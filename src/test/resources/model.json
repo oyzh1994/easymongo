@@ -1,0 +1,18 @@
+{
+    "version": "1.0",
+    "defaultSchema": "mongo",
+    "schemas": [
+        {
+            "name": "mongo",
+            "type": "custom",
+            "factory": "org.apache.calcite.adapter.mongodb.MongoSchemaFactory",
+            "operand": {
+                "host": "mongodb://127.0.0.1:27017/test?authSource=admin",
+                "database": "test",
+                "authMechanism": "SCRAM-SHA-1",
+                "username": "admin",
+                "password": "123456"
+            }
+        }
+    ]
+}

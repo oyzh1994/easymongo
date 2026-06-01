@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>io.github.oyzh1994</groupId>
+        <artifactId>fx-base</artifactId>
+        <version>1.3.6</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>EasyMongo</name>
+    <groupId>cn.oyzh</groupId>
+    <artifactId>easymongo</artifactId>
+    <version>0.1.0</version>
+
+    <properties>
+        <maven.compiler.source>26</maven.compiler.source>
+        <maven.compiler.target>26</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- 声明仓库 -->
+    <repositories>
+        <repository>
+            <id>center</id>
+            <name>center</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/public/</url>
+        </repository>
+        <repository>
+            <id>tencent</id>
+            <name>tencent</name>
+            <url>https://mirrors.tencent.com/nexus/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+
+        <!-- json类库 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- 存储模块 -->
+        <dependency>
+            <groupId>io.github.oyzh1994</groupId>
+            <artifactId>base-store</artifactId>
+        </dependency>
+
+        <!-- 事件模块 -->
+        <dependency>
+            <groupId>io.github.oyzh1994</groupId>
+            <artifactId>base-event</artifactId>
+        </dependency>
+
+        <!-- i18n模块 -->
+        <dependency>
+            <groupId>io.github.oyzh1994</groupId>
+            <artifactId>base-i18n</artifactId>
+        </dependency>
+
+        <!-- ssh模块 -->
+        <dependency>
+            <groupId>io.github.oyzh1994</groupId>
+            <artifactId>base-ssh</artifactId>
+        </dependency>
+
+        <!-- fx-终端模块 -->
+        <dependency>
+            <groupId>io.github.oyzh1994</groupId>
+            <artifactId>fx-terminal</artifactId>
+        </dependency>
+
+        <!-- fx-终端模块 -->
+        <dependency>
+            <groupId>io.github.oyzh1994</groupId>
+            <artifactId>fx-editor</artifactId>
+        </dependency>
+
+            <!-- Calcite 核心 -->
+            <dependency>
+                <groupId>org.apache.calcite</groupId>
+                <artifactId>calcite-core</artifactId>
+                <version>1.36.0</version>
+            </dependency>
+
+            <!-- MongoDB 适配器 -->
+            <dependency>
+                <groupId>org.apache.calcite</groupId>
+                <artifactId>calcite-mongodb</artifactId>
+                <version>1.36.0</version>
+            </dependency>
+            <!-- MongoDB Java 驱动（适配器依赖它） -->
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongodb-driver-sync</artifactId>
+                <version>4.11.0</version>
+            </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

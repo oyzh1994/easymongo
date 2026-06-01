@@ -1,0 +1,17 @@
+package cn.oyzh.easymongo.event.database;
+
+import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.event.Event;
+import cn.oyzh.event.EventFormatter;
+
+/**
+ * @author oyzh
+ * @since 2024/01/26
+ */
+public class MongoDatabaseClosedEvent extends Event<MongoDatabaseTreeItem> implements EventFormatter {
+
+    @Override
+    public String eventFormat() {
+        return String.format("[%s] 数据库已关闭", this.data().value());
+    }
+}

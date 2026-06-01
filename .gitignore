@@ -1,0 +1,17 @@
+### compile ###
+target/
+
+### 崩溃日志
+hs_err_*.log
+
+### IntelliJ IDEA ###
+.idea/
+
+### logs ###
+logs/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
