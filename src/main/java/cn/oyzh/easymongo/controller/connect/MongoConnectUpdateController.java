@@ -207,17 +207,19 @@ public class MongoConnectUpdateController extends StageController {
         if (StringUtil.isBlank(host) || StringUtil.isBlank(host.split(":")[0])) {
             MessageBox.warn(I18nHelper.contentCanNotEmpty());
         } else {
-            MongoConnect mysqlConnect = new MongoConnect();
-            mysqlConnect.setHost(host);
-            mysqlConnect.setConnectTimeOut(3);
-            mysqlConnect.setId(this.mysqlConnect.getId());
-            mysqlConnect.setUser(this.user.getText());
-            mysqlConnect.setPassword(this.password.getText());
-            mysqlConnect.setSshForward(this.sshForward.isSelected());
-            if (mysqlConnect.isSSHForward()) {
-                mysqlConnect.setSshConfig(this.getSSHConfig());
+            MongoConnect mongoConnect = new MongoConnect();
+            mongoConnect.setHost(host);
+            mongoConnect.setConnectTimeOut(3);
+            mongoConnect.setId(this.mysqlConnect.getId());
+            mongoConnect.setAuthType(this.authMethod.getType());
+            mongoConnect.setAuthDatabase(this.authDatabase.getTextTrim());
+            mongoConnect.setUser(this.user.getText());
+            mongoConnect.setPassword(this.password.getText());
+            mongoConnect.setSshForward(this.sshForward.isSelected());
+            if (mongoConnect.isSSHForward()) {
+                mongoConnect.setSshConfig(this.getSSHConfig());
             }
-            MongoConnectUtil.testConnect(this.stage, mysqlConnect);
+            MongoConnectUtil.testConnect(this.stage, mongoConnect);
         }
     }
 

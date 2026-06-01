@@ -154,6 +154,6 @@ public class MainController extends ParentStageController {
 
     @Override
     public String getViewTitle() {
-        return I18nResourceBundle.i18nString("db.title.main");
+        return I18nResourceBundle.i18nString("mongo.title.main");
     }
 }

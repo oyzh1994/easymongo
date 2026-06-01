@@ -394,4 +394,8 @@ public class MongoConnect implements Serializable, Comparable<MongoConnect>, Obj
     public void setAuthDatabase(String authDatabase) {
         this.authDatabase = authDatabase;
     }
+
+    public boolean isPasswordAuth() {
+        return "password".equalsIgnoreCase(this.authType);
+    }
 }

@@ -197,16 +197,18 @@ public class MongoConnectAddController extends StageController {
             MessageBox.warn(I18nHelper.contentCanNotEmpty());
         } else {
             // 创建redis连接
-            MongoConnect redisConnect = new MongoConnect();
-            redisConnect.setHost(host);
-            redisConnect.setConnectTimeOut(3);
-            redisConnect.setUser(this.user.getText());
-            redisConnect.setPassword(this.password.getText());
-            redisConnect.setSshForward(this.sshForward.isSelected());
-            if (redisConnect.isSSHForward()) {
-                redisConnect.setSshConfig(this.getSSHConfig());
+            MongoConnect mongoConnect = new MongoConnect();
+            mongoConnect.setHost(host);
+            mongoConnect.setConnectTimeOut(3);
+            mongoConnect.setUser(this.user.getText());
+            mongoConnect.setAuthType(this.authMethod.getType());
+            mongoConnect.setAuthDatabase(this.authDatabase.getTextTrim());
+            mongoConnect.setPassword(this.password.getText());
+            mongoConnect.setSshForward(this.sshForward.isSelected());
+            if (mongoConnect.isSSHForward()) {
+                mongoConnect.setSshConfig(this.getSSHConfig());
             }
-            MongoConnectUtil.testConnect(this.stage, redisConnect);
+            MongoConnectUtil.testConnect(this.stage, mongoConnect);
         }
     }
 

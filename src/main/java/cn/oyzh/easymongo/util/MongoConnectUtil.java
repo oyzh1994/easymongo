@@ -1,10 +1,10 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.common.thread.ThreadUtil;
-import cn.oyzh.fx.plus.information.MessageBox;
-import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
+import cn.oyzh.fx.plus.information.MessageBox;
+import cn.oyzh.fx.plus.window.StageAdapter;
 
 /**
  * db连接工具类
@@ -27,14 +27,12 @@ public class MongoConnectUtil {
                 view.waitCursor();
                 view.appendTitle("==连接测试中...");
                 MongoClient client = new MongoClient(dbInfo);
-                if (client != null) {
-                    client.start();
-                    if (client.isConnected()) {
-                        client.close();
-                        MessageBox.okToast("连接成功！");
-                    } else {
-                        MessageBox.warn("连接失败，请检查地址是否有效！");
-                    }
+                client.start();
+                if (client.isConnected()) {
+                    client.close();
+                    MessageBox.okToast("连接成功！");
+                } else {
+                    MessageBox.warn("连接失败，请检查地址是否有效！");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
