@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.trees.database;
 
 import cn.oyzh.common.thread.Task;
 import cn.oyzh.common.thread.TaskBuilder;
+import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeItem;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
@@ -124,6 +125,7 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
             Task task = TaskBuilder.newBuilder()
                     .onStart(() -> {
                         List<TreeItem<?>> typeItems = new ArrayList<>();
+                        typeItems.add(new MongoCollectionsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoQueriesTreeItem(this.getTreeView()));
                         super.setChild(typeItems);
                     })
@@ -201,5 +203,9 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
 
     public MongoConnect dbConnect() {
         return this.client().getDbConnect();
+    }
+
+    public void dropCollection(String collection) {
+        this.client().dropCollection(collection);
     }
 }

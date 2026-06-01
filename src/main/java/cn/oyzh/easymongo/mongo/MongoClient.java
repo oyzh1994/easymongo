@@ -3,12 +3,15 @@ package cn.oyzh.easymongo.mongo;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
+import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import org.bson.Document;
 
 import java.io.Closeable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -45,29 +48,7 @@ public class MongoClient implements Closeable {
         return this.state.get() == MongoConnState.CONNECTING;
     }
 
-    public MongoDatabase database(String databaseName) {
-        return null;
-    }
-
-    public List<MongoDatabase> databases() {
-        return null;
-    }
-
-    public void createDatabase(MongoDatabase database) {
-    }
-
-    public boolean existDatabase(String dbName) {
-        return false;
-    }
-
-    public boolean alterDatabase(MongoDatabase database) {
-        return false;
-    }
-
-    public boolean dropDatabase(String dbName) {
-        return false;
-    }
-
+    @Override
     public void close() {
         try {
             if (this.mongoClient != null) {
@@ -150,5 +131,54 @@ public class MongoClient implements Closeable {
             JulLog.warn("Mongo client start error", ex);
             throw new MongoException(ex);
         }
+    }
+
+    public MongoDatabase database(String databaseName) {
+        return null;
+    }
+
+    public List<MongoDatabase> databases() {
+        List<MongoDatabase> databases = new ArrayList<>();
+        ListDatabasesIterable<Document> documents = this.mongoClient.listDatabases();
+        for (Document document : documents) {
+            MongoDatabase database = new MongoDatabase();
+            String name = document.getString("name");
+            Long sizeOnDisk = document.getLong("sizeOnDisk");
+            database.setName(name);
+            database.setSizeOnDisk(sizeOnDisk);
+            databases.add(database);
+        }
+        return databases;
+    }
+
+    public void createDatabase(MongoDatabase database) {
+    }
+
+    public boolean existDatabase(String dbName) {
+        return false;
+    }
+
+    public boolean alterDatabase(MongoDatabase database) {
+        return false;
+    }
+
+    public boolean dropDatabase(String dbName) {
+        return false;
+    }
+
+    public void dropCollection(String collection) {
+
+    }
+
+    public List<MongoCollection> collections(String dbName) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        List<MongoCollection> collections = new ArrayList<>();
+        for (String name : database.listCollectionNames()) {
+            MongoCollection collection = new MongoCollection();
+            collection.setDbName(dbName);
+            collection.setName(name);
+            collections.add(collection);
+        }
+        return collections;
     }
 }

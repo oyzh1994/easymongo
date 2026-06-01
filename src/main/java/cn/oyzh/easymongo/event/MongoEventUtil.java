@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.event;
 
 import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryDeletedEvent;
+import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.EventUtil;
 import cn.oyzh.fx.gui.event.Layout1Event;
@@ -147,5 +148,12 @@ public class MongoEventUtil {
         MongoTreeItemChangedEvent event = new MongoTreeItemChangedEvent();
         event.data(item);
         EventUtil.post(event);
+    }
+
+    public static void collectionDropped(MongoCollectionTreeItem collectionTreeItem, MongoDatabaseTreeItem mysqlDatabaseTreeItem) {
+    }
+
+    public static void collectionOpen(MongoCollectionTreeItem mongoCollectionTreeItem, MongoDatabaseTreeItem mongoDatabaseTreeItem) {
+
     }
 }
