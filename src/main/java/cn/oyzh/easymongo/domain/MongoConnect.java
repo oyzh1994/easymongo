@@ -53,6 +53,18 @@ public class MongoConnect implements Serializable, Comparable<MongoConnect>, Obj
     private String type;
 
     /**
+     * 认证方式
+     */
+    @Column
+    private String authType;
+
+    /**
+     * 认证数据库
+     */
+    @Column
+    private String authDatabase;
+
+    /**
      * 认证密码
      */
     @Column
@@ -116,6 +128,8 @@ public class MongoConnect implements Serializable, Comparable<MongoConnect>, Obj
         this.remark = info.remark;
         this.groupId = info.groupId;
         this.readonly = info.readonly;
+        this.authType = info.authType;
+        this.authDatabase = info.authDatabase;
         this.password = info.password;
         this.collects = info.collects;
         this.sshConfig = info.sshConfig;
@@ -363,5 +377,21 @@ public class MongoConnect implements Serializable, Comparable<MongoConnect>, Obj
 
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
+    }
+
+    public String getAuthType() {
+        return authType;
+    }
+
+    public void setAuthType(String authType) {
+        this.authType = authType;
+    }
+
+    public String getAuthDatabase() {
+        return authDatabase;
+    }
+
+    public void setAuthDatabase(String authDatabase) {
+        this.authDatabase = authDatabase;
     }
 }

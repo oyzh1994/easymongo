@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.controller.connect;
 
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.easymongo.fx.MonogoAuthMethodComboBox;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.gui.text.field.PortTextField;
@@ -36,12 +37,6 @@ import javafx.stage.WindowEvent;
         value = FXConst.FXML_PATH + "connect/mongoConnectAdd.fxml"
 )
 public class MongoConnectAddController extends StageController {
-
-    /**
-     * 只读模式
-     */
-    @FXML
-    private FXCheckBox readonly;
 
     /**
      * tab组件
@@ -84,6 +79,18 @@ public class MongoConnectAddController extends StageController {
      */
     @FXML
     private PortTextField hostPort;
+
+    /**
+     * 认证方式
+     */
+    @FXML
+    private MonogoAuthMethodComboBox authMethod;
+
+    /**
+     * 认证数据库
+     */
+    @FXML
+    private ClearableTextField authDatabase;
 
     /**
      * 连接超时
@@ -218,12 +225,17 @@ public class MongoConnectAddController extends StageController {
         }
         try {
             String name = this.name.getTextTrim();
+            String authType = this.authMethod.getType();
+            String authDatabase = this.authDatabase.getTextTrim();
             MongoConnect mysqlConnect = new MongoConnect();
             mysqlConnect.setName(name);
             Number connectTimeOut = this.connectTimeOut.getValue();
             mysqlConnect.setHost(host);
+            mysqlConnect.setAuthType(authType);
+            mysqlConnect.setAuthDatabase(authDatabase);
             mysqlConnect.setUser(this.user.getText());
             mysqlConnect.setRemark(this.remark.getTextTrim());
+            mysqlConnect.setPassword(this.password.getText());
             mysqlConnect.setPassword(this.password.getText());
             mysqlConnect.setGroupId(this.group == null ? null : this.group.getGid());
             mysqlConnect.setConnectTimeOut(connectTimeOut == null ? 5 : connectTimeOut.intValue());

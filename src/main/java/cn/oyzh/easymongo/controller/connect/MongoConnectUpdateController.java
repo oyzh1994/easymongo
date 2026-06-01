@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.controller.connect;
 
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.easymongo.fx.MonogoAuthMethodComboBox;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.gui.text.field.PortTextField;
@@ -91,16 +92,22 @@ public class MongoConnectUpdateController extends StageController {
     private PortTextField hostPort;
 
     /**
+     * 认证方式
+     */
+    @FXML
+    private MonogoAuthMethodComboBox authMethod;
+
+    /**
+     * 认证数据库
+     */
+    @FXML
+    private ClearableTextField authDatabase;
+
+    /**
      * 超时时间
      */
     @FXML
     private NumberTextField connectTimeOut;
-
-    /**
-     * 执行超时
-     */
-    @FXML
-    private NumberTextField executeTimeOut;
 
     /**
      * ssh面板
@@ -232,6 +239,12 @@ public class MongoConnectUpdateController extends StageController {
             this.mysqlConnect.setName(name);
             Number connectTimeOut = this.connectTimeOut.getValue();
 
+            // 认证信息
+            String authType = this.authMethod.getType();
+            String authDatabase = this.authDatabase.getTextTrim();
+            this.mysqlConnect.setAuthType(authType);
+            this.mysqlConnect.setAuthDatabase(authDatabase);
+
             this.mysqlConnect.setHost(host.trim());
             this.mysqlConnect.setUser(this.user.getText());
             // ssh配置
@@ -291,6 +304,9 @@ public class MongoConnectUpdateController extends StageController {
         this.connectTimeOut.setValue(this.mysqlConnect.getConnectTimeOut());
         // ssh配置
         this.sshForward.setSelected(this.mysqlConnect.isSSHForward());
+        // 认证配置
+        this.authMethod.select(this.mysqlConnect.getAuthType());
+        this.authDatabase.setText(this.mysqlConnect.getAuthDatabase());
         MongoSSHConfig sshConfig = this.sshConfigStore.getByIid(this.mysqlConnect.getId());
         if (sshConfig != null) {
             this.sshHost.setText(sshConfig.getHost());
