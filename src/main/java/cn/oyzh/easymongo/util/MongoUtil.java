@@ -29,6 +29,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class MongoUtil {
 
+    public static final String ID = "_id";
+
     /**
      * 打印数据
      *

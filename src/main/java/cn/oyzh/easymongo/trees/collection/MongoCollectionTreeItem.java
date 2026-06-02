@@ -1,7 +1,6 @@
 package cn.oyzh.easymongo.trees.collection;
 
 import cn.oyzh.common.dto.Paging;
-import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -14,20 +13,15 @@ import cn.oyzh.easymongo.mongo.MysqlSelectRecordParam;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
-import cn.oyzh.fx.gui.svg.glyph.CopySVGGlyph;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
-import cn.oyzh.fx.plus.window.StageAdapter;
-import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * db树表节点
@@ -220,19 +214,17 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         this.loadChild();
     }
 
-
-    public int insertRecord(MongoRecordData recordData) {
-        return -1;
+    public ObjectId insertRecord(MongoRecordData recordData) {
+        return this.client().insertRecord(recordData);
     }
 
-    public int deleteRecord(MongoRecordData recordData) {
-        return -1;
+    public long deleteRecord(MongoRecordData recordData) {
+        return this.client().deleteRecord(recordData);
     }
 
     public int updateRecord(MongoRecordData recordData ) {
         return -1;
     }
-
 
     public MongoCollection value() {
         return value;

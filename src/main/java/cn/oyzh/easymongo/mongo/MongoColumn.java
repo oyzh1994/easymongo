@@ -186,4 +186,17 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         return name;
     }
 
+    public boolean is_id() {
+        return "_id".equalsIgnoreCase(this.name);
+    }
+
+    public Object defaultValue() {
+        if (this.supportInteger()) {
+            return 0;
+        }
+        if (this.supportDigits()) {
+            return 0d;
+        }
+        return "";
+    }
 }

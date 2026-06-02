@@ -17,7 +17,9 @@ public class MongoNodeUtil {
 
     public static Object getNodeVal(Node node) throws Exception {
         Object val = null;
-         if (node instanceof NumberTextField textField) {
+        if (node instanceof NumberTextField textField) {
+            val = textField.getValue();
+        } else if (node instanceof DecimalTextField textField) {
             val = textField.getValue();
         } else if (node instanceof TextField textField) {
             val = textField.getText();

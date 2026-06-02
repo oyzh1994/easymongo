@@ -19,6 +19,7 @@ import cn.oyzh.easymongo.popups.ShellMysqlTableRecordFilterPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
+import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.fx.gui.page.PageBox;
 import cn.oyzh.fx.gui.page.PageEvent;
 import cn.oyzh.fx.gui.tabs.RichTabController;
@@ -38,6 +39,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -224,16 +226,15 @@ public class MongoCollectionRecordTabController extends RichTabController {
         if (lastItem == null) {
 
         } else {
-            MongoRecord record = new MongoRecord(lastItem.getColumns());
+            MongoColumns columns = new MongoColumns(lastItem.getColumns());
+            MongoRecord record = new MongoRecord(columns);
             record.setCreated(true);
-            for (MongoColumn column : lastItem.getColumns()) {
-                Object val = null;
-                record.putValue(column, val);
+            for (MongoColumn column : columns) {
+                record.putValue(column, column.defaultValue());
             }
             this.recordTable.addItem(record);
             this.recordTable.selectLast();
         }
-
     }
 
     /**
@@ -243,7 +244,8 @@ public class MongoCollectionRecordTabController extends RichTabController {
      */
     private void insertRecord(MongoRecord record) {
         MongoRecordData recordData = record.getRecordData();
-        this.getItem().insertRecord(recordData);
+        ObjectId _id = this.getItem().insertRecord(recordData);
+        record.putValue(MongoUtil.ID, _id);
     }
 
     /**
@@ -432,7 +434,6 @@ public class MongoCollectionRecordTabController extends RichTabController {
             if (record.isCreated()) {
                 success = true;
             } else {
-                // 获取主键
                 success = this.getItem().deleteRecord(record.getRecordData()) == 1;
             }
             // 操作成功

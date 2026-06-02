@@ -2,6 +2,8 @@ package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.easymongo.util.MongoUtil;
+import org.bson.types.ObjectId;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -47,7 +49,7 @@ public class MongoRecordData {
 
     public Object value(String column) {
         if (this.dataList != null) {
-            for (Map.Entry<MongoColumn, Object> entry : dataList.entrySet()) {
+            for (Map.Entry<MongoColumn, Object> entry : this.dataList.entrySet()) {
                 if (StringUtil.equalsAnyIgnoreCase(column, entry.getKey().getName())) {
                     return entry.getValue();
                 }
@@ -99,5 +101,16 @@ public class MongoRecordData {
 
     public boolean notNull(String column) {
         return this.value(column) != null;
+    }
+
+    public ObjectId id() {
+        Object o = this.value(MongoUtil.ID);
+        if (o == null) {
+            return null;
+        }
+        if (o instanceof ObjectId objectId) {
+            return objectId;
+        }
+        return new ObjectId(o.toString());
     }
 }

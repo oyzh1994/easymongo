@@ -3,17 +3,25 @@ package cn.oyzh.easymongo.mongo;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
+import cn.oyzh.easymongo.util.MongoUtil;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.InsertOneResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import org.bson.BsonValue;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -90,7 +98,6 @@ public class MongoClient implements Closeable {
         return host;
     }
 
-
     private com.mongodb.client.MongoClient mongoClient;
 
     /**
@@ -151,6 +158,10 @@ public class MongoClient implements Closeable {
             databases.add(database);
         }
         return databases;
+    }
+
+    private com.mongodb.client.MongoCollection<Document> collection(String dbName, String collectionName) {
+        return this.mongoClient.getDatabase(dbName).getCollection(collectionName);
     }
 
     public void createDatabase(MongoDatabase database) {
@@ -216,5 +227,46 @@ public class MongoClient implements Closeable {
 
     public long selectRecordCount(MysqlSelectRecordParam param) {
         return 0;
+    }
+
+    public ObjectId insertRecord(MongoRecordData recordData) {
+        String dbName = null;
+        String collectionName = null;
+        Document document = new Document();
+        for (Map.Entry<MongoColumn, Object> entry : recordData.entries()) {
+            Object value = entry.getValue();
+            MongoColumn column = entry.getKey();
+            if (column.is_id()) {
+                continue;
+            }
+            if (dbName == null) {
+                dbName = column.getDbName();
+            }
+            if (collectionName == null) {
+                collectionName = column.getCollectionName();
+            }
+            document.append(column.getName(), value);
+        }
+        if (dbName != null) {
+            com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+            com.mongodb.client.MongoCollection<Document> collection = database.getCollection(collectionName);
+            InsertOneResult result = collection.insertOne(document);
+            BsonValue value = result.getInsertedId();
+            if (value != null) {
+                return value.asObjectId().getValue();
+            }
+        }
+        return null;
+    }
+
+    public long deleteRecord(MongoRecordData recordData) {
+        MongoColumn column = recordData.column(MongoUtil.ID);
+        String dbName = column.getDbName();
+        String collectionName = column.getCollectionName();
+        ObjectId _id = recordData.id();
+        Bson filter = Filters.eq(MongoUtil.ID, _id);
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
+        DeleteResult result = collection.deleteOne(filter);
+        return result.getDeletedCount();
     }
 }
