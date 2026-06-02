@@ -31,7 +31,7 @@ public class MysqlEndWithCondition extends MysqlCondition {
         Pattern pattern = Pattern.compile(quote + "$", Pattern.CASE_INSENSITIVE);
         Bson bson1;
         if (MongoUtil.ID.equals(columnName)) {
-            bson1 = MysqlConditionUtil.idFilter(pattern);
+            bson1 = MysqlConditionUtil.idFilterRegex(pattern);
         } else {
             bson1 = Filters.and(Filters.exists(columnName), Filters.regex(columnName, pattern));
         }

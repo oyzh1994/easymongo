@@ -163,7 +163,7 @@ public class MysqlConditionUtil {
         return list;
     }
 
-    public static Bson idFilter(Pattern pattern) {
+    public static Bson idFilterRegex(Pattern pattern) {
         return Filters.expr(
                 new Document("$regexMatch",
                         new Document("input", new Document("$toString", "$_id"))
@@ -172,7 +172,7 @@ public class MysqlConditionUtil {
         );
     }
 
-    public static Bson idFilterNot(Pattern pattern) {
+    public static Bson idFilterRegexNot(Pattern pattern) {
         return Filters.expr(
                 new Document("$not",
                         new Document("$regexMatch",

@@ -28,7 +28,7 @@ public class MysqlNotEndWithCondition extends MysqlEndWithCondition {
         Pattern pattern = Pattern.compile(quote + "$", Pattern.CASE_INSENSITIVE);
         Bson bson1;
         if (MongoUtil.ID.equals(columnName)) {
-            bson1 = MysqlConditionUtil.idFilterNot(pattern);
+            bson1 = MysqlConditionUtil.idFilterRegexNot(pattern);
         } else {
             bson1 = Filters.and(Filters.exists(columnName), Filters.not(Filters.regex(columnName, pattern)));
         }
