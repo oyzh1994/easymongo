@@ -1,6 +1,12 @@
 package cn.oyzh.easymongo.mongo.condition;
 
+import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import java.util.Arrays;
 
 /**
  * 小于条件
@@ -14,5 +20,22 @@ public class MysqlLtCondition extends MysqlCondition {
 
     public MysqlLtCondition() {
         super(I18nHelper.lt(), "<");
+    }
+
+
+    @Override
+    public Bson wrapCondition(String columnName, Object condition) {
+        Bson bson1;
+        if (MongoUtil.ID.equals(columnName)) {
+            bson1 = Filters.expr(
+                    new Document("$lt", Arrays.asList(
+                            new Document("$toString", "$_id"),
+                            condition
+                    ))
+            );
+        } else {
+            bson1 = Filters.and(Filters.exists(columnName), Filters.lt(columnName, condition));
+        }
+        return bson1;
     }
 }
