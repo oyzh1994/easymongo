@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.trees.group;
 
+import cn.oyzh.fx.gui.svg.glyph.FolderSVGGlyph;
 import cn.oyzh.fx.gui.svg.glyph.GroupSVGGlyph;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemValue;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
@@ -31,17 +32,17 @@ public class MongoGroupTreeItemValue extends RichTreeItemValue {
     @Override
     public SVGGlyph graphic() {
         if (super.graphic() == null) {
-            super.graphic(new GroupSVGGlyph());
-            super.graphic().disableTheme();
+            super.graphic(new FolderSVGGlyph());
+//            super.graphic().disableTheme();
         }
         return super.graphic();
     }
 
-    @Override
-    public Color graphicColor() {
-        if (!this.item().isChildEmpty()) {
-           return Color.DEEPSKYBLUE;
-        }
-        return super.graphicColor();
-    }
+//    @Override
+//    public Color graphicColor() {
+//        if (!this.item().isChildEmpty()) {
+//           return Color.DEEPSKYBLUE;
+//        }
+//        return super.graphicColor();
+//    }
 }

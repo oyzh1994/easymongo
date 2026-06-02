@@ -17,11 +17,12 @@ public class MongoHomeTab extends RichTab {
     public MongoHomeTab() {
         super();
         super.flush();
+        this.setClosable(false);
     }
 
     @Override
     protected String url() {
-        return  "/tabs/home/dbHomeTab.fxml";
+        return "/tabs/home/mongoHomeTab.fxml";
     }
 
     @Override

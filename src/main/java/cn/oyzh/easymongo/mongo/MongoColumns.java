@@ -25,6 +25,10 @@ public class MongoColumns extends DBObjectList<MongoColumn> {
         return false;
     }
 
+    public boolean exists(String name) {
+        return this.column(name) != null;
+    }
+
     public MongoColumn column(String name) {
         if (!this.isEmpty()) {
             for (MongoColumn dbColumn : this) {

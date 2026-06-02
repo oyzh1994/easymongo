@@ -42,11 +42,11 @@
                 <Insets left="20"/>
             </HBox.margin>
         </AddGroupButton>
-        <OpenTerminalButton onMousePrimaryClicked="#openTerminal">
-            <HBox.margin>
-                <Insets left="20"/>
-            </HBox.margin>
-        </OpenTerminalButton>
+        <!-- <OpenTerminalButton onMousePrimaryClicked="#openTerminal"> -->
+        <!--     <HBox.margin> -->
+        <!--         <Insets left="20"/> -->
+        <!--     </HBox.margin> -->
+        <!-- </OpenTerminalButton> -->
         <ChangelogButton onMousePrimaryClicked="#changelog">
             <HBox.margin>
                 <Insets left="20"/>

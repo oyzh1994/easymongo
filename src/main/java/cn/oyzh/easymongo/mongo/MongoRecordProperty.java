@@ -2,14 +2,14 @@ package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.object.Destroyable;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.fx.plus.node.NodeDestroyUtil;
-import cn.oyzh.fx.plus.node.NodeUtil;
-import cn.oyzh.fx.plus.tableview.TableViewUtil;
-import cn.oyzh.fx.plus.util.ClipboardUtil;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.easymongo.util.MongoNodeUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
+import cn.oyzh.fx.plus.node.NodeDestroyUtil;
+import cn.oyzh.fx.plus.node.NodeUtil;
+import cn.oyzh.fx.plus.tableview.TableViewUtil;
+import cn.oyzh.fx.plus.util.ClipboardUtil;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -115,7 +115,8 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
 
     @Override
     public Object getValue() {
-        if (this.readonly || !this.record.isEditable()) {
+        //        if (this.readonly || !this.record.isEditable()) {
+        if (this.readonly) {
             return MongoRecordUtil.formatValue(super.getValue(), this.column);
         }
         if (this.node == null) {

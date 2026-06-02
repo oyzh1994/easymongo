@@ -3,6 +3,7 @@ package cn.oyzh.easymongo.mongo;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
 import javafx.beans.property.ObjectProperty;
@@ -12,7 +13,9 @@ import org.bson.Document;
 
 import java.io.Closeable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -180,5 +183,49 @@ public class MongoClient implements Closeable {
             collections.add(collection);
         }
         return collections;
+    }
+
+    public List<MongoRecord> selectRecords(MysqlSelectRecordParam param) {
+        String dbName = param.getDbName();
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        com.mongodb.client.MongoCollection<Document> collection = database.getCollection(param.getCollectionName());
+        int limit = Math.toIntExact(param.getLimit());
+        int skip = Math.toIntExact(param.getStart());
+        FindIterable<Document> iterable = collection.find().limit(limit).skip(skip);
+
+
+        MongoColumns columns = new MongoColumns();
+
+        for (Document document : iterable) {
+            Set<String> cols = document.keySet();
+            if (!cols.isEmpty()) {
+                for (String col : cols) {
+                    if (columns.exists(col)) {
+                        continue;
+                    }
+                    MongoColumn column = new MongoColumn();
+                    column.setDbName(dbName);
+                    column.setName(col);
+                    columns.add(column);
+                }
+            }
+        }
+
+        List<MongoRecord> records = new ArrayList<>();
+        for (Document document : iterable) {
+            Set<String> cols = document.keySet();
+            if (!cols.isEmpty()) {
+                MongoRecord record = new MongoRecord(columns);
+                for (String col : cols) {
+                    record.putValue(col, document.get(col));
+                }
+                records.add(record);
+            }
+        }
+        return records;
+    }
+
+    public long selectRecordCount(MysqlSelectRecordParam param) {
+        return 0;
     }
 }

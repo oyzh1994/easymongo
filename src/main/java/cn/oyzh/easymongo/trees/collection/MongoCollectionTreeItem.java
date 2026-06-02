@@ -6,8 +6,11 @@ import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
+import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordData;
+import cn.oyzh.easymongo.mongo.MongoRecordFilter;
+import cn.oyzh.easymongo.mongo.MysqlSelectRecordParam;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
@@ -181,7 +184,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return this.parent().parent();
     }
 //
-//    public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MysqlRecordFilter> filters, List<MysqlColumn> columns) {
+//    public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, List<MysqlColumn> columns) {
 //        MysqlSelectRecordParam param = new MysqlSelectRecordParam();
 //        param.setLimit(limit);
 //        param.setFilters(filters);
@@ -226,8 +229,6 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return -1;
     }
 
-
-
     public int updateRecord(MongoRecordData recordData ) {
         return -1;
     }
@@ -235,5 +236,20 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
 
     public MongoCollection value() {
         return value;
+    }
+
+    public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, MongoColumns columns) {
+        MysqlSelectRecordParam param = new MysqlSelectRecordParam();
+        param.setLimit(limit);
+        param.setFilters(filters);
+        param.setColumns(columns);
+        param.setDbName(this.dbName());
+        param.setStart(pageNo * limit);
+        param.setCollectionName(this.tableName());
+        List<MongoRecord> rows = this.client().selectRecords(param);
+        long count = rows.size();
+        Paging<MongoRecord> paging = new Paging<>(rows, limit, count);
+        paging.currentPage(pageNo);
+        return paging;
     }
 }

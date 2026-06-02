@@ -1,0 +1,29 @@
+package cn.oyzh.easymongo.mongo.condition;
+
+import cn.oyzh.i18n.I18nHelper;
+
+/**
+ * 不介于列表条件
+ *
+ * @author oyzh
+ * @since 2024/6/28
+ */
+public class MysqlNotBetweenCondition extends MysqlBetweenCondition {
+
+    public final static MysqlNotBetweenCondition INSTANCE = new MysqlNotBetweenCondition();
+
+    public MysqlNotBetweenCondition() {
+        super(I18nHelper.notBetween(), "NOT BETWEEN");
+    }
+
+    // @Override
+    // public String wrapCondition(Object condition) {
+    //     if (condition instanceof Object[] arr) {
+    //         return this.getValue() + " " + MongoUtil.wrapData(arr[0]) + " AND " + MongoUtil.wrapData(arr[1]);
+    //     }
+    //     if (condition instanceof Collection<?> coll) {
+    //         return this.getValue() + " " + MongoUtil.wrapData(CollectionUtil.get(coll, 0)) + " AND " + MongoUtil.wrapData(CollectionUtil.get(coll, 1));
+    //     }
+    //     return super.wrapCondition(condition);
+    // }
+}

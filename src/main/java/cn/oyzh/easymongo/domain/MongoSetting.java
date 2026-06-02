@@ -28,7 +28,7 @@ public class MongoSetting extends AppSetting {
         }
     }
 
-    public Integer getRecordPageLimit() {
+    public int getRecordPageLimit() {
         if (this.recordPageLimit == null || this.recordPageLimit <= 0) {
             return 100;
         }

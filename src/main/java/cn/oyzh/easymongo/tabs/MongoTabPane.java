@@ -1,5 +1,11 @@
 package cn.oyzh.easymongo.tabs;
 
+import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
+import cn.oyzh.easymongo.mongo.MongoCollection;
+import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
+import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.event.EventSubscribe;
 import cn.oyzh.fx.gui.tabs.RichTabPane;
 import cn.oyzh.fx.plus.event.FXEventListener;
 import cn.oyzh.easymongo.tabs.home.MongoHomeTab;
@@ -164,32 +170,32 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //     return list;
     // }
     //
-    // private MysqlTableRecordTab getMysqlTableRecordTab(MongoDatabaseTreeItem dbItem, String tableName) {
-    //     for (Tab tab : this.getTabs()) {
-    //         if (tab instanceof MysqlTableRecordTab tab1 && tab1.dbItem() == dbItem && StrUtil.equals(tableName, tab1.tableName())) {
-    //             return tab1;
-    //         }
-    //     }
-    //     return null;
-    // }
-    //
-    // /**
-    //  * 表打开事件
-    //  *
-    //  * @param event 事件
-    //  */
-    // @EventSubscribe
-    // private void onMysqlTableOpen(MysqlTableOpenEvent event) {
-    //     MysqlTableRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
-    //     if (tab == null) {
-    //         tab = new MysqlTableRecordTab();
-    //         super.addTab(tab);
-    //     }
-    //     // 选中节点
-    //     this.select(tab);
-    //     // 初始化节点
-    //     tab.init(event.data());
-    // }
+     private MongoCollectionRecordTab getMysqlTableRecordTab(MongoDatabaseTreeItem dbItem, String tableName) {
+         for (Tab tab : this.getTabs()) {
+             if (tab instanceof MongoCollectionRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(tableName, tab1.tableName())) {
+                 return tab1;
+             }
+         }
+         return null;
+     }
+
+     /**
+      * 表打开事件
+      *
+      * @param event 事件
+      */
+     @EventSubscribe
+     private void onMysqlTableOpen(MongoCollectionOpenEvent event) {
+         MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.getDbItem(), event.tableName());
+         if (tab == null) {
+             tab = new MongoCollectionRecordTab();
+             super.addTab(tab);
+         }
+         // 选中节点
+         this.select(tab);
+         // 初始化节点
+         tab.init(event.data());
+     }
     //
     // /**
     //  * 表重命名事件
@@ -198,7 +204,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableRenamed(MysqlTableRenamedEvent event) {
-    //     MysqlTableRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.flushTitle();
     //     }
@@ -211,7 +217,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableCleared(MysqlTableClearedEvent event) {
-    //     MysqlTableRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.reload();
     //     }
@@ -224,7 +230,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableTruncated(MysqlTableTruncatedEvent event) {
-    //     MysqlTableRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.reload();
     //     }
@@ -236,8 +242,8 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  * @param event 事件
     //  */
     // @EventSubscribe
-    // private void onMysqlTableDropped(MysqlTableDroppedEvent event) {
-    //     MysqlTableRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    // private void onMysqlTableDropped(MongoCollectionDroppedEvent event) {
+    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.closeTab();
     //     }
@@ -250,7 +256,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableFiltered(MysqlTableFilteredEvent event) {
-    //     MysqlTableRecordTab tableTab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
+    //     MongoCollectionRecordTab tableTab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
     //     if (tableTab != null) {
     //         tableTab.setFilters(event.filters());
     //         tableTab.reload();
@@ -264,7 +270,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableAlerted(MysqlTableAlertedEvent event) {
-    //     MysqlTableRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
+    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
     //     if (tab != null) {
     //         tab.flush();
     //         tab.reload();

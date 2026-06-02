@@ -1,0 +1,18 @@
+package cn.oyzh.easymongo.mongo.condition;
+
+import cn.oyzh.i18n.I18nHelper;
+
+/**
+ * 大于条件
+ *
+ * @author oyzh
+ * @since 2024/6/27
+ */
+public class MysqlGtCondition extends MysqlCondition {
+
+    public final static MysqlGtCondition INSTANCE = new MysqlGtCondition();
+
+    public MysqlGtCondition() {
+        super(I18nHelper.gt(), ">");
+    }
+}

@@ -1,7 +1,10 @@
 package cn.oyzh.easymongo.event;
 
+import cn.oyzh.easymongo.event.collection.MongoCollectionDroppedEvent;
+import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryDeletedEvent;
+import cn.oyzh.easymongo.mongo.MongoCollection;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.EventUtil;
@@ -150,10 +153,17 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
-    public static void collectionDropped(MongoCollectionTreeItem collectionTreeItem, MongoDatabaseTreeItem mysqlDatabaseTreeItem) {
+    public static void collectionDropped(MongoCollectionTreeItem collectionItem, MongoDatabaseTreeItem dbItem) {
+        MongoCollectionDroppedEvent event = new MongoCollectionDroppedEvent();
+        event.data(collectionItem);
+        event.setDbItem(dbItem);
+        EventUtil.post(event);
     }
 
-    public static void collectionOpen(MongoCollectionTreeItem mongoCollectionTreeItem, MongoDatabaseTreeItem mongoDatabaseTreeItem) {
-
+    public static void collectionOpen(MongoCollectionTreeItem collectionItem, MongoDatabaseTreeItem dbItem) {
+        MongoCollectionOpenEvent event = new MongoCollectionOpenEvent();
+        event.data(collectionItem);
+        event.setDbItem(dbItem);
+        EventUtil.post(event);
     }
 }

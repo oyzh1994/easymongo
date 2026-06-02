@@ -43,7 +43,6 @@ public class MongoUtil {
         }
     }
 
-
     public static String wrap(String name) {
         StringBuilder builder = new StringBuilder(name);
         return builder.toString();

@@ -1,7 +1,10 @@
 package cn.oyzh.easymongo.test;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -20,7 +23,7 @@ public class MongoTest {
     @Test
     public void test1() throws ClassNotFoundException, SQLException {
 
-        String model= """
+        String model = """
                 {
                   "version": "1.0",
                   "defaultSchema": "mongo",
@@ -39,8 +42,7 @@ public class MongoTest {
                     }
                   ]
                 }
-                """
-                ;
+                """;
 
         // 1. 加载 Calcite JDBC 驱动
         Class.forName("org.apache.calcite.jdbc.Driver");
@@ -67,17 +69,7 @@ public class MongoTest {
     }
 
     @Test
-    public void  test2(){
-        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
-            MongoDatabase db = mongoClient.getDatabase("test");
-            for (String name : db.listCollectionNames()) {
-                System.out.println(name);
-            }
-        }
-    }
-
-    @Test
-    public void test3() throws ClassNotFoundException, SQLException {
+    public void test2() throws ClassNotFoundException, SQLException {
 
 
         // 1. 加载 Calcite JDBC 驱动
@@ -104,5 +96,29 @@ public class MongoTest {
         rs.close();
         stmt.close();
         connection.close();
+    }
+
+    @Test
+    public void test3() {
+        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
+            MongoDatabase db = mongoClient.getDatabase("test");
+            for (String name : db.listCollectionNames()) {
+                System.out.println(name);
+            }
+        }
+    }
+
+    @Test
+    public void test4() {
+        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
+            MongoDatabase db = mongoClient.getDatabase("test");
+            MongoCollection<Document> collection = db.getCollection("users");
+            FindIterable<Document> iterable = collection.find();
+            for (Document document : iterable) {
+                System.out.println("name=" + document.get("name"));
+                System.out.println("age=" + document.get("age"));
+                System.out.println("----");
+            }
+        }
     }
 }

@@ -7,11 +7,14 @@ import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.gui.text.field.DecimalTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
+import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.font.FontUtil;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
+import cn.oyzh.fx.plus.util.ControlUtil;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +35,8 @@ public class MongoRecordUtil {
             node = textField;
         } else {
             ClearableTextField textField = new ClearableTextField();
+
+            textField.setBackground(ControlUtil.background(Color.RED));
             textField.setValue(object);
             node = textField;
         }
@@ -74,49 +79,6 @@ public class MongoRecordUtil {
         return "(Null)";
     }
 
-    // public static double suitableColumnWidth(String columnType) {
-    //     if (DBColumnUtil.isGeometryType(columnType)) {
-    //         return 120;
-    //     }
-    //     if (DBColumnUtil.isPointType(columnType)) {
-    //         return 110;
-    //     }
-    //     if (DBColumnUtil.isMultiPointType(columnType)) {
-    //         return 200;
-    //     }
-    //     if (DBColumnUtil.isPolygonType(columnType)) {
-    //         return 220;
-    //     }
-    //     if (DBColumnUtil.isMultiPolygonType(columnType)) {
-    //         return 420;
-    //     }
-    //     if (DBColumnUtil.isLineStringType(columnType)) {
-    //         return 180;
-    //     }
-    //     if (DBColumnUtil.isMultiLineStringType(columnType)) {
-    //         return 320;
-    //     }
-    //     if (DBColumnUtil.isGeomCollectionType(columnType)) {
-    //         return 600;
-    //     }
-    //     if (DBColumnUtil.isYearType(columnType)) {
-    //         return 80;
-    //     }
-    //     if (DBColumnUtil.supportJson(columnType)) {
-    //         return 150;
-    //     }
-    //     if (DBColumnUtil.supportTimestamp(columnType)) {
-    //         return 160;
-    //     }
-    //     if (DBColumnUtil.supportBinary(columnType)) {
-    //         return 140;
-    //     }
-    //     if (DBColumnUtil.isDateType(columnType)) {
-    //         return 110;
-    //     }
-    //     return 100;
-    // }
-
     /**
      * 计算合适的字段宽
      *
@@ -124,11 +86,12 @@ public class MongoRecordUtil {
      * @return 结果
      */
     public static double suitableColumnWidth(MongoColumn column) {
-        double w1 = FontUtil.textWidth(column.getName());
-        double w2;
-            w2 = FontUtil.textWidth(column.getType());
+        String str1 = column.getName();
+        String str2 = column.getType();
+        double w1 = FontUtil.textWidth(str1, FontManager.currentFont());
+        double w2 = FontUtil.textWidth(str2, FontManager.currentFont());
         double w3 = Math.max(w1, w2);
-        return w3 + 30;
+        return w3 + 50;
     }
 
     public static ContextMenu getColumnContextMenu(MongoRecordProperty property) {
