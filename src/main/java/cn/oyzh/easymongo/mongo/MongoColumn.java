@@ -23,9 +23,9 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     private String dbName;
 
     /**
-     * 表名称
+     * 集合名称
      */
-    private String tableName;
+    private String collectionName;
 
     /**
      * 字段类型
@@ -87,18 +87,35 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     /**
+     * 是否支持小数
+     *
+     * @return 结果
+     */
+    public boolean supportDigits() {
+        return StringUtil.equalsAnyIgnoreCase(this.getType(),
+                float.class.getSimpleName(),
+                double.class.getSimpleName());
+    }
+
+    /**
      * 是否支持整数
      *
      * @return 结果
      */
     public boolean supportInteger() {
-        return false;
+        return StringUtil.equalsAnyIgnoreCase(this.getType(), int.class.getSimpleName(),
+                long.class.getSimpleName(),
+                short.class.getSimpleName(),
+                byte.class.getSimpleName(),
+                Integer.class.getSimpleName());
     }
 
     public boolean supportString() {
-        return false;
+        return StringUtil.equalsAnyIgnoreCase(this.getType(),
+                String.class.getSimpleName(),
+                char.class.getSimpleName(),
+                Character.class.getSimpleName());
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -129,7 +146,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
             this.setType(column.getType());
             this.setValue(column.value);
             this.setDbName(column.dbName);
-            this.setTableName(column.tableName);
+            this.setCollectionName(column.collectionName);
         }
     }
 
@@ -145,12 +162,12 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         this.dbName = dbName;
     }
 
-    public String getTableName() {
-        return tableName;
+    public String getCollectionName() {
+        return collectionName;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setCollectionName(String collectionName) {
+        this.collectionName = collectionName;
     }
 
     public String getType() {
@@ -169,7 +186,4 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         return name;
     }
 
-    public boolean supportDigits() {
-        return false;
-    }
 }

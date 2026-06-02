@@ -13,7 +13,6 @@ import org.bson.Document;
 
 import java.io.Closeable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
@@ -187,37 +186,27 @@ public class MongoClient implements Closeable {
 
     public List<MongoRecord> selectRecords(MysqlSelectRecordParam param) {
         String dbName = param.getDbName();
+        String collectionName = param.getCollectionName();
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
-        com.mongodb.client.MongoCollection<Document> collection = database.getCollection(param.getCollectionName());
+        com.mongodb.client.MongoCollection<Document> collection = database.getCollection(collectionName);
         int limit = Math.toIntExact(param.getLimit());
         int skip = Math.toIntExact(param.getStart());
         FindIterable<Document> iterable = collection.find().limit(limit).skip(skip);
-
-
-        MongoColumns columns = new MongoColumns();
-
-        for (Document document : iterable) {
-            Set<String> cols = document.keySet();
-            if (!cols.isEmpty()) {
-                for (String col : cols) {
-                    if (columns.exists(col)) {
-                        continue;
-                    }
-                    MongoColumn column = new MongoColumn();
-                    column.setDbName(dbName);
-                    column.setName(col);
-                    columns.add(column);
-                }
-            }
-        }
-
         List<MongoRecord> records = new ArrayList<>();
         for (Document document : iterable) {
             Set<String> cols = document.keySet();
             if (!cols.isEmpty()) {
+                MongoColumns columns = new MongoColumns();
                 MongoRecord record = new MongoRecord(columns);
                 for (String col : cols) {
-                    record.putValue(col, document.get(col));
+                    Object val = document.get(col);
+                    MongoColumn column = new MongoColumn();
+                    column.setName(col);
+                    column.setDbName(dbName);
+                    column.setCollectionName(collectionName);
+                    column.setType(val.getClass().getSimpleName());
+                    columns.add(column);
+                    record.putValue(column, val);
                 }
                 records.add(record);
             }

@@ -58,30 +58,15 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
      */
     private final boolean readonly;
 
-    // public MongoRecordProperty(MongoColumn column, Object value) {
-    //     this(column, value, false);
-    // }
-
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
         super(value);
         this.column = column;
         this.record = record;
-        // this.columns = columns;
         if (!readonly) {
             this.original = value;
         }
         this.readonly = readonly;
     }
-
-    // public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
-    //     super(value);
-    //     this.record = record;
-    //     this.column = column;
-    //     if (!readonly) {
-    //         this.original = value;
-    //     }
-    //     this.readonly = readonly;
-    // }
 
     @Override
     public Object get() {
@@ -111,8 +96,6 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
      */
     private Node node;
 
-    //    private static LongAdder adder = new LongAdder();
-
     @Override
     public Object getValue() {
         //        if (this.readonly || !this.record.isEditable()) {
@@ -123,8 +106,6 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
             this.node = MongoRecordUtil.getNode(this, super.get(), this.column);
             TableViewUtil.rowOnCtrlS(this.node);
             TableViewUtil.selectRowOnMouseClicked(this.node);
-            //            adder.increment();
-            //            System.out.println("adder:" + adder.longValue());
         }
         return this.node;
     }
@@ -153,7 +134,7 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     public void setChanged(boolean changed) {
         this.changedProperty().set(changed);
         DBStatusListener listener;
-        listener = DBStatusListenerManager.getListener(this.column.getDbName() + ":" + this.column.getTableName());
+        listener = DBStatusListenerManager.getListener(this.column.getDbName() + ":" + this.column.getCollectionName());
         if (listener != null) {
             listener.changed(null, null, null);
         }
@@ -182,28 +163,6 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     public void vPaste() {
         ClipboardUtil.paste(this.node);
     }
-
-    // public void vDelete() {
-    //     MysqlEventUtil.recordDelete(this.record);
-    // }
-    //
-    // /**
-    //  * 转换为字段列表
-    //  *
-    //  * @return 字段列表
-    //  */
-    // private MongoColumns toColumns() {
-    //     Set<String> cols = this.record.columns();
-    //     MongoColumns columns = new MongoColumns();
-    //     int pos = 0;
-    //     for (String col : cols) {
-    //         MongoColumn column = new MongoColumn(col);
-    //         column.setPosition(pos++);
-    //         column.setTableName(this.column.getTableName());
-    //         columns.add(column);
-    //     }
-    //     return columns;
-    // }
 
     /**
      * 复制为insert语句
@@ -283,8 +242,6 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
             this.record = null;
             this.original = null;
             this.changedProperty = null;
-            //            adder.decrement();
-            //            System.out.println("adder:" + adder.longValue());
         }
 
     }

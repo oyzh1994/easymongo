@@ -196,7 +196,7 @@ public class MongoDataUtil {
      */
     public static List<String> toInsertSql(MongoColumns columns, List<MongoRecord> records, boolean includeFields) {
         List<String> list = new ArrayList<>();
-        String tableName = columns.tableName();
+        String tableName = columns.collectionName();
         final String sqlBase = "INSERT INTO " + MongoUtil.wrap(tableName);
         for (MongoRecord record : records) {
             StringBuilder sql = new StringBuilder(sqlBase);
@@ -233,7 +233,7 @@ public class MongoDataUtil {
      * @return 修改sql
      */
     public static String toUpdateSql(MongoColumns columns, MongoRecord record) {
-        String tableName = columns.tableName();
+        String tableName = columns.collectionName();
         StringBuilder builder = new StringBuilder();
         builder.append("UPDATE ")
                 .append(MongoUtil.wrap(columns.dbName(), tableName))

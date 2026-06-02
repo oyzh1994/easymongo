@@ -220,14 +220,20 @@ public class MongoCollectionRecordTabController extends RichTabController {
      */
     @FXML
     private void addRecord() {
-        MongoRecord record = new MongoRecord(this.columns);
-        record.setCreated(true);
-        for (MongoColumn column : this.columns) {
-            Object val = null;
-            record.putValue(column, val);
+        MongoRecord lastItem = (MongoRecord) this.recordTable.lastItem();
+        if (lastItem == null) {
+
+        } else {
+            MongoRecord record = new MongoRecord(lastItem.getColumns());
+            record.setCreated(true);
+            for (MongoColumn column : lastItem.getColumns()) {
+                Object val = null;
+                record.putValue(column, val);
+            }
+            this.recordTable.addItem(record);
+            this.recordTable.selectLast();
         }
-        this.recordTable.addItem(record);
-        this.recordTable.selectLast();
+
     }
 
     /**

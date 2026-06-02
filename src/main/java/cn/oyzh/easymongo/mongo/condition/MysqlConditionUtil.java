@@ -111,14 +111,14 @@ public class MysqlConditionUtil {
             node.setDisable(!condition.isRequireCondition());
             list.add(node);
         } else if (isBetweenCondition(condition)) {
-            Node node1 = MongoNodeUtil.generateNode(column, false);
-            Node node2 = MongoNodeUtil.generateNode(column, false);
+            Node node1 = MongoNodeUtil.generateNode(column);
+            Node node2 = MongoNodeUtil.generateNode(column);
             node1.setDisable(!condition.isRequireCondition());
             node2.setDisable(!condition.isRequireCondition());
             list.add(node1);
             list.add(node2);
         } else {
-            Node node = MongoNodeUtil.generateNode(column, false);
+            Node node = MongoNodeUtil.generateNode(column);
             node.setDisable(!condition.isRequireCondition());
             list.add(node);
         }

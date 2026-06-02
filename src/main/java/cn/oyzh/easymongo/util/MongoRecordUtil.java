@@ -7,6 +7,7 @@ import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.gui.text.field.DecimalTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
+import cn.oyzh.fx.plus.controls.text.field.FXTextField;
 import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.font.FontUtil;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
@@ -28,15 +29,19 @@ public class MongoRecordUtil {
 
     public static Node getNode(MongoRecordProperty property, Object object, MongoColumn column) {
         Node node;
-        String columnType = column.getType();
-         if (column.supportInteger()) {
+        if (column.supportInteger()) {
             NumberTextField textField = new NumberTextField();
             textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#80D06A")));
+            node = textField;
+        } else if (column.supportDigits()) {
+            DecimalTextField textField = new DecimalTextField();
+            textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#60C6F4")));
             node = textField;
         } else {
-            ClearableTextField textField = new ClearableTextField();
-
-            textField.setBackground(ControlUtil.background(Color.RED));
+            FXTextField textField = new FXTextField();
+            textField.setBackground(ControlUtil.background(Color.valueOf("#FA7B73")));
             textField.setValue(object);
             node = textField;
         }

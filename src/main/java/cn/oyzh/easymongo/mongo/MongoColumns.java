@@ -51,9 +51,9 @@ public class MongoColumns extends DBObjectList<MongoColumn> {
         return index;
     }
 
-    public String tableName() {
+    public String collectionName() {
         for (MongoColumn dbColumn : this) {
-            return dbColumn.getTableName();
+            return dbColumn.getCollectionName();
         }
         return null;
     }
