@@ -1,6 +1,13 @@
 package cn.oyzh.easymongo.mongo.condition;
 
+import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 不介于列表条件
@@ -16,14 +23,22 @@ public class MysqlNotBetweenCondition extends MysqlBetweenCondition {
         super(I18nHelper.notBetween(), "NOT BETWEEN");
     }
 
-    // @Override
-    // public String wrapCondition(Object condition) {
-    //     if (condition instanceof Object[] arr) {
-    //         return this.getValue() + " " + MongoUtil.wrapData(arr[0]) + " AND " + MongoUtil.wrapData(arr[1]);
-    //     }
-    //     if (condition instanceof Collection<?> coll) {
-    //         return this.getValue() + " " + MongoUtil.wrapData(CollectionUtil.get(coll, 0)) + " AND " + MongoUtil.wrapData(CollectionUtil.get(coll, 1));
-    //     }
-    //     return super.wrapCondition(condition);
-    // }
+    @Override
+    public Bson wrapCondition(String columnName, Object condition) {
+        Bson bson1;
+        List<?> list = (List<?>) condition;
+        Object f = list.getFirst();
+        Object l = list.getLast();
+        if (MongoUtil.ID.equals(columnName)) {
+            bson1 = Filters.expr(
+                    new Document("$or", Arrays.asList(
+                            new Document("$lt", Arrays.asList(new Document("$toString", "$_id"), f)),
+                            new Document("$gt", Arrays.asList(new Document("$toString", "$_id"), l))
+                    ))
+            );
+        } else {
+            bson1 = Filters.and(Filters.exists(columnName), Filters.or(Filters.lt(columnName, f), Filters.gt(columnName, l)));
+        }
+        return bson1;
+    }
 }
