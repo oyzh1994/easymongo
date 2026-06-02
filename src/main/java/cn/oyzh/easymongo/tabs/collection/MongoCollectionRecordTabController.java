@@ -14,8 +14,8 @@ import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordData;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
-import cn.oyzh.easymongo.popups.ShellMysqlPageSettingPopupController;
-import cn.oyzh.easymongo.popups.ShellMysqlTableRecordFilterPopupController;
+import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
+import cn.oyzh.easymongo.popups.MongoCollectionRecordFilterPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
@@ -339,9 +339,10 @@ public class MongoCollectionRecordTabController extends RichTabController {
     @FXML
     private void filter() {
         try {
-            PopupAdapter popup = PopupManager.parsePopup(ShellMysqlTableRecordFilterPopupController.class);
+            PopupAdapter popup = PopupManager.parsePopup(MongoCollectionRecordFilterPopupController.class);
             popup.setProp("item", this.getItem());
             popup.setProp("filters", this.filters);
+            popup.setProp("columns", this.columns);
             popup.showPopup(this.filter);
             popup.setSubmitHandler(filters -> {
                 this.setFilters((List<MongoRecordFilter>) filters);
@@ -397,7 +398,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
      */
     @FXML
     private void pageSetting() {
-        PopupAdapter popup = PopupManager.parsePopup(ShellMysqlPageSettingPopupController.class);
+        PopupAdapter popup = PopupManager.parsePopup(MongoPageSettingPopupController.class);
         popup.showPopup(this.pageBox.getSettingBtn());
         int limit = this.setting.getRecordPageLimit();
         popup.setSubmitHandler(o -> {

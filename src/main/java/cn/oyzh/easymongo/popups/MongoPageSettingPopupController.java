@@ -17,9 +17,9 @@ import javafx.stage.WindowEvent;
  * @since 2024/08/06
  */
 @PopupAttribute(
-        value = FXConst.POPUP_PATH + "mysql/shellMysqlPageSettingPopup.fxml"
+        value = FXConst.POPUP_PATH + "mongoPageSettingPopup.fxml"
 )
-public class ShellMysqlPageSettingPopupController extends PopupController {
+public class MongoPageSettingPopupController extends PopupController {
 
     /**
      * 每页限制

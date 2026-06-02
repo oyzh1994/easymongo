@@ -4,7 +4,9 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -70,8 +72,6 @@ public class MongoTest {
 
     @Test
     public void test2() throws ClassNotFoundException, SQLException {
-
-
         // 1. 加载 Calcite JDBC 驱动
         Class.forName("org.apache.calcite.jdbc.Driver");
 
@@ -114,6 +114,28 @@ public class MongoTest {
             MongoDatabase db = mongoClient.getDatabase("test");
             MongoCollection<Document> collection = db.getCollection("users");
             FindIterable<Document> iterable = collection.find();
+            for (Document document : iterable) {
+                System.out.println("name=" + document.get("name"));
+                System.out.println("age=" + document.get("age"));
+                System.out.println("----");
+            }
+        }
+    }
+
+    @Test
+    public void test5() {
+        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
+            MongoDatabase db = mongoClient.getDatabase("test");
+            MongoCollection<Document> collection = db.getCollection("users");
+            Bson f1 = Filters.regex("name", "五$");
+            Bson f2 = Filters.expr(
+                    new Document("$regexMatch",
+                            new Document("input", new Document("$toString", "$_id"))
+                                    .append("regex", "be$")
+                    )
+            );
+            Bson f3 = Filters.not(f1);
+            FindIterable<Document> iterable = collection.find(f3);
             for (Document document : iterable) {
                 System.out.println("name=" + document.get("name"));
                 System.out.println("age=" + document.get("age"));

@@ -21,18 +21,4 @@ public class MysqlInListCondition extends MysqlCondition {
         super(name, value);
     }
 
-    @Override
-    public String wrapCondition(Object condition) {
-        if (condition instanceof String str) {
-            String[] arr = str.split(",");
-            StringBuilder sb = new StringBuilder();
-            for (String s : arr) {
-                sb.append(",").append(MongoUtil.wrapData(s));
-            }
-            if (!sb.isEmpty()) {
-                return this.getValue() + " (" + sb.substring(1) + ")";
-            }
-        }
-        return super.wrapCondition(condition);
-    }
 }

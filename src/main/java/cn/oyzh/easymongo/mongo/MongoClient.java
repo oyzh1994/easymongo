@@ -3,6 +3,7 @@ package cn.oyzh.easymongo.mongo;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
+import cn.oyzh.easymongo.mongo.condition.MysqlConditionUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.ListDatabasesIterable;
@@ -198,11 +199,12 @@ public class MongoClient implements Closeable {
     public List<MongoRecord> selectRecords(MysqlSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
-        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
-        com.mongodb.client.MongoCollection<Document> collection = database.getCollection(collectionName);
-        int limit = Math.toIntExact(param.getLimit());
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
         int skip = Math.toIntExact(param.getStart());
-        FindIterable<Document> iterable = collection.find().limit(limit).skip(skip);
+        int limit = Math.toIntExact(param.getLimit());
+
+        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        FindIterable<Document> iterable = collection.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         for (Document document : iterable) {
             Set<String> cols = document.keySet();

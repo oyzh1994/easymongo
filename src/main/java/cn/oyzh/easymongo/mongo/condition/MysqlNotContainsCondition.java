@@ -1,6 +1,11 @@
 package cn.oyzh.easymongo.mongo.condition;
 
+import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
+import com.mongodb.client.model.Filters;
+import org.bson.conversions.Bson;
+
+import java.util.regex.Pattern;
 
 /**
  * 不包含条件
@@ -16,11 +21,17 @@ public class MysqlNotContainsCondition extends MysqlContainsCondition {
         super(I18nHelper.notContains(), "NOT LIKE");
     }
 
-    // @Override
-    // public String wrapCondition(Object condition) {
-    //     if (condition != null) {
-    //         return super.wrapCondition("%" + condition + "%");
-    //     }
-    //     return super.wrapCondition(condition);
-    // }
+    @Override
+    public Bson wrapCondition(String columnName, Object condition) {
+        String quote = Pattern.quote(condition.toString());
+        Pattern pattern = Pattern.compile(quote, Pattern.CASE_INSENSITIVE);
+        Bson bson1;
+        if (MongoUtil.ID.equals(columnName)) {
+            bson1 = MysqlConditionUtil.idFilterNot(pattern);
+        } else {
+            bson1 = Filters.and(Filters.exists(columnName), Filters.not(Filters.regex(columnName, pattern)));
+        }
+        return bson1;
+    }
+
 }

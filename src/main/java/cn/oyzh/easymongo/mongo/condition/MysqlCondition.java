@@ -1,7 +1,7 @@
 package cn.oyzh.easymongo.mongo.condition;
 
 
-import cn.oyzh.easymongo.util.MongoUtil;
+import org.bson.conversions.Bson;
 
 /**
  * 条件
@@ -41,15 +41,12 @@ public abstract class MysqlCondition {
         this.requireCondition = requireCondition;
     }
 
-    public String wrapCondition() {
-        return this.wrapCondition(null);
+    public Bson wrapCondition(String columnName) {
+        return this.wrapCondition(columnName, null);
     }
 
-    public String wrapCondition(Object condition) {
-        if (this.requireCondition) {
-            return condition == null ? this.getValue() : this.getValue() + " " +  MongoUtil.wrapData(condition);
-        }
-        return this.getValue();
+    public Bson wrapCondition(String columnName, Object condition) {
+        return null;
     }
 
     public String getName() {

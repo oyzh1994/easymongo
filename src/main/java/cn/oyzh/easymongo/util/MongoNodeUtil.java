@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
  */
 public class MongoNodeUtil {
 
-    public static Object getNodeVal(Node node) throws Exception {
+    public static Object getNodeVal(Node node)   {
         Object val = null;
         if (node instanceof NumberTextField textField) {
             val = textField.getValue();

@@ -15,9 +15,7 @@
         xmlns:fx="http://javafx.com/fxml"
         fx:controller="cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTabController" fx:id="root" flexWidth="100%"
         flexHeight="100%">
-    <MongoRecordTableView fx:id="recordTable" flexHeight="100% - 40" flexWidth="100%" tableMenuButtonVisible="true">
-    </MongoRecordTableView>
-    <FXHBox realHeight="40" flexWidth="100%">
+    <FXHBox realHeight="30" flexWidth="100%">
         <DeleteSVGGlyph groupId="action2" onMousePrimaryClicked="#deleteRecord">
             <HBox.margin>
                 <Insets left="10" top="10"/>
@@ -57,4 +55,6 @@
             </HBox.margin>
         </PageBox>
     </FXHBox>
+    <MongoRecordTableView fx:id="recordTable" flexHeight="100% - 30" flexWidth="100%" tableMenuButtonVisible="true">
+    </MongoRecordTableView>
 </FXVBox>

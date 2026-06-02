@@ -1,15 +1,17 @@
 package cn.oyzh.easymongo.mongo.condition;
 
-import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
 import cn.oyzh.easymongo.util.MongoNodeUtil;
-import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
+import com.mongodb.client.model.Filters;
 import javafx.scene.Node;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 条件工具类
@@ -55,25 +57,25 @@ public class MysqlConditionUtil {
      * @param filters 过滤条件
      * @return 条件
      */
-    public static String buildCondition(List<MongoRecordFilter> filters) throws Exception {
+    public static Bson buildCondition(List<MongoRecordFilter> filters) {
+        Bson bson = new Document();
         if (filters == null || filters.isEmpty()) {
-            return "";
+            return bson;
         }
-        StringBuilder conditions = new StringBuilder();
-        for (int i = 0; i < filters.size(); i++) {
-            MongoRecordFilter filter = filters.get(i);
-            String condition = filter.condition();
-            if (StringUtil.isNotBlank(condition)) {
-                conditions.append(MongoUtil.wrap(filter.column()))
-                        .append(" ")
-                        .append(condition)
-                        .append(" ");
+        for (MongoRecordFilter filter : filters) {
+            if (!filter.isEnabled()) {
+                continue;
             }
-            if (i != filters.size() - 1) {
-                conditions.append(filter.getJoinSymbol()).append(" ");
+            Bson bson1 = filter.condition();
+            if (bson1 != null) {
+                if ("and".equalsIgnoreCase(filter.getJoinSymbol())) {
+                    bson = Filters.and(bson1);
+                } else {
+                    bson = Filters.or(bson1);
+                }
             }
         }
-        return conditions.toString();
+        return bson;
     }
 
     /**
@@ -147,7 +149,7 @@ public class MysqlConditionUtil {
      * @param controls 组件
      * @return 值
      */
-    public static Object getNodeVal(List<Node> controls) throws Exception {
+    public static Object getNodeVal(List<Node> controls) {
         if (controls == null || controls.isEmpty()) {
             return null;
         }
@@ -159,5 +161,25 @@ public class MysqlConditionUtil {
             list.add(MongoNodeUtil.getNodeVal(control));
         }
         return list;
+    }
+
+    public static Bson idFilter(Pattern pattern) {
+        return Filters.expr(
+                new Document("$regexMatch",
+                        new Document("input", new Document("$toString", "$_id"))
+                                .append("regex", pattern.pattern())
+                )
+        );
+    }
+
+    public static Bson idFilterNot(Pattern pattern) {
+        return Filters.expr(
+                new Document("$not",
+                        new Document("$regexMatch",
+                                new Document("input", new Document("$toString", "$_id"))
+                                        .append("regex", pattern.pattern())
+                        )
+                )
+        );
     }
 }

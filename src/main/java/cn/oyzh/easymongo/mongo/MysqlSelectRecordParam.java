@@ -1,6 +1,9 @@
 package cn.oyzh.easymongo.mongo;
 
 
+import com.mongodb.client.model.Filters;
+import org.bson.conversions.Bson;
+
 import java.util.List;
 
 /**
@@ -82,4 +85,5 @@ public class MysqlSelectRecordParam {
     public void setCollectionName(String collectionName) {
         this.collectionName = collectionName;
     }
+
 }

@@ -12,6 +12,7 @@ import cn.oyzh.fx.plus.tableview.TableViewUtil;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import org.bson.conversions.Bson;
 
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class MongoRecordFilter {
      *
      * @return 值
      */
-    public Object value() throws Exception {
+    public Object value() {
         if (this.valueBox == null || this.valueBox.isChildEmpty()) {
             return this.value;
         }
@@ -181,8 +182,8 @@ public class MongoRecordFilter {
      *
      * @return 条件
      */
-    public String condition() throws Exception {
-        return this.condition.wrapCondition(this.value());
+    public Bson condition() {
+        return this.condition.wrapCondition(this.column(), this.value());
     }
 
     /**

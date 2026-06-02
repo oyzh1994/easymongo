@@ -8,7 +8,6 @@ import cn.oyzh.fx.plus.controls.table.FXTableView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.PopupAttribute;
 import javafx.fxml.FXML;
-import javafx.scene.control.TreeItem;
 import javafx.stage.WindowEvent;
 
 import java.util.List;
@@ -20,20 +19,15 @@ import java.util.List;
  * @since 2024/06/26
  */
 @PopupAttribute(
-        value = FXConst.POPUP_PATH + "mysql/shellMysqlTableRecordFilterPopup.fxml"
+        value = FXConst.POPUP_PATH + "mongoCollectionRecordFilterPopup.fxml"
 )
-public class ShellMysqlTableRecordFilterPopupController extends PopupController {
+public class MongoCollectionRecordFilterPopupController extends PopupController {
 
     /**
      * 表过滤条件表单
      */
     @FXML
     private FXTableView<MongoRecordFilter> filterTable;
-
-    /**
-     * db表节点
-     */
-    private TreeItem<?> treeItem;
 
     /**
      * 字段列表
@@ -69,34 +63,10 @@ public class ShellMysqlTableRecordFilterPopupController extends PopupController 
     @Override
     public void onWindowShowing(WindowEvent event) {
         super.onWindowShowing(event);
-        this.treeItem = this.getProp("item");
         List<MongoRecordFilter> filters = this.getProp("filters");
         this.filterTable.setItem(filters);
+        this.columnList = this.getProp("columns");
     }
-
-    @Override
-    public void onWindowHidden(WindowEvent event) {
-        super.onWindowHidden(event);
-        this.columnList = null;
-    }
-
-    // /**
-    //  * 初始化列表控件
-    //  */
-    // private void initTable() {
-    //     this.value.setCellValueFactory(new PropertyValueFactory<>("valueControl"));
-    //     this.column.setCellValueFactory(new PropertyValueFactory<>("columnControl"));
-    //     this.enabled.setCellValueFactory(new PropertyValueFactory<>("enabledControl"));
-    //     this.condition.setCellValueFactory(new PropertyValueFactory<>("conditionControl"));
-    //     this.joinSymbol.setCellValueFactory(new PropertyValueFactory<>("joinSymbolControl"));
-    // }
-
-    // @Override
-    // public void onPopupInitialize(PopupAdapter window) {
-    //     super.onPopupInitialize(window);
-    //     // 初始化表单
-    //     this.initTable();
-    // }
 
     /**
      * 添加过滤条件
@@ -104,8 +74,6 @@ public class ShellMysqlTableRecordFilterPopupController extends PopupController 
     @FXML
     private void addFilter() {
         MongoRecordFilter filter = new MongoRecordFilter();
-        if (this.columnList == null) {
-        }
         filter.setColumns(this.columnList);
         this.filterTable.addItem(filter);
     }
