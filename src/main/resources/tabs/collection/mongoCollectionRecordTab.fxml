@@ -61,6 +61,6 @@
             </HBox.margin>
         </PageBox>
     </FXHBox>
-    <MongoRecordTableView fx:id="recordTable" flexHeight="100% - 30" flexWidth="100%" tableMenuButtonVisible="true">
+    <MongoRecordTableView fixedCellSize="30" fx:id="recordTable" flexHeight="100% - 30" flexWidth="100%" tableMenuButtonVisible="true">
     </MongoRecordTableView>
 </FXVBox>
