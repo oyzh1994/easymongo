@@ -34,7 +34,7 @@ public class MongoRecordData {
 
     public MongoColumn column(String column) {
         if (this.dataList != null) {
-            for (MongoColumn dbColumn : dataList.keySet()) {
+            for (MongoColumn dbColumn : this.dataList.keySet()) {
                 if (StringUtil.equalsAnyIgnoreCase(column, dbColumn.getName())) {
                     return dbColumn;
                 }

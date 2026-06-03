@@ -44,7 +44,9 @@ import javafx.fxml.FXML;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * db表tab内容组件
@@ -163,11 +165,8 @@ public class MongoCollectionRecordTabController extends RichTabController {
             this.pageBox.setPaging(this.pageData);
             List<MongoRecord> records = this.pageData.dataList();
             // 初始化字段
-            if (records.isEmpty()) {
-                this.initColumns(null);
-            } else {
-                this.initColumns(records.getFirst().getColumns());
-            }
+            this.initColumns(records);
+            // 初始化数据
             this.initRecords(records);
         } catch (Exception ex) {
             MessageBox.exception(ex);
@@ -184,6 +183,43 @@ public class MongoCollectionRecordTabController extends RichTabController {
             return this.filters.stream().filter(MongoRecordFilter::isEnabled).toList();
         }
         return null;
+    }
+
+    /**
+     * 初始化字段
+     *
+     * @param records 记录列表
+     */
+    private void initColumns(List<MongoRecord> records) {
+        MongoColumns columnList = this.columns;
+        if (columnList == null) {
+            columnList = new MongoColumns();
+        }
+
+        Set<String> colNames = new HashSet<>();
+        for (MongoRecord record : records) {
+            MongoColumns mongoColumns = record.getColumns();
+            for (MongoColumn mongoColumn : mongoColumns) {
+                MongoColumn column = columnList.column(mongoColumn.getName());
+                if (column == null) {
+                    column = new MongoColumn();
+                    column.copy(mongoColumn);
+                    columnList.add(column);
+                }
+                colNames.add(mongoColumn.getName());
+            }
+        }
+
+        List<MongoColumn> delList = new ArrayList<>();
+        for (MongoColumn column : columnList) {
+            if (!colNames.contains(column.getName())) {
+                delList.add(column);
+            }
+        }
+
+        columnList.removeAll(delList);
+
+        this.initColumns(columnList);
     }
 
     /**
@@ -227,27 +263,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
         try {
             MongoRecord lastItem = (MongoRecord) this.recordTable.lastItem();
             if (lastItem == null) {
-                StageAdapter adapter = MongoViewFactory.documentAdd();
-                if (adapter == null) {
-                    return;
-                }
-                String doc = adapter.getProp("doc");
-                if (StringUtil.isBlank(doc)) {
-                    return;
-                }
-                MongoRecord record = MongoRecordUtil.docToRecord(doc, this.getItem().dbName(), this.getItem().collectionName());
-                ObjectId _id = this.getItem().insertRecord(record.getRecordData());
-                if (_id == null) {
-                    MessageBox.warn(I18nHelper.addDocumentFail());
-                    return;
-                }
-                record.set_id(_id);
-                if (this.recordTable.isItemEmpty()) {
-                    this.reload();
-                } else {
-                    this.recordTable.addItem(record);
-                    this.recordTable.selectLast();
-                }
+                this.addDocument();
             } else {
                 MongoColumns columns = new MongoColumns(lastItem.getColumns());
                 MongoRecord record = new MongoRecord(columns);
@@ -257,6 +273,46 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 }
                 this.recordTable.addItem(record);
                 this.recordTable.selectLast();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+    }
+
+    /**
+     * 添加文档
+     */
+    @FXML
+    private void addDocument() {
+        try {
+            StageAdapter adapter = MongoViewFactory.documentAdd(this.columns);
+            if (adapter == null) {
+                return;
+            }
+            String doc = adapter.getProp("doc");
+            if (StringUtil.isBlank(doc)) {
+                return;
+            }
+            MongoRecord record = MongoRecordUtil.docToRecord(doc, this.getItem().dbName(), this.getItem().collectionName());
+            ObjectId _id = this.getItem().insertRecord(record.getRecordData());
+            if (_id == null) {
+                MessageBox.warn(I18nHelper.addDocumentFail());
+                return;
+            }
+            record.set_id(_id);
+            record.clearStatus();
+            if (this.recordTable.isItemEmpty()) {
+                this.reload();
+            } else {
+                // 更新字段
+                List<MongoRecord> list = new ArrayList<>(this.recordTable.getItems());
+                list.add(record);
+                this.initColumns(list);
+                // 追加内容
+                this.recordTable.addItem(record);
+                this.recordTable.selectLast();
+                this.apply.disable();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -282,11 +338,15 @@ public class MongoCollectionRecordTabController extends RichTabController {
      */
     private void updateRecord(MongoRecord record) {
         // 记录数据
-        MongoRecordData recordData = record.getChangedRecordData();
-        // 设置id
-        recordData.put(record._idColumn(), record._idValue());
+        MongoRecordData recordData = record.getRecordData();
         // 更新行
-        this.getItem().updateRecord(recordData);
+        long result = this.getItem().updateRecord(recordData);
+        // 更新字段
+        if (result == 1) {
+            this.initColumns(this.recordTable.getItems());
+        } else {// 操作失败
+            MessageBox.warn(I18nHelper.updateDocumentFail());
+        }
     }
 
     /**

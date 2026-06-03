@@ -1,12 +1,15 @@
 package cn.oyzh.easymongo.controller.collection;
 
 import cn.oyzh.common.json.JSONUtil;
+import cn.oyzh.easymongo.mongo.MongoColumn;
+import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.fx.editor.incubator.Editor;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controller.StageController;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.StageAttribute;
 import cn.oyzh.i18n.I18nHelper;
+import com.alibaba.fastjson.JSONObject;
 import javafx.fxml.FXML;
 import javafx.stage.Modality;
 import javafx.stage.WindowEvent;
@@ -56,10 +59,32 @@ public class MongoDocumentAddController extends StageController {
     @Override
     public void onWindowShown(WindowEvent event) {
         super.onWindowShown(event);
-        this.doc.setText("""
-                {
-                
-                }""");
+        MongoColumns columns = this.getProp("columns");
+        if (columns.isEmpty()) {
+            this.doc.setText("""
+                    {
+                    
+                    }""");
+        } else {
+            JSONObject object = new JSONObject();
+            for (MongoColumn column : columns) {
+                if (column.is_id()) {
+                    continue;
+                }
+                Object defVal;
+                if (column.supportInteger()) {
+                    defVal = 1;
+                } else if (column.supportDigits()) {
+                    defVal = 1d;
+                } else {
+                    defVal = "";
+                }
+                object.put(column.getName(), defVal);
+            }
+            this.doc.setText(JSONUtil.toPretty(object));
+        }
+
+
         this.stage.switchOnTab();
         this.stage.hideOnEscape();
     }

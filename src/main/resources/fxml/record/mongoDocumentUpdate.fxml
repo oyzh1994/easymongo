@@ -10,7 +10,7 @@
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController" realWidth="750"
         realHeight="300">
-    <Editor formatType="JSON" fx:id="doc" flexHeight="100% - 60" flexWidth="100%">
+    <Editor formatType="JSON" fx:id="doc" flexHeight="100% - 60" flexWidth="100% - 60">
         <VBox.margin>
             <Insets left="30" top="5"/>
         </VBox.margin>

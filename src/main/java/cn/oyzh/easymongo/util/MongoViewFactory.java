@@ -3,6 +3,7 @@ package cn.oyzh.easymongo.util;
 import cn.oyzh.easymongo.controller.collection.MongoDocumentAddController;
 import cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
+import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
 import cn.oyzh.fx.plus.information.MessageBox;
@@ -20,11 +21,13 @@ public class MongoViewFactory {
     /**
      * 添加文档
      *
+     * @param columns 字段列表
      * @return 页面
      */
-    public static StageAdapter documentAdd() {
+    public static StageAdapter documentAdd(MongoColumns columns) {
         try {
             StageAdapter adapter = StageManager.parseStage(MongoDocumentAddController.class, StageManager.getFrontWindow());
+            adapter.setProp("columns", columns);
             adapter.showAndWait();
             return adapter;
         } catch (Exception ex) {

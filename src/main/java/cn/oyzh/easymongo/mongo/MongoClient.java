@@ -313,21 +313,35 @@ public class MongoClient implements Closeable {
         com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, collectionName);
         ObjectId _id = recordData.id();
         Bson filter = Filters.eq(MongoUtil.ID, _id);
+        FindIterable<Document> iterable = collection1.find(filter);
+        Document document = iterable.first();
+        if (document == null) {
+            return 0;
+        }
         Bson update = null;
         for (Map.Entry<MongoColumn, Object> entry : recordData.entries()) {
             if (entry.getKey().is_id()) {
                 continue;
             }
-            Bson bson = Updates.set(entry.getKey().getName(), entry.getValue());
+            String colName = entry.getKey().getName();
+            Bson bson = Updates.set(colName, entry.getValue());
             if (update == null) {
                 update = bson;
             } else {
                 update = Updates.combine(update, bson);
             }
         }
+
+        for (String colName : document.keySet()) {
+            if (recordData.column(colName) == null) {
+                Bson bson = Updates.unset(colName);
+                update = Updates.combine(update, bson);
+            }
+        }
+
         if (update != null) {
             UpdateResult result = collection1.updateOne(filter, update);
-            return result.getModifiedCount();
+            return result.getMatchedCount();
         }
         return 0;
     }
