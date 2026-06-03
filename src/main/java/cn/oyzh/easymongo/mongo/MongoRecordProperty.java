@@ -6,10 +6,12 @@ import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.easymongo.util.MongoNodeUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
+import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.plus.node.NodeDestroyUtil;
 import cn.oyzh.fx.plus.node.NodeUtil;
 import cn.oyzh.fx.plus.tableview.TableViewUtil;
 import cn.oyzh.fx.plus.util.ClipboardUtil;
+import cn.oyzh.fx.plus.window.StageAdapter;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -32,11 +34,6 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
      * 表字段
      */
     private MongoColumn column;
-
-    // /**
-    //  * 表字段列表
-    //  */
-    // private MongoColumns columns;
 
     /**
      * 表记录
@@ -61,6 +58,11 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
         super(value);
         this.column = column;
+        this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
+            this.node = null;
+            this.initNode();
+            this.setChanged(true);
+        });
         this.record = record;
         if (!readonly) {
             this.original = value;
@@ -103,11 +105,21 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
             return MongoRecordUtil.formatValue(super.getValue(), this.column);
         }
         if (this.node == null) {
-            this.node = MongoRecordUtil.getNode(this, super.get(), this.column);
-            TableViewUtil.rowOnCtrlS(this.node);
-            TableViewUtil.selectRowOnMouseClicked(this.node);
+            //            this.node = MongoRecordUtil.getNode(this, super.get(), this.column);
+            //            TableViewUtil.rowOnCtrlS(this.node);
+            //            TableViewUtil.selectRowOnMouseClicked(this.node);
+            this.initNode();
         }
         return this.node;
+    }
+
+    /**
+     * 初始化节点
+     */
+    private void initNode() {
+        this.node = MongoRecordUtil.getNode(this, super.get(), this.column);
+        TableViewUtil.rowOnCtrlS(this.node);
+        TableViewUtil.selectRowOnMouseClicked(this.node);
     }
 
     /**
@@ -164,6 +176,19 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         ClipboardUtil.paste(this.node);
     }
 
+    public void vEdit() {
+        StageAdapter adapter = MongoViewFactory.documentUpdate(this.record);
+        if (adapter == null) {
+            return;
+        }
+        String doc = adapter.getProp("doc");
+        if (doc == null) {
+            return;
+        }
+        MongoRecord record = MongoRecordUtil.docToRecord(doc, this.column.getDbName(), this.column.getCollectionName());
+        this.record.copy(record);
+    }
+
     /**
      * 复制为insert语句
      */
@@ -183,30 +208,14 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     }
 
     public void vSetToNull() {
-        if (this.node instanceof TextField textField) {
-            // 如果内容为空，则直接设置变更
-            if (StringUtil.isEmpty(textField.getText())) {
-                this.setChanged(true);
-            } else {
-                textField.clear();
-            }
-            textField.setPromptText(MongoRecordUtil.nullPromptText());
-            NodeUtil.unFocus(this.node);
-        }
+        this.setChanged(true);
         this.setToNullFlag = true;
+        MongoNodeUtil.setToNullString(this.node);
     }
 
     public void vSetToEmptyString() {
-        if (this.node instanceof TextField textField) {
-            // 如果内容为空，则直接设置变更
-            if (StringUtil.isEmpty(textField.getText())) {
-                this.setChanged(true);
-            } else {
-                textField.setText("");
-            }
-            textField.setPromptText("");
-            NodeUtil.unFocus(this.node);
-        }
+        this.setChanged(true);
+        MongoNodeUtil.setToEmptyString(this.node);
     }
 
     public MongoColumn getColumn() {

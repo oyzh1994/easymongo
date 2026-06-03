@@ -1,7 +1,9 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.controller.collection.MongoDocumentAddController;
+import cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
+import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.StageAdapter;
@@ -23,6 +25,25 @@ public class MongoViewFactory {
     public static StageAdapter documentAdd() {
         try {
             StageAdapter adapter = StageManager.parseStage(MongoDocumentAddController.class, StageManager.getFrontWindow());
+            adapter.showAndWait();
+            return adapter;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+        return null;
+    }
+
+    /**
+     * 编辑文档
+     *
+     * @param record 记录
+     * @return 页面
+     */
+    public static StageAdapter documentUpdate(MongoRecord record) {
+        try {
+            StageAdapter adapter = StageManager.parseStage(MongoDocumentUpdateController.class, StageManager.getFrontWindow());
+            adapter.setProp("record", record);
             adapter.showAndWait();
             return adapter;
         } catch (Exception ex) {

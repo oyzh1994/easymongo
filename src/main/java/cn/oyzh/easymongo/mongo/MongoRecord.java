@@ -2,9 +2,11 @@ package cn.oyzh.easymongo.mongo;
 
 
 import cn.oyzh.common.object.Destroyable;
+import cn.oyzh.common.object.ObjectCopier;
 import cn.oyzh.easymongo.util.MongoUtil;
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +18,7 @@ import java.util.Set;
  * @author oyzh
  * @since 2023/12/20
  */
-public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implements Destroyable {
+public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implements Destroyable, ObjectCopier<MongoRecord> {
 
     /**
      * 是否只读
@@ -71,7 +73,7 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
         if (property == null) {
             property = putValue(new MongoColumn(column), value);
         } else {
-            property.setValue(value);
+            property.set(value);
         }
         return property;
     }
@@ -198,13 +200,32 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
         super.clearStatus();
     }
 
+    @Override
     public void copy(MongoRecord record) {
-        if (record != null) {
+        if (record == null) {
+            return;
+        }
+        if (record.columns != null) {
+            List<MongoColumn> addList = new ArrayList<>();
+            for (MongoColumn column : record.columns) {
+                boolean found = false;
+                for (MongoColumn mongoColumn : this.columns) {
+                    if (mongoColumn.getName().equals(column.getName())) {
+                        mongoColumn.copy(column);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    addList.add(column);
+                }
+            }
+            this.columns.addAll(addList);
+        }
+        if (record.properties != null) {
             for (String column : record.columns()) {
                 Object value = record.getValue(column);
-                if (value != null) {
-                    this.putValue(column, value);
-                }
+                this.putValue(column, value);
             }
         }
     }
@@ -282,5 +303,17 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
 
     public void set_id(ObjectId _id) {
         this.putValue(MongoUtil.ID, _id);
+    }
+
+    public MongoColumn column(String columnName) {
+        return this.columns.column(columnName);
+    }
+
+    public MongoColumn _idColumn() {
+        return this.column(MongoUtil.ID);
+    }
+
+    public Object _idValue() {
+        return this.getValue(MongoUtil.ID);
     }
 }

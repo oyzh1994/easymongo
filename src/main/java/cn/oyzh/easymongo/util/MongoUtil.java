@@ -7,6 +7,7 @@ import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoRecordData;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.JDBCType;
@@ -268,5 +269,31 @@ public class MongoUtil {
 
     public static String wrap(String s, String tableName) {
         return "";
+    }
+
+    /**
+     * 获取值类型
+     *
+     * @param val 值
+     * @return 类型
+     */
+    public static String getType(Object val) {
+//        if (val instanceof BigDecimal decimal) {
+//            return decimal.stripTrailingZeros().scale() <= 0 ? "int" : "double";
+//        }
+        if (val instanceof Double || val instanceof Float) {
+            return "double";
+        }
+        if (val instanceof Long || val instanceof Integer
+                || val instanceof Short || val instanceof Byte) {
+            return "int";
+        }
+        if (val instanceof Number) {
+            return "double";
+        }
+        if (val instanceof Character || val instanceof CharSequence) {
+            return "string";
+        }
+        return "string";
     }
 }

@@ -35,7 +35,6 @@ import cn.oyzh.fx.plus.window.PopupManager;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
-import com.alibaba.fastjson.JSONObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -236,18 +235,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 if (StringUtil.isBlank(doc)) {
                     return;
                 }
-                JSONObject object = JSONObject.parseObject(doc);
-                MongoColumns columns = new MongoColumns();
-                for (String col : object.keySet()) {
-                    MongoColumn column= new MongoColumn(col);
-                    column.setDbName(this.getItem().dbName());
-                    column.setCollectionName(this.getItem().collectionName());
-                    columns.add(column);
-                }
-                MongoRecord record = new MongoRecord(columns);
-                for (MongoColumn column : columns) {
-                    record.putValue(column, object.get(column.getName()));
-                }
+                MongoRecord record = MongoRecordUtil.docToRecord(doc, this.getItem().dbName(), this.getItem().collectionName());
                 ObjectId _id = this.getItem().insertRecord(record.getRecordData());
                 if (_id == null) {
                     MessageBox.warn(I18nHelper.addDocumentFail());
@@ -295,6 +283,8 @@ public class MongoCollectionRecordTabController extends RichTabController {
     private void updateRecord(MongoRecord record) {
         // 记录数据
         MongoRecordData recordData = record.getChangedRecordData();
+        // 设置id
+        recordData.put(record._idColumn(), record._idValue());
         // 更新行
         this.getItem().updateRecord(recordData);
     }

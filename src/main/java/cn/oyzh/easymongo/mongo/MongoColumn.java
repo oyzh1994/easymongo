@@ -5,6 +5,7 @@ import cn.oyzh.common.util.StringUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,9 +60,6 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     public void setType(String type) {
-        if (type != null) {
-            type = type.toUpperCase();
-        }
         this.typeProperty.set(type);
         super.putOriginalData("type", type);
     }
@@ -92,9 +90,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
      * @return 结果
      */
     public boolean supportDigits() {
-        return StringUtil.equalsAnyIgnoreCase(this.getType(),
-                float.class.getSimpleName(),
-                double.class.getSimpleName());
+        return StringUtil.equals(this.getType(), "double");
     }
 
     /**
@@ -103,18 +99,11 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
      * @return 结果
      */
     public boolean supportInteger() {
-        return StringUtil.equalsAnyIgnoreCase(this.getType(), int.class.getSimpleName(),
-                long.class.getSimpleName(),
-                short.class.getSimpleName(),
-                byte.class.getSimpleName(),
-                Integer.class.getSimpleName());
+        return StringUtil.equals(this.getType(), "int");
     }
 
     public boolean supportString() {
-        return StringUtil.equalsAnyIgnoreCase(this.getType(),
-                String.class.getSimpleName(),
-                char.class.getSimpleName(),
-                Character.class.getSimpleName());
+        return StringUtil.equals(this.getType(),"string");
     }
 
     public void setName(String name) {
@@ -137,7 +126,6 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
             this.setValue(null);
         }
     }
-
 
     @Override
     public void copy(MongoColumn column) {

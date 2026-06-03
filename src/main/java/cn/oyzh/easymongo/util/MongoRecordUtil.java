@@ -2,6 +2,8 @@ package cn.oyzh.easymongo.util;
 
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
+import cn.oyzh.easymongo.mongo.MongoColumns;
+import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordProperty;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
@@ -12,6 +14,7 @@ import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.font.FontUtil;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.fx.plus.util.ControlUtil;
+import com.alibaba.fastjson.JSONObject;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
@@ -111,6 +114,8 @@ public class MongoRecordUtil {
         menuItems.add(copy);
         FXMenuItem paste = MenuItemHelper.paste(property::vPaste);
         menuItems.add(paste);
+        FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
+        menuItems.add(edit);
         // FXMenuItem delete = MenuItemHelper.deleteRecord(property::vDelete);
         FXMenuItem setToNull = MenuItemHelper.setToNull(property::vSetToNull);
         menuItems.add(setToNull);
@@ -122,5 +127,23 @@ public class MongoRecordUtil {
         menuItems.add(copyAsUpdateStatement);
         // menuItems.add(delete);
         return menuItems;
+    }
+
+    public static MongoRecord docToRecord(String doc, String dbName, String collectionName) {
+        JSONObject object = JSONObject.parseObject(doc);
+        MongoColumns columns = new MongoColumns();
+        for (String col : object.keySet()) {
+            MongoColumn column = new MongoColumn(col);
+            column.setDbName(dbName);
+            column.setCollectionName(collectionName);
+            columns.add(column);
+        }
+        MongoRecord record = new MongoRecord(columns);
+        for (MongoColumn column : columns) {
+            Object value = object.get(column.getName());
+            record.putValue(column, value);
+            column.setType(MongoUtil.getType(value));
+        }
+        return record;
     }
 }

@@ -10,8 +10,10 @@ import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -236,7 +238,7 @@ public class MongoClient implements Closeable {
                     column.setName(col);
                     column.setDbName(dbName);
                     column.setCollectionName(collectionName);
-                    column.setType(val.getClass().getSimpleName());
+                    column.setType(MongoUtil.getType(val));
                     columns.add(column);
                     record.putValue(column, val);
                 }
@@ -278,6 +280,9 @@ public class MongoClient implements Closeable {
 
     public long deleteRecord(MongoRecordData recordData) {
         MongoColumn column = recordData.column(MongoUtil.ID);
+        if (column == null) {
+            throw new IllegalArgumentException("_id");
+        }
         String dbName = column.getDbName();
         String collectionName = column.getCollectionName();
         ObjectId _id = recordData.id();
@@ -296,5 +301,34 @@ public class MongoClient implements Closeable {
         com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, collectionName);
         DeleteResult result = collection1.deleteMany(new Document());
         return result.getDeletedCount();
+    }
+
+    public long updateRecord(MongoRecordData recordData) {
+        MongoColumn column = recordData.column(MongoUtil.ID);
+        if (column == null) {
+            throw new IllegalArgumentException("_id");
+        }
+        String dbName = column.getDbName();
+        String collectionName = column.getCollectionName();
+        com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, collectionName);
+        ObjectId _id = recordData.id();
+        Bson filter = Filters.eq(MongoUtil.ID, _id);
+        Bson update = null;
+        for (Map.Entry<MongoColumn, Object> entry : recordData.entries()) {
+            if (entry.getKey().is_id()) {
+                continue;
+            }
+            Bson bson = Updates.set(entry.getKey().getName(), entry.getValue());
+            if (update == null) {
+                update = bson;
+            } else {
+                update = Updates.combine(update, bson);
+            }
+        }
+        if (update != null) {
+            UpdateResult result = collection1.updateOne(filter, update);
+            return result.getModifiedCount();
+        }
+        return 0;
     }
 }

@@ -182,8 +182,8 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return this.client().deleteRecord(recordData);
     }
 
-    public int updateRecord(MongoRecordData recordData ) {
-        return -1;
+    public long updateRecord(MongoRecordData recordData ) {
+        return this.client().updateRecord(recordData);
     }
 
     public MongoCollection value() {

@@ -4,6 +4,7 @@ import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.fx.gui.text.field.DecimalTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.plus.controls.text.field.FXTextField;
+import cn.oyzh.fx.plus.node.NodeUtil;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
@@ -15,7 +16,7 @@ import javafx.scene.control.TextField;
  */
 public class MongoNodeUtil {
 
-    public static Object getNodeVal(Node node)   {
+    public static Object getNodeVal(Node node) {
         Object val = null;
         if (node instanceof NumberTextField textField) {
             val = textField.getValue();
@@ -50,4 +51,31 @@ public class MongoNodeUtil {
         node.setId("value");
         return node;
     }
+
+    /**
+     * 设置节点内容为null字符串
+     *
+     * @param node 节点
+     */
+    public static void setToNullString(Node node) {
+        if (node instanceof TextField textField) {
+            textField.clear();
+            textField.setPromptText(MongoRecordUtil.nullPromptText());
+            NodeUtil.unFocus(node);
+        }
+    }
+
+    /**
+     * 设置节点内容为空字符串
+     *
+     * @param node 节点
+     */
+    public static void setToEmptyString(Node node) {
+        if (node instanceof TextField textField) {
+            textField.setText("");
+            textField.setPromptText("");
+            NodeUtil.unFocus(node);
+        }
+    }
+
 }
