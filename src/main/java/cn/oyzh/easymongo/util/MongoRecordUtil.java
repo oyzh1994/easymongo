@@ -44,7 +44,11 @@ public class MongoRecordUtil {
             node = textField;
         } else {
             FXTextField textField = new FXTextField();
-            textField.setBackground(ControlUtil.background(Color.valueOf("#FA7B73")));
+            if (column.is_id()) {
+                textField.setEditable(false);
+            } else {
+                textField.setBackground(ControlUtil.background(Color.valueOf("#FA7B73")));
+            }
             textField.setValue(object);
             node = textField;
         }
@@ -94,6 +98,9 @@ public class MongoRecordUtil {
      * @return 结果
      */
     public static double suitableColumnWidth(MongoColumn column) {
+        if (column.is_id()) {
+            return FontUtil.textWidth("a".repeat(32), FontManager.currentFont());
+        }
         String str1 = column.getName();
         String str2 = column.getType();
         double w1 = FontUtil.textWidth(str1, FontManager.currentFont());
@@ -110,22 +117,31 @@ public class MongoRecordUtil {
 
     public static List<FXMenuItem> getColumnMenuItem(MongoRecordProperty property) {
         List<FXMenuItem> menuItems = new ArrayList<>();
-        FXMenuItem copy = MenuItemHelper.copy(property::vCopy);
-        menuItems.add(copy);
-        FXMenuItem paste = MenuItemHelper.paste(property::vPaste);
-        menuItems.add(paste);
-        FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
-        menuItems.add(edit);
-        // FXMenuItem delete = MenuItemHelper.deleteRecord(property::vDelete);
-        FXMenuItem setToNull = MenuItemHelper.setToNull(property::vSetToNull);
-        menuItems.add(setToNull);
-        FXMenuItem setToEmptyString = MenuItemHelper.setToEmptyString(property::vSetToEmptyString);
-        menuItems.add(setToEmptyString);
-        FXMenuItem copyAsInsertStatement = MenuItemHelper.copyAsInsertStatement(property::vCopyAsInsertSql);
-        menuItems.add(copyAsInsertStatement);
-        FXMenuItem copyAsUpdateStatement = MenuItemHelper.copyAsUpdateStatement(property::vCopyAsUpdateSql);
-        menuItems.add(copyAsUpdateStatement);
-        // menuItems.add(delete);
+        if (property.getColumn().is_id()) {
+            FXMenuItem copy = MenuItemHelper.copy(property::vCopy);
+            menuItems.add(copy);
+            FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
+            menuItems.add(edit);
+            FXMenuItem copyAsInsertStatement = MenuItemHelper.copyAsInsertStatement(property::vCopyAsInsertSql);
+            menuItems.add(copyAsInsertStatement);
+            FXMenuItem copyAsUpdateStatement = MenuItemHelper.copyAsUpdateStatement(property::vCopyAsUpdateSql);
+            menuItems.add(copyAsUpdateStatement);
+        } else {
+            FXMenuItem copy = MenuItemHelper.copy(property::vCopy);
+            menuItems.add(copy);
+            FXMenuItem paste = MenuItemHelper.paste(property::vPaste);
+            menuItems.add(paste);
+            FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
+            menuItems.add(edit);
+            FXMenuItem setToNull = MenuItemHelper.setToNull(property::vSetToNull);
+            menuItems.add(setToNull);
+            FXMenuItem setToEmptyString = MenuItemHelper.setToEmptyString(property::vSetToEmptyString);
+            menuItems.add(setToEmptyString);
+            FXMenuItem copyAsInsertStatement = MenuItemHelper.copyAsInsertStatement(property::vCopyAsInsertSql);
+            menuItems.add(copyAsInsertStatement);
+            FXMenuItem copyAsUpdateStatement = MenuItemHelper.copyAsUpdateStatement(property::vCopyAsUpdateSql);
+            menuItems.add(copyAsUpdateStatement);
+        }
         return menuItems;
     }
 

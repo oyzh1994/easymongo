@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * db工具类
@@ -177,95 +176,6 @@ public class MongoUtil {
         }
     }
 
-    /**
-     * 生成索引名称
-     *
-     * @return 索引名称
-     */
-    public static String genIndexName() {
-        return "index_" + UUIDUtil.uuidSimple().substring(0, 5);
-    }
-
-    /**
-     * 生成检查名称
-     *
-     * @return 检查名称
-     */
-    public static String genCheckName() {
-        return "check_" + UUIDUtil.uuidSimple().substring(0, 5);
-    }
-
-    /**
-     * 生成触发器名称
-     *
-     * @return 触发器名称
-     */
-    public static String genTriggerName() {
-        return "trigger_" + UUIDUtil.uuidSimple().substring(0, 5);
-    }
-
-    /**
-     * 生成外键名称
-     *
-     * @return 外键名称
-     */
-    public static String genForeignKeyName() {
-        return "fk_" + UUIDUtil.uuidSimple().substring(0, 5);
-    }
-
-    /**
-     * 生成复制名称
-     *
-     * @return 复制名称
-     */
-    public static String genCopyName() {
-        return "_copy_" + UUIDUtil.uuidSimple().substring(0, 5);
-    }
-
-    /**
-     * 生成克隆名称
-     *
-     * @return 复制名称
-     */
-    public static String genCloneName() {
-        return "_clone_" + UUIDUtil.uuidSimple().substring(0, 5);
-    }
-
-
-    /**
-     * 移除注释
-     *
-     * @param sql sql
-     * @return 结果
-     */
-    public static String removeComment(String sql) {
-        StringBuilder builder = new StringBuilder();
-        AtomicBoolean commentFlag = new AtomicBoolean(false);
-        sql.lines().forEach(line -> {
-            // 单行注释1
-            if (line.stripLeading().startsWith("-- ")) {
-                return;
-            }
-            // 单行注释2
-            if (line.stripLeading().startsWith("#")) {
-                return;
-            }
-            // 多行注释开始
-            if (line.stripLeading().startsWith("/*")) {
-                commentFlag.set(true);
-            }
-            // 多行注释结束
-            if (line.stripTrailing().endsWith("*/")) {
-                commentFlag.set(false);
-                return;
-            }
-            // 正常行
-            if (!commentFlag.get() && StringUtil.isNotBlank(line)) {
-                builder.append(line).append("\n");
-            }
-        });
-        return builder.toString();
-    }
 
     public static String wrap(String s, String tableName) {
         return "";

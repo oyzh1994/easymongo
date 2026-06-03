@@ -1,21 +1,18 @@
 package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.object.Destroyable;
-import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.easymongo.util.MongoNodeUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.plus.node.NodeDestroyUtil;
-import cn.oyzh.fx.plus.node.NodeUtil;
 import cn.oyzh.fx.plus.tableview.TableViewUtil;
 import cn.oyzh.fx.plus.util.ClipboardUtil;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 
 /**
  * db表记录属性
@@ -58,11 +55,13 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
         super(value);
         this.column = column;
-        this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
-            this.node = null;
-            this.initNode();
-            this.setChanged(true);
-        });
+        if (!column.is_id()) {
+            this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
+                this.node = null;
+                this.initNode();
+                this.setChanged(true);
+            });
+        }
         this.record = record;
         if (!readonly) {
             this.original = value;
@@ -105,9 +104,6 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
             return MongoRecordUtil.formatValue(super.getValue(), this.column);
         }
         if (this.node == null) {
-            //            this.node = MongoRecordUtil.getNode(this, super.get(), this.column);
-            //            TableViewUtil.rowOnCtrlS(this.node);
-            //            TableViewUtil.selectRowOnMouseClicked(this.node);
             this.initNode();
         }
         return this.node;
