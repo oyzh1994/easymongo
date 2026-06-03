@@ -2,6 +2,8 @@ package cn.oyzh.easymongo.mongo;
 
 
 import cn.oyzh.common.object.Destroyable;
+import cn.oyzh.easymongo.util.MongoUtil;
+import org.bson.types.ObjectId;
 
 import java.util.HashMap;
 import java.util.List;
@@ -276,5 +278,9 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+    }
+
+    public void set_id(ObjectId _id) {
+        this.putValue(MongoUtil.ID, _id);
     }
 }

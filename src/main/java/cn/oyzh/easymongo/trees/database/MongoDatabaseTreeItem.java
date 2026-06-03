@@ -2,7 +2,15 @@ package cn.oyzh.easymongo.trees.database;
 
 import cn.oyzh.common.thread.Task;
 import cn.oyzh.common.thread.TaskBuilder;
+import cn.oyzh.easymongo.controller.database.MongoDatabaseUpdateController;
+import cn.oyzh.easymongo.domain.MongoConnect;
+import cn.oyzh.easymongo.event.MongoEventUtil;
+import cn.oyzh.easymongo.mongo.MongoClient;
+import cn.oyzh.easymongo.mongo.MongoDatabase;
+import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
+import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
+import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeItem;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
@@ -12,14 +20,6 @@ import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
-import cn.oyzh.easymongo.controller.database.MongoDatabaseUpdateController;
-import cn.oyzh.easymongo.domain.MongoConnect;
-import cn.oyzh.easymongo.event.MongoEventUtil;
-import cn.oyzh.easymongo.mongo.MongoClient;
-import cn.oyzh.easymongo.mongo.MongoDatabase;
-import cn.oyzh.easymongo.trees.MongoTreeItem;
-import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
-import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 
@@ -205,7 +205,11 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         return this.client().getDbConnect();
     }
 
-    public void dropCollection(String collection) {
-        this.client().dropCollection(collection);
+    public void dropCollection(String collectionName) {
+        this.client().dropCollection(this.dbName(), collectionName);
+    }
+
+    public void clearCollection(String collectionName) {
+        this.client().clearCollection(this.dbName(), collectionName);
     }
 }

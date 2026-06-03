@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.tabs.collection;
 
 import cn.oyzh.common.dto.Paging;
 import cn.oyzh.common.util.CollectionUtil;
+import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoSetting;
 import cn.oyzh.easymongo.fx.DBStatusColumn;
 import cn.oyzh.easymongo.fx.MongoRecordColumn;
@@ -14,12 +15,12 @@ import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordData;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
-import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.popups.MongoCollectionRecordFilterPopupController;
+import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
-import cn.oyzh.easymongo.util.MongoUtil;
+import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.page.PageBox;
 import cn.oyzh.fx.gui.page.PageEvent;
 import cn.oyzh.fx.gui.tabs.RichTabController;
@@ -31,8 +32,10 @@ import cn.oyzh.fx.plus.node.NodeGroupUtil;
 import cn.oyzh.fx.plus.node.NodeUtil;
 import cn.oyzh.fx.plus.window.PopupAdapter;
 import cn.oyzh.fx.plus.window.PopupManager;
+import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
+import com.alibaba.fastjson.JSONObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -137,7 +140,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
         });
         this.reload();
         if (this.changeListener == null) {
-            this.changeListener = new DBStatusListener(this.getItem().dbName() + ":" + this.getItem().tableName()) {
+            this.changeListener = new DBStatusListener(this.getItem().dbName() + ":" + this.getItem().collectionName()) {
                 @Override
                 public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
                     apply.enable();
@@ -222,18 +225,54 @@ public class MongoCollectionRecordTabController extends RichTabController {
      */
     @FXML
     private void addRecord() {
-        MongoRecord lastItem = (MongoRecord) this.recordTable.lastItem();
-        if (lastItem == null) {
-
-        } else {
-            MongoColumns columns = new MongoColumns(lastItem.getColumns());
-            MongoRecord record = new MongoRecord(columns);
-            record.setCreated(true);
-            for (MongoColumn column : columns) {
-                record.putValue(column, column.defaultValue());
+        try {
+            MongoRecord lastItem = (MongoRecord) this.recordTable.lastItem();
+            if (lastItem == null) {
+                StageAdapter adapter = MongoViewFactory.documentAdd();
+                if (adapter == null) {
+                    return;
+                }
+                String doc = adapter.getProp("doc");
+                if (StringUtil.isBlank(doc)) {
+                    return;
+                }
+                JSONObject object = JSONObject.parseObject(doc);
+                MongoColumns columns = new MongoColumns();
+                for (String col : object.keySet()) {
+                    MongoColumn column= new MongoColumn(col);
+                    column.setDbName(this.getItem().dbName());
+                    column.setCollectionName(this.getItem().collectionName());
+                    columns.add(column);
+                }
+                MongoRecord record = new MongoRecord(columns);
+                for (MongoColumn column : columns) {
+                    record.putValue(column, object.get(column.getName()));
+                }
+                ObjectId _id = this.getItem().insertRecord(record.getRecordData());
+                if (_id == null) {
+                    MessageBox.warn(I18nHelper.addDocumentFail());
+                    return;
+                }
+                record.set_id(_id);
+                if (this.recordTable.isItemEmpty()) {
+                    this.reload();
+                } else {
+                    this.recordTable.addItem(record);
+                    this.recordTable.selectLast();
+                }
+            } else {
+                MongoColumns columns = new MongoColumns(lastItem.getColumns());
+                MongoRecord record = new MongoRecord(columns);
+                record.setCreated(true);
+                for (MongoColumn column : columns) {
+                    record.putValue(column, column.defaultValue());
+                }
+                this.recordTable.addItem(record);
+                this.recordTable.selectLast();
             }
-            this.recordTable.addItem(record);
-            this.recordTable.selectLast();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
         }
     }
 
@@ -245,7 +284,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
     private void insertRecord(MongoRecord record) {
         MongoRecordData recordData = record.getRecordData();
         ObjectId _id = this.getItem().insertRecord(recordData);
-        record.putValue(MongoUtil.ID, _id);
+        record.set_id(_id);
     }
 
     /**

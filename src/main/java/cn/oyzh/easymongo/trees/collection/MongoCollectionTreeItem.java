@@ -55,7 +55,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return this.parent().dbName();
     }
 
-    public String tableName() {
+    public String collectionName() {
         return this.value.getName();
     }
 
@@ -71,18 +71,12 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem openTable = MenuItemHelper.openTable("12", this::onPrimaryDoubleClick);
-        items.add(openTable);
-        FXMenuItem updateTable = MenuItemHelper.designTable("12", this::designTable);
-        items.add(updateTable);
-        FXMenuItem renameTable = MenuItemHelper.renameTable("12", this::rename);
-        items.add(renameTable);
-        FXMenuItem clearTable = MenuItemHelper.clearTableData("12", this::clearTableData);
-        items.add(clearTable);
-        FXMenuItem truncateTable = MenuItemHelper.truncateTable("12", this::truncateTable);
-        items.add(truncateTable);
-        FXMenuItem dropTable = MenuItemHelper.deleteTable("12", this::delete);
-        items.add(dropTable);
+        FXMenuItem openCollection = MenuItemHelper.openCollection("12", this::onPrimaryDoubleClick);
+        items.add(openCollection);
+        FXMenuItem clearCollection = MenuItemHelper.clearCollection("12", this::clearCollection);
+        items.add(clearCollection);
+        FXMenuItem deleteCollection = MenuItemHelper.deleteCollection("12", this::delete);
+        items.add(deleteCollection);
         items.add(MenuItemHelper.separator());
         FXMenuItem dumpTable = MenuItemHelper.dumpData("12", this::dump);
         items.add(dumpTable);
@@ -106,23 +100,21 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     private void export() {
     }
 
-    private void designTable() {
-    }
-
-    private void truncateTable() {
-    }
-
     /**
-     * 清空表
+     * 清空集合
      */
-    private void clearTableData() {
+    private void clearCollection() {
+        if (MessageBox.confirm(I18nHelper.clearCollection() + "[" + this.collectionName() + "]")) {
+            this.dbItem().clearCollection(this.collectionName());
+            this.parent().reloadChild();
+        }
     }
 
     @Override
     public void delete() {
         try {
-            if (MessageBox.confirm(I18nHelper.deleteTable() + "[" + this.tableName() + "]")) {
-                this.dbItem().dropCollection(this.tableName());
+            if (MessageBox.confirm(I18nHelper.deleteCollection() + "[" + this.collectionName() + "]")) {
+                this.dbItem().dropCollection(this.collectionName());
                 MongoEventUtil.collectionDropped(this, this.dbItem());
                 this.remove();
             } else {
@@ -137,38 +129,6 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
 //        StageAdapter fxView = StageManager.parseStage(MysqlTableInfoController.class, this.window());
 //        fxView.setProp("tableItem", this);
 //        fxView.display();
-    }
-
-    @Override
-    public void rename() {
-//        try {
-//            // if (!MessageBox.confirm(DBI18nHelper.tableTip2())) {
-//            //     return;
-//            // }
-//            String tableName = MessageBox.prompt(I18nHelper.pleaseInputName(), this.value.getName());
-//            // 名称为null或者跟当前名称相同，则忽略
-//            if (tableName == null || Objects.equals(tableName, this.value.getName())) {
-//                return;
-//            }
-//            // 检查名称
-//            if (StringUtil.isBlank(tableName)) {
-//                MessageBox.warn(I18nHelper.pleaseInputContent());
-//                return;
-//            }
-//            // if (this.dbItem().existTable(tableName)) {
-//            //     MessageBox.warn(I18nHelper.table() + " " + tableName + I18nHelper.alreadyExists());
-//            //     return;
-//            // }
-//            String oldName = this.value.getName();
-//            // 修改名称
-//            this.dbItem().renameTable(oldName, tableName);
-//            this.value.setName(tableName);
-//            this.refresh();
-//            MysqlEventUtil.tableRenamed(this, this.dbItem());
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            MessageBox.exception(ex);
-//        }
     }
 
     public MongoDatabaseTreeItem dbItem() {
@@ -237,7 +197,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         param.setColumns(columns);
         param.setDbName(this.dbName());
         param.setStart(pageNo * limit);
-        param.setCollectionName(this.tableName());
+        param.setCollectionName(this.collectionName());
         List<MongoRecord> rows = this.client().selectRecords(param);
         long count = rows.size();
         Paging<MongoRecord> paging = new Paging<>(rows, limit, count);

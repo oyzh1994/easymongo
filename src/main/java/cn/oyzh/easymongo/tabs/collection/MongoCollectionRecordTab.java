@@ -41,7 +41,7 @@ public class MongoCollectionRecordTab extends MongoTab {
     @Override
     public void flushTitle() {
         // 设置提示文本
-        this.setText(this.item().tableName() + "@" + this.item().dbName() + "(" + this.item().infoName() + ")");
+        this.setText(this.item().collectionName() + "@" + this.item().dbName() + "(" + this.item().infoName() + ")");
     }
 
     /**
@@ -79,8 +79,8 @@ public class MongoCollectionRecordTab extends MongoTab {
         return this.controller().getItem();
     }
     
-    public String tableName() {
-        return this.item().tableName();
+    public String collectionName() {
+        return this.item().collectionName();
     }
 
     @Override

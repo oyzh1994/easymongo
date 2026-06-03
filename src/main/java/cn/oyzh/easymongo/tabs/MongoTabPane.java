@@ -172,7 +172,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //
      private MongoCollectionRecordTab getMysqlTableRecordTab(MongoDatabaseTreeItem dbItem, String tableName) {
          for (Tab tab : this.getTabs()) {
-             if (tab instanceof MongoCollectionRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(tableName, tab1.tableName())) {
+             if (tab instanceof MongoCollectionRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(tableName, tab1.collectionName())) {
                  return tab1;
              }
          }
@@ -186,7 +186,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
       */
      @EventSubscribe
      private void onMysqlTableOpen(MongoCollectionOpenEvent event) {
-         MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.getDbItem(), event.tableName());
+         MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.getDbItem(), event.collectionName());
          if (tab == null) {
              tab = new MongoCollectionRecordTab();
              super.addTab(tab);

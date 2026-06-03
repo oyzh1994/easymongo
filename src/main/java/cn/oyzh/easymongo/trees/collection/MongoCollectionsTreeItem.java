@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.trees.collection;
 
 import cn.oyzh.common.thread.Task;
 import cn.oyzh.common.thread.TaskBuilder;
+import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
@@ -12,6 +13,7 @@ import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
+import cn.oyzh.i18n.I18nHelper;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
@@ -42,15 +44,22 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
         FXMenuItem reload = MenuItemHelper.reloadData("12", this::reloadChild);
-        FXMenuItem add = MenuItemHelper.addTable("12", this::addTable);
+        FXMenuItem add = MenuItemHelper.addCollection("12", this::addCollection);
         items.add(add);
         items.add(reload);
         return items;
     }
 
-    private void addTable() {
-        MongoCollection table = new MongoCollection();
-        table.setDbName(this.dbName());
+    private void addCollection() {
+        String name = MessageBox.prompt(I18nHelper.pleaseInputCollectionName());
+        if (StringUtil.isBlank(name)) {
+            return;
+        }
+        MongoCollection collection = new MongoCollection();
+        collection.setName(name);
+        collection.setDbName(this.dbName());
+        this.client().createCollection(collection);
+        this.reloadChild();
     }
 
     @Override

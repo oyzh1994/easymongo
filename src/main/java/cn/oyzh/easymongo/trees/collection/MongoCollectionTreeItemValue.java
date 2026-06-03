@@ -31,6 +31,6 @@ public class MongoCollectionTreeItemValue extends RichTreeItemValue {
 
     @Override
     public String name() {
-        return this.item().tableName();
+        return this.item().collectionName();
     }
 }

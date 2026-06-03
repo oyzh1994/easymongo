@@ -12,8 +12,8 @@ public class MongoCollectionDroppedEvent extends Event<MongoCollectionTreeItem> 
 
     private MongoDatabaseTreeItem dbItem;
 
-    public String tableName() {
-        return this.data().tableName();
+    public String collectionName() {
+        return this.data().collectionName();
     }
 
     public String dbName() {

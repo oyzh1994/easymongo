@@ -180,8 +180,9 @@ public class MongoClient implements Closeable {
         return false;
     }
 
-    public void dropCollection(String collection) {
-
+    public void dropCollection(String dbName, String collectionName) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
+        collection.drop();
     }
 
     public List<MongoCollection> collections(String dbName) {
@@ -269,6 +270,17 @@ public class MongoClient implements Closeable {
         Bson filter = Filters.eq(MongoUtil.ID, _id);
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
         DeleteResult result = collection.deleteOne(filter);
+        return result.getDeletedCount();
+    }
+
+    public void createCollection(MongoCollection collection) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(collection.getDbName());
+        database.createCollection(collection.getName());
+    }
+
+    public long clearCollection(String dbName, String collectionName) {
+        com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, collectionName);
+        DeleteResult result = collection1.deleteMany(new Document());
         return result.getDeletedCount();
     }
 }
