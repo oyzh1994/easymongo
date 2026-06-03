@@ -4,15 +4,7 @@ import cn.oyzh.common.thread.Task;
 import cn.oyzh.common.thread.TaskBuilder;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
-import cn.oyzh.fx.gui.menu.MenuItemHelper;
-import cn.oyzh.fx.plus.information.MessageBox;
-import cn.oyzh.fx.plus.menu.FXMenuItem;
-import cn.oyzh.fx.plus.window.StageAdapter;
-import cn.oyzh.fx.plus.window.StageManager;
-import cn.oyzh.i18n.I18nHelper;
 import cn.oyzh.easymongo.controller.connect.MongoConnectUpdateController;
-import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -21,6 +13,14 @@ import cn.oyzh.easymongo.store.MongoConnectStore;
 import cn.oyzh.easymongo.trees.MongoConnectManager;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.MongoTreeView;
+import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.easymongo.util.MongoViewFactory;
+import cn.oyzh.fx.gui.menu.MenuItemHelper;
+import cn.oyzh.fx.plus.information.MessageBox;
+import cn.oyzh.fx.plus.menu.FXMenuItem;
+import cn.oyzh.fx.plus.window.StageAdapter;
+import cn.oyzh.fx.plus.window.StageManager;
+import cn.oyzh.i18n.I18nHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
@@ -107,10 +107,11 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
      */
     @FXML
     private void addDatabase() {
-        StageAdapter fxView = StageManager.parseStage(MongoDatabaseAddController.class, this.window());
-        fxView.setProp("connectItem", this);
-        fxView.showAndWait();
-        String databaseName = fxView.getProp("databaseName");
+        StageAdapter adapter = MongoViewFactory.databaseAdd(this);
+        if (adapter == null) {
+            return;
+        }
+        String databaseName = adapter.getProp("databaseName");
         if (StringUtil.isNotBlank(databaseName)) {
             this.addDatabase(databaseName);
         }
@@ -260,7 +261,7 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
      */
     public void value(MongoConnect value) {
         this.value = value;
-        this.client =new MongoClient(value);
+        this.client = new MongoClient(value);
         this.setValue(new MongoConnectTreeItemValue(this));
     }
 
@@ -328,8 +329,8 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
         return this.client.existDatabase(dbName);
     }
 
-    public void createDatabase(MongoDatabase database) {
-        this.client.createDatabase(database);
+    public void createDatabase(String dbName) {
+        this.client.createDatabase(dbName);
     }
 
     public boolean alterDatabase(MongoDatabase database) {

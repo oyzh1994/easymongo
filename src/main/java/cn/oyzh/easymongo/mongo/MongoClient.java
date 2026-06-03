@@ -8,6 +8,7 @@ import cn.oyzh.easymongo.util.MongoUtil;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
@@ -87,7 +88,6 @@ public class MongoClient implements Closeable {
         return this.state;
     }
 
-
     /**
      * 初始化连接
      *
@@ -143,8 +143,10 @@ public class MongoClient implements Closeable {
         }
     }
 
-    public MongoDatabase database(String databaseName) {
-        return null;
+    public MongoDatabase database(String dbName) {
+        MongoDatabase database1 = new MongoDatabase();
+        database1.setName(dbName);
+        return database1;
     }
 
     public List<MongoDatabase> databases() {
@@ -165,10 +167,19 @@ public class MongoClient implements Closeable {
         return this.mongoClient.getDatabase(dbName).getCollection(collectionName);
     }
 
-    public void createDatabase(MongoDatabase database) {
+    public void createDatabase(String dbName) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        database.createCollection("_empty_");
     }
 
     public boolean existDatabase(String dbName) {
+        try {
+            com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+            MongoIterable<String> iterable = database.listCollectionNames();
+            return iterable.first() != null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return false;
     }
 
@@ -177,6 +188,13 @@ public class MongoClient implements Closeable {
     }
 
     public boolean dropDatabase(String dbName) {
+        try {
+            com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+            database.drop();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return false;
     }
 
@@ -226,10 +244,6 @@ public class MongoClient implements Closeable {
             }
         }
         return records;
-    }
-
-    public long selectRecordCount(MysqlSelectRecordParam param) {
-        return 0;
     }
 
     public ObjectId insertRecord(MongoRecordData recordData) {

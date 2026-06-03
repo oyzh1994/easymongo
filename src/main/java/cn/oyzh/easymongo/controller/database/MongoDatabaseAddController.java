@@ -52,10 +52,10 @@ public class MongoDatabaseAddController extends StageController {
                 MessageBox.warn(I18nHelper.database() + " " + dbName + " " + I18nHelper.alreadyExists());
                 return;
             }
+            this.connectItem.createDatabase(dbName);
+            this.setProp("databaseName", dbName);
             MongoDatabase database = new MongoDatabase();
             database.setName(dbName);
-            this.connectItem.createDatabase(database);
-            this.setProp("databaseName", dbName);
             MongoEventUtil.databaseAdded(this.connectItem, database);
             this.closeWindow();
         } catch (Exception ex) {
