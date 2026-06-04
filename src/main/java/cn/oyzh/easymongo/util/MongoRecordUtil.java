@@ -102,7 +102,7 @@ public class MongoRecordUtil {
      */
     public static double suitableColumnWidth(MongoColumn column) {
         if (column.is_id()) {
-            return FontUtil.textWidth("a".repeat(32), FontManager.currentFont());
+            return FontUtil.textWidth("a".repeat(40), FontManager.currentFont());
         }
         String str1 = column.getName();
         String str2 = column.getType();

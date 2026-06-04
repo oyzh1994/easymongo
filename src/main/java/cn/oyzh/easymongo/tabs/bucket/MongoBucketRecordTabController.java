@@ -163,14 +163,24 @@ public class MongoBucketRecordTabController extends RichTabController {
      * @param columns 列数据
      */
     private void initColumns(MongoColumns columns) {
+        // 非首次，忽略
+        if (this.columns != null) {
+            return;
+        }
         // 设置字段列表
         this.columns = columns;
         // 数据列集合
         List<FXTableColumn<MongoRecord, Object>> columnList = new ArrayList<>();
         for (MongoColumn column : columns) {
-            MongoRecordColumn tableColumn = new MongoRecordColumn(column, 0);
-            tableColumn.setPrefWidth(MongoRecordUtil.suitableColumnWidth(column));
-            columnList.add(tableColumn);
+            MongoRecordColumn recordColumn = new MongoRecordColumn(column, 0);
+            if (recordColumn.getName().equals("uploadDate")) {
+                recordColumn.setPrefWidth(150);
+            } else if (recordColumn.getName().equals("filename")) {
+                recordColumn.setPrefWidth(300);
+            } else {
+                recordColumn.setPrefWidth(MongoRecordUtil.suitableColumnWidth(column));
+            }
+            columnList.add(recordColumn);
         }
         this.recordTable.setColumn(columnList);
     }
