@@ -194,15 +194,20 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return this.client().bucketColumns();
     }
 
-    public ObjectId uploadBucket(File file) throws Exception {
-        return this.client().uploadBucket(this.dbName(), this.bucketName(), file);
+    public ObjectId uploadBucketRecord(File file) throws Exception {
+        return this.client().uploadBucketRecord(this.dbName(), this.bucketName(), file);
     }
 
     public MongoRecord selectBucketRecord(ObjectId _id) {
         return this.client().selectBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 
-    public void downloadBucket(ObjectId _id, File file) throws Exception {
-        this.client().downloadBucket(this.dbName(), this.bucketName(), _id, file);
+    public void downloadBucketRecord(ObjectId _id, File file) throws Exception {
+        this.client().downloadBucketRecord(this.dbName(), this.bucketName(), _id, file);
     }
+
+    public void deleteBucketRecord(ObjectId _id) {
+        this.client().deleteBucketRecord(this.dbName(), this.bucketName(), _id);
+    }
+
 }

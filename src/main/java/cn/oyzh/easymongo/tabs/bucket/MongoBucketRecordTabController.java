@@ -284,8 +284,19 @@ public class MongoBucketRecordTabController extends RichTabController {
      */
     @FXML
     private void deleteRecord() {
-        MongoRecord record = this.recordTable.getSelectedItem();
-        this.doDeleteRecord(record);
+        try {
+            MongoRecord record = this.recordTable.getSelectedItem();
+            if (record == null) {
+                return;
+            }
+            if (!MessageBox.confirm(I18nHelper.deleteRecord() + "?")) {
+                return;
+            }
+            this.getItem().deleteBucketRecord(record._idValue());
+            this.recordTable.removeItem(record);
+        } catch (Exception ex) {
+            MessageBox.exception(ex);
+        }
     }
 
     /**
@@ -299,7 +310,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         }
         StageManager.showMask(() -> {
             try {
-                ObjectId _id = this.getItem().uploadBucket(file);
+                ObjectId _id = this.getItem().uploadBucketRecord(file);
                 if (_id == null) {
                     MessageBox.warn(I18nHelper.uploadFileFailed());
                     return;
@@ -340,43 +351,12 @@ public class MongoBucketRecordTabController extends RichTabController {
         }
         StageManager.showMask(() -> {
             try {
-                ObjectId _id = (ObjectId) record._idValue();
-                this.getItem().downloadBucket(_id, file);
+                ObjectId _id = record._idValue();
+                this.getItem().downloadBucketRecord(_id, file);
             } catch (Exception ex) {
                 MessageBox.exception(ex);
             }
         });
-    }
-
-    /**
-     * 删除记录
-     *
-     * @param record 记录
-     */
-    private void doDeleteRecord(MongoRecord record) {
-        try {
-            if (record == null) {
-                return;
-            }
-            if (!MessageBox.confirm(I18nHelper.deleteRecord() + "?")) {
-                return;
-            }
-            // 如果是新增的数据，直接删除
-            boolean success;
-            if (record.isCreated()) {
-                success = true;
-            } else {
-                success = this.getItem().deleteRecord(record.getRecordData()) == 1;
-            }
-            // 操作成功
-            if (success) {
-                this.recordTable.removeItem(record);
-            } else {// 操作失败
-                MessageBox.warnToast(I18nHelper.operationFail());
-            }
-        } catch (Exception ex) {
-            MessageBox.exception(ex);
-        }
     }
 
     public List<MongoRecordFilter> getFilters() {

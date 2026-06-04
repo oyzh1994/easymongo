@@ -421,7 +421,7 @@ public class MongoClient implements Closeable {
         GridFSFindIterable iterable = fsBucket.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         MongoColumns columns = new MongoColumns();
-        MongoColumn idColumn = new MongoColumn("_id", I18nHelper.id());
+        MongoColumn idColumn = new MongoColumn(MongoUtil.ID, I18nHelper.id());
         columns.add(idColumn);
         MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
         columns.add(fileNameColumn);
@@ -444,11 +444,14 @@ public class MongoClient implements Closeable {
     }
 
     public MongoRecord selectBucketRecord(String dbName, String bucketName, ObjectId _id) {
+        if (_id == null) {
+            throw new IllegalArgumentException("_id");
+        }
         GridFSBucket fsBucket = this.createBucket(dbName, bucketName);
-        Bson filters = Filters.eq("_id", _id);
+        Bson filters = Filters.eq(MongoUtil.ID, _id);
         GridFSFindIterable iterable = fsBucket.find(filters).limit(1);
         MongoColumns columns = new MongoColumns();
-        MongoColumn idColumn = new MongoColumn("_id", I18nHelper.id());
+        MongoColumn idColumn = new MongoColumn(MongoUtil.ID, I18nHelper.id());
         columns.add(idColumn);
         MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
         columns.add(fileNameColumn);
@@ -486,7 +489,10 @@ public class MongoClient implements Closeable {
         return columns;
     }
 
-    public ObjectId uploadBucket(String dbName, String bucketName, File file) throws Exception {
+    public ObjectId uploadBucketRecord(String dbName, String bucketName, File file) throws Exception {
+        if (file == null) {
+            throw new IllegalArgumentException("file");
+        }
         GridFSBucket bucket = this.createBucket(dbName, bucketName);
         FileInputStream fis = new FileInputStream(file);
         ObjectId objectId;
@@ -496,9 +502,23 @@ public class MongoClient implements Closeable {
         return objectId;
     }
 
-    public void downloadBucket(String dbName, String bucketName, ObjectId _id, File file) throws FileNotFoundException {
+    public void downloadBucketRecord(String dbName, String bucketName, ObjectId _id, File file) throws FileNotFoundException {
+        if (_id == null) {
+            throw new IllegalArgumentException("_id");
+        }
+        if (file == null) {
+            throw new IllegalArgumentException("file");
+        }
         GridFSBucket bucket = this.createBucket(dbName, bucketName);
         FileOutputStream fos = new FileOutputStream(file);
         bucket.downloadToStream(_id, fos);
+    }
+
+    public void deleteBucketRecord(String dbName, String bucketName, ObjectId _id) {
+        if (_id == null) {
+            throw new IllegalArgumentException("_id");
+        }
+        GridFSBucket bucket = this.createBucket(dbName, bucketName);
+        bucket.delete(_id);
     }
 }
