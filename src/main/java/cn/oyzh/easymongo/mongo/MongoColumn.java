@@ -101,7 +101,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
      * @return 结果
      */
     public boolean supportDigits() {
-        return StringUtil.equals(this.getType(), "double");
+        return StringUtil.equalsIgnoreCase(this.getType(), "double");
     }
 
     /**
@@ -110,11 +110,11 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
      * @return 结果
      */
     public boolean supportInteger() {
-        return StringUtil.equals(this.getType(), "int");
+        return StringUtil.equalsIgnoreCase(this.getType(), "int");
     }
 
     public boolean supportString() {
-        return StringUtil.equals(this.getType(), "string");
+        return StringUtil.equalsIgnoreCase(this.getType(), "string");
     }
 
     public void setName(String name) {
