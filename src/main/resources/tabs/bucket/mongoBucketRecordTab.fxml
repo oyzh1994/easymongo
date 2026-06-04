@@ -8,27 +8,39 @@
 <?import cn.oyzh.fx.plus.controls.box.FXVBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
+<?import cn.oyzh.fx.gui.svg.glyph.UploadSVGGlyph?>
+<?import cn.oyzh.fx.gui.svg.glyph.DownloadSVGGlyph?>
 <FXVBox xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
         fx:controller="cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTabController" fx:id="root" flexWidth="100%"
         flexHeight="100%">
     <FXHBox realHeight="30" flexWidth="100%">
-        <DeleteSVGGlyph groupId="action2" onMousePrimaryClicked="#deleteRecord">
+        <DeleteSVGGlyph onMousePrimaryClicked="#deleteRecord">
             <HBox.margin>
                 <Insets left="10" top="10"/>
             </HBox.margin>
         </DeleteSVGGlyph>
-        <RefreshSVGGlyph groupId="action2" onMousePrimaryClicked="#reload">
+        <UploadSVGGlyph onMousePrimaryClicked="#uploadRecord">
+            <HBox.margin>
+                <Insets left="5" top="10"/>
+            </HBox.margin>
+        </UploadSVGGlyph>
+        <DownloadSVGGlyph onMousePrimaryClicked="#downloadRecord">
+            <HBox.margin>
+                <Insets left="5" top="10"/>
+            </HBox.margin>
+        </DownloadSVGGlyph>
+        <RefreshSVGGlyph onMousePrimaryClicked="#reload">
             <HBox.margin>
                 <Insets left="5" top="10"/>
             </HBox.margin>
         </RefreshSVGGlyph>
-        <FilterSVGGlyph groupId="action2" fx:id="filter" onMousePrimaryClicked="#filter">
+        <FilterSVGGlyph fx:id="filter" onMousePrimaryClicked="#filter">
             <HBox.margin>
                 <Insets left="5" top="10"/>
             </HBox.margin>
         </FilterSVGGlyph>
-        <PageBox groupId="action2" fx:id="pageBox" onJumpFired="#pageJump" onSettingClicked="#pageSetting"
+        <PageBox fx:id="pageBox" onJumpFired="#pageJump" onSettingClicked="#pageSetting"
                  onNextClicked="#nextPage" onPrevClicked="#prevPage"
                  onLastClicked="#lastPage"
                  onFirstClicked="#firstPage" realWidth="400" realHeight="22" hideIfLessPage="false">

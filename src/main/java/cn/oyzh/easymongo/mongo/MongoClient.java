@@ -9,6 +9,9 @@ import cn.oyzh.easymongo.mongo.condition.MysqlConditionUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
@@ -31,7 +34,12 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -117,16 +125,25 @@ public class MongoClient implements Closeable {
     private void initClient() {
         // 连接信息
         String host = this.initHost();
-        String connStr = "mongodb://";
+        // 密码认证
         if (this.shellConnect.isPasswordAuth()) {
-            connStr += this.shellConnect.getUser() + ":" + this.shellConnect.getPassword() + "@";
+            String hostIp = host.split(":")[0];
+            int port = Integer.parseInt(host.split(":")[1]);
+            String user = this.shellConnect.getUser();
+            String database = this.shellConnect.getAuthDatabase();
+            String password = this.shellConnect.getPassword();
+            MongoCredential credential = MongoCredential.createCredential(user, database, password.toCharArray());
+            MongoClientSettings settings = MongoClientSettings.builder()
+                    .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(new ServerAddress(hostIp, port))))
+                    .credential(credential)
+                    .build();
+            // 创建客户端
+            this.mongoClient = MongoClients.create(settings);
+        } else {
+            String connStr = "mongodb://" + host;
+            // 创建客户端
+            this.mongoClient = MongoClients.create(connStr);
         }
-        connStr += host;
-        if (this.shellConnect.isPasswordAuth()) {
-            connStr += "/" + this.shellConnect.getAuthDatabase();
-        }
-        // 创建客户端
-        this.mongoClient = MongoClients.create(connStr);
     }
 
     public void start() {
@@ -165,7 +182,7 @@ public class MongoClient implements Closeable {
         for (Document document : documents) {
             MongoDatabase database = new MongoDatabase();
             String name = document.getString("name");
-            Long sizeOnDisk = document.getLong("sizeOnDisk");
+            Double sizeOnDisk = document.getDouble("sizeOnDisk");
             database.setName(name);
             database.setSizeOnDisk(sizeOnDisk);
             databases.add(database);
@@ -426,7 +443,35 @@ public class MongoClient implements Closeable {
         return records;
     }
 
-    public MongoColumns bucketColumns( ) {
+    public MongoRecord selectBucketRecord(String dbName, String bucketName, ObjectId _id) {
+        GridFSBucket fsBucket = this.createBucket(dbName, bucketName);
+        Bson filters = Filters.eq("_id", _id);
+        GridFSFindIterable iterable = fsBucket.find(filters).limit(1);
+        MongoColumns columns = new MongoColumns();
+        MongoColumn idColumn = new MongoColumn("_id", I18nHelper.id());
+        columns.add(idColumn);
+        MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
+        columns.add(fileNameColumn);
+        MongoColumn lengthColumn = new MongoColumn("length", I18nHelper.length());
+        columns.add(lengthColumn);
+        MongoColumn chunkSizeColumn = new MongoColumn("chunkSize", I18nHelper.chunkSize());
+        columns.add(chunkSizeColumn);
+        MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
+        columns.add(uploadDateColumn);
+        GridFSFile file = iterable.first();
+        if (file != null) {
+            MongoRecord record = new MongoRecord(columns, true);
+            record.putValue(idColumn, file.getObjectId().toHexString());
+            record.putValue(fileNameColumn, file.getFilename());
+            record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength(), 2));
+            record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize(), 2));
+            record.putValue(uploadDateColumn, DateHelper.formatDateTimeSimple(file.getUploadDate()));
+            return record;
+        }
+        return null;
+    }
+
+    public MongoColumns bucketColumns() {
         MongoColumns columns = new MongoColumns();
         MongoColumn idColumn = new MongoColumn("_id", I18nHelper.id());
         columns.add(idColumn);
@@ -439,5 +484,21 @@ public class MongoClient implements Closeable {
         MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
         columns.add(uploadDateColumn);
         return columns;
+    }
+
+    public ObjectId uploadBucket(String dbName, String bucketName, File file) throws Exception {
+        GridFSBucket bucket = this.createBucket(dbName, bucketName);
+        FileInputStream fis = new FileInputStream(file);
+        ObjectId objectId;
+        try (fis) {
+            objectId = bucket.uploadFromStream(file.getName(), fis);
+        }
+        return objectId;
+    }
+
+    public void downloadBucket(String dbName, String bucketName, ObjectId _id, File file) throws FileNotFoundException {
+        GridFSBucket bucket = this.createBucket(dbName, bucketName);
+        FileOutputStream fos = new FileOutputStream(file);
+        bucket.downloadToStream(_id, fos);
     }
 }

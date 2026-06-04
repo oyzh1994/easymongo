@@ -9,7 +9,7 @@ public class MongoDatabase {
 
     private String name;
 
-    private Long sizeOnDisk;
+    private Double sizeOnDisk;
 
     public String getName() {
         return name;
@@ -19,11 +19,11 @@ public class MongoDatabase {
         this.name = name;
     }
 
-    public Long getSizeOnDisk() {
+    public Double getSizeOnDisk() {
         return sizeOnDisk;
     }
 
-    public void setSizeOnDisk(Long sizeOnDisk) {
+    public void setSizeOnDisk(Double sizeOnDisk) {
         this.sizeOnDisk = sizeOnDisk;
     }
 }

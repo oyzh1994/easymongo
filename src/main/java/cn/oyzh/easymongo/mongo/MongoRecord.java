@@ -373,8 +373,15 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
         return this.column(MongoUtil.ID);
     }
 
-    public Object _idValue() {
-        return this.getValue(MongoUtil.ID);
+    public ObjectId _idValue() {
+        Object o = this.getValue(MongoUtil.ID);
+        if (o instanceof String s) {
+            return new ObjectId(s);
+        }
+        if (o instanceof ObjectId o1) {
+            return o1;
+        }
+        throw new IllegalArgumentException("_id");
     }
 
 

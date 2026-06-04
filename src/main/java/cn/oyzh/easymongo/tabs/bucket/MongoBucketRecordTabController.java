@@ -1,23 +1,27 @@
 package cn.oyzh.easymongo.tabs.bucket;
 
 import cn.oyzh.common.dto.Paging;
+import cn.oyzh.common.file.FileNameUtil;
 import cn.oyzh.common.util.CollectionUtil;
+import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoSetting;
-import cn.oyzh.easymongo.fx.DBStatusColumn;
 import cn.oyzh.easymongo.fx.MongoRecordColumn;
 import cn.oyzh.easymongo.fx.MongoRecordTableView;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
-import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
 import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
+import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.gridfs.MongoBucketTreeItem;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.fx.gui.page.PageBox;
 import cn.oyzh.fx.gui.page.PageEvent;
 import cn.oyzh.fx.gui.tabs.RichTabController;
+import cn.oyzh.fx.plus.chooser.FXChooser;
+import cn.oyzh.fx.plus.chooser.FileChooserHelper;
+import cn.oyzh.fx.plus.chooser.FileExtensionFilter;
 import cn.oyzh.fx.plus.controls.box.FXVBox;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import cn.oyzh.fx.plus.controls.table.FXTableColumn;
@@ -29,7 +33,9 @@ import cn.oyzh.i18n.I18nHelper;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
+import org.bson.types.ObjectId;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -280,6 +286,66 @@ public class MongoBucketRecordTabController extends RichTabController {
     private void deleteRecord() {
         MongoRecord record = this.recordTable.getSelectedItem();
         this.doDeleteRecord(record);
+    }
+
+    /**
+     * 上传记录
+     */
+    @FXML
+    private void uploadRecord() {
+        File file = FileChooserHelper.choose(I18nHelper.pleaseSelectFile(), FXChooser.allExtensionFilter());
+        if (file == null) {
+            return;
+        }
+        StageManager.showMask(() -> {
+            try {
+                ObjectId _id = this.getItem().uploadBucket(file);
+                if (_id == null) {
+                    MessageBox.warn(I18nHelper.uploadFileFailed());
+                    return;
+                }
+                MongoRecord record = this.getItem().selectBucketRecord(_id);
+                if (record == null) {
+                    MessageBox.warn(I18nHelper.uploadFileFailed());
+                    return;
+                }
+                this.recordTable.addItem(record);
+                this.recordTable.selectLast();
+            } catch (Exception ex) {
+                MessageBox.exception(ex);
+            }
+        });
+    }
+
+    /**
+     * 下载记录
+     */
+    @FXML
+    private void downloadRecord() {
+        MongoRecord record = this.recordTable.getSelectedItem();
+        if (record == null) {
+            return;
+        }
+        String fileName = (String) record.getValue("filename");
+        String extName = FileNameUtil.extName(fileName);
+        FileExtensionFilter extensionFilter;
+        if (StringUtil.isNotBlank(extName)) {
+            extensionFilter = FXChooser.newExtensionFilter(extName);
+        } else {
+            extensionFilter = FXChooser.allExtensionFilter();
+        }
+        File file = FileChooserHelper.save(I18nHelper.pleaseSelectFile(), fileName, extensionFilter);
+        if (file == null) {
+            return;
+        }
+        StageManager.showMask(() -> {
+            try {
+                ObjectId _id = (ObjectId) record._idValue();
+                this.getItem().downloadBucket(_id, file);
+            } catch (Exception ex) {
+                MessageBox.exception(ex);
+            }
+        });
     }
 
     /**

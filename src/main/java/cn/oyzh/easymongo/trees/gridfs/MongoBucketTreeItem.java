@@ -20,6 +20,7 @@ import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
 import org.bson.types.ObjectId;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,5 +192,17 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
 
     public MongoColumns bucketColumns() {
         return this.client().bucketColumns();
+    }
+
+    public ObjectId uploadBucket(File file) throws Exception {
+        return this.client().uploadBucket(this.dbName(), this.bucketName(), file);
+    }
+
+    public MongoRecord selectBucketRecord(ObjectId _id) {
+        return this.client().selectBucketRecord(this.dbName(), this.bucketName(), _id);
+    }
+
+    public void downloadBucket(ObjectId _id, File file) throws Exception {
+        this.client().downloadBucket(this.dbName(), this.bucketName(), _id, file);
     }
 }
