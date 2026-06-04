@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.trees.root;
 
+import cn.oyzh.fx.gui.svg.glyph.database.DatabaseSVGGlyph;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemValue;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import cn.oyzh.i18n.I18nHelper;
@@ -21,7 +22,7 @@ public class MongoRootTreeItemValue extends RichTreeItemValue {
     @Override
     public SVGGlyph graphic() {
         if (super.graphic() == null) {
-            super.graphic(new SVGGlyph("/font/database.svg"));
+            super.graphic(new DatabaseSVGGlyph());
         }
         return super.graphic();
     }

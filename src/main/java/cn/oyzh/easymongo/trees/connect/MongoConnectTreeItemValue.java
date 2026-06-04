@@ -1,6 +1,6 @@
 package cn.oyzh.easymongo.trees.connect;
 
-import cn.oyzh.fx.gui.svg.glyph.database.MysqlSVGGlyph;
+import cn.oyzh.fx.gui.svg.glyph.database.MongodbSVGGlyph;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemValue;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import javafx.scene.paint.Color;
@@ -31,7 +31,7 @@ public class MongoConnectTreeItemValue extends RichTreeItemValue {
     @Override
     public SVGGlyph graphic() {
         if (super.graphic() == null) {
-            super.graphic(new MysqlSVGGlyph());
+            super.graphic(new MongodbSVGGlyph());
             super.graphic().disableTheme();
         }
         return super.graphic();
