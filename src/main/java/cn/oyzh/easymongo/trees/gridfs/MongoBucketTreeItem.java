@@ -18,6 +18,7 @@ import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
+import org.bson.BsonValue;
 import org.bson.types.ObjectId;
 
 import java.io.File;
@@ -72,40 +73,20 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem openCollection = MenuItemHelper.openCollection("12", this::onPrimaryDoubleClick);
-        items.add(openCollection);
-        FXMenuItem clearCollection = MenuItemHelper.clearCollection("12", this::clearCollection);
-        items.add(clearCollection);
-        FXMenuItem deleteCollection = MenuItemHelper.deleteCollection("12", this::delete);
-        items.add(deleteCollection);
-        items.add(MenuItemHelper.separator());
-        FXMenuItem dumpTable = MenuItemHelper.dumpData("12", this::dump);
-        items.add(dumpTable);
-        FXMenuItem exportTable = MenuItemHelper.exportData("12", this::export);
-        items.add(exportTable);
-        FXMenuItem tableInfo = MenuItemHelper.tableInfo("12", this::tableInfo);
-        items.add(tableInfo);
-
+        FXMenuItem openBucket = MenuItemHelper.openBucket("12", this::onPrimaryDoubleClick);
+        items.add(openBucket);
+        FXMenuItem clearBucket = MenuItemHelper.clearBucket("12", this::clearBucket);
+        items.add(clearBucket);
+        FXMenuItem deleteBucket = MenuItemHelper.deleteBucket("12", this::delete);
+        items.add(deleteBucket);
         return items;
-    }
-
-    /**
-     * 转储
-     */
-    private void dump() {
-    }
-
-    /**
-     * 导出
-     */
-    private void export() {
     }
 
     /**
      * 清空集合
      */
-    private void clearCollection() {
-        if (MessageBox.confirm(I18nHelper.clearCollection() + "[" + this.bucketName() + "]")) {
+    private void clearBucket() {
+        if (MessageBox.confirm(I18nHelper.clearBucket() + "[" + this.bucketName() + "]")) {
             this.dbItem().clearBucket(this.bucketName());
             this.parent().reloadChild();
         }
@@ -114,22 +95,14 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
     @Override
     public void delete() {
         try {
-            if (MessageBox.confirm(I18nHelper.deleteCollection() + "[" + this.bucketName() + "]")) {
+            if (MessageBox.confirm(I18nHelper.deleteBucket() + "[" + this.bucketName() + "]")) {
                 this.dbItem().dropBucket(this.bucketName());
                 MongoEventUtil.bucketDropped(this, this.dbItem());
                 this.remove();
-            } else {
-                MessageBox.warn(I18nHelper.operationFail());
             }
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
-    }
-
-    private void tableInfo() {
-        //        StageAdapter fxView = StageManager.parseStage(MysqlTableInfoController.class, this.window());
-        //        fxView.setProp("tableItem", this);
-        //        fxView.display();
     }
 
     public MongoDatabaseTreeItem dbItem() {
@@ -187,15 +160,15 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return this.client().uploadBucketRecord(this.dbName(), this.bucketName(), file);
     }
 
-    public MongoRecord selectRecord(ObjectId _id) {
+    public MongoRecord selectRecord(BsonValue _id) {
         return this.client().selectBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 
-    public void downloadRecord(ObjectId _id, File file) throws Exception {
+    public void downloadRecord(BsonValue _id, File file) throws Exception {
         this.client().downloadBucketRecord(this.dbName(), this.bucketName(), _id, file);
     }
 
-    public void deleteRecord(ObjectId _id) {
+    public void deleteRecord(BsonValue _id) {
         this.client().deleteBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 

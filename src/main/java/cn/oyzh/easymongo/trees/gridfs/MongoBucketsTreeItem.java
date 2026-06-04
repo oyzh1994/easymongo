@@ -46,21 +46,18 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
         FXMenuItem reload = MenuItemHelper.reloadData("12", this::reloadChild);
-        FXMenuItem add = MenuItemHelper.addCollection("12", this::addCollection);
+        FXMenuItem add = MenuItemHelper.addBucket("12", this::addBucket);
         items.add(add);
         items.add(reload);
         return items;
     }
 
-    private void addCollection() {
-        String name = MessageBox.prompt(I18nHelper.pleaseInputCollectionName());
+    private void addBucket() {
+        String name = MessageBox.prompt(I18nHelper.pleaseInputBucketName());
         if (StringUtil.isBlank(name)) {
             return;
         }
-        MongoCollection collection = new MongoCollection();
-        collection.setName(name);
-        collection.setDbName(this.dbName());
-        this.client().createCollection(collection);
+        this.client().createBucket(this.dbName(), name);
         this.reloadChild();
     }
 

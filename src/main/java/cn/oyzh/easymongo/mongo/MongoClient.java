@@ -40,6 +40,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -182,9 +183,11 @@ public class MongoClient implements Closeable {
         for (Document document : documents) {
             MongoDatabase database = new MongoDatabase();
             String name = document.getString("name");
-            Double sizeOnDisk = document.getDouble("sizeOnDisk");
             database.setName(name);
-            database.setSizeOnDisk(sizeOnDisk);
+            Object sizeOnDisk = document.get("sizeOnDisk");
+            if (sizeOnDisk instanceof Number number) {
+                database.setSizeOnDisk(number.doubleValue());
+            }
             databases.add(database);
         }
         return databases;
@@ -242,6 +245,7 @@ public class MongoClient implements Closeable {
             collection.setName(name);
             collections.add(collection);
         }
+        collections = collections.stream().sorted(Comparator.comparing(MongoCollection::getName)).toList();
         return collections;
     }
 
@@ -407,7 +411,7 @@ public class MongoClient implements Closeable {
     public List<MongoBucket> buckets(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         MongoIterable<String> collectionNames = database.listCollectionNames();
-        List<MongoBucket> gridFSList = new ArrayList<>();
+        List<MongoBucket> buckets = new ArrayList<>();
         for (String collectionName : collectionNames) {
             if (!MongoRecordUtil.isBucket(collectionName)) {
                 continue;
@@ -415,9 +419,10 @@ public class MongoClient implements Closeable {
             MongoBucket gridFS = new MongoBucket();
             gridFS.setDbName(dbName);
             gridFS.setName(collectionName.substring(0, collectionName.lastIndexOf(".")));
-            gridFSList.add(gridFS);
+            buckets.add(gridFS);
         }
-        return gridFSList;
+        buckets = buckets.stream().sorted(Comparator.comparing(MongoBucket::getName)).toList();
+        return buckets;
     }
 
     /**
@@ -482,7 +487,7 @@ public class MongoClient implements Closeable {
         columns.add(uploadDateColumn);
         for (GridFSFile file : iterable) {
             MongoRecord record = new MongoRecord(columns, true);
-            record.putValue(idColumn, file.getObjectId().toHexString());
+            record.putValue(idColumn, file.getId());
             record.putValue(fileNameColumn, file.getFilename());
             record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength(), 2));
             record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize(), 2));
@@ -500,7 +505,7 @@ public class MongoClient implements Closeable {
      * @param _id        数据id
      * @return 结果
      */
-    public MongoRecord selectBucketRecord(String dbName, String bucketName, ObjectId _id) {
+    public MongoRecord selectBucketRecord(String dbName, String bucketName, BsonValue _id) {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
@@ -521,7 +526,7 @@ public class MongoClient implements Closeable {
         GridFSFile file = iterable.first();
         if (file != null) {
             MongoRecord record = new MongoRecord(columns, true);
-            record.putValue(idColumn, file.getObjectId().toHexString());
+            record.putValue(idColumn, file.getId());
             record.putValue(fileNameColumn, file.getFilename());
             record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength(), 2));
             record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize(), 2));
@@ -579,7 +584,7 @@ public class MongoClient implements Closeable {
      * @param _id        数据id
      * @param file       文件
      */
-    public void downloadBucketRecord(String dbName, String bucketName, ObjectId _id, File file) throws FileNotFoundException {
+    public void downloadBucketRecord(String dbName, String bucketName, BsonValue _id, File file) throws FileNotFoundException {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
@@ -598,7 +603,7 @@ public class MongoClient implements Closeable {
      * @param bucketName 桶名称
      * @param _id        数据id
      */
-    public void deleteBucketRecord(String dbName, String bucketName, ObjectId _id) {
+    public void deleteBucketRecord(String dbName, String bucketName, BsonValue _id) {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }

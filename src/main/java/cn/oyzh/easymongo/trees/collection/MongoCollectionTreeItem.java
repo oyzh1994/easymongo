@@ -186,7 +186,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         param.setDbName(this.dbName());
         param.setStart(pageNo * limit);
         param.setCollectionName(this.collectionName());
-        List<MongoRecord> rows = this.client().selectBucketRecords(param);
+        List<MongoRecord> rows = this.client().selectCollectionRecords(param);
         long count = rows.size();
         Paging<MongoRecord> paging = new Paging<>(rows, limit, count);
         paging.currentPage(pageNo);

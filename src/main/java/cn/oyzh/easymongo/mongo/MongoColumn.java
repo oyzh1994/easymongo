@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.object.ObjectCopier;
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.easymongo.util.MongoUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -55,7 +56,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         this.name = name;
     }
 
-    public MongoColumn(String name,String aliasName) {
+    public MongoColumn(String name, String aliasName) {
         this.name = name;
         this.aliasName = aliasName;
     }
@@ -69,6 +70,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     public void setType(String type) {
+        type = StringUtil.toUpperCase(type);
         this.typeProperty.set(type);
         super.putOriginalData("type", type);
     }
@@ -184,7 +186,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     public boolean is_id() {
-        return "_id".equalsIgnoreCase(this.name);
+        return MongoUtil.ID.equalsIgnoreCase(this.name);
     }
 
     public Object defaultValue() {
@@ -205,7 +207,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         this.aliasName = aliasName;
     }
 
-    public String displayName(){
-        return this.aliasName==null?this.name:this.aliasName;
+    public String displayName() {
+        return this.aliasName == null ? this.name : this.aliasName;
     }
 }
