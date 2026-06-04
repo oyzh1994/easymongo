@@ -374,6 +374,10 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
     }
 
     public Object _idValue() {
-       return this.getValue(MongoUtil.ID);
+        MongoRecordProperty property = this.getProperty(MongoUtil.ID);
+        if (property != null) {
+            return property.getOriginal();
+        }
+        return null;
     }
 }

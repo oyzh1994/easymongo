@@ -57,6 +57,7 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         this.record = record;
         if (column.is_id()) {
             super.set(MongoRecordUtil.idValue(value));
+            this.original = value;
         } else {
             super.set(value);
             this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
@@ -64,9 +65,9 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
                 this.initNode();
                 this.setChanged(true);
             });
-        }
-        if (!readonly) {
-            this.original = value;
+            if (!readonly) {
+                this.original = value;
+            }
         }
         this.readonly = readonly;
     }

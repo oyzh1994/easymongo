@@ -28,11 +28,13 @@ import com.mongodb.client.result.UpdateResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import org.bson.BsonObjectId;
 import org.bson.BsonValue;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -440,15 +442,29 @@ public class MongoClient implements Closeable {
     }
 
     /**
+     * 获取存储桶
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     */
+    public GridFSBucket bucket(String dbName, String bucketName) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        return GridFSBuckets.create(database, bucketName);
+    }
+
+    /**
      * 创建存储桶
      *
      * @param dbName     数据库名称
      * @param bucketName 桶名称
-     * @return 结果
      */
-    public GridFSBucket createBucket(String dbName, String bucketName) {
-        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
-        return GridFSBuckets.create(database, bucketName);
+    public void createBucket(String dbName, String bucketName) {
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
+        // 需要上传一次数据，不然桶不会出现
+        ByteArrayInputStream bis = new ByteArrayInputStream(new byte[]{});
+        ObjectId _id = bucket.uploadFromStream("_empty_", bis);
+        // 删除此数据
+        this.deleteBucketRecord(dbName, bucketName, new BsonObjectId(_id));
     }
 
     /**
@@ -468,7 +484,7 @@ public class MongoClient implements Closeable {
      * @param bucketName 桶名称
      */
     public void clearBucket(String dbName, String bucketName) {
-        GridFSBucket bucket = this.createBucket(dbName, bucketName);
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
         bucket.find().forEach(file -> bucket.delete(file.getObjectId()));
     }
 
@@ -481,7 +497,7 @@ public class MongoClient implements Closeable {
     public List<MongoRecord> selectBucketRecords(MongoSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
-        GridFSBucket fsBucket = this.createBucket(dbName, collectionName);
+        GridFSBucket fsBucket = this.bucket(dbName, collectionName);
         int skip = Math.toIntExact(param.getStart());
         int limit = Math.toIntExact(param.getLimit());
 
@@ -537,9 +553,9 @@ public class MongoClient implements Closeable {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
-        GridFSBucket fsBucket = this.createBucket(dbName, bucketName);
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
         Bson filters = Filters.eq(MongoUtil.ID, _id);
-        GridFSFindIterable iterable = fsBucket.find(filters).limit(1);
+        GridFSFindIterable iterable = bucket.find(filters).limit(1);
         MongoColumns columns = new MongoColumns();
         MongoColumn idColumn = new MongoColumn(MongoUtil.ID, I18nHelper.id());
         columns.add(idColumn);
@@ -595,7 +611,7 @@ public class MongoClient implements Closeable {
         if (file == null) {
             throw new IllegalArgumentException("file");
         }
-        GridFSBucket bucket = this.createBucket(dbName, bucketName);
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
         FileInputStream fis = new FileInputStream(file);
         ObjectId objectId;
         try (fis) {
@@ -619,7 +635,7 @@ public class MongoClient implements Closeable {
         if (file == null) {
             throw new IllegalArgumentException("file");
         }
-        GridFSBucket bucket = this.createBucket(dbName, bucketName);
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
         FileOutputStream fos = new FileOutputStream(file);
         bucket.downloadToStream(_id, fos);
     }
@@ -635,7 +651,7 @@ public class MongoClient implements Closeable {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
-        GridFSBucket bucket = this.createBucket(dbName, bucketName);
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
         bucket.delete(_id);
     }
 }

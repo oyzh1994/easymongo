@@ -313,8 +313,10 @@ public class MongoBucketRecordTabController extends RichTabController {
             if (!MessageBox.confirm(I18nHelper.deleteRecord() + "?")) {
                 return;
             }
-            this.getItem().deleteRecord((BsonValue) record._idValue());
-            this.recordTable.removeItem(record);
+            StageManager.showMask(() -> {
+                this.getItem().deleteRecord((BsonValue) record._idValue());
+                this.recordTable.removeItem(record);
+            });
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
