@@ -245,7 +245,13 @@ public class MongoClient implements Closeable {
         return collections;
     }
 
-    public List<MongoRecord> selectRecords(MysqlSelectRecordParam param) {
+    /**
+     * 查询集合记录
+     *
+     * @param param 参数
+     * @return 结果
+     */
+    public List<MongoRecord> selectCollectionRecords(MysqlSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
@@ -276,7 +282,13 @@ public class MongoClient implements Closeable {
         return records;
     }
 
-    public ObjectId insertRecord(MongoRecordData recordData) {
+    /**
+     * 新增集合记录
+     *
+     * @param recordData 数据
+     * @return 结果
+     */
+    public ObjectId insertCollectionRecord(MongoRecordData recordData) {
         String dbName = null;
         String collectionName = null;
         Document document = new Document();
@@ -306,7 +318,13 @@ public class MongoClient implements Closeable {
         return null;
     }
 
-    public long deleteRecord(MongoRecordData recordData) {
+    /**
+     * 删除集合记录
+     *
+     * @param recordData 数据
+     * @return 结果
+     */
+    public long deleteCollectionRecord(MongoRecordData recordData) {
         MongoColumn column = recordData.column(MongoUtil.ID);
         if (column == null) {
             throw new IllegalArgumentException("_id");
@@ -331,7 +349,13 @@ public class MongoClient implements Closeable {
         return result.getDeletedCount();
     }
 
-    public long updateRecord(MongoRecordData recordData) {
+    /**
+     * 更新集合记录
+     *
+     * @param recordData 数据
+     * @return 结果
+     */
+    public long updateCollectionRecord(MongoRecordData recordData) {
         MongoColumn column = recordData.column(MongoUtil.ID);
         if (column == null) {
             throw new IllegalArgumentException("_id");
@@ -374,12 +398,12 @@ public class MongoClient implements Closeable {
         return 0;
     }
 
-
-    private GridFSBucket bucket(String dbName, String bucketName) {
-        bucketName = bucketName.endsWith(".files") ? bucketName : bucketName + ".files";
-        return createBucket(dbName, bucketName);
-    }
-
+    /**
+     * 获取存储桶
+     *
+     * @param dbName 数据库名称
+     * @return 结果
+     */
     public List<MongoBucket> buckets(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         MongoIterable<String> collectionNames = database.listCollectionNames();
@@ -396,20 +420,45 @@ public class MongoClient implements Closeable {
         return gridFSList;
     }
 
+    /**
+     * 创建存储桶
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     * @return 结果
+     */
     public GridFSBucket createBucket(String dbName, String bucketName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         return GridFSBuckets.create(database, bucketName);
     }
 
+    /**
+     * 删除存储桶
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     */
     public void dropBucket(String dbName, String bucketName) {
         this.dropCollection(dbName, bucketName + ".files");
     }
 
+    /**
+     * 清除存储桶
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     */
     public void clearBucket(String dbName, String bucketName) {
-        GridFSBucket bucket = this.bucket(dbName, bucketName);
+        GridFSBucket bucket = this.createBucket(dbName, bucketName);
         bucket.find().forEach(file -> bucket.delete(file.getObjectId()));
     }
 
+    /**
+     * 查询存储桶记录
+     *
+     * @param param 参数
+     * @return 结果
+     */
     public List<MongoRecord> selectBucketRecords(MysqlSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
@@ -443,6 +492,14 @@ public class MongoClient implements Closeable {
         return records;
     }
 
+    /**
+     * 查询单个记录
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 存储桶名称
+     * @param _id        数据id
+     * @return 结果
+     */
     public MongoRecord selectBucketRecord(String dbName, String bucketName, ObjectId _id) {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
@@ -474,6 +531,11 @@ public class MongoClient implements Closeable {
         return null;
     }
 
+    /**
+     * 存储桶字段列表
+     *
+     * @return 结果
+     */
     public MongoColumns bucketColumns() {
         MongoColumns columns = new MongoColumns();
         MongoColumn idColumn = new MongoColumn("_id", I18nHelper.id());
@@ -489,6 +551,13 @@ public class MongoClient implements Closeable {
         return columns;
     }
 
+    /**
+     * 上传存储桶记录
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     * @param file       文件
+     */
     public ObjectId uploadBucketRecord(String dbName, String bucketName, File file) throws Exception {
         if (file == null) {
             throw new IllegalArgumentException("file");
@@ -502,6 +571,14 @@ public class MongoClient implements Closeable {
         return objectId;
     }
 
+    /**
+     * 下载存储桶记录
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     * @param _id        数据id
+     * @param file       文件
+     */
     public void downloadBucketRecord(String dbName, String bucketName, ObjectId _id, File file) throws FileNotFoundException {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
@@ -514,6 +591,13 @@ public class MongoClient implements Closeable {
         bucket.downloadToStream(_id, fos);
     }
 
+    /**
+     * 删除存储桶记录
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     * @param _id        数据id
+     */
     public void deleteBucketRecord(String dbName, String bucketName, ObjectId _id) {
         if (_id == null) {
             throw new IllegalArgumentException("_id");

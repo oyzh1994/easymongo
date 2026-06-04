@@ -292,7 +292,7 @@ public class MongoBucketRecordTabController extends RichTabController {
             if (!MessageBox.confirm(I18nHelper.deleteRecord() + "?")) {
                 return;
             }
-            this.getItem().deleteBucketRecord(record._idValue());
+            this.getItem().deleteRecord(record._idValue());
             this.recordTable.removeItem(record);
         } catch (Exception ex) {
             MessageBox.exception(ex);
@@ -310,12 +310,12 @@ public class MongoBucketRecordTabController extends RichTabController {
         }
         StageManager.showMask(() -> {
             try {
-                ObjectId _id = this.getItem().uploadBucketRecord(file);
+                ObjectId _id = this.getItem().uploadRecord(file);
                 if (_id == null) {
                     MessageBox.warn(I18nHelper.uploadFileFailed());
                     return;
                 }
-                MongoRecord record = this.getItem().selectBucketRecord(_id);
+                MongoRecord record = this.getItem().selectRecord(_id);
                 if (record == null) {
                     MessageBox.warn(I18nHelper.uploadFileFailed());
                     return;
@@ -352,7 +352,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         StageManager.showMask(() -> {
             try {
                 ObjectId _id = record._idValue();
-                this.getItem().downloadBucketRecord(_id, file);
+                this.getItem().downloadRecord(_id, file);
             } catch (Exception ex) {
                 MessageBox.exception(ex);
             }

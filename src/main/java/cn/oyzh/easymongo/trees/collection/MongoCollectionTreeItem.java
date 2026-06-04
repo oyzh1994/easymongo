@@ -174,18 +174,6 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         this.loadChild();
     }
 
-    public ObjectId insertRecord(MongoRecordData recordData) {
-        return this.client().insertRecord(recordData);
-    }
-
-    public long deleteRecord(MongoRecordData recordData) {
-        return this.client().deleteRecord(recordData);
-    }
-
-    public long updateRecord(MongoRecordData recordData ) {
-        return this.client().updateRecord(recordData);
-    }
-
     public MongoCollection value() {
         return value;
     }
@@ -198,10 +186,22 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         param.setDbName(this.dbName());
         param.setStart(pageNo * limit);
         param.setCollectionName(this.collectionName());
-        List<MongoRecord> rows = this.client().selectRecords(param);
+        List<MongoRecord> rows = this.client().selectBucketRecords(param);
         long count = rows.size();
         Paging<MongoRecord> paging = new Paging<>(rows, limit, count);
         paging.currentPage(pageNo);
         return paging;
+    }
+
+    public ObjectId insertRecord(MongoRecordData recordData) {
+        return this.client().insertCollectionRecord(recordData);
+    }
+
+    public long deleteRecord(MongoRecordData recordData) {
+        return this.client().deleteCollectionRecord(recordData);
+    }
+
+    public long updateRecord(MongoRecordData recordData ) {
+        return this.client().updateCollectionRecord(recordData);
     }
 }

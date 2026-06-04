@@ -159,21 +159,14 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         this.loadChild();
     }
 
-    public ObjectId insertRecord(MongoRecordData recordData) {
-        return this.client().insertRecord(recordData);
-    }
-
-    public long deleteRecord(MongoRecordData recordData) {
-        return this.client().deleteRecord(recordData);
-    }
-
-    public long updateRecord(MongoRecordData recordData) {
-        return this.client().updateRecord(recordData);
-    }
-
     public MongoBucket value() {
         return value;
     }
+
+    public MongoColumns bucketColumns() {
+        return this.client().bucketColumns();
+    }
+
 
     public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, MongoColumns columns) {
         MysqlSelectRecordParam param = new MysqlSelectRecordParam();
@@ -190,23 +183,19 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return paging;
     }
 
-    public MongoColumns bucketColumns() {
-        return this.client().bucketColumns();
-    }
-
-    public ObjectId uploadBucketRecord(File file) throws Exception {
+    public ObjectId uploadRecord(File file) throws Exception {
         return this.client().uploadBucketRecord(this.dbName(), this.bucketName(), file);
     }
 
-    public MongoRecord selectBucketRecord(ObjectId _id) {
+    public MongoRecord selectRecord(ObjectId _id) {
         return this.client().selectBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 
-    public void downloadBucketRecord(ObjectId _id, File file) throws Exception {
+    public void downloadRecord(ObjectId _id, File file) throws Exception {
         this.client().downloadBucketRecord(this.dbName(), this.bucketName(), _id, file);
     }
 
-    public void deleteBucketRecord(ObjectId _id) {
+    public void deleteRecord(ObjectId _id) {
         this.client().deleteBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 
