@@ -164,10 +164,12 @@ public class MongoCollectionRecordTabController extends RichTabController {
             this.pageData = this.getItem().recordPage(pageNo, this.setting.getRecordPageLimit(), this.enabledFilters(), this.columns);
             this.pageBox.setPaging(this.pageData);
             List<MongoRecord> records = this.pageData.dataList();
-            // 初始化字段
-            this.initColumns(records);
+            // 更新字段
+            this.updateColumns(records);
             // 初始化数据
             this.initRecords(records);
+            // 纠正记录
+            this.correctRecords();
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
@@ -186,11 +188,11 @@ public class MongoCollectionRecordTabController extends RichTabController {
     }
 
     /**
-     * 初始化字段
+     * 更新字段
      *
      * @param records 记录列表
      */
-    private void initColumns(List<MongoRecord> records) {
+    private void updateColumns(List<MongoRecord> records) {
         MongoColumns columnList = this.columns;
         if (columnList == null) {
             columnList = new MongoColumns();
@@ -256,6 +258,17 @@ public class MongoCollectionRecordTabController extends RichTabController {
     }
 
     /**
+     * 初始化记录
+     *
+     */
+    private void correctRecords() {
+        List<MongoRecord> records = this.recordTable.getItems();
+        for (MongoRecord record : records) {
+            record.correctColumns(this.columns);
+        }
+    }
+
+    /**
      * 添加记录
      */
     @FXML
@@ -308,10 +321,13 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 // 更新字段
                 List<MongoRecord> list = new ArrayList<>(this.recordTable.getItems());
                 list.add(record);
-                this.initColumns(list);
+                // 更新字段
+                this.updateColumns(list);
                 // 追加内容
                 this.recordTable.addItem(record);
                 this.recordTable.selectLast();
+                // 纠正记录
+                this.correctRecords();
                 this.apply.disable();
             }
         } catch (Exception ex) {
@@ -343,7 +359,10 @@ public class MongoCollectionRecordTabController extends RichTabController {
         long result = this.getItem().updateRecord(recordData);
         // 更新字段
         if (result == 1) {
-            this.initColumns(this.recordTable.getItems());
+            // 更新字段
+            this.updateColumns(this.recordTable.getItems());
+            // 纠正记录
+            this.correctRecords();
         } else {// 操作失败
             MessageBox.warn(I18nHelper.updateDocumentFail());
         }

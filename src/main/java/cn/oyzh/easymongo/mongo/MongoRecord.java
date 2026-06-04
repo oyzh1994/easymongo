@@ -246,15 +246,48 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
             this.columns.removeAll(delList);
         }
         if (record.properties != null) {
-            for (String column : record.columns()) {
-                Object value = record.getValue(column);
+            for (MongoColumn column : record.columns) {
+                if (column.is_id()) {
+                    continue;
+                }
+                Object value = record.getValue(column.getName());
                 this.putValue(column, value);
             }
         }
         if (!delList.isEmpty()) {
             this.setChanged(true);
             for (MongoColumn column : delList) {
-                this.removeProperty(column.getName());
+                MongoRecordProperty property = this.getProperty(column.getName());
+                if (property != null) {
+                    property.set(null);
+                    this.removeProperty(column.getName());
+                }
+            }
+        }
+    }
+
+    /**
+     * 纠正字段
+     *
+     * @param columns 字段列表
+     */
+    public void correctColumns(MongoColumns columns) {
+        if (columns != null) {
+            List<MongoColumn> addList = new ArrayList<>();
+            for (MongoColumn column : columns) {
+                if (column.is_id()) {
+                    continue;
+                }
+                MongoColumn mongoColumn = this.column(column.getName());
+                if (mongoColumn == null) {
+                    addList.add(column);
+                } else {
+                    mongoColumn.copy(column);
+                }
+            }
+            this.columns.addAll(addList);
+            for (MongoColumn column : addList) {
+                this.putValue(column, null);
             }
         }
     }
@@ -343,4 +376,6 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
     public Object _idValue() {
         return this.getValue(MongoUtil.ID);
     }
+
+
 }
