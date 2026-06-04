@@ -19,6 +19,9 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import org.bson.BsonObjectId;
+import org.bson.BsonValue;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -181,5 +184,41 @@ public class MongoRecordUtil {
      */
     public static boolean isBucket(String name) {
         return StringUtil.endWith(name, ".files");
+    }
+
+    public static Object idValue(Object value) {
+        if (value == null) {
+            return "";
+        }
+        if (value instanceof ObjectId id) {
+            return id.toHexString();
+        }
+        if (value instanceof BsonValue bsonValue) {
+            if (bsonValue.isString()) {
+                return bsonValue.asString().getValue();
+            }
+            if (bsonValue instanceof BsonObjectId) {
+                return idValue(bsonValue.asObjectId().getValue());
+            }
+            if (bsonValue.isDouble()) {
+                return bsonValue.asDouble().getValue();
+            }
+            if (bsonValue.isInt32()) {
+                return bsonValue.asInt32().getValue();
+            }
+            if (bsonValue.isInt64()) {
+                return bsonValue.asInt64().getValue();
+            }
+            if (bsonValue.isDecimal128()) {
+                return bsonValue.asDecimal128().getValue();
+            }
+            if (bsonValue.isTimestamp()) {
+                return bsonValue.asTimestamp().getValue();
+            }
+            if (bsonValue.isDateTime()) {
+                return bsonValue.asDateTime().getValue();
+            }
+        }
+        return value.toString();
     }
 }

@@ -287,6 +287,20 @@ public class MongoClient implements Closeable {
     }
 
     /**
+     * 查询集合记录数量
+     *
+     * @param param 参数
+     * @return 结果
+     */
+    public long selectCollectionRecordCount(MysqlSelectRecordParam param) {
+        String dbName = param.getDbName();
+        String collectionName = param.getCollectionName();
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
+        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        return collection.countDocuments(filters);
+    }
+
+    /**
      * 新增集合记录
      *
      * @param recordData 数据
@@ -495,6 +509,20 @@ public class MongoClient implements Closeable {
             records.add(record);
         }
         return records;
+    }
+
+    /**
+     * 查询存储桶记录数量
+     *
+     * @param param 参数
+     * @return 结果
+     */
+    public long selectBucketRecordCount(MysqlSelectRecordParam param) {
+        String dbName = param.getDbName();
+        String collectionName = param.getCollectionName();
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName + ".files");
+        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        return collection.countDocuments(filters);
     }
 
     /**

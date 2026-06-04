@@ -150,7 +150,7 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         param.setStart(pageNo * limit);
         param.setCollectionName(this.bucketName());
         List<MongoRecord> rows = this.client().selectBucketRecords(param);
-        long count = rows.size();
+        long count = this.client().selectBucketRecordCount(param);
         Paging<MongoRecord> paging = new Paging<>(rows, limit, count);
         paging.currentPage(pageNo);
         return paging;
