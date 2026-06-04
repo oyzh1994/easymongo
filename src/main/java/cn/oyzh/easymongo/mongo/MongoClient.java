@@ -1,14 +1,21 @@
 package cn.oyzh.easymongo.mongo;
 
+import cn.oyzh.common.date.DateHelper;
 import cn.oyzh.common.log.JulLog;
+import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MysqlConditionUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
+import cn.oyzh.i18n.I18nHelper;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoIterable;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.GridFSFindIterable;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
@@ -209,6 +216,9 @@ public class MongoClient implements Closeable {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         List<MongoCollection> collections = new ArrayList<>();
         for (String name : database.listCollectionNames()) {
+            if (name.endsWith(".files")) {
+                continue;
+            }
             MongoCollection collection = new MongoCollection();
             collection.setDbName(dbName);
             collection.setName(name);
@@ -344,5 +354,74 @@ public class MongoClient implements Closeable {
             return result.getMatchedCount();
         }
         return 0;
+    }
+
+
+    private GridFSBucket bucket(String dbName, String bucketName) {
+        bucketName = bucketName.endsWith(".files") ? bucketName : bucketName + ".files";
+        return createBucket(dbName, bucketName);
+    }
+
+    public List<MongoBucket> buckets(String dbName) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        MongoIterable<String> collectionNames = database.listCollectionNames();
+        List<MongoBucket> gridFSList = new ArrayList<>();
+        for (String collectionName : collectionNames) {
+            if (!collectionName.endsWith(".files")) {
+                continue;
+            }
+            MongoBucket gridFS = new MongoBucket();
+            gridFS.setDbName(dbName);
+            gridFS.setName(collectionName.substring(0, collectionName.lastIndexOf(".")));
+            gridFSList.add(gridFS);
+        }
+        return gridFSList;
+    }
+
+    public GridFSBucket createBucket(String dbName, String bucketName) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        return GridFSBuckets.create(database, bucketName);
+    }
+
+    public void dropBucket(String dbName, String bucketName) {
+        this.dropCollection(dbName, bucketName + ".files");
+    }
+
+    public void clearBucket(String dbName, String bucketName) {
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
+        bucket.find().forEach(file -> bucket.delete(file.getObjectId()));
+    }
+
+    public List<MongoRecord> selectBucketRecords(MysqlSelectRecordParam param) {
+        String dbName = param.getDbName();
+        String collectionName = param.getCollectionName();
+        GridFSBucket fsBucket = this.createBucket(dbName, collectionName);
+        int skip = Math.toIntExact(param.getStart());
+        int limit = Math.toIntExact(param.getLimit());
+
+        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        GridFSFindIterable iterable = fsBucket.find(filters).limit(limit).skip(skip);
+        List<MongoRecord> records = new ArrayList<>();
+        MongoColumns columns = new MongoColumns();
+        MongoColumn idColumn = new MongoColumn("ID");
+        columns.add(idColumn);
+        MongoColumn fileNameColumn = new MongoColumn(I18nHelper.fileName());
+        columns.add(fileNameColumn);
+        MongoColumn lengthColumn = new MongoColumn(I18nHelper.length());
+        columns.add(lengthColumn);
+        MongoColumn chunkSizeColumn = new MongoColumn(I18nHelper.chunkSize());
+        columns.add(chunkSizeColumn);
+        MongoColumn uploadDateColumn = new MongoColumn(I18nHelper.uploadDate());
+        columns.add(uploadDateColumn);
+        for (GridFSFile file : iterable) {
+            MongoRecord record = new MongoRecord(columns, true);
+            record.putValue(idColumn, file.getObjectId().toHexString());
+            record.putValue(fileNameColumn, file.getFilename());
+            record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength()));
+            record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize()));
+            record.putValue(uploadDateColumn, DateHelper.formatDate(file.getUploadDate()));
+            records.add(record);
+        }
+        return records;
     }
 }

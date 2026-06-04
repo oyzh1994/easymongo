@@ -10,6 +10,7 @@ import cn.oyzh.easymongo.mongo.MongoDatabase;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
+import cn.oyzh.easymongo.trees.gridfs.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeItem;
@@ -126,6 +127,7 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
                     .onStart(() -> {
                         List<TreeItem<?>> typeItems = new ArrayList<>();
                         typeItems.add(new MongoCollectionsTreeItem(this.getTreeView()));
+                        typeItems.add(new MongoBucketsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoQueriesTreeItem(this.getTreeView()));
                         super.setChild(typeItems);
                     })
@@ -211,5 +213,13 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
 
     public void clearCollection(String collectionName) {
         this.client().clearCollection(this.dbName(), collectionName);
+    }
+
+    public void dropBucket(String bucketName) {
+        this.client().dropBucket(this.dbName(), bucketName);
+    }
+
+    public void clearBucket(String bucketName) {
+        this.client().clearBucket(this.dbName(), bucketName);
     }
 }

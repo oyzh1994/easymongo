@@ -1,9 +1,8 @@
-package cn.oyzh.easymongo.trees.collection;
+package cn.oyzh.easymongo.trees.gridfs;
 
 import cn.oyzh.fx.gui.svg.glyph.database.TableSVGGlyph;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemValue;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
-import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.paint.Color;
 
 /**
@@ -12,20 +11,20 @@ import javafx.scene.paint.Color;
  * @author oyzh
  * @since 2023/12/08
  */
-public class MongoCollectionsTreeItemValue extends RichTreeItemValue {
+public class MongoBucketsTreeItemValue extends RichTreeItemValue {
 
-    public MongoCollectionsTreeItemValue(MongoCollectionsTreeItem item) {
+    public MongoBucketsTreeItemValue(MongoBucketsTreeItem item) {
         super(item);
     }
 
     @Override
-    public MongoCollectionsTreeItem item() {
-        return (MongoCollectionsTreeItem) super.item();
+    public MongoBucketsTreeItem item() {
+        return (MongoBucketsTreeItem) super.item();
     }
 
     @Override
     public String name() {
-        return I18nHelper.collections();
+        return "GridFS";
     }
 
     @Override

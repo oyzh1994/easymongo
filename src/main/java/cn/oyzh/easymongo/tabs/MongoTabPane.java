@@ -2,7 +2,8 @@ package cn.oyzh.easymongo.tabs;
 
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
-import cn.oyzh.easymongo.mongo.MongoCollection;
+import cn.oyzh.easymongo.event.gridfs.MongoBucketOpenEvent;
+import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.EventSubscribe;
@@ -204,7 +205,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableRenamed(MysqlTableRenamedEvent event) {
-    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    //     MongoBucketRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.flushTitle();
     //     }
@@ -217,7 +218,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableCleared(MysqlTableClearedEvent event) {
-    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    //     MongoBucketRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.reload();
     //     }
@@ -230,7 +231,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableTruncated(MysqlTableTruncatedEvent event) {
-    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    //     MongoBucketRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.reload();
     //     }
@@ -242,8 +243,8 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  * @param event 事件
     //  */
     // @EventSubscribe
-    // private void onMysqlTableDropped(MongoCollectionDroppedEvent event) {
-    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
+    // private void onMysqlTableDropped(MongoBucketDroppedEvent event) {
+    //     MongoBucketRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.tableName());
     //     if (tab != null) {
     //         tab.closeTab();
     //     }
@@ -256,7 +257,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableFiltered(MysqlTableFilteredEvent event) {
-    //     MongoCollectionRecordTab tableTab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
+    //     MongoBucketRecordTab tableTab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
     //     if (tableTab != null) {
     //         tableTab.setFilters(event.filters());
     //         tableTab.reload();
@@ -270,7 +271,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlTableAlerted(MysqlTableAlertedEvent event) {
-    //     MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
+    //     MongoBucketRecordTab tab = this.getMysqlTableRecordTab(event.dbItem(), event.data());
     //     if (tab != null) {
     //         tab.flush();
     //         tab.reload();
@@ -737,4 +738,31 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //     super.initNode();
     //    this.setupSelectCountListener();
     // }
+
+    private MongoBucketRecordTab getBucketRecordTab(MongoDatabaseTreeItem dbItem, String bucketName) {
+        for (Tab tab : this.getTabs()) {
+            if (tab instanceof MongoBucketRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(bucketName, tab1.bucketName())) {
+                return tab1;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 桶打开事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onBucketOpen(MongoBucketOpenEvent event) {
+        MongoBucketRecordTab tab = this.getBucketRecordTab(event.getDbItem(), event.bucketName());
+        if (tab == null) {
+            tab = new MongoBucketRecordTab();
+            super.addTab(tab);
+        }
+        // 选中节点
+        this.select(tab);
+        // 初始化节点
+        tab.init(event.data());
+    }
 }
