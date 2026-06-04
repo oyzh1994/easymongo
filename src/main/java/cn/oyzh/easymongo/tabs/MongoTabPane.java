@@ -2,7 +2,7 @@ package cn.oyzh.easymongo.tabs;
 
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
-import cn.oyzh.easymongo.event.gridfs.MongoBucketOpenEvent;
+import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;

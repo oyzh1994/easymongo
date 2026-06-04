@@ -1,10 +1,10 @@
 package cn.oyzh.easymongo.mongo;
 
-import cn.oyzh.easymongo.fx.ShellMysqlColumnComboBox;
-import cn.oyzh.easymongo.fx.ShellMysqlConditionComboBox;
-import cn.oyzh.easymongo.fx.ShellMysqlJoinSymbolComboBox;
-import cn.oyzh.easymongo.mongo.condition.MysqlCondition;
-import cn.oyzh.easymongo.mongo.condition.MysqlConditionUtil;
+import cn.oyzh.easymongo.fx.MongoColumnComboBox;
+import cn.oyzh.easymongo.fx.MongoConditionComboBox;
+import cn.oyzh.easymongo.fx.MongoJoinSymbolComboBox;
+import cn.oyzh.easymongo.mongo.condition.MongoCondition;
+import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
 import cn.oyzh.fx.plus.controls.box.FXHBox;
 import cn.oyzh.fx.plus.controls.button.FXCheckBox;
 import cn.oyzh.fx.plus.flex.FlexUtil;
@@ -42,7 +42,7 @@ public class MongoRecordFilter {
     /**
      * 条件
      */
-    private MysqlCondition condition;
+    private MongoCondition condition;
 
     /**
      * 字段
@@ -68,7 +68,7 @@ public class MongoRecordFilter {
         if (this.valueBox == null || this.valueBox.isChildEmpty()) {
             return this.value;
         }
-        return this.value = MysqlConditionUtil.getNodeVal(this.valueBox.getChildren());
+        return this.value = MongoConditionUtil.getNodeVal(this.valueBox.getChildren());
     }
 
     /**
@@ -89,8 +89,8 @@ public class MongoRecordFilter {
             this.valueBox = new FXHBox();
             FlexUtil.flexWidth(this.valueBox, "100%");
         }
-        List<Node> nodes = MysqlConditionUtil.generateNode(this.column, this.condition);
-        MysqlConditionUtil.setNodeVal(nodes, this.value);
+        List<Node> nodes = MongoConditionUtil.generateNode(this.column, this.condition);
+        MongoConditionUtil.setNodeVal(nodes, this.value);
         if (nodes.size() == 1) {
             FlexUtil.flexWidth(nodes.getFirst(), "100% - 10");
             FlexUtil.flexHeight(nodes.getFirst(), "100%");
@@ -114,8 +114,8 @@ public class MongoRecordFilter {
      *
      * @return 字段组件
      */
-    public ShellMysqlColumnComboBox getColumnControl() {
-        ShellMysqlColumnComboBox comboBox = new ShellMysqlColumnComboBox(this.columns);
+    public MongoColumnComboBox getColumnControl() {
+        MongoColumnComboBox comboBox = new MongoColumnComboBox(this.columns);
         comboBox.selectedItemChanged((observable, oldValue, newValue) -> {
             this.column = newValue;
             this.updateValueControl();
@@ -130,8 +130,8 @@ public class MongoRecordFilter {
      *
      * @return 条件组件
      */
-    public ShellMysqlConditionComboBox getConditionControl() {
-        ShellMysqlConditionComboBox comboBox = new ShellMysqlConditionComboBox();
+    public MongoConditionComboBox getConditionControl() {
+        MongoConditionComboBox comboBox = new MongoConditionComboBox();
         comboBox.selectedItemChanged((observable, oldValue, newValue) -> {
             this.condition = newValue;
             this.updateValueControl();
@@ -159,8 +159,8 @@ public class MongoRecordFilter {
      *
      * @return 连接符组件
      */
-    public ShellMysqlJoinSymbolComboBox getJoinSymbolControl() {
-        ShellMysqlJoinSymbolComboBox comboBox = new ShellMysqlJoinSymbolComboBox();
+    public MongoJoinSymbolComboBox getJoinSymbolControl() {
+        MongoJoinSymbolComboBox comboBox = new MongoJoinSymbolComboBox();
         comboBox.selectFirstIfNull(this.joinSymbol);
         comboBox.selectedItemChanged((observable, oldValue, newValue) -> this.joinSymbol = newValue);
         TableViewUtil.selectRowOnMouseClicked(comboBox);
@@ -219,11 +219,11 @@ public class MongoRecordFilter {
         this.joinSymbol = joinSymbol;
     }
 
-    public MysqlCondition getCondition() {
+    public MongoCondition getCondition() {
         return condition;
     }
 
-    public void setCondition(MysqlCondition condition) {
+    public void setCondition(MongoCondition condition) {
         this.condition = condition;
     }
 

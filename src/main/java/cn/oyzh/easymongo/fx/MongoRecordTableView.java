@@ -43,7 +43,7 @@ public class MongoRecordTableView extends FXTableView<MongoRecord> {
     @Override
     public void initNode() {
 //        this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        this.setRowFactory(param -> new ShellMysqlRecordTableRow());
+        this.setRowFactory(param -> new MongoRecordTableRow());
         // 监听移除
         super.destroyItemsOnRemoved();
 //        super.fakerMultipleSelection();

@@ -5,7 +5,7 @@ import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
-import cn.oyzh.easymongo.mongo.condition.MysqlConditionUtil;
+import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
@@ -255,14 +255,14 @@ public class MongoClient implements Closeable {
      * @param param 参数
      * @return 结果
      */
-    public List<MongoRecord> selectCollectionRecords(MysqlSelectRecordParam param) {
+    public List<MongoRecord> selectCollectionRecords(MongoSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
         int skip = Math.toIntExact(param.getStart());
         int limit = Math.toIntExact(param.getLimit());
 
-        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
         FindIterable<Document> iterable = collection.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         for (Document document : iterable) {
@@ -292,11 +292,11 @@ public class MongoClient implements Closeable {
      * @param param 参数
      * @return 结果
      */
-    public long selectCollectionRecordCount(MysqlSelectRecordParam param) {
+    public long selectCollectionRecordCount(MongoSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
-        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
         return collection.countDocuments(filters);
     }
 
@@ -478,14 +478,14 @@ public class MongoClient implements Closeable {
      * @param param 参数
      * @return 结果
      */
-    public List<MongoRecord> selectBucketRecords(MysqlSelectRecordParam param) {
+    public List<MongoRecord> selectBucketRecords(MongoSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
         GridFSBucket fsBucket = this.createBucket(dbName, collectionName);
         int skip = Math.toIntExact(param.getStart());
         int limit = Math.toIntExact(param.getLimit());
 
-        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
         GridFSFindIterable iterable = fsBucket.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         MongoColumns columns = new MongoColumns();
@@ -517,11 +517,11 @@ public class MongoClient implements Closeable {
      * @param param 参数
      * @return 结果
      */
-    public long selectBucketRecordCount(MysqlSelectRecordParam param) {
+    public long selectBucketRecordCount(MongoSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName + ".files");
-        Bson filters = MysqlConditionUtil.buildCondition(param.getFilters());
+        Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
         return collection.countDocuments(filters);
     }
 

@@ -9,7 +9,7 @@ import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordData;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
-import cn.oyzh.easymongo.mongo.MysqlSelectRecordParam;
+import cn.oyzh.easymongo.mongo.MongoSelectRecordParam;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
@@ -139,7 +139,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     }
 //
 //    public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, List<MysqlColumn> columns) {
-//        MysqlSelectRecordParam param = new MysqlSelectRecordParam();
+//        MongoSelectRecordParam param = new MongoSelectRecordParam();
 //        param.setLimit(limit);
 //        param.setFilters(filters);
 //        param.setColumns(columns);
@@ -179,7 +179,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     }
 
     public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, MongoColumns columns) {
-        MysqlSelectRecordParam param = new MysqlSelectRecordParam();
+        MongoSelectRecordParam param = new MongoSelectRecordParam();
         param.setLimit(limit);
         param.setFilters(filters);
         param.setColumns(columns);

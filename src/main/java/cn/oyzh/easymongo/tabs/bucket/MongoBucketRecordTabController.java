@@ -14,7 +14,7 @@ import cn.oyzh.easymongo.mongo.MongoRecordFilter;
 import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
-import cn.oyzh.easymongo.trees.gridfs.MongoBucketTreeItem;
+import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.fx.gui.page.PageBox;
 import cn.oyzh.fx.gui.page.PageEvent;
