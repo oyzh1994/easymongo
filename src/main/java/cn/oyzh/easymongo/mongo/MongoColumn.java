@@ -5,7 +5,6 @@ import cn.oyzh.common.util.StringUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,12 +42,22 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
      */
     private String name;
 
+    /**
+     * 别名，优先name显示
+     */
+    private String aliasName;
+
     public MongoColumn() {
 
     }
 
     public MongoColumn(String name) {
         this.name = name;
+    }
+
+    public MongoColumn(String name,String aliasName) {
+        this.name = name;
+        this.aliasName = aliasName;
     }
 
     public boolean isNameChanged() {
@@ -103,7 +112,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     public boolean supportString() {
-        return StringUtil.equals(this.getType(),"string");
+        return StringUtil.equals(this.getType(), "string");
     }
 
     public void setName(String name) {
@@ -186,5 +195,17 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
             return 0d;
         }
         return "";
+    }
+
+    public String getAliasName() {
+        return aliasName;
+    }
+
+    public void setAliasName(String aliasName) {
+        this.aliasName = aliasName;
+    }
+
+    public String displayName(){
+        return this.aliasName==null?this.name:this.aliasName;
     }
 }

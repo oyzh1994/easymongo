@@ -15,7 +15,6 @@ import cn.oyzh.fx.plus.menu.MenuItemAdapter;
 import cn.oyzh.fx.plus.util.ClipboardUtil;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.OverrunStyle;
-import javafx.scene.control.TableCell;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -39,14 +38,20 @@ public class MongoRecordColumn extends FarkerResizeTableColumn<MongoRecord, Obje
         this.column = column;
         this.setReorderable(true);
         this.setCellValueFactory(p -> p.getValue().getProperty(column.getName()));
-        FXVBox vBox = this.initContent();
-        if (mode == 1) {
+        if (mode == 0) {
+            this.text(column.displayName());
+        } else if (mode == 1) {
+            FXVBox vBox = this.initContent();
             this.setGraphic(vBox);
+            this.text(column.displayName());
+            super.showGraphicOnlyLater();
         } else {
+            FXVBox vBox = this.initContent();
             FXHBox hBox = super.initGraphic(vBox);
             this.setGraphic(hBox);
+            this.text(column.displayName());
+            super.showGraphicOnlyLater();
         }
-        this.text(column.getName());
     }
 
     /**
@@ -113,11 +118,5 @@ public class MongoRecordColumn extends FarkerResizeTableColumn<MongoRecord, Obje
     @Override
     protected boolean autoInitGraphic() {
         return false;
-    }
-
-    @Override
-    public void initNode() {
-        super.showGraphicOnlyLater();
-        super.initNode();
     }
 }

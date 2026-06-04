@@ -403,23 +403,23 @@ public class MongoClient implements Closeable {
         GridFSFindIterable iterable = fsBucket.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         MongoColumns columns = new MongoColumns();
-        MongoColumn idColumn = new MongoColumn("ID");
+        MongoColumn idColumn = new MongoColumn("_id" , I18nHelper.id());
         columns.add(idColumn);
-        MongoColumn fileNameColumn = new MongoColumn(I18nHelper.fileName());
+        MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
         columns.add(fileNameColumn);
-        MongoColumn lengthColumn = new MongoColumn(I18nHelper.length());
+        MongoColumn lengthColumn = new MongoColumn("length", I18nHelper.length());
         columns.add(lengthColumn);
-        MongoColumn chunkSizeColumn = new MongoColumn(I18nHelper.chunkSize());
+        MongoColumn chunkSizeColumn = new MongoColumn("chunkSize", I18nHelper.chunkSize());
         columns.add(chunkSizeColumn);
-        MongoColumn uploadDateColumn = new MongoColumn(I18nHelper.uploadDate());
+        MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
         columns.add(uploadDateColumn);
         for (GridFSFile file : iterable) {
             MongoRecord record = new MongoRecord(columns, true);
             record.putValue(idColumn, file.getObjectId().toHexString());
             record.putValue(fileNameColumn, file.getFilename());
-            record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength()));
-            record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize()));
-            record.putValue(uploadDateColumn, DateHelper.formatDate(file.getUploadDate()));
+            record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength(), 2));
+            record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize(), 2));
+            record.putValue(uploadDateColumn, DateHelper.formatDateTimeSimple(file.getUploadDate()));
             records.add(record);
         }
         return records;

@@ -15,7 +15,7 @@ import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordData;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
-import cn.oyzh.easymongo.popups.MongoCollectionRecordFilterPopupController;
+import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
 import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
@@ -447,7 +447,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
     @FXML
     private void filter() {
         try {
-            PopupAdapter popup = PopupManager.parsePopup(MongoCollectionRecordFilterPopupController.class);
+            PopupAdapter popup = PopupManager.parsePopup(MongoRecordFilterPopupController.class);
             popup.setProp("item", this.getItem());
             popup.setProp("filters", this.filters);
             popup.setProp("columns", this.columns);

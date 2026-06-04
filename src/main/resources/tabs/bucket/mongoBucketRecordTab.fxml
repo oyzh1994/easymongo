@@ -22,21 +22,6 @@
                 <Insets left="10" top="10"/>
             </HBox.margin>
         </DeleteSVGGlyph>
-        <AddSVGGlyph groupId="action2" onMousePrimaryClicked="#addRecord">
-            <HBox.margin>
-                <Insets left="5" top="10"/>
-            </HBox.margin>
-        </AddSVGGlyph>
-        <Apply1SVGGlyph onMousePrimaryClicked="#apply" fx:id="apply" disable="true">
-            <HBox.margin>
-                <Insets left="5" top="10"/>
-            </HBox.margin>
-        </Apply1SVGGlyph>
-        <DiscardSVGGlyph onMousePrimaryClicked="#discard" fx:id="discard" disable="true">
-            <HBox.margin>
-                <Insets left="5" top="10"/>
-            </HBox.margin>
-        </DiscardSVGGlyph>
         <RefreshSVGGlyph groupId="action2" onMousePrimaryClicked="#reload">
             <HBox.margin>
                 <Insets left="5" top="10"/>

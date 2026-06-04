@@ -22,7 +22,7 @@ public class ShellMysqlColumnComboBox extends FXComboBox<MongoColumn> {
                 if (o == null) {
                     return "";
                 }
-                return o.getName();
+                return o.displayName();
             }
         });
     }
