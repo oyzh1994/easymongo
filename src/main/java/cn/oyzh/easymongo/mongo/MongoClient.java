@@ -6,6 +6,7 @@ import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MysqlConditionUtil;
+import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
 import com.mongodb.client.FindIterable;
@@ -216,7 +217,7 @@ public class MongoClient implements Closeable {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         List<MongoCollection> collections = new ArrayList<>();
         for (String name : database.listCollectionNames()) {
-            if (name.endsWith(".files")) {
+            if (!MongoRecordUtil.isCollection(name)) {
                 continue;
             }
             MongoCollection collection = new MongoCollection();
@@ -367,7 +368,7 @@ public class MongoClient implements Closeable {
         MongoIterable<String> collectionNames = database.listCollectionNames();
         List<MongoBucket> gridFSList = new ArrayList<>();
         for (String collectionName : collectionNames) {
-            if (!collectionName.endsWith(".files")) {
+            if (!MongoRecordUtil.isBucket(collectionName)) {
                 continue;
             }
             MongoBucket gridFS = new MongoBucket();
@@ -403,7 +404,7 @@ public class MongoClient implements Closeable {
         GridFSFindIterable iterable = fsBucket.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         MongoColumns columns = new MongoColumns();
-        MongoColumn idColumn = new MongoColumn("_id" , I18nHelper.id());
+        MongoColumn idColumn = new MongoColumn("_id", I18nHelper.id());
         columns.add(idColumn);
         MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
         columns.add(fileNameColumn);
@@ -423,5 +424,20 @@ public class MongoClient implements Closeable {
             records.add(record);
         }
         return records;
+    }
+
+    public MongoColumns bucketColumns( ) {
+        MongoColumns columns = new MongoColumns();
+        MongoColumn idColumn = new MongoColumn("_id", I18nHelper.id());
+        columns.add(idColumn);
+        MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
+        columns.add(fileNameColumn);
+        MongoColumn lengthColumn = new MongoColumn("length", I18nHelper.length());
+        columns.add(lengthColumn);
+        MongoColumn chunkSizeColumn = new MongoColumn("chunkSize", I18nHelper.chunkSize());
+        columns.add(chunkSizeColumn);
+        MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
+        columns.add(uploadDateColumn);
+        return columns;
     }
 }

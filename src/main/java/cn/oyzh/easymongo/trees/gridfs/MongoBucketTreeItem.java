@@ -3,15 +3,14 @@ package cn.oyzh.easymongo.trees.gridfs;
 import cn.oyzh.common.dto.Paging;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
+import cn.oyzh.easymongo.mongo.MongoBucket;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
-import cn.oyzh.easymongo.mongo.MongoBucket;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordData;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
 import cn.oyzh.easymongo.mongo.MysqlSelectRecordParam;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
-import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
@@ -127,9 +126,9 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
     }
 
     private void tableInfo() {
-//        StageAdapter fxView = StageManager.parseStage(MysqlTableInfoController.class, this.window());
-//        fxView.setProp("tableItem", this);
-//        fxView.display();
+        //        StageAdapter fxView = StageManager.parseStage(MysqlTableInfoController.class, this.window());
+        //        fxView.setProp("tableItem", this);
+        //        fxView.display();
     }
 
     public MongoDatabaseTreeItem dbItem() {
@@ -167,7 +166,7 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return this.client().deleteRecord(recordData);
     }
 
-    public long updateRecord(MongoRecordData recordData ) {
+    public long updateRecord(MongoRecordData recordData) {
         return this.client().updateRecord(recordData);
     }
 
@@ -188,5 +187,9 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         Paging<MongoRecord> paging = new Paging<>(rows, limit, count);
         paging.currentPage(pageNo);
         return paging;
+    }
+
+    public MongoColumns bucketColumns() {
+        return this.client().bucketColumns();
     }
 }

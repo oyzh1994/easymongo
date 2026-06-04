@@ -126,7 +126,7 @@ public class MongoBucketRecordTabController extends RichTabController {
             List<MongoRecord> records = this.pageData.dataList();
             //  初始化字段
             if (records.isEmpty()) {
-                this.initColumns(null);
+                this.initColumns(this.getItem().bucketColumns());
             } else {
                 this.initColumns(records.getFirst().getColumns());
             }
@@ -157,14 +157,8 @@ public class MongoBucketRecordTabController extends RichTabController {
     private void initColumns(MongoColumns columns) {
         // 设置字段列表
         this.columns = columns;
-        if (this.columns == null || this.columns.isEmpty()) {
-            this.recordTable.clearColumn();
-            return;
-        }
         // 数据列集合
         List<FXTableColumn<MongoRecord, Object>> columnList = new ArrayList<>();
-        DBStatusColumn<MongoRecord> statusColumn = new DBStatusColumn<>();
-        columnList.add(statusColumn);
         for (MongoColumn column : columns) {
             MongoRecordColumn tableColumn = new MongoRecordColumn(column, 0);
             tableColumn.setPrefWidth(MongoRecordUtil.suitableColumnWidth(column));

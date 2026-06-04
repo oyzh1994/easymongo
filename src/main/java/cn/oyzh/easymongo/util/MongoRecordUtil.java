@@ -162,4 +162,24 @@ public class MongoRecordUtil {
         }
         return record;
     }
+
+    /**
+     * 判断是否集合
+     *
+     * @param name 名称
+     * @return 结果
+     */
+    public static boolean isCollection(String name) {
+        return !StringUtil.endWithAny(name, ".files", ".chunks");
+    }
+
+    /**
+     * 判断是否存储桶
+     *
+     * @param name 名称
+     * @return 结果
+     */
+    public static boolean isBucket(String name) {
+        return StringUtil.endWith(name, ".files");
+    }
 }
