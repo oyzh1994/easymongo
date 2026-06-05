@@ -209,7 +209,7 @@ public class ShellMysqlDataExportController extends StageController {
     /**
      * 表
      */
-    private String tableName;
+    private String collectionName;
 
     /**
      * 0: 正常导出
@@ -346,7 +346,7 @@ public class ShellMysqlDataExportController extends StageController {
         super.onWindowShown(event);
         this.dbClient = this.getProp("dbClient");
         this.dbName = this.getProp("dbName");
-        this.tableName = this.getProp("tableName");
+        this.collectionName = this.getProp("collectionName");
         if (this.hasProp("exportMode")) {
             this.exportMode = this.getProp("exportMode");
         }
@@ -412,7 +412,7 @@ public class ShellMysqlDataExportController extends StageController {
             for (MongoCollection table : tables) {
                 ShellMysqlDataExportTable exportTable = new ShellMysqlDataExportTable();
                 exportTable.setName(table.getName());
-                exportTable.setSelected(StringUtil.equals(table.getName(), this.tableName));
+                exportTable.setSelected(StringUtil.equals(table.getName(), this.collectionName));
                 this.exportTableView.addItem(exportTable);
             }
         } else {// 查询导出
@@ -461,15 +461,7 @@ public class ShellMysqlDataExportController extends StageController {
         // 文件类型
         String type = this.fileType.selectedUserData();
         // 显示对应组件
-        if ("sql".equalsIgnoreCase(type)) {
-            NodeGroupUtil.display(this.getStage(), "includeFields");
-            NodeGroupUtil.disappear(this.getStage(), "txtIdentifier");
-            NodeGroupUtil.disappear(this.getStage(), "fieldSeparator");
-            NodeGroupUtil.disappear(this.getStage(), "recordSeparator");
-            NodeGroupUtil.disappear(this.getStage(), "dateFormat");
-            NodeGroupUtil.disappear(this.getStage(), "fieldToAttr");
-            NodeGroupUtil.disappear(this.getStage(), "earlyVersion");
-        } else if ("txt".equalsIgnoreCase(type)) {
+       if ("txt".equalsIgnoreCase(type)) {
             NodeGroupUtil.display(this.getStage(), "txtIdentifier");
             NodeGroupUtil.display(this.getStage(), "fieldSeparator");
             NodeGroupUtil.display(this.getStage(), "recordSeparator");

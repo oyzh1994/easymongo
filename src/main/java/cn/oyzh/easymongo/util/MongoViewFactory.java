@@ -82,11 +82,11 @@ public class MongoViewFactory {
      * 导出数据
      *
      * @param client    客户端
-     * @param dbName    数据库名称
+     * @param collectionName    集合名称
      * @param tableName 表名称
      */
-    public static void exportData(MongoClient client, String dbName, String tableName) {
-        exportData(client, dbName, tableName, 0, null);
+    public static void exportData(MongoClient client, String collectionName, String tableName) {
+        exportData(client, collectionName, tableName, 0, null);
     }
 
     /**
@@ -94,16 +94,16 @@ public class MongoViewFactory {
      *
      * @param client      客户端
      * @param dbName      数据库名称
-     * @param tableName   表名称
+     * @param collectionName   集合名称
      * @param exportMode  导出模式
      * @param exportTable 导出表
      */
-    public static void exportData(MongoClient client, String dbName, String tableName, int exportMode, ShellMysqlDataExportTable exportTable) {
+    public static void exportData(MongoClient client, String dbName, String collectionName, int exportMode, ShellMysqlDataExportTable exportTable) {
         try {
             StageAdapter adapter = StageManager.parseStage(ShellMysqlDataExportController.class, StageManager.getFrontWindow());
             adapter.setProp("dbName", dbName);
             adapter.setProp("dbClient", client);
-            adapter.setProp("tableName", tableName);
+            adapter.setProp("collectionName", collectionName);
             adapter.setProp("exportMode", exportMode);
             adapter.setProp("exportTable", exportTable);
             adapter.display();

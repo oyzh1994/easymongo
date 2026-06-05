@@ -9,9 +9,11 @@ import org.bson.types.ObjectId;
 
 import java.io.Closeable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author oyzh
@@ -107,7 +109,11 @@ public abstract class MysqlTypeFileWriter implements Closeable {
     }
 
     protected String formatLine(Object[] objects, String fieldSeparator, String txtIdentifier, String recordSeparator) {
-        return this.formatLine(List.of(objects), fieldSeparator, txtIdentifier, recordSeparator);
+        List<Object> list = new ArrayList<>();
+        for (Object object : objects) {
+            list.add(Objects.requireNonNullElse(object, ""));
+        }
+        return this.formatLine(list, fieldSeparator, txtIdentifier, recordSeparator);
     }
 
     protected String formatLine(List<?> list, String fieldSeparator, String txtIdentifier, String recordSeparator) {

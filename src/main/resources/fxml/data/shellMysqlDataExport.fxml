@@ -40,11 +40,6 @@
             <fx:define>
                 <FXToggleGroup fx:id="fileType"/>
             </fx:define>
-            <FXRadioButton toggleGroup="$fileType" text="%base.sqlType" selected="true" userData="sql">
-                <VBox.margin>
-                    <Insets left="30" top="10"/>
-                </VBox.margin>
-            </FXRadioButton>
             <FXRadioButton toggleGroup="$fileType" text="%base.jsonType" userData="json">
                 <VBox.margin>
                     <Insets left="30" top="10"/>

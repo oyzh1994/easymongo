@@ -12,6 +12,7 @@ import cn.oyzh.easymongo.mongo.MongoRecordFilter;
 import cn.oyzh.easymongo.mongo.MongoSelectRecordParam;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
@@ -98,6 +99,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
      * 导出
      */
     private void export() {
+        MongoViewFactory.exportData(this.client(), this.dbName(), this.collectionName());
     }
 
     /**
