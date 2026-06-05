@@ -5,6 +5,7 @@ import cn.oyzh.common.object.Destroyable;
 import cn.oyzh.common.object.ObjectCopier;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
+import org.bson.BsonValue;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -361,11 +362,14 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
         this.editable = editable;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(BsonValue _id) {
         this.putValue(MongoUtil.ID, _id);
     }
 
     public MongoColumn column(String columnName) {
+        if (this.columns == null) {
+            return null;
+        }
         return this.columns.column(columnName);
     }
 

@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.util;
 
+import cn.oyzh.common.util.StringUtil;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
@@ -50,5 +51,26 @@ public class MongoUtil {
             return "obejectid";
         }
         return "string";
+    }
+
+    /**
+     * 是否原始类型
+     *
+     * @param val 值
+     * @return 类型
+     */
+    public static boolean isPrimaryType(Object val) {
+        return StringUtil.equalsAnyIgnoreCase(getType(val), "int", "double", "list", "boolean");
+    }
+
+    /**
+     * 是否json类型
+     *
+     * @param val 值
+     * @return 类型
+     */
+    public static boolean isJsonType(Object val) {
+        return StringUtil.equalsIgnoreCase(getType(val), "list");
+
     }
 }

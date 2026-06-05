@@ -41,6 +41,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import org.bson.BsonValue;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -323,7 +324,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 return;
             }
             MongoRecord record = MongoRecordUtil.docToRecord(doc, this.getItem().dbName(), this.getItem().collectionName());
-            ObjectId _id = this.getItem().insertRecord(record.getRecordData());
+            BsonValue _id = this.getItem().insertRecord(record.getRecordData());
             if (_id == null) {
                 MessageBox.warn(I18nHelper.addDocumentFail());
                 return;
@@ -358,7 +359,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
      */
     private void insertRecord(MongoRecord record) {
         MongoRecordData recordData = record.getRecordData();
-        ObjectId _id = this.getItem().insertRecord(recordData);
+        BsonValue _id = this.getItem().insertRecord(recordData);
         record.set_id(_id);
     }
 

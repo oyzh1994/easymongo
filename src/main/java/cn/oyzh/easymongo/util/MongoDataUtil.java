@@ -1,9 +1,10 @@
 package cn.oyzh.easymongo.util;
 
-import cn.oyzh.common.util.CollectionUtil;
+import cn.oyzh.common.util.RegexUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
+import com.alibaba.fastjson2.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,77 +164,6 @@ public class MongoDataUtil {
     }
 
     /**
-     * 转换为插入sql
-     *
-     * @param columns       字段列表
-     * @param record        记录
-     * @param includeFields 包含字段
-     * @return 插入sql
-     */
-    public static String toInsertSql(MongoColumns columns, MongoRecord record, boolean includeFields) {
-        List<String> list = toInsertSql(columns, List.of(record), includeFields);
-        return CollectionUtil.getFirst(list);
-    }
-
-    /**
-     * 转换为插入sql
-     *
-     * @param columns 字段列表
-     * @param records 记录
-     * @return 插入sql
-     */
-    public static List<String> toInsertSql(MongoColumns columns, List<MongoRecord> records) {
-        return toInsertSql(columns, records, false);
-    }
-
-    /**
-     * 转换为插入sql
-     *
-     * @param columns       字段列表
-     * @param records       记录
-     * @param includeFields 包含字段
-     * @return 插入sql
-     */
-    public static List<String> toInsertSql(MongoColumns columns, List<MongoRecord> records, boolean includeFields) {
-        List<String> list = new ArrayList<>();
-        return list;
-    }
-
-    /**
-     * 转换为修改sql
-     *
-     * @param columns 字段列表
-     * @param record  记录
-     * @return 修改sql
-     */
-    public static String toUpdateSql(MongoColumns columns, MongoRecord record) {
-        StringBuilder builder = new StringBuilder();
-        return builder.toString();
-    }
-
-    /**
-     * 转换为插入json
-     *
-     * @param columns 字段列表
-     * @param records 记录
-     * @return 插入json
-     */
-    public static List<Map<String, Object>> toInsertJson(MongoColumns columns, List<MongoRecord> records) {
-        List<Map<String, Object>> list = new ArrayList<>();
-        List<MongoColumn> columnList = columns;
-        for (MongoRecord record : records) {
-            Map<String, Object> object = new HashMap<>();
-            for (MongoColumn dbColumn : columnList) {
-                Object value = record.getValue(dbColumn.getName());
-                value = parameterizedForJson(dbColumn, value);
-                object.put(dbColumn.getName(), value);
-            }
-            list.add(object);
-        }
-        return list;
-    }
-
-    /**
      * 转换为插入xml
      *
      * @param columns 字段列表
@@ -319,5 +249,13 @@ public class MongoDataUtil {
             list.add(object);
         }
         return list;
+    }
+
+    public static String toInsertSql(MongoColumns columns, MongoRecord record, boolean b) {
+        return null;
+    }
+
+    public static String toUpdateSql(MongoColumns columns, MongoRecord record) {
+        return null;
     }
 }

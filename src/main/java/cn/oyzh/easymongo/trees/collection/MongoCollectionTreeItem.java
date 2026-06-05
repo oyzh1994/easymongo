@@ -19,6 +19,7 @@ import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
+import org.bson.BsonValue;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -195,7 +196,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return paging;
     }
 
-    public ObjectId insertRecord(MongoRecordData recordData) {
+    public BsonValue insertRecord(MongoRecordData recordData) {
         return this.client().insertCollectionRecord(recordData);
     }
 

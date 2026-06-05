@@ -27,6 +27,7 @@ public class MysqlJsonTypeFileReader extends MysqlTypeFileReader {
     private MysqlDataImportConfig config;
 
     public MysqlJsonTypeFileReader(File file, MysqlDataImportConfig config) throws FileNotFoundException {
+        super(file);
         this.config = config;
         this.reader = new JSONReader(FileUtil.getReader(file, Charset.forName(config.getCharset())));
         this.init();

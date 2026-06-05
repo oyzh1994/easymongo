@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.date.DateHelper;
 import cn.oyzh.common.log.JulLog;
+import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
@@ -23,6 +24,7 @@ import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import javafx.beans.property.ObjectProperty;
@@ -313,16 +315,13 @@ public class MongoClient implements Closeable {
      * @param recordData 数据
      * @return 结果
      */
-    public ObjectId insertCollectionRecord(MongoRecordData recordData) {
+    public BsonValue insertCollectionRecord(MongoRecordData recordData) {
         String dbName = null;
         String collectionName = null;
         Document document = new Document();
         for (Map.Entry<MongoColumn, Object> entry : recordData.entries()) {
             Object value = entry.getValue();
             MongoColumn column = entry.getKey();
-            if (column.is_id()) {
-                continue;
-            }
             if (dbName == null) {
                 dbName = column.getDbName();
             }
@@ -335,12 +334,36 @@ public class MongoClient implements Closeable {
             com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
             com.mongodb.client.MongoCollection<Document> collection = database.getCollection(collectionName);
             InsertOneResult result = collection.insertOne(document);
-            BsonValue value = result.getInsertedId();
-            if (value != null) {
-                return value.asObjectId().getValue();
-            }
+            return result.getInsertedId();
         }
         return null;
+    }
+
+    /**
+     * 新增多条集合记录
+     *
+     * @param records 数据列表
+     * @return 结果
+     */
+    public List<BsonValue> insertCollectionRecord(List<MongoRecord> records) {
+        if (CollectionUtil.isEmpty(records)) {
+            return Collections.emptyList();
+        }
+        String dbName = records.getFirst()._idColumn().getDbName();
+        String collectionName = records.getFirst()._idColumn().getCollectionName();
+        List<Document> documents = new ArrayList<>();
+        for (MongoRecord record : records) {
+            Document document = new Document();
+            for (String col : record.columns()) {
+                document.append(col, record.getValue(col));
+            }
+            documents.add(document);
+        }
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        com.mongodb.client.MongoCollection<Document> collection = database.getCollection(collectionName);
+        InsertManyResult result = collection.insertMany(documents);
+        Map<Integer, BsonValue> map = result.getInsertedIds();
+        return new ArrayList<>(map.values());
     }
 
     /**

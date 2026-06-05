@@ -42,6 +42,7 @@ public class MysqlExcelTypeFileReader extends MysqlTypeFileReader {
     private Integer currentRowIndex;
 
     public MysqlExcelTypeFileReader(File file, MysqlDataImportConfig config) throws Exception {
+        super(file);
         this.config = config;
         boolean isXlsx = StringUtil.endWithIgnoreCase(file.getName(), ".xlsx");
         this.workbook = WorkbookHelper.create(isXlsx, file);

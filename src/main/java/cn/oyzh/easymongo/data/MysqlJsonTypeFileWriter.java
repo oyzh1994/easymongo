@@ -75,8 +75,7 @@ public class MysqlJsonTypeFileWriter extends MysqlTypeFileWriter {
             MongoColumn column = this.columns.column(entry.getKey());
             Object val = this.parameterized(column, entry.getValue(), this.config);
             if (val != null) {
-                String type = MongoUtil.getType(entry.getValue());
-                if (StringUtil.equalsAnyIgnoreCase(type, "int", "double", "list", "boolean")) {
+                if (MongoUtil.isPrimaryType(entry.getValue())) {
                     builder.append(val);
                 } else {// 其他类型
                     builder.append("\"").append(val).append("\"");

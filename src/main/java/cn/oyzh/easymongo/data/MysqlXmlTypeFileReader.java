@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.data;
 
 
+import cn.oyzh.easymongo.util.MongoDataUtil;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -30,6 +31,7 @@ public class MysqlXmlTypeFileReader extends MysqlTypeFileReader {
     private MysqlDataImportConfig config;
 
     public MysqlXmlTypeFileReader(File file, MysqlDataImportConfig config) throws Exception {
+        super(file);
         this.config = config;
         this.reader = XMLInputFactory.newInstance().createXMLEventReader(new FileInputStream(file), config.getCharset());
         this.init();
@@ -70,7 +72,8 @@ public class MysqlXmlTypeFileReader extends MysqlTypeFileReader {
                         if (map == null) {
                             map = new HashMap<>();
                         }
-                        map.put(attribute.getName().getLocalPart(), attribute.getValue());
+                        Object val = MysqlDataImportHelper.parseValue(attribute.getValue());
+                        map.put(attribute.getName().getLocalPart(), val);
                     }
                 }
             } else {// 属性为子节点
@@ -92,7 +95,8 @@ public class MysqlXmlTypeFileReader extends MysqlTypeFileReader {
                     if (map == null) {
                         map = new HashMap<>();
                     }
-                    map.put(name, value);
+                    Object val = MysqlDataImportHelper.parseValue(value);
+                    map.put(name, val);
                     name = null;
                     value = null;
                     continue;

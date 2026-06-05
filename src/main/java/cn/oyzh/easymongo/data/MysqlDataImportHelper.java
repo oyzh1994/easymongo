@@ -1,16 +1,7 @@
 package cn.oyzh.easymongo.data;
 
-import cn.oyzh.common.date.DateUtil;
-import cn.oyzh.easymongo.mongo.MongoColumn;
-import cn.oyzh.easymongo.mongo.MongoColumns;
-import cn.oyzh.easymongo.mongo.MongoRecord;
-import cn.oyzh.easymongo.util.MongoDataUtil;
-
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import cn.oyzh.common.util.RegexUtil;
+import com.alibaba.fastjson2.JSONArray;
 
 /**
  * @author oyzh
@@ -19,35 +10,25 @@ import java.util.List;
 public class MysqlDataImportHelper {
 
     /**
-     * 参数化
+     * 解析值
      *
-     * @param column 字段
-     * @param value  值
-     * @return 参数化后的值
+     * @param value 值
+     * @return 结果
      */
-    public static Object parameterized(MongoColumn column, Object value, MysqlDataImportConfig config) throws ParseException {
+    public static Object parseValue(String value) {
         if (value == null) {
             return null;
         }
-        if (value.toString().isEmpty()) {
-            return null;
+        if (RegexUtil.isDecimal(value)) {
+            return Double.parseDouble(value);
         }
-        if (column.supportString()) {
-            return MongoDataUtil.escapeQuotes(value.toString());
+        if (RegexUtil.isNumber(value)) {
+            return Integer.parseInt(value);
+        }
+        // json array
+        if (value.startsWith("[") && value.endsWith("]")) {
+            return JSONArray.parseArray(value);
         }
         return value;
-    }
-
-    /**
-     * 转换为插入sql
-     *
-     * @param columns 字段列表
-     * @param records 记录
-     * @param config  配置
-     * @return 插入sql
-     */
-    public static List<String> toInsertSql(MongoColumns columns, List<MongoRecord> records, MysqlDataImportConfig config) throws Exception {
-        List<String> insertSql = new ArrayList<>();
-        return insertSql;
     }
 }

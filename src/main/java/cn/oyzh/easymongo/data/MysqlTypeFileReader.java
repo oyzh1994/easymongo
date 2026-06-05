@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.data;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -13,20 +14,15 @@ import java.util.Map;
  */
 public abstract class MysqlTypeFileReader implements Closeable {
 
-    // public TypeFileReader( String filePath) {
-    //     this(new File(filePath), StandardCharsets.UTF_8);
-    // }
-    //
-    // public TypeFileReader( File file) {
-    //     this(file, StandardCharsets.UTF_8);
-    // }
-    //
-    // public TypeFileReader( String filePath, Charset charset) {
-    //     this(new File(filePath), charset);
-    // }
-    //
-    // public TypeFileReader( File file, Charset charset) {
-    // }
+    private final File file;
+
+    public MysqlTypeFileReader(File file) {
+        this.file = file;
+    }
+
+    public File getFile() {
+        return file;
+    }
 
     protected void init() throws Exception {
 

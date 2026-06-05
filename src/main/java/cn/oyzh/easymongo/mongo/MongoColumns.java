@@ -21,10 +21,6 @@ public class MongoColumns extends DBObjectList<MongoColumn> {
         super.addAll(list);
     }
 
-    public boolean primaryKeyChanged() {
-        return false;
-    }
-
     public boolean exists(String name) {
         return this.column(name) != null;
     }

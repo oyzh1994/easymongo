@@ -172,15 +172,6 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         super.putOriginalData("name", name);
     }
 
-    public boolean isColumnChanged() {
-        for (Map.Entry<String, Object> entry : super.originalData().entrySet()) {
-            if (!StringUtil.equalsAny(entry.getKey(), "primaryKey", "primaryKeySize")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public void initStatus() {
         if (this.value == null) {

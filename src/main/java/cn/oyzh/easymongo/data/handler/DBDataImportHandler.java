@@ -1,22 +1,21 @@
 package cn.oyzh.easymongo.data.handler;
 
+import cn.oyzh.common.file.FileNameUtil;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.MysqlCsvTypeFileReader;
 import cn.oyzh.easymongo.data.MysqlDataImportConfig;
-import cn.oyzh.easymongo.data.MysqlDataImportHelper;
 import cn.oyzh.easymongo.data.MysqlExcelTypeFileReader;
 import cn.oyzh.easymongo.data.MysqlJsonTypeFileReader;
-import cn.oyzh.easymongo.data.MysqlTxtTypeFileReader;
 import cn.oyzh.easymongo.data.MysqlTypeFileReader;
 import cn.oyzh.easymongo.data.MysqlXmlTypeFileReader;
 import cn.oyzh.easymongo.data.ShellMysqlDataImportFile;
 import cn.oyzh.easymongo.mongo.MongoClient;
+import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
-import cn.oyzh.easymongo.util.MongoRecordUtil;
+import org.bson.BsonValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,15 +71,6 @@ public abstract class DBDataImportHandler extends DBDataHandler {
         this.dbClient = dbClient;
         this.dbName = dbName;
         this.config = new MysqlDataImportConfig();
-    }
-
-    /**
-     * 是否sql类型
-     *
-     * @return 结果
-     */
-    public boolean isSqlType() {
-        return "sql".equalsIgnoreCase(this.fileType);
     }
 
     /**
@@ -164,14 +154,13 @@ public abstract class DBDataImportHandler extends DBDataHandler {
                 this.checkInterrupt();
                 long start1 = System.currentTimeMillis();
                 List<MongoRecord> records = this.readRecords(reader, this.readLimit);
-                MongoColumns dbColumns = MongoRecordUtil.columns(records);
                 if (CollectionUtil.isEmpty(records)) {
                     break;
                 }
                 long end1 = System.currentTimeMillis();
                 JulLog.info("读取耗时: {}ms", (end1 - start1));
                 long start2 = System.currentTimeMillis();
-                this.writeRecord(dbColumns, records);
+                this.writeRecord(records);
                 long end2 = System.currentTimeMillis();
                 JulLog.info("写入耗时: {}ms", (end2 - start2));
                 // this.processed(records.size());
@@ -185,9 +174,9 @@ public abstract class DBDataImportHandler extends DBDataHandler {
     }
 
     private MysqlTypeFileReader initReader(File file) throws Exception {
-        if (this.isCsvType()) {
-            return new MysqlCsvTypeFileReader(file, this.config);
-        }
+//        if (this.isCsvType()) {
+//            return new MysqlCsvTypeFileReader(file, this.config);
+//        }
         if (this.isJsonType()) {
             return new MysqlJsonTypeFileReader(file, this.config);
         }
@@ -197,9 +186,9 @@ public abstract class DBDataImportHandler extends DBDataHandler {
         if (this.isExcelType()) {
             return new MysqlExcelTypeFileReader(file, this.config);
         }
-        if (this.isTxtType()) {
-            return new MysqlTxtTypeFileReader(file, this.config);
-        }
+//        if (this.isTxtType()) {
+//            return new MysqlTxtTypeFileReader(file, this.config);
+//        }
         return null;
     }
 
@@ -207,7 +196,16 @@ public abstract class DBDataImportHandler extends DBDataHandler {
         List<MongoRecord> records = new ArrayList<>();
         List<Map<String, Object>> list = reader.readObjects(count);
         for (Map<String, Object> objectMap : list) {
-            MongoRecord record = new MongoRecord(null);
+            MongoColumns columns = new MongoColumns();
+            String collectionName = reader.getFile().getName();
+            collectionName = FileNameUtil.removeExtName(collectionName);
+            for (String s : objectMap.keySet()) {
+                MongoColumn column = new MongoColumn();
+                column.setName(s);
+                column.setCollectionName(collectionName);
+                columns.add(column);
+            }
+            MongoRecord record = new MongoRecord(columns);
             for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
                 record.putValue(entry.getKey(), entry.getValue());
             }
@@ -217,32 +215,21 @@ public abstract class DBDataImportHandler extends DBDataHandler {
     }
 
     /**
-     * 写入记录
-     *
-     * @param columns 字段列表
-     * @param records 记录列表
-     */
-    private void writeRecord(MongoColumns columns, List<MongoRecord> records) throws Exception {
-        List<String> sqlList = MysqlDataImportHelper.toInsertSql(columns, records, this.config);
-        this.addInsertSql(sqlList);
-    }
-
-    /**
      * 插入集合
      */
-    private List<String> insertList;
+    private List<MongoRecord> insertList;
 
     /**
-     * 添加插入sql
+     * 写入记录
      *
-     * @param sqlList 插入sql列表
+     * @param records 记录列表
      */
-    private void addInsertSql(List<String> sqlList) {
-        if (CollectionUtil.isNotEmpty(sqlList)) {
+    private void writeRecord(List<MongoRecord> records) {
+        if (CollectionUtil.isNotEmpty(records)) {
             if (this.insertList == null) {
                 this.insertList = new ArrayList<>();
             }
-            this.insertList.addAll(sqlList);
+            this.insertList.addAll(records);
             if (this.insertList.size() >= this.batchLimit) {
                 this.doBatchInsert();
             }
@@ -256,12 +243,12 @@ public abstract class DBDataImportHandler extends DBDataHandler {
         if (CollectionUtil.isNotEmpty(this.insertList)) {
             try {
                 if (this.insertList.size() <= this.batchLimit) {
-                    this.doBatchInsert(this.insertList, false);
+                    this.doBatchInsert(this.insertList);
                 } else {
-                    List<List<String>> lists = CollectionUtil.split(this.insertList, this.batchLimit);
+                    List<List<MongoRecord>> lists = CollectionUtil.split(this.insertList, this.batchLimit);
                     List<Runnable> tasks = new ArrayList<>();
-                    for (List<String> list : lists) {
-                        tasks.add(() -> this.doBatchInsert(list, true));
+                    for (List<MongoRecord> list : lists) {
+                        tasks.add(() -> this.doBatchInsert(list));
                     }
                     ThreadUtil.submitVirtual(tasks);
                 }
@@ -274,15 +261,17 @@ public abstract class DBDataImportHandler extends DBDataHandler {
     /**
      * 执行批量插入
      *
-     * @param sqlList  sql列表
-     * @param parallel 是否并发
+     * @param records 数据列表
      */
-    private void doBatchInsert(List<String> sqlList, boolean parallel) {
+    private void doBatchInsert(List<MongoRecord> records) {
         try {
-//            int result = this.dbClient.insertBatch(this.dbName, sqlList, parallel);
-//            this.processedIncr(result);
+            for (MongoRecord record : records) {
+                record.getColumns().forEach(c -> c.setDbName(this.dbName));
+            }
+            List<BsonValue> list = this.dbClient.insertCollectionRecord(records);
+            this.processedIncr(list.size());
         } catch (Exception ex) {
-            this.processedDecr(sqlList.size());
+            this.processedDecr(records.size());
             throw ex;
         }
     }
@@ -407,14 +396,6 @@ public abstract class DBDataImportHandler extends DBDataHandler {
 
     public MysqlDataImportConfig getConfig() {
         return config;
-    }
-
-    public List<String> getInsertList() {
-        return insertList;
-    }
-
-    public void setInsertList(List<String> insertList) {
-        this.insertList = insertList;
     }
 }
 
