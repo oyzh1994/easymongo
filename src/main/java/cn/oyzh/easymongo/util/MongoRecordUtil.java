@@ -1,10 +1,12 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.common.util.TextUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordProperty;
+import cn.oyzh.fx.editor.incubator.control.JsonTextFiled;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
 import cn.oyzh.fx.gui.text.field.BooleanTextFiled;
@@ -22,11 +24,14 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import org.bson.BsonBinary;
+import org.bson.BsonBoolean;
+import org.bson.BsonDbPointer;
+import org.bson.BsonNull;
 import org.bson.BsonObjectId;
 import org.bson.BsonValue;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
-import cn.oyzh.fx.editor.incubator.control.JsonTextFiled;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +74,7 @@ public class MongoRecordUtil {
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#43A5F5")));
             node = textField;
-        } else if (column.supportList()){
+        } else if (column.supportList()) {
             JsonTextFiled textField = new JsonTextFiled();
             textField.setArray(true);
             textField.setValue(object);
@@ -97,14 +102,14 @@ public class MongoRecordUtil {
 
     public static String formatValue(Object object, MongoColumn column) {
         String val;
-         if (column.supportInteger()) {
+        if (column.supportInteger()) {
             val = NumberTextField.format(object);
         } else if (column.supportDigits()) {
             val = DecimalTextField.format(object);
         } else if (column.supportString()) {
             val = ClearableTextField.format(object);
-         } else if (column.supportBinary()) {
-             val = BinaryTextFiled.format(object);
+        } else if (column.supportBinary()) {
+            val = BinaryTextFiled.format(object);
         } else if (column.supportDate()) {
             val = DateTimeTextField.FORMAT.format(object);
         } else {
@@ -209,6 +214,12 @@ public class MongoRecordUtil {
         return StringUtil.endWith(name, ".files");
     }
 
+    /**
+     * 获取id的值
+     *
+     * @param value 值
+     * @return 结果
+     */
     public static Object idValue(Object value) {
         if (value == null) {
             return "";
@@ -222,6 +233,18 @@ public class MongoRecordUtil {
             }
             if (bsonValue instanceof BsonObjectId) {
                 return idValue(bsonValue.asObjectId().getValue());
+            }
+            if (bsonValue instanceof BsonDbPointer) {
+                return idValue(bsonValue.asDBPointer().getId());
+            }
+            if (bsonValue instanceof BsonBinary) {
+                return TextUtil.byteToBitStr(bsonValue.asBinary().getData());
+            }
+            if (bsonValue instanceof BsonBoolean) {
+                return Boolean.toString(bsonValue.asBoolean().getValue());
+            }
+            if (bsonValue instanceof BsonNull) {
+                return "null";
             }
             if (bsonValue.isDouble()) {
                 return bsonValue.asDouble().getValue();

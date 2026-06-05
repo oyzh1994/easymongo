@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.util;
 
 import org.bson.types.Binary;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class MongoUtil {
         }
         if (val instanceof Binary) {
             return "binary";
+        }
+        if (val instanceof ObjectId) {
+            return "obejectid";
         }
         return "string";
     }

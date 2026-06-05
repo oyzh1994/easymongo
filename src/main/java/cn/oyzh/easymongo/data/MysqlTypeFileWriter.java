@@ -1,9 +1,15 @@
 package cn.oyzh.easymongo.data;
 
+import cn.oyzh.common.date.DateUtil;
+import cn.oyzh.common.json.JSONUtil;
+import cn.oyzh.common.util.HexUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.util.MongoDataUtil;
+import org.bson.types.ObjectId;
 
 import java.io.Closeable;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +36,34 @@ public abstract class MysqlTypeFileWriter implements Closeable {
             return "";
         }
         if (column.supportString()) {
-            return MongoDataUtil.escapeQuotes((String) value);
+            return MongoDataUtil.escapeQuotes(value.toString());
         }
-        if (column.supportInteger() || column.supportDigits()) {
+        if (column.supportObjectId()) {
+            if (value instanceof ObjectId id) {
+                return id.toHexString();
+            }
+            return value.toString();
+        }
+        if (column.supportInteger() || column.supportDigits() || column.supportBoolean()) {
             return value;
+        }
+        if (column.supportDate()) {
+            if (value instanceof LocalDateTime date) {
+                return DateUtil.format(date, config.getDateFormat());
+            }
+            if (value instanceof Date date) {
+                return DateUtil.format(date, config.getDateFormat());
+            }
+        }
+        if (column.supportBinary()) {
+            byte[] bytes = (byte[]) value;
+            if (bytes.length == 0) {
+                return "";
+            }
+            return "0x" + HexUtil.encodeHexStr(bytes, false);
+        }
+        if (column.supportList()) {
+            return JSONUtil.toJson(value);
         }
         return value.toString();
     }

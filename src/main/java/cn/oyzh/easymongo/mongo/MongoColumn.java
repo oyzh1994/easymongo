@@ -158,6 +158,15 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         return StringUtil.equalsIgnoreCase(this.getType(), "binary");
     }
 
+    /**
+     * 是否支持对象id
+     *
+     * @return 结果
+     */
+    public boolean supportObjectId() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "obejectid");
+    }
+
     public void setName(String name) {
         this.name = name;
         super.putOriginalData("name", name);

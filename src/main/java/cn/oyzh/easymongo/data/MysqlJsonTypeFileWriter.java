@@ -1,8 +1,10 @@
 package cn.oyzh.easymongo.data;
 
 import cn.oyzh.common.file.LineFileWriter;
+import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
+import cn.oyzh.easymongo.util.MongoUtil;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -73,8 +75,8 @@ public class MysqlJsonTypeFileWriter extends MysqlTypeFileWriter {
             MongoColumn column = this.columns.column(entry.getKey());
             Object val = this.parameterized(column, entry.getValue(), this.config);
             if (val != null) {
-                // 数字
-                if (val instanceof Number) {
+                String type = MongoUtil.getType(entry.getValue());
+                if (StringUtil.equalsAnyIgnoreCase(type, "int", "double", "list", "boolean")) {
                     builder.append(val);
                 } else {// 其他类型
                     builder.append("\"").append(val).append("\"");
