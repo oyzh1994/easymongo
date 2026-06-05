@@ -7,6 +7,7 @@ import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordProperty;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
+import cn.oyzh.fx.gui.text.field.BooleanTextFiled;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.gui.text.field.DateTimeTextField;
 import cn.oyzh.fx.gui.text.field.DecimalTextField;
@@ -61,6 +62,11 @@ public class MongoRecordUtil {
             textField.setDateFormat(DateTimeTextField.FORMAT);
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#F1E1F5")));
+            node = textField;
+        } else if (column.supportBoolean()) {
+            BooleanTextFiled textField = new BooleanTextFiled();
+            textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#43A5F5")));
             node = textField;
         } else {
             FXTextField textField = new FXTextField();

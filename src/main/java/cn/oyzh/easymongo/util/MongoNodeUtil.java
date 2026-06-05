@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
+import cn.oyzh.fx.gui.text.field.BooleanTextFiled;
 import cn.oyzh.fx.gui.text.field.DateTimeTextField;
 import cn.oyzh.fx.gui.text.field.DecimalTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
@@ -19,16 +20,18 @@ import org.bson.types.Binary;
  */
 public class MongoNodeUtil {
 
-    public static Object getNodeVal(Node node)   {
+    public static Object getNodeVal(Node node) {
         Object val = null;
         if (node instanceof NumberTextField textField) {
             val = textField.getValue();
         } else if (node instanceof DecimalTextField textField) {
             val = textField.getValue();
         } else if (node instanceof DateTimeTextField textField) {
-            val = textField.getObjectValue();
+            val = textField.getValue();
         } else if (node instanceof BinaryTextFiled textField) {
-            val = textField.getData();
+            val = textField.getValue();
+        } else if (node instanceof BooleanTextFiled textField) {
+            val = textField.getValue();
         } else if (node instanceof TextField textField) {
             val = textField.getText();
         }
@@ -49,6 +52,8 @@ public class MongoNodeUtil {
             } else {
                 textField.setValue(val);
             }
+        } else if (node instanceof BooleanTextFiled textField) {
+            textField.setValue(val);
         } else if (node instanceof TextField textField) {
             textField.setText(val.toString());
         }
