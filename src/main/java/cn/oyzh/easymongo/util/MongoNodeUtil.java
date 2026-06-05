@@ -1,12 +1,15 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.mongo.MongoColumn;
+import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
+import cn.oyzh.fx.gui.text.field.DateTimeTextField;
 import cn.oyzh.fx.gui.text.field.DecimalTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.plus.controls.text.field.FXTextField;
 import cn.oyzh.fx.plus.node.NodeUtil;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import org.bson.types.Binary;
 
 /**
  * db节点工具类
@@ -16,12 +19,16 @@ import javafx.scene.control.TextField;
  */
 public class MongoNodeUtil {
 
-    public static Object getNodeVal(Node node) {
+    public static Object getNodeVal(Node node)   {
         Object val = null;
         if (node instanceof NumberTextField textField) {
             val = textField.getValue();
         } else if (node instanceof DecimalTextField textField) {
             val = textField.getValue();
+        } else if (node instanceof DateTimeTextField textField) {
+            val = textField.getObjectValue();
+        } else if (node instanceof BinaryTextFiled textField) {
+            val = textField.getData();
         } else if (node instanceof TextField textField) {
             val = textField.getText();
         }
@@ -34,6 +41,14 @@ public class MongoNodeUtil {
         }
         if (node instanceof NumberTextField textField) {
             textField.setValue(val);
+        } else if (node instanceof DateTimeTextField textField) {
+            textField.setValue(val);
+        } else if (node instanceof BinaryTextFiled textField) {
+            if (val instanceof Binary binary) {
+                textField.setValue(binary.getData());
+            } else {
+                textField.setValue(val);
+            }
         } else if (node instanceof TextField textField) {
             textField.setText(val.toString());
         }
@@ -45,6 +60,10 @@ public class MongoNodeUtil {
             node = new NumberTextField();
         } else if (column.supportDigits()) {
             node = new DecimalTextField();
+        } else if (column.supportDate()) {
+            node = new DateTimeTextField();
+        } else if (column.supportBinary()) {
+            node = new BinaryTextFiled();
         } else {
             node = new FXTextField();
         }

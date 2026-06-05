@@ -113,8 +113,40 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         return StringUtil.equalsIgnoreCase(this.getType(), "int");
     }
 
+    /**
+     * 是否支持字符
+     *
+     * @return 结果
+     */
     public boolean supportString() {
         return StringUtil.equalsIgnoreCase(this.getType(), "string");
+    }
+
+    /**
+     * 是否支持日期
+     *
+     * @return 结果
+     */
+    public boolean supportDate() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "date");
+    }
+
+    /**
+     * 是否支持布尔
+     *
+     * @return 结果
+     */
+    public boolean supportBoolean() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "boolean");
+    }
+
+    /**
+     * 是否支持二进制
+     *
+     * @return 结果
+     */
+    public boolean supportBinary() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "binary");
     }
 
     public void setName(String name) {

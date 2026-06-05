@@ -196,32 +196,6 @@ public class MongoDataUtil {
      */
     public static List<String> toInsertSql(MongoColumns columns, List<MongoRecord> records, boolean includeFields) {
         List<String> list = new ArrayList<>();
-        String tableName = columns.collectionName();
-        final String sqlBase = "INSERT INTO " + MongoUtil.wrap(tableName);
-        for (MongoRecord record : records) {
-            StringBuilder sql = new StringBuilder(sqlBase);
-            if (includeFields) {
-                sql.append("(");
-                for (MongoColumn dbColumn : columns) {
-                    sql.append(MongoUtil.wrap(dbColumn.getName())).append(", ");
-                }
-                if (sql.toString().endsWith(", ")) {
-                    sql.delete(sql.length() - 2, sql.length());
-                }
-                sql.append(")");
-            }
-            sql.append(" VALUES (");
-            for (MongoColumn dbColumn : columns) {
-                Object value = record.getValue(dbColumn.getName());
-                value = parameterizedForSql(dbColumn, value);
-                sql.append(value).append(", ");
-            }
-            if (sql.toString().endsWith(", ")) {
-                sql.delete(sql.length() - 2, sql.length());
-            }
-            sql.append(");");
-            list.add(sql.toString());
-        }
         return list;
     }
 
@@ -233,22 +207,7 @@ public class MongoDataUtil {
      * @return 修改sql
      */
     public static String toUpdateSql(MongoColumns columns, MongoRecord record) {
-        String tableName = columns.collectionName();
         StringBuilder builder = new StringBuilder();
-        builder.append("UPDATE ")
-                .append(MongoUtil.wrap(columns.dbName(), tableName))
-                .append(" SET ");
-        for (MongoColumn column : columns) {
-            Object value = record.getValue(column.getName());
-            value = parameterizedForSql(column, value);
-            builder.append(MongoUtil.wrap(column.getName()));
-            builder.append(" = ");
-            builder.append(value);
-            builder.append(", ");
-        }
-        builder.deleteCharAt(builder.length() - 2);
-        builder.append(" WHERE ");
-        builder.append(";");
         return builder.toString();
     }
 

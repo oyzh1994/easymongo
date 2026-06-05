@@ -6,7 +6,9 @@ import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordProperty;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
+import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
+import cn.oyzh.fx.gui.text.field.DateTimeTextField;
 import cn.oyzh.fx.gui.text.field.DecimalTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.plus.controls.text.field.FXTextField;
@@ -21,10 +23,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import org.bson.BsonObjectId;
 import org.bson.BsonValue;
+import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,13 +41,26 @@ public class MongoRecordUtil {
             NumberTextField textField = new NumberTextField();
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#D7EED0")));
-            //            textField.setBackground(ControlUtil.background(Color.valueOf("#80D06A")));
             node = textField;
         } else if (column.supportDigits()) {
             DecimalTextField textField = new DecimalTextField();
             textField.setValue(object);
-            //            textField.setBackground(ControlUtil.background(Color.valueOf("#60C6F4")));
             textField.setBackground(ControlUtil.background(Color.valueOf("#CDECFA")));
+            node = textField;
+        } else if (column.supportBinary()) {
+            BinaryTextFiled textField = new BinaryTextFiled();
+            if (object instanceof Binary binary) {
+                textField.setValue(binary.getData());
+            } else {
+                textField.setValue(object);
+            }
+            textField.setBackground(ControlUtil.background(Color.valueOf("#FBF0D0")));
+            node = textField;
+        } else if (column.supportDate()) {
+            DateTimeTextField textField = new DateTimeTextField();
+            textField.setDateFormat(DateTimeTextField.FORMAT);
+            textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#F1E1F5")));
             node = textField;
         } else {
             FXTextField textField = new FXTextField();
@@ -53,7 +68,6 @@ public class MongoRecordUtil {
                 textField.setEditable(false);
             } else {
                 textField.setBackground(ControlUtil.background(Color.valueOf("#FDD4D3")));
-                //                textField.setBackground(ControlUtil.background(Color.valueOf("#FA7B73")));
             }
             textField.setValue(object);
             node = textField;
@@ -69,24 +83,17 @@ public class MongoRecordUtil {
     }
 
     public static String formatValue(Object object, MongoColumn column) {
-        String val = null;
-        String columnType = column.getType();
-        if (StringUtil.isBlank(columnType)) {
-            if (object instanceof CharSequence sequence) {
-                val = sequence.toString();
-            } else if (object instanceof byte[] bytes) {
-                val = new String(bytes);
-            } else if (object instanceof Date date) {
-                val = date.toString();
-            } else if (object != null) {
-                val = object.toString();
-            }
-        } else if (column.supportInteger()) {
+        String val;
+         if (column.supportInteger()) {
             val = NumberTextField.format(object);
         } else if (column.supportDigits()) {
             val = DecimalTextField.format(object);
         } else if (column.supportString()) {
             val = ClearableTextField.format(object);
+         } else if (column.supportBinary()) {
+             val = BinaryTextFiled.format(object);
+        } else if (column.supportDate()) {
+            val = DateTimeTextField.FORMAT.format(object);
         } else {
             val = ClearableTextField.format(object);
         }
