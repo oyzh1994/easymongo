@@ -282,8 +282,8 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
                 MongoColumn mongoColumn = this.column(column.getName());
                 if (mongoColumn == null) {
                     addList.add(column);
-                } else {
-                    mongoColumn.copy(column);
+//                } else {
+//                    mongoColumn.copy(column);
                 }
             }
             this.columns.addAll(addList);

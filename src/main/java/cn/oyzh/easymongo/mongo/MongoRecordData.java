@@ -3,7 +3,6 @@ package cn.oyzh.easymongo.mongo;
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
-import org.bson.types.ObjectId;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -103,14 +102,7 @@ public class MongoRecordData {
         return this.value(column) != null;
     }
 
-    public ObjectId id() {
-        Object o = this.value(MongoUtil.ID);
-        if (o == null) {
-            return null;
-        }
-        if (o instanceof ObjectId objectId) {
-            return objectId;
-        }
-        return new ObjectId(o.toString());
+    public Object id() {
+        return this.value(MongoUtil.ID);
     }
 }

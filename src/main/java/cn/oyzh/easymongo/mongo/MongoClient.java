@@ -379,7 +379,7 @@ public class MongoClient implements Closeable {
         }
         String dbName = column.getDbName();
         String collectionName = column.getCollectionName();
-        ObjectId _id = recordData.id();
+        Object _id = recordData.id();
         Bson filter = Filters.eq(MongoUtil.ID, _id);
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
         DeleteResult result = collection.deleteOne(filter);
@@ -411,7 +411,7 @@ public class MongoClient implements Closeable {
         String dbName = column.getDbName();
         String collectionName = column.getCollectionName();
         com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, collectionName);
-        ObjectId _id = recordData.id();
+        Object _id = recordData.id();
         Bson filter = Filters.eq(MongoUtil.ID, _id);
         FindIterable<Document> iterable = collection1.find(filter);
         Document document = iterable.first();
