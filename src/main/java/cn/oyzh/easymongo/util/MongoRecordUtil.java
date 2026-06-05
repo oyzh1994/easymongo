@@ -26,6 +26,7 @@ import org.bson.BsonObjectId;
 import org.bson.BsonValue;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
+import cn.oyzh.fx.editor.incubator.control.JsonTextFiled;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,12 @@ public class MongoRecordUtil {
             BooleanTextFiled textField = new BooleanTextFiled();
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#43A5F5")));
+            node = textField;
+        } else if (column.supportList()){
+            JsonTextFiled textField = new JsonTextFiled();
+            textField.setArray(true);
+            textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#FDE5CF")));
             node = textField;
         } else {
             FXTextField textField = new FXTextField();

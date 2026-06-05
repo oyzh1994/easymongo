@@ -141,6 +141,15 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     /**
+     * 是否支持集合
+     *
+     * @return 结果
+     */
+    public boolean supportList() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "list");
+    }
+
+    /**
      * 是否支持二进制
      *
      * @return 结果

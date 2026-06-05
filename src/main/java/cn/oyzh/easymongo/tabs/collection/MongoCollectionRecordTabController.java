@@ -202,9 +202,11 @@ public class MongoCollectionRecordTabController extends RichTabController {
      * @param records 记录列表
      */
     private void updateColumns(List<MongoRecord> records) {
+        boolean changed = false;
         MongoColumns columnList = this.columns;
         if (columnList == null) {
             columnList = new MongoColumns();
+            changed = true;
         }
 
         Set<String> colNames = new HashSet<>();
@@ -216,6 +218,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
                     column = new MongoColumn();
                     column.copy(mongoColumn);
                     columnList.add(column);
+                    changed = true;
                 }
                 colNames.add(mongoColumn.getName());
             }
@@ -225,12 +228,15 @@ public class MongoCollectionRecordTabController extends RichTabController {
         for (MongoColumn column : columnList) {
             if (!colNames.contains(column.getName())) {
                 delList.add(column);
+                changed = true;
             }
         }
 
         columnList.removeAll(delList);
 
-        this.initColumns(columnList);
+        if (changed) {
+            this.initColumns(columnList);
+        }
     }
 
     /**

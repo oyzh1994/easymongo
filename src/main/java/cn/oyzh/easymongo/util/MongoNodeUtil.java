@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.mongo.MongoColumn;
+import cn.oyzh.fx.editor.incubator.control.JsonTextFiled;
 import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
 import cn.oyzh.fx.gui.text.field.BooleanTextFiled;
 import cn.oyzh.fx.gui.text.field.DateTimeTextField;
@@ -8,6 +9,7 @@ import cn.oyzh.fx.gui.text.field.DecimalTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.plus.controls.text.field.FXTextField;
 import cn.oyzh.fx.plus.node.NodeUtil;
+import com.alibaba.fastjson.JSONArray;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import org.bson.types.Binary;
@@ -32,6 +34,8 @@ public class MongoNodeUtil {
             val = textField.getValue();
         } else if (node instanceof BooleanTextFiled textField) {
             val = textField.getValue();
+        } else if (node instanceof JsonTextFiled textField) {
+            val = textField.getValue();
         } else if (node instanceof TextField textField) {
             val = textField.getText();
         }
@@ -53,6 +57,8 @@ public class MongoNodeUtil {
                 textField.setValue(val);
             }
         } else if (node instanceof BooleanTextFiled textField) {
+            textField.setValue(val);
+        } else if (node instanceof JsonTextFiled textField) {
             textField.setValue(val);
         } else if (node instanceof TextField textField) {
             textField.setText(val.toString());
