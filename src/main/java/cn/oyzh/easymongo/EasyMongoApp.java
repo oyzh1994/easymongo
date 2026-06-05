@@ -47,6 +47,7 @@ public class EasyMongoApp extends FXApplication {
 
     public static void main(String[] args) {
         try {
+            FXUtil.enablePreview();
             SysConst.projectName(PROJECT.getName());
             JulLog.info("项目启动中...");
             // 储存初始化

@@ -42,6 +42,14 @@
 
     <dependencies>
 
+        <!-- Source: https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>5.8.0</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- json类库 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -86,25 +94,38 @@
             <artifactId>fx-editor</artifactId>
         </dependency>
 
-            <!-- Calcite 核心 -->
-            <dependency>
-                <groupId>org.apache.calcite</groupId>
-                <artifactId>calcite-core</artifactId>
-                <version>1.36.0</version>
-            </dependency>
+        <!-- &lt;!&ndash; Calcite 核心 &ndash;&gt; -->
+        <!-- <dependency> -->
+        <!--     <groupId>org.apache.calcite</groupId> -->
+        <!--     <artifactId>calcite-core</artifactId> -->
+        <!--     <version>1.36.0</version> -->
+        <!-- </dependency> -->
 
-            <!-- MongoDB 适配器 -->
-            <dependency>
-                <groupId>org.apache.calcite</groupId>
-                <artifactId>calcite-mongodb</artifactId>
-                <version>1.36.0</version>
-            </dependency>
-            <!-- MongoDB Java 驱动（适配器依赖它） -->
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>mongodb-driver-sync</artifactId>
-                <version>4.11.0</version>
-            </dependency>
+        <!-- &lt;!&ndash; MongoDB 适配器 &ndash;&gt; -->
+        <!-- <dependency> -->
+        <!--     <groupId>org.apache.calcite</groupId> -->
+        <!--     <artifactId>calcite-mongodb</artifactId> -->
+        <!--     <version>1.36.0</version> -->
+        <!-- </dependency> -->
+        <!-- &lt;!&ndash; MongoDB Java 驱动（适配器依赖它） &ndash;&gt; -->
+        <!-- <dependency> -->
+        <!--     <groupId>org.mongodb</groupId> -->
+        <!--     <artifactId>mongodb-driver-sync</artifactId> -->
+        <!--     <version>4.11.0</version> -->
+        <!-- </dependency> -->
+
+        <!-- Apache POI -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

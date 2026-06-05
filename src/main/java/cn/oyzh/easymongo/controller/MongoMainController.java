@@ -226,7 +226,7 @@ public class MongoMainController extends ParentStageController {
         // resizeHelper.initResizeEvent();
 
         // 搜索触发事件
-        // KeyListener.listenReleased(this.stage, new KeyHandler().keyCode(KeyCode.F).controlDown(true).handler(t1 -> RedisEventUtil.searchFire()));
+        // KeyListener.listenReleased(this.stage, new KeyHandler().keyCode(KeyCode.F).controlDown(true).data(t1 -> RedisEventUtil.searchFire()));
         // // 刷新触发事件
         // KeyListener.listenReleased(this.tree, KeyCode.F5, keyEvent -> this.tree.reload());
         // // 刷新触发事件

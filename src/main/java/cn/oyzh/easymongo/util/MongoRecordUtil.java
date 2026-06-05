@@ -39,12 +39,12 @@ public class MongoRecordUtil {
             NumberTextField textField = new NumberTextField();
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#D7EED0")));
-//            textField.setBackground(ControlUtil.background(Color.valueOf("#80D06A")));
+            //            textField.setBackground(ControlUtil.background(Color.valueOf("#80D06A")));
             node = textField;
         } else if (column.supportDigits()) {
             DecimalTextField textField = new DecimalTextField();
             textField.setValue(object);
-//            textField.setBackground(ControlUtil.background(Color.valueOf("#60C6F4")));
+            //            textField.setBackground(ControlUtil.background(Color.valueOf("#60C6F4")));
             textField.setBackground(ControlUtil.background(Color.valueOf("#CDECFA")));
             node = textField;
         } else {
@@ -53,7 +53,7 @@ public class MongoRecordUtil {
                 textField.setEditable(false);
             } else {
                 textField.setBackground(ControlUtil.background(Color.valueOf("#FDD4D3")));
-//                textField.setBackground(ControlUtil.background(Color.valueOf("#FA7B73")));
+                //                textField.setBackground(ControlUtil.background(Color.valueOf("#FA7B73")));
             }
             textField.setValue(object);
             node = textField;
@@ -223,5 +223,23 @@ public class MongoRecordUtil {
             }
         }
         return value.toString();
+    }
+
+    /**
+     * 根据记录，获取字段列表
+     *
+     * @param records 记录
+     * @return 字段列表
+     */
+    public static MongoColumns columns(List<MongoRecord> records) {
+        MongoColumns columns = new MongoColumns();
+        for (MongoRecord record : records) {
+            for (String column : record.columns()) {
+                if (columns.column(column) == null) {
+                    columns.add(record.column(column));
+                }
+            }
+        }
+        return columns;
     }
 }

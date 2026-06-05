@@ -7,7 +7,9 @@ import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
+import cn.oyzh.easymongo.trees.MongoTreeView;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
@@ -45,9 +47,27 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
         List<MenuItem> items = new ArrayList<>();
         FXMenuItem reload = MenuItemHelper.reloadData("12", this::reloadChild);
         FXMenuItem add = MenuItemHelper.addCollection("12", this::addCollection);
+        FXMenuItem exportData = MenuItemHelper.exportData("12", this::exportData);
+        FXMenuItem importData = MenuItemHelper.importData("12", this::importData);
         items.add(add);
         items.add(reload);
+        items.add(exportData);
+        items.add(importData);
         return items;
+    }
+
+    /**
+     * 导出数据
+     */
+    private void exportData() {
+        MongoViewFactory.exportData(this.client(), this.dbName(), null);
+    }
+
+    /**
+     * 导入数据
+     */
+    private void importData() {
+        MongoViewFactory.importData(this.client(), this.dbName());
     }
 
     private void addCollection() {

@@ -261,11 +261,16 @@ public class MongoClient implements Closeable {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
-        int skip = Math.toIntExact(param.getStart());
-        int limit = Math.toIntExact(param.getLimit());
-
         Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
-        FindIterable<Document> iterable = collection.find(filters).limit(limit).skip(skip);
+        FindIterable<Document> iterable = collection.find(filters);
+        if (param.getStart() != null) {
+            int skip = Math.toIntExact(param.getStart());
+            iterable = iterable.skip(skip);
+        }
+        if (param.getLimit() != null) {
+            int limit = Math.toIntExact(param.getLimit());
+            iterable = iterable.limit(limit);
+        }
         List<MongoRecord> records = new ArrayList<>();
         for (Document document : iterable) {
             Set<String> cols = document.keySet();
@@ -653,5 +658,10 @@ public class MongoClient implements Closeable {
         }
         GridFSBucket bucket = this.bucket(dbName, bucketName);
         bucket.delete(_id);
+    }
+
+    public List<? extends MongoColumn> selectColumns(MongoSelectRecordParam param) {
+        List<MongoRecord> records = this.selectCollectionRecords(param);
+        return MongoRecordUtil.columns(records);
     }
 }

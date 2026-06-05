@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -203,6 +204,9 @@ public class MongoUtil {
         }
         if (val instanceof Character || val instanceof CharSequence) {
             return "string";
+        }
+        if (val instanceof List<?>) {
+            return "list";
         }
         return "string";
     }

@@ -23,6 +23,14 @@ public class MongoSelectRecordParam {
 
     private List<MongoRecordFilter> filters;
 
+    public MongoSelectRecordParam() {
+    }
+
+    public MongoSelectRecordParam(String dbName, String collectionName) {
+        this.dbName = dbName;
+        this.collectionName = collectionName;
+    }
+
     public boolean hasPageControl() {
         return this.start != null && this.limit != null;
     }

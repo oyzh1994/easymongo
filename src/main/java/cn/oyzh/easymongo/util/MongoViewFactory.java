@@ -2,7 +2,11 @@ package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.controller.collection.MongoDocumentAddController;
 import cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController;
+import cn.oyzh.easymongo.controller.data.ShellMysqlDataExportController;
+import cn.oyzh.easymongo.controller.data.ShellMysqlDataImportController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
+import cn.oyzh.easymongo.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
@@ -72,6 +76,59 @@ public class MongoViewFactory {
             MessageBox.exception(ex);
         }
         return null;
+    }
+
+    /**
+     * 导出数据
+     *
+     * @param client    客户端
+     * @param dbName    数据库名称
+     * @param tableName 表名称
+     */
+    public static void exportData(MongoClient client, String dbName, String tableName) {
+        exportData(client, dbName, tableName, 0, null);
+    }
+
+    /**
+     * 导出数据
+     *
+     * @param client      客户端
+     * @param dbName      数据库名称
+     * @param tableName   表名称
+     * @param exportMode  导出模式
+     * @param exportTable 导出表
+     */
+    public static void exportData(MongoClient client, String dbName, String tableName, int exportMode, ShellMysqlDataExportTable exportTable) {
+        try {
+            StageAdapter adapter = StageManager.parseStage(ShellMysqlDataExportController.class, StageManager.getFrontWindow());
+            adapter.setProp("dbName", dbName);
+            adapter.setProp("dbClient", client);
+            adapter.setProp("tableName", tableName);
+            adapter.setProp("exportMode", exportMode);
+            adapter.setProp("exportTable", exportTable);
+            adapter.display();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+    }
+
+    /**
+     * 导入数据
+     *
+     * @param client 客户端
+     * @param dbName 数据库名称
+     */
+    public static void importData(MongoClient client, String dbName) {
+        try {
+            StageAdapter adapter = StageManager.parseStage(ShellMysqlDataImportController.class, StageManager.getFrontWindow());
+            adapter.setProp("dbName", dbName);
+            adapter.setProp("dbClient", client);
+            adapter.display();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
     }
 
 }
