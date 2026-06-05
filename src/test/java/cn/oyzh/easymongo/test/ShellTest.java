@@ -1,13 +1,17 @@
 package cn.oyzh.easymongo.test;
 
+import cn.oyzh.easymongo.shell.ShellCursor;
 import cn.oyzh.easymongo.shell.ShellMongoDatabase;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.Value;
 import org.junit.Test;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,27 +22,25 @@ public class ShellTest {
         new ShellTest().test1();
     }
 
-    private Context initJs() {
+    private ScriptEngine initJs() {
         MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@120.24.176.61:27017/admin");
-        // 初始化 GraalVM JS 环境
-        Context context = Context.newBuilder("js")
-                .allowAllAccess(true)  // 允许脚本访问 Java 类
-                .build();
+
+        NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
+        ScriptEngine engine = factory.getScriptEngine("--language=es6", "-scripting");
 
         MongoDatabase database = mongoClient.getDatabase("test");
         // 注入包装后的 db 对象
-        Value value = context.getBindings("js");
-        value.putMember("db", new ShellMongoDatabase(database));
-        return context;
+        Bindings value = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+        //value.put("db", database);
+        value.put("db", new ShellMongoDatabase(database));
+        return engine;
     }
 
-    private void printResult(Value result) {
-        if (result != null && !result.isNull() && !result.toString().isEmpty()) {
+    private void printResult(Object result) {
+        if (result != null) {
             // 如果是游标包装器，自动转为格式化的 JSON 字符串输出
-            if (result.canInvokeMember("pretty")) {
-                System.out.println(result.invokeMember("pretty"));
-            } else if (result.canInvokeMember("toArray")) {
-                System.out.println(result.invokeMember("toString"));
+            if (result instanceof ShellCursor cursor) {
+                System.out.println(cursor.pretty());
             } else {
                 System.out.println(result);
             }
@@ -48,7 +50,7 @@ public class ShellTest {
     @Test
     public void test1() throws IOException {
         // 初始化 GraalVM JS 环境
-        Context context = this.initJs();
+        ScriptEngine context = this.initJs();
 
         // REPL 循环
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -60,7 +62,7 @@ public class ShellTest {
             }
             // 否则当作 JavaScript 执行
             try {
-                Value result = context.eval("js", line);
+                Object result = context.eval(line);
                 printResult(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -71,32 +73,51 @@ public class ShellTest {
     }
 
     @Test
-    public void getName() {
+    public void getName() throws ScriptException {
         // 初始化 GraalVM JS 环境
-        Context context = initJs();
+        ScriptEngine engine = initJs();
 
         String cmd = "db.getName()";
-        Value result = context.eval("js", cmd);
+        Object result = engine.eval(cmd);
         printResult(result);
     }
 
     @Test
-    public void listCollectionNames() {
+    public void listCollectionNames() throws ScriptException {
         // 初始化 GraalVM JS 环境
-        Context context = initJs();
+        ScriptEngine engine = initJs();
 
         String cmd = "db.listCollectionNames()";
-        Value result = context.eval("js", cmd);
+        Object result = engine.eval(cmd);
         printResult(result);
     }
 
     @Test
-    public void listCollections() {
+    public void listCollections() throws ScriptException {
         // 初始化 GraalVM JS 环境
-        Context context = initJs();
+        ScriptEngine engine = initJs();
 
         String cmd = "db.listCollections()";
-        Value result = context.eval("js", cmd);
+        Object result = engine.eval(cmd);
+        printResult(result);
+    }
+
+    @Test
+    public void find() throws ScriptException {
+        // 初始化 GraalVM JS 环境
+        ScriptEngine engine = initJs();
+
+        String cmd = "db.getCollection('test').find()";
+        Object result = engine.eval(cmd);
+        printResult(result);
+    }
+
+    @Test
+    public void find_1() throws ScriptException {
+        // 初始化 GraalVM JS 环境
+        ScriptEngine engine = initJs();
+        String cmd = "db.getCollection('test').find({'a':1})";
+        Object result = engine.eval(cmd);
         printResult(result);
     }
 }
