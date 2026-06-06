@@ -381,6 +381,6 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
         if (property == null) {
             return null;
         }
-        return property.getOriginal() == null ? property.getValue() : property.getOriginal();
+        return property.getOriginal();
     }
 }

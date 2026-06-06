@@ -55,7 +55,11 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     private final boolean readonly;
 
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
-        super.set(value);
+        if (readonly && column.is_id()) {
+            super.set(MongoRecordUtil.idValue(value));
+        } else {
+            super.set(value);
+        }
         this.column = column;
         this.record = record;
         //this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
