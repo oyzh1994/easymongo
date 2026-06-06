@@ -102,9 +102,13 @@ public class MongoTest {
         connection.close();
     }
 
+    private com.mongodb.client.MongoClient mongoClient() {
+        return MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin");
+    }
+
     @Test
     public void test3() {
-        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
+        try (com.mongodb.client.MongoClient mongoClient = this.mongoClient()) {
             MongoDatabase db = mongoClient.getDatabase("test");
             for (String name : db.listCollectionNames()) {
                 System.out.println(name);
@@ -114,7 +118,7 @@ public class MongoTest {
 
     @Test
     public void test4() {
-        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
+        try (com.mongodb.client.MongoClient mongoClient = this.mongoClient()) {
             MongoDatabase db = mongoClient.getDatabase("test");
             MongoCollection<Document> collection = db.getCollection("users");
             FindIterable<Document> iterable = collection.find();
@@ -128,7 +132,7 @@ public class MongoTest {
 
     @Test
     public void test5() {
-        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
+        try (com.mongodb.client.MongoClient mongoClient = this.mongoClient()) {
             MongoDatabase db = mongoClient.getDatabase("test");
             MongoCollection<Document> collection = db.getCollection("users");
             Bson f1 = Filters.regex("name", "五$");
@@ -150,7 +154,7 @@ public class MongoTest {
 
     @Test
     public void test6() {
-        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@120.24.176.61:27017/admin")) {
+        try (com.mongodb.client.MongoClient mongoClient = this.mongoClient()) {
             MongoDatabase db = mongoClient.getDatabase("test");
             MongoCollection<Document> collection = db.getCollection("test_type");
             Document document = new Document();

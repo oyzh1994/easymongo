@@ -23,7 +23,7 @@ public class ShellTest {
     }
 
     private ScriptEngine initJs() {
-        MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@120.24.176.61:27017/admin");
+        MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin");
 
         NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
         ScriptEngine engine = factory.getScriptEngine("--language=es6", "-scripting");
