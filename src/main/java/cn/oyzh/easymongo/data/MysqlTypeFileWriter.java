@@ -8,7 +8,6 @@ import cn.oyzh.easymongo.util.MongoDataUtil;
 import org.bson.types.ObjectId;
 
 import java.io.Closeable;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,7 +64,7 @@ public abstract class MysqlTypeFileWriter implements Closeable {
             }
             return "0x" + HexUtil.encodeHexStr(bytes, false);
         }
-        if (column.supportList()) {
+        if (column.supportList() || column.supportObject()) {
             return JSONUtil.toJson(value);
         }
         return value.toString();

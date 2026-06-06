@@ -6,10 +6,6 @@ import cn.oyzh.easymongo.util.MongoUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * db字段
  *
@@ -75,21 +71,6 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         super.putOriginalData("type", type);
     }
 
-    public List<String> getValueList() {
-        List<String> valueList = new ArrayList<>();
-        if (this.getValue() != null) {
-            List<String> list = StringUtil.split(this.getValue(), ",");
-            for (String s : list) {
-                if (s.startsWith("'") && s.endsWith("'")) {
-                    valueList.add(s.substring(1, s.length() - 1));
-                } else {
-                    valueList.add(s);
-                }
-            }
-        }
-        return valueList;
-    }
-
     public void setValue(String value) {
         this.value = value;
         super.putOriginalData("value", value);
@@ -147,6 +128,15 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
      */
     public boolean supportList() {
         return StringUtil.equalsIgnoreCase(this.getType(), "list");
+    }
+
+    /**
+     * 是否支持对象
+     *
+     * @return 结果
+     */
+    public boolean supportObject() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "object");
     }
 
     /**
@@ -231,6 +221,9 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     public Object defaultValue() {
+        if (this.is_id()) {
+            return null;
+        }
         if (this.supportInteger()) {
             return 0;
         }

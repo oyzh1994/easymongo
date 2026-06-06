@@ -13,7 +13,6 @@ import cn.oyzh.easymongo.mongo.DBStatusListenerManager;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
-import cn.oyzh.easymongo.mongo.MongoRecordData;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
 import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
@@ -323,7 +322,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 return;
             }
             MongoRecord record = MongoRecordUtil.docToRecord(doc, this.getItem().dbName(), this.getItem().collectionName());
-            BsonValue _id = this.getItem().insertRecord(record.getRecordData());
+            BsonValue _id = this.getItem().insertRecord(record);
             if (_id == null) {
                 MessageBox.warn(I18nHelper.addDocumentFail());
                 return;
@@ -357,8 +356,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
      * @param record 记录
      */
     private void insertRecord(MongoRecord record) {
-        MongoRecordData recordData = record.getRecordData();
-        BsonValue _id = this.getItem().insertRecord(recordData);
+        BsonValue _id = this.getItem().insertRecord(record);
         record.set_id(_id);
     }
 
@@ -368,10 +366,8 @@ public class MongoCollectionRecordTabController extends RichTabController {
      * @param record 记录
      */
     private void updateRecord(MongoRecord record) {
-        // 记录数据
-        MongoRecordData recordData = record.getRecordData();
         // 更新行
-        long result = this.getItem().updateRecord(recordData);
+        long result = this.getItem().updateRecord(record);
         // 更新字段
         if (result == 1) {
             // 更新字段
@@ -558,7 +554,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
             if (record.isCreated()) {
                 success = true;
             } else {
-                success = this.getItem().deleteRecord(record.getRecordData()) == 1;
+                success = this.getItem().deleteRecord(record) == 1;
             }
             // 操作成功
             if (success) {

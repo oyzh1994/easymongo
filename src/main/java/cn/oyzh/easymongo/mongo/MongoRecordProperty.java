@@ -1,10 +1,12 @@
 package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.object.Destroyable;
+import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.easymongo.util.MongoNodeUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
+import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.plus.node.NodeDestroyUtil;
 import cn.oyzh.fx.plus.tableview.TableViewUtil;
@@ -53,21 +55,15 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     private final boolean readonly;
 
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
+        super.set(value);
         this.column = column;
         this.record = record;
-        if (column.is_id()) {
-            super.set(MongoRecordUtil.idValue(value));
+        //this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
+        //    this.refreshNode();
+        //    this.setChanged(true);
+        //});
+        if (!readonly || column.is_id()) {
             this.original = value;
-        } else {
-            super.set(value);
-            this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
-                this.node = null;
-                this.initNode();
-                this.setChanged(true);
-            });
-            if (!readonly) {
-                this.original = value;
-            }
         }
         this.readonly = readonly;
     }
@@ -91,7 +87,14 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     public void set(Object newValue) {
         super.set(newValue);
         if (this.node != null) {
-            MongoNodeUtil.setNodeVal(node, newValue);
+            String type = MongoUtil.getType(newValue);
+            if (StringUtil.notEquals(type, this.column.getType())) {
+                this.column.setType(type);
+                this.refreshNode();
+                this.setChanged(true);
+            }
+            Object value = this.column.is_id() ? MongoRecordUtil.idValue(newValue) : newValue;
+            MongoNodeUtil.setNodeVal(this.node, value);
         }
     }
 
@@ -102,7 +105,6 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
 
     @Override
     public Object getValue() {
-        //        if (this.readonly || !this.record.isEditable()) {
         if (this.readonly) {
             return MongoRecordUtil.formatValue(super.getValue(), this.column);
         }
@@ -110,6 +112,14 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
             this.initNode();
         }
         return this.node;
+    }
+
+    /**
+     * 刷新节点
+     */
+    private void refreshNode() {
+        this.node = null;
+        this.initNode();
     }
 
     /**

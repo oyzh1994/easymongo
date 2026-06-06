@@ -1,6 +1,8 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.common.util.StringUtil;
+import org.bson.BsonValue;
+import org.bson.Document;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
@@ -50,7 +52,42 @@ public class MongoUtil {
         if (val instanceof ObjectId) {
             return "obejectid";
         }
-        return "string";
+        if (val instanceof Document) {
+            return "object";
+        }
+        if (val instanceof BsonValue bsonValue) {
+            if (bsonValue.isInt32() || bsonValue.isInt64()) {
+                return "int";
+            }
+            if (bsonValue.isDouble() || bsonValue.isDecimal128()) {
+                return "double";
+            }
+            if (bsonValue.isDouble() || bsonValue.isDecimal128() || bsonValue.isNumber()) {
+                return "double";
+            }
+            if (bsonValue.isDateTime() || bsonValue.isTimestamp()) {
+                return "date";
+            }
+            if (bsonValue.isArray()) {
+                return "list";
+            }
+            if (bsonValue.isBinary()) {
+                return "binary";
+            }
+            if (bsonValue.isBoolean()) {
+                return "boolean";
+            }
+            if (bsonValue.isString()) {
+                return "string";
+            }
+            if (bsonValue.isDocument()) {
+                return "object";
+            }
+            if (bsonValue.isObjectId()) {
+                return "obejectid";
+            }
+        }
+        return "object";
     }
 
     /**

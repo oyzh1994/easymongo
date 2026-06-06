@@ -14,8 +14,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -148,17 +150,19 @@ public class MongoTest {
 
     @Test
     public void test6() {
-        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin")) {
+        try (com.mongodb.client.MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@120.24.176.61:27017/admin")) {
             MongoDatabase db = mongoClient.getDatabase("test");
             MongoCollection<Document> collection = db.getCollection("test_type");
             Document document = new Document();
             document.append("date", new Date());
+            document.append("time", new Timestamp(System.currentTimeMillis()));
             document.append("boolean", true);
             document.append("string", "string");
             document.append("list", List.of(1, "2", true, List.of("1", 2)));
             document.append("int", 10086);
             document.append("double", 13.14);
             document.append("binary", new byte[]{1, 2, 3});
+            document.append("object", new Document(Map.of("key1", "value1", "key2", "value2")));
             collection.insertOne(document);
         }
     }

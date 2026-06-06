@@ -312,21 +312,17 @@ public class MongoClient implements Closeable {
     /**
      * 新增集合记录
      *
-     * @param recordData 数据
+     * @param record 数据
      * @return 结果
      */
-    public BsonValue insertCollectionRecord(MongoRecordData recordData) {
-        String dbName = null;
-        String collectionName = null;
+    public BsonValue insertCollectionRecord(MongoRecord record) {
+        String dbName = record._idColumn().getDbName();
+        String collectionName = record._idColumn().getCollectionName();
         Document document = new Document();
-        for (Map.Entry<MongoColumn, Object> entry : recordData.entries()) {
-            Object value = entry.getValue();
-            MongoColumn column = entry.getKey();
-            if (dbName == null) {
-                dbName = column.getDbName();
-            }
-            if (collectionName == null) {
-                collectionName = column.getCollectionName();
+        for (MongoColumn column : record.getColumns()) {
+            Object value = record.getValue(column.getName());
+            if (column.is_id() && value == null) {
+                continue;
             }
             document.append(column.getName(), value);
         }
@@ -369,17 +365,17 @@ public class MongoClient implements Closeable {
     /**
      * 删除集合记录
      *
-     * @param recordData 数据
+     * @param record 数据
      * @return 结果
      */
-    public long deleteCollectionRecord(MongoRecordData recordData) {
-        MongoColumn column = recordData.column(MongoUtil.ID);
+    public long deleteCollectionRecord(MongoRecord record) {
+        MongoColumn column = record._idColumn();
         if (column == null) {
             throw new IllegalArgumentException("_id");
         }
         String dbName = column.getDbName();
         String collectionName = column.getCollectionName();
-        Object _id = recordData.id();
+        Object _id = record._idValue();
         Bson filter = Filters.eq(MongoUtil.ID, _id);
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
         DeleteResult result = collection.deleteOne(filter);
@@ -400,18 +396,18 @@ public class MongoClient implements Closeable {
     /**
      * 更新集合记录
      *
-     * @param recordData 数据
+     * @param record 数据
      * @return 结果
      */
-    public long updateCollectionRecord(MongoRecordData recordData) {
-        MongoColumn column = recordData.column(MongoUtil.ID);
+    public long updateCollectionRecord(MongoRecord record) {
+        MongoColumn column = record._idColumn();
         if (column == null) {
             throw new IllegalArgumentException("_id");
         }
         String dbName = column.getDbName();
         String collectionName = column.getCollectionName();
         com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, collectionName);
-        Object _id = recordData.id();
+        Object _id = record._idValue();
         Bson filter = Filters.eq(MongoUtil.ID, _id);
         FindIterable<Document> iterable = collection1.find(filter);
         Document document = iterable.first();
@@ -419,12 +415,12 @@ public class MongoClient implements Closeable {
             return 0;
         }
         Bson update = null;
-        for (Map.Entry<MongoColumn, Object> entry : recordData.entries()) {
-            if (entry.getKey().is_id()) {
+        for (MongoColumn mongoColumn : record.getColumns()) {
+            if (mongoColumn.is_id()) {
                 continue;
             }
-            String colName = entry.getKey().getName();
-            Bson bson = Updates.set(colName, entry.getValue());
+            String colName = mongoColumn.getName();
+            Bson bson = Updates.set(colName, record.getValue(colName));
             if (update == null) {
                 update = bson;
             } else {
@@ -433,7 +429,7 @@ public class MongoClient implements Closeable {
         }
 
         for (String colName : document.keySet()) {
-            if (recordData.column(colName) == null) {
+            if (record.column(colName) == null) {
                 Bson bson = Updates.unset(colName);
                 update = Updates.combine(update, bson);
             }

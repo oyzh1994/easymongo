@@ -80,13 +80,18 @@ public class MongoRecordUtil {
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#FDE5CF")));
             node = textField;
+        } else if (column.supportObject()) {
+            JsonTextFiled textField = new JsonTextFiled();
+            textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#FDE5CF")));
+            node = textField;
         } else {
             FXTextField textField = new FXTextField();
-            if (column.is_id()) {
-                textField.setEditable(false);
-            } else {
-                textField.setBackground(ControlUtil.background(Color.valueOf("#FDD4D3")));
-            }
+            //if (column.is_id()) {
+            //    textField.setEditable(false);
+            //} else {
+            textField.setBackground(ControlUtil.background(Color.valueOf("#FDD4D3")));
+            //}
             textField.setValue(object);
             node = textField;
         }
@@ -110,8 +115,12 @@ public class MongoRecordUtil {
             val = ClearableTextField.format(object);
         } else if (column.supportBinary()) {
             val = BinaryTextFiled.format(object);
+        } else if (column.supportObject() || column.supportList()) {
+            val = JsonTextFiled.format(object);
         } else if (column.supportDate()) {
             val = DateTimeTextField.FORMAT.format(object);
+        } else if (column.supportBoolean()) {
+            val = BooleanTextFiled.format(object);
         } else {
             val = ClearableTextField.format(object);
         }
@@ -176,6 +185,14 @@ public class MongoRecordUtil {
         return menuItems;
     }
 
+    /**
+     * 文档转换为记录
+     *
+     * @param doc            文档
+     * @param dbName         数据库名称
+     * @param collectionName 集合名称
+     * @return 结果
+     */
     public static MongoRecord docToRecord(String doc, String dbName, String collectionName) {
         JSONObject object = JSONObject.parseObject(doc);
         MongoColumns columns = new MongoColumns();
@@ -222,7 +239,7 @@ public class MongoRecordUtil {
      */
     public static Object idValue(Object value) {
         if (value == null) {
-            return "";
+            return null;
         }
         if (value instanceof ObjectId id) {
             return id.toHexString();

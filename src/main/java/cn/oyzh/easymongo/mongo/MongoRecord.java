@@ -6,7 +6,6 @@ import cn.oyzh.common.object.ObjectCopier;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import org.bson.BsonValue;
-import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -293,42 +292,42 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
         }
     }
 
-    public MongoRecordData getRecordData() {
-        MongoRecordData recordData = new MongoRecordData();
-        for (String column : this.columns()) {
-            MongoRecordProperty property = this.getProperty(column);
-            if (property != null) {
-                Object value = property.get();
-                if (value != null) {
-                    recordData.put(property.getColumn(), value);
-                }
-            }
-        }
-        return recordData;
-    }
-
-    public MongoRecordData getChangedRecordData() {
-        MongoRecordData recordData = new MongoRecordData();
-        for (String column : this.columns()) {
-            MongoRecordProperty property = this.getProperty(column);
-            if (property != null && property.isChanged()) {
-                recordData.put(property.getColumn(), property.get());
-            }
-        }
-        return recordData;
-    }
-
-    public MongoRecordData getOriginalRecordData() {
-        MongoRecordData recordData = new MongoRecordData();
-        for (String column : this.columns()) {
-            MongoRecordProperty property = this.getProperty(column);
-            if (property != null) {
-                Object val = property.getOriginal();
-                recordData.put(property.getColumn(), val);
-            }
-        }
-        return recordData;
-    }
+    //public MongoRecordData getRecordData() {
+    //    MongoRecordData recordData = new MongoRecordData();
+    //    for (String column : this.columns()) {
+    //        MongoRecordProperty property = this.getProperty(column);
+    //        if (property != null) {
+    //            Object value = property.get();
+    //            if (value != null) {
+    //                recordData.put(property.getColumn(), value);
+    //            }
+    //        }
+    //    }
+    //    return recordData;
+    //}
+    //
+    //public MongoRecordData getChangedRecordData() {
+    //    MongoRecordData recordData = new MongoRecordData();
+    //    for (String column : this.columns()) {
+    //        MongoRecordProperty property = this.getProperty(column);
+    //        if (property != null && property.isChanged()) {
+    //            recordData.put(property.getColumn(), property.get());
+    //        }
+    //    }
+    //    return recordData;
+    //}
+    //
+    //public MongoRecordData getOriginalRecordData() {
+    //    MongoRecordData recordData = new MongoRecordData();
+    //    for (String column : this.columns()) {
+    //        MongoRecordProperty property = this.getProperty(column);
+    //        if (property != null) {
+    //            Object val = property.getOriginal();
+    //            recordData.put(property.getColumn(), val);
+    //        }
+    //    }
+    //    return recordData;
+    //}
 
     public boolean isColumnChanged(String column) {
         return false;
@@ -379,9 +378,9 @@ public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implemen
 
     public Object _idValue() {
         MongoRecordProperty property = this.getProperty(MongoUtil.ID);
-        if (property != null) {
-            return property.getOriginal();
+        if (property == null) {
+            return null;
         }
-        return null;
+        return property.getOriginal() == null ? property.getValue() : property.getOriginal();
     }
 }

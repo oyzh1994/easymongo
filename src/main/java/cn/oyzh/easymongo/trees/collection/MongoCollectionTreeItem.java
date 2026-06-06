@@ -7,7 +7,6 @@ import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
-import cn.oyzh.easymongo.mongo.MongoRecordData;
 import cn.oyzh.easymongo.mongo.MongoRecordFilter;
 import cn.oyzh.easymongo.mongo.MongoSelectRecordParam;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
@@ -20,7 +19,6 @@ import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
 import org.bson.BsonValue;
-import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,15 +194,15 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return paging;
     }
 
-    public BsonValue insertRecord(MongoRecordData recordData) {
-        return this.client().insertCollectionRecord(recordData);
+    public BsonValue insertRecord(MongoRecord record) {
+        return this.client().insertCollectionRecord(record);
     }
 
-    public long deleteRecord(MongoRecordData recordData) {
-        return this.client().deleteCollectionRecord(recordData);
+    public long deleteRecord(MongoRecord record) {
+        return this.client().deleteCollectionRecord(record);
     }
 
-    public long updateRecord(MongoRecordData recordData ) {
-        return this.client().updateCollectionRecord(recordData);
+    public long updateRecord(MongoRecord record) {
+        return this.client().updateCollectionRecord(record);
     }
 }
