@@ -106,8 +106,8 @@ public class ShellTest {
     public void find() throws ScriptException {
         // 初始化 GraalVM JS 环境
         ScriptEngine engine = initJs();
-
-        String cmd = "db.getCollection('test').find()";
+        //String cmd = "db.getCollection('test').find()";
+        String cmd = "db.test.find()";
         Object result = engine.eval(cmd);
         printResult(result);
     }
@@ -116,7 +116,39 @@ public class ShellTest {
     public void find_1() throws ScriptException {
         // 初始化 GraalVM JS 环境
         ScriptEngine engine = initJs();
-        String cmd = "db.getCollection('test').find({'a':1})";
+        //String cmd = "db.getCollection('test').find({'a':1})";
+        String cmd = "db.test.find({'a':1})";
+        Object result = engine.eval(cmd);
+        printResult(result);
+    }
+
+    @Test
+    public void insert() throws ScriptException {
+        // 初始化 GraalVM JS 环境
+        ScriptEngine engine = initJs();
+        //String cmd = """
+        //        db.getCollection("test").insert({
+        //            a: 1
+        //        });
+        //        """;
+        String cmd = """
+                db.test.insert({
+                    a: 1
+                });
+                """;
+        Object result = engine.eval(cmd);
+        printResult(result);
+    }
+
+    @Test
+    public void delete() throws ScriptException {
+        // 初始化 GraalVM JS 环境
+        ScriptEngine engine = initJs();
+        String cmd = """
+                db.test.delete({
+                    a: 1
+                });
+                """;
         Object result = engine.eval(cmd);
         printResult(result);
     }
