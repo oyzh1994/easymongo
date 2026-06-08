@@ -237,7 +237,7 @@ public class MongoClient implements Closeable {
         collection.drop();
     }
 
-    public List<MongoCollection> collections(String dbName) {
+    public List<MongoCollection> selectCollections(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         List<MongoCollection> collections = new ArrayList<>();
         for (String name : database.listCollectionNames()) {
@@ -448,7 +448,7 @@ public class MongoClient implements Closeable {
      * @param dbName 数据库名称
      * @return 结果
      */
-    public List<MongoBucket> buckets(String dbName) {
+    public List<MongoBucket> selectBuckets(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         MongoIterable<String> collectionNames = database.listCollectionNames();
         List<MongoBucket> buckets = new ArrayList<>();
@@ -682,5 +682,16 @@ public class MongoClient implements Closeable {
     public List<? extends MongoColumn> selectColumns(MongoSelectRecordParam param) {
         List<MongoRecord> records = this.selectCollectionRecords(param);
         return MongoRecordUtil.columns(records);
+    }
+
+    private String version;
+
+    public String selectVersion() {
+        if (this.version == null) {
+            Document buildInfo = this.mongoClient.getDatabase("admin")
+                    .runCommand(new Document("buildInfo", 1));
+            this.version = buildInfo.getString("version");
+        }
+        return this.version;
     }
 }

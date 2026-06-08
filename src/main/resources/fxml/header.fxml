@@ -13,11 +13,11 @@
 <?import cn.oyzh.fx.gui.svg.glyph.AboutSVGGlyph?>
 <FXVBox styleClass="root" xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.HeaderController" flexWidth="100%" flexHeight="100%">
-    <!-- <TransportSVGGlyph onMousePrimaryClicked="#transport" size="12"> -->
-    <!--     <VBox.margin> -->
-    <!--         <Insets left="10" top="60"/> -->
-    <!--     </VBox.margin> -->
-    <!-- </TransportSVGGlyph> -->
+    <TransportSVGGlyph onMousePrimaryClicked="#transport" size="12">
+        <VBox.margin>
+            <Insets left="10" top="60"/>
+        </VBox.margin>
+    </TransportSVGGlyph>
     <ToolsSVGGlyph onMousePrimaryClicked="#tool">
         <VBox.margin>
             <Insets left="10" top="15"/>

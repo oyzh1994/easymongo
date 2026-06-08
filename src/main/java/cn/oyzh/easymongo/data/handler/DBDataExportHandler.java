@@ -48,7 +48,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     /**
      * 查询限制
      */
-    private int queryLimit = 1000;
+    private int queryLimit = 500;
 
     /**
      * 导出表

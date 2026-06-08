@@ -94,7 +94,7 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
             this.setLoading(true);
             Task task = TaskBuilder.newBuilder()
                     .onStart(() -> {
-                        List<MongoCollection> tables = this.client().collections(this.dbName());
+                        List<MongoCollection> tables = this.client().selectCollections(this.dbName());
                         // 无数据直接更新列表
                         if (this.isChildEmpty()) {
                             List<TreeItem<?>> list = new ArrayList<>();

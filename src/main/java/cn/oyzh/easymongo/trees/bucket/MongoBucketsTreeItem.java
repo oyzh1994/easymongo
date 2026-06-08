@@ -73,7 +73,7 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
             this.setLoading(true);
             Task task = TaskBuilder.newBuilder()
                     .onStart(() -> {
-                        List<MongoBucket> buckets = this.client().buckets(this.dbName());
+                        List<MongoBucket> buckets = this.client().selectBuckets(this.dbName());
                         // 无数据直接更新列表
                         if (this.isChildEmpty()) {
                             List<TreeItem<?>> list = new ArrayList<>();

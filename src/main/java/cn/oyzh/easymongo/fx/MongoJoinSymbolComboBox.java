@@ -8,7 +8,8 @@ import cn.oyzh.fx.plus.controls.combo.FXComboBox;
  */
 public class MongoJoinSymbolComboBox extends FXComboBox<String> {
 
-    {
+    @Override
+    public void initNode(){
         this.addItem("AND");
         this.addItem("OR");
     }

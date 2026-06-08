@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.controller;
 
 import cn.oyzh.common.SysConst;
+import cn.oyzh.easymongo.controller.data.ShellMysqlDataTransportController;
 import cn.oyzh.fx.plus.controller.SubStageController;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.StageAdapter;
@@ -16,6 +17,19 @@ import javafx.fxml.FXML;
  * @since 2023/06/16
  */
 public class HeaderController extends SubStageController {
+
+    /**
+     * 数据传输
+     */
+    @FXML
+    private void transport() {
+        StageAdapter wrapper = StageManager.getStage(ShellMysqlDataTransportController.class);
+        if (wrapper != null) {
+            wrapper.toFront();
+        } else {
+            StageManager.showStage(ShellMysqlDataTransportController.class);
+        }
+    }
 
     /**
      * 设置

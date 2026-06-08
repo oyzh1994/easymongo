@@ -408,7 +408,7 @@ public class ShellMysqlDataExportController extends StageController {
         this.exportTableView.clearItems();
         // 正常导出
         if (this.exportMode == 0) {
-            List<MongoCollection> tables = this.dbClient.collections(this.dbName);
+            List<MongoCollection> tables = this.dbClient.selectCollections(this.dbName);
             for (MongoCollection table : tables) {
                 ShellMysqlDataExportTable exportTable = new ShellMysqlDataExportTable();
                 exportTable.setName(table.getName());
