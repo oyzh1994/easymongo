@@ -7,6 +7,7 @@ import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
+import cn.oyzh.easymongo.shell.ShellEngine;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
@@ -123,6 +124,15 @@ public class MongoClient implements Closeable {
     }
 
     private com.mongodb.client.MongoClient mongoClient;
+
+    /**
+     * 创建shell引擎
+     *
+     * @return 结果
+     */
+    public ShellEngine createShellEngine() {
+        return new ShellEngine(this.mongoClient);
+    }
 
     /**
      * 初始化客户端
@@ -693,5 +703,9 @@ public class MongoClient implements Closeable {
             this.version = buildInfo.getString("version");
         }
         return this.version;
+    }
+
+    public MongoConnect getShellConnect() {
+        return this.shellConnect;
     }
 }

@@ -20,7 +20,7 @@ import java.util.Set;
  * @author oyzh
  * @since 2023/12/20
  */
-public class MongoRecord extends cn.oyzh.easymongo.mongo.DBObjectStatus implements Destroyable, ObjectCopier<MongoRecord> {
+public class MongoRecord extends DBObjectStatus implements Destroyable, ObjectCopier<MongoRecord> {
 
     /**
      * 是否只读

@@ -12,6 +12,7 @@ import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
+import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeItem;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
@@ -76,9 +77,26 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         items.add(editDB);
         FXMenuItem dropDB = MenuItemHelper.deleteDatabase("12", this::delete);
         items.add(dropDB);
+        FXMenuItem dumpData = MenuItemHelper.dumpData("12", this::dump);
+        items.add(dumpData);
+        FXMenuItem runSqlFile = MenuItemHelper.runSqlFile("12", this::runScriptFile);
+        items.add(runSqlFile);
         return items;
     }
 
+    /**
+     * 转储
+     */
+    private void dump() {
+        MongoViewFactory.dumpData(this.client(), this.dbName(), null, 1);
+    }
+
+    /**
+     * 转储
+     */
+    private void runScriptFile() {
+        MongoViewFactory.runScriptFile(this.client(), this.dbName());
+    }
 
     @Override
     public void delete() {

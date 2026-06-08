@@ -4,6 +4,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 
 import java.util.Map;
@@ -32,12 +33,12 @@ public class ShellMongoCollection {
     }
 
     public InsertOneResult insert(Object doc) {
-       return this.insertOne(doc);
+        return this.insertOne(doc);
     }
 
     public InsertOneResult insertOne(Object doc) {
         if (doc instanceof Map map) {
-            return collection.insertOne(new Document(map));
+            return this.collection.insertOne(new Document(map));
         }
         return null;
     }
@@ -48,8 +49,23 @@ public class ShellMongoCollection {
 
     public DeleteResult deleteOne(Object doc) {
         if (doc instanceof Map map) {
-          return  collection.deleteOne(new Document(map));
+            return this.collection.deleteOne(new Document(map));
         }
         return null;
+    }
+
+    public UpdateResult update(Object filter, Object doc) {
+        return this.updateOne(filter, doc);
+    }
+
+    public UpdateResult updateOne(Object filter, Object doc) {
+        if (filter instanceof Map f && doc instanceof Map map) {
+            return this.collection.updateOne(new Document(f), new Document(map));
+        }
+        return null;
+    }
+
+    public void drop() {
+        this.collection.drop();
     }
 }

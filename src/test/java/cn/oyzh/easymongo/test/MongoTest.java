@@ -155,7 +155,7 @@ public class MongoTest {
     @Test
     public void test6() {
         try (com.mongodb.client.MongoClient mongoClient = this.mongoClient()) {
-            MongoDatabase db = mongoClient.getDatabase("test");
+            MongoDatabase db = mongoClient.getDatabase("type");
             MongoCollection<Document> collection = db.getCollection("test_type");
             Document document = new Document();
             document.append("date", new Date());

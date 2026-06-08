@@ -26,12 +26,11 @@ public class ShellTest {
         MongoClient mongoClient = MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin");
 
         NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
-        ScriptEngine engine = factory.getScriptEngine("--language=es6", "-scripting");
+        ScriptEngine engine = factory.getScriptEngine( );
 
         MongoDatabase database = mongoClient.getDatabase("test");
         // 注入包装后的 db 对象
         Bindings value = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-        //value.put("db", database);
         value.put("db", new ShellMongoDatabase(database));
         return engine;
     }

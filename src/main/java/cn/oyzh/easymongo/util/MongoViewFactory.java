@@ -2,8 +2,10 @@ package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.controller.collection.MongoDocumentAddController;
 import cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController;
+import cn.oyzh.easymongo.controller.data.ShellMysqlDataDumpController;
 import cn.oyzh.easymongo.controller.data.ShellMysqlDataExportController;
 import cn.oyzh.easymongo.controller.data.ShellMysqlDataImportController;
+import cn.oyzh.easymongo.controller.data.ShellMysqlRunSqlFileController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
 import cn.oyzh.easymongo.data.ShellMysqlDataExportTable;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -122,6 +124,46 @@ public class MongoViewFactory {
     public static void importData(MongoClient client, String dbName) {
         try {
             StageAdapter adapter = StageManager.parseStage(ShellMysqlDataImportController.class, StageManager.getFrontWindow());
+            adapter.setProp("dbName", dbName);
+            adapter.setProp("dbClient", client);
+            adapter.display();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+    }
+
+    /**
+     * 转储数据
+     *
+     * @param client    客户端
+     * @param dbName    数据库名称
+     * @param tableName 表名称
+     * @param dumpType 导出类型 1.库 2.表
+     */
+    public static void dumpData(MongoClient client, String dbName, String tableName, int dumpType) {
+        try {
+            StageAdapter adapter = StageManager.parseStage(ShellMysqlDataDumpController.class, StageManager.getFrontWindow());
+            adapter.setProp("dumpType", dumpType);
+            adapter.setProp("dbName", dbName);
+            adapter.setProp("dbClient", client);
+            adapter.setProp("tableName", tableName);
+            adapter.display();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+    }
+
+    /**
+     * 运行脚本文件
+     *
+     * @param client 客户端
+     * @param dbName 数据库名称
+     */
+    public static void runScriptFile(MongoClient client, String dbName) {
+        try {
+            StageAdapter adapter = StageManager.parseStage(ShellMysqlRunSqlFileController.class, StageManager.getFrontWindow());
             adapter.setProp("dbName", dbName);
             adapter.setProp("dbClient", client);
             adapter.display();

@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public class MongoUtil {
 
     public static final String ID = "_id";
 
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
     /**
      * 获取值类型
      *
@@ -25,11 +28,13 @@ public class MongoUtil {
      * @return 类型
      */
     public static String getType(Object val) {
-        if (val instanceof Long
-                || val instanceof Integer
+        if (val instanceof Integer
                 || val instanceof Short
                 || val instanceof Byte) {
             return "int";
+        }
+        if (val instanceof Long) {
+            return "long";
         }
         if (val instanceof Number) {
             return "double";
@@ -46,7 +51,7 @@ public class MongoUtil {
         if (val instanceof java.util.Date) {
             return "date";
         }
-        if (val instanceof Binary) {
+        if (val instanceof byte[] || val instanceof Binary) {
             return "binary";
         }
         if (val instanceof ObjectId) {

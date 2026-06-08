@@ -92,6 +92,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
      * 转储
      */
     private void dump() {
+        MongoViewFactory.dumpData(this.client(), this.dbName(), this.collectionName(), 1);
     }
 
     /**

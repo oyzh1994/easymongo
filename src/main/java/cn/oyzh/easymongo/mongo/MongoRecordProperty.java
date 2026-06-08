@@ -206,8 +206,7 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
      * 复制为insert语句
      */
     public void vCopyAsInsertSql() {
-        MongoColumns columns = this.record.getColumns();
-        String sql = MongoDataUtil.toInsertSql(columns, this.record, true);
+        String sql = MongoDataUtil.toInsertScript(this.record);
         ClipboardUtil.copy(sql);
     }
 
@@ -215,8 +214,7 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
      * 复制为update语句
      */
     public void vCopyAsUpdateSql() {
-        MongoColumns columns = this.record.getColumns();
-        String sql = MongoDataUtil.toUpdateSql(columns, this.record);
+        String sql = MongoDataUtil.toUpdateScript(this.record);
         ClipboardUtil.copy(sql);
     }
 

@@ -5,9 +5,8 @@ import com.mongodb.client.ListCollectionsIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.openjdk.nashorn.api.scripting.AbstractJSObject;
 
-public class ShellMongoDatabase extends AbstractJSObject {
+public class ShellMongoDatabase {
 
     private final MongoDatabase database;
 
@@ -24,6 +23,11 @@ public class ShellMongoDatabase extends AbstractJSObject {
         return new ShellMongoCollection(collection);
     }
 
+    public ShellMongoDatabase createCollection(String name) {
+        this.database.createCollection(name);
+        return this;
+    }
+
     public ShellCursor listCollectionNames() {
         ListCollectionNamesIterable iter = this.database.listCollectionNames();
         return new ShellCursor(iter);
@@ -34,8 +38,8 @@ public class ShellMongoDatabase extends AbstractJSObject {
         return new ShellCursor(iter);
     }
 
-    @Override
-    public Object getMember(String name) {
-        return this.getCollection(name);
-    }
+    //    @Override
+    //    public Object getMember(String name) {
+    //        return this.getCollection(name);
+    //    }
 }

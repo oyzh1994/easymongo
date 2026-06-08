@@ -86,12 +86,21 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     /**
-     * 是否支持整数
+     * 是否支持32位整数
      *
      * @return 结果
      */
-    public boolean supportInteger() {
+    public boolean supportInt32() {
         return StringUtil.equalsIgnoreCase(this.getType(), "int");
+    }
+
+    /**
+     * 是否支持64位整数
+     *
+     * @return 结果
+     */
+    public boolean supportInt64() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "long");
     }
 
     /**
@@ -224,8 +233,11 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         if (this.is_id()) {
             return null;
         }
-        if (this.supportInteger()) {
+        if (this.supportInt32()) {
             return 0;
+        }
+        if (this.supportInt64()) {
+            return 0L;
         }
         if (this.supportDigits()) {
             return 0d;
@@ -243,5 +255,9 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
 
     public String displayName() {
         return this.aliasName == null ? this.name : this.aliasName;
+    }
+
+    public boolean supportInteger() {
+        return this.supportInt32() || this.supportInt64();
     }
 }
