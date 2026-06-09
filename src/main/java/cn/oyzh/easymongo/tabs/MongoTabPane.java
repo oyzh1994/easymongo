@@ -5,6 +5,7 @@ import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryAddEvent;
+import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
 import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
 import cn.oyzh.easymongo.tabs.query.MysqlQueryMainTab;
@@ -769,6 +770,15 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         tab.init(event.data());
     }
 
+    private MysqlQueryMainTab getMysqlQueryMainTab(String queryId) {
+        for (Tab tab : this.getTabs()) {
+            if (tab instanceof MysqlQueryMainTab tab1 && StringUtil.equals(tab1.queryId(), queryId)) {
+                return tab1;
+            }
+        }
+        return null;
+    }
+
     /**
      * 查询新增事件
      *
@@ -786,4 +796,25 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
             ex.printStackTrace();
         }
     }
+
+    /**
+     * 查询打开事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onMysqlQueryOpen(MongoQueryOpenEvent event) {
+        try {
+            MysqlQueryMainTab tab = this.getMysqlQueryMainTab(event.queryId());
+            if (tab == null) {
+                tab = new MysqlQueryMainTab();
+                tab.init(event.data(), event.getDbItem());
+                this.addTab(tab);
+            }
+            this.select(tab);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

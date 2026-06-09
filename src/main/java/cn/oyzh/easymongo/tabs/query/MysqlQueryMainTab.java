@@ -70,7 +70,6 @@ public class MysqlQueryMainTab extends MongoTab {
         return this.dbItem().connectName();
     }
 
-
     /**
      * 初始化
      *

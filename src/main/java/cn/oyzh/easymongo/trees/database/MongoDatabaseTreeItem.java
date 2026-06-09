@@ -9,7 +9,6 @@ import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoDatabase;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.query.MysqlExecuteResult;
-import cn.oyzh.easymongo.query.MysqlExplainResult;
 import cn.oyzh.easymongo.query.MysqlQueryResults;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
@@ -254,9 +253,9 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         return this.client().executeSql(this.dbName(), sql);
     }
 
-    public MysqlQueryResults<MysqlExplainResult> explainSql(String sql) {
-        return null;
-    }
+//    public MysqlQueryResults<MysqlExplainResult> explainSql(String sql) {
+//        return null;
+//    }
 
     public long deleteCollectionRecord(MongoRecord record) {
         return this.client().deleteCollectionRecord(record);

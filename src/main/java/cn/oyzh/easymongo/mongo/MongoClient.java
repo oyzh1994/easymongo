@@ -41,6 +41,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import javax.script.ScriptException;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.File;
@@ -718,18 +719,28 @@ public class MongoClient implements Closeable {
     }
 
     public MysqlExecuteResult executeSingleSql(String dbName, String sql) throws Exception {
+        this.shellEngine().db(dbName);
         MysqlExecuteResult result = new MysqlExecuteResult();
         result.setSql(sql);
         long start = System.currentTimeMillis();
-        Object obj = this.shellEngine().eval(sql);
-        if (obj instanceof ShellFindCursor cursor) {
-            result.parseResult(cursor.toArray());
-        } else if (obj instanceof Document document) {
-            MongoRecord record = MongoRecordUtil.docToRecord(dbName, null, document);
-            if (record != null) {
-                result.parseResult(List.of(record));
+        try {
+            Object obj = this.shellEngine().eval(sql);
+            if (obj instanceof ShellFindCursor cursor) {
+                result.setSuccess(true);
+                result.parseResult(cursor.toArray());
+            } else if (obj instanceof Document document) {
+                MongoRecord record = MongoRecordUtil.docToRecord(dbName, null, document);
+                if (record != null) {
+                    result.setSuccess(true);
+                    result.parseResult(List.of(record));
+                }
             }
+        } catch (ScriptException ex) {
+            ex.printStackTrace();
+            result.setSuccess(false);
+            result.setMsg(ex.getMessage());
         }
+        result.setMsg("ok");
         long end = System.currentTimeMillis();
         result.setUsed(end - start);
         return result;
@@ -738,32 +749,16 @@ public class MongoClient implements Closeable {
     public MysqlQueryResults<MysqlExecuteResult> executeSql(String dbName, String sql) throws Exception {
         this.shellEngine().db(dbName);
         MysqlQueryResults<MysqlExecuteResult> results = new MysqlQueryResults<>();
-        DBSqlParser parser = DBSqlParser.getParser(sql, null);
-        List<String> sqlList = parser.parseSql();
-        for (String sql1 : sqlList) {
-            MysqlExecuteResult result = new MysqlExecuteResult();
-            long start = System.currentTimeMillis();
-            try {
-                result.setSql(sql1);
-                Object obj = this.shellEngine().eval(sql1);
-                if (obj instanceof ShellFindCursor cursor) {
-                    result.parseResult(cursor.toArray());
-                } else if (obj instanceof Document document) {
-                    MongoRecord record = MongoRecordUtil.docToRecord(dbName, null, document);
-                    if (record != null) {
-                        result.parseResult(List.of(record));
-                    }
-                }
-                result.setMsg("ok");
-                result.setSuccess(true);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                result.setSuccess(false);
-                result.setMsg(ex.getMessage());
+        try {
+            DBSqlParser parser = DBSqlParser.getParser(sql, null);
+            List<String> sqlList = parser.parseSql();
+            for (String sql1 : sqlList) {
+                MysqlExecuteResult result = this.executeSingleSql(dbName, sql1);
+                results.addResult(result);
             }
-            long end = System.currentTimeMillis();
-            result.setUsed(end - start);
-            results.addResult(result);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            results.parseError(ex);
         }
         return results;
     }

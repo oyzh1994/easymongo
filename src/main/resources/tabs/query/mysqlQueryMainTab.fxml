@@ -25,11 +25,11 @@
                 <Insets left="10" top="10"/>
             </HBox.margin>
         </RunSVGGlyph>
-        <ExplainSVGGlyph onMousePrimaryClicked="#explain" size="14">
-            <HBox.margin>
-                <Insets left="10" top="10"/>
-            </HBox.margin>
-        </ExplainSVGGlyph>
+        <!-- <ExplainSVGGlyph onMousePrimaryClicked="#explain" size="14"> -->
+        <!--     <HBox.margin> -->
+        <!--         <Insets left="10" top="10"/> -->
+        <!--     </HBox.margin> -->
+        <!-- </ExplainSVGGlyph> -->
     </FXHBox>
     <MysqlQueryEditor fontSize="12" fx:id="queryArea" flexHeight="100% - 35" flexWidth="100%"
                       onKeyPressed="#queryKeyPressed"/>
