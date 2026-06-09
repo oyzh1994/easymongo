@@ -23,7 +23,7 @@ public class MysqlQueryInfoTabController extends RichTabController {
         this.infoArea.clear();
         if (results.isSuccess()) {
             for (MysqlQueryResult result : results.getResults()) {
-                this.infoArea.appendLine(result.getSql());
+                this.infoArea.appendLine(result.getScript());
                 if (result.isSuccess()) {
                     if (result.getUpdateCount() > 0) {
                         this.infoArea.appendLine("> Affected rows: " + result.getUpdateCount());

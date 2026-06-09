@@ -103,7 +103,7 @@ public class MysqlQueryMainTabController extends RichTabController {
             this.unsaved = true;
             this.flushTab();
         });
-        MysqlQueryUtil.updateIndex(dbItem.client(),this.dbItem.dbName());
+        MysqlQueryUtil.updateIndex(dbItem.client(), this.dbItem.dbName());
     }
 
     @Override
@@ -184,7 +184,7 @@ public class MysqlQueryMainTabController extends RichTabController {
                 int index = 1;
                 this.initInfoTab(results);
                 for (MysqlExecuteResult result : results.getResults()) {
-                    if (result.isSuccess()) {
+                    if (result.isSuccess() && result.getRecords() != null) {
                         FXTab fxTab = this.initSelectTab(result, I18nHelper.result() + index++);
                         showType = 2;
                         this.resultTabPane.addTab(fxTab);
@@ -204,41 +204,41 @@ public class MysqlQueryMainTabController extends RichTabController {
         }
     }
 
-//    /**
-//     * 解释
-//     */
-//    @FXML
-//    private void explain() {
-//        try {
-//            String sql = this.queryArea.getTextTrim();
-//            this.resultTabPane.disable();
-//            MysqlQueryResults<MysqlExplainResult> results = this.dbItem.explainSql(sql);
-//            this.clearTabs();
-//            int showType = 1;
-//            this.initInfoTab(results);
-//            if (!results.isEmpty()) {
-//                int index = 1;
-//                this.initInfoTab(results);
-//                for (MysqlExplainResult result : results.getResults()) {
-//                    if (result.isSuccess()) {
-//                        FXTab fxTab = this.initExplainTab(result, I18nHelper.explain() + index++);
-//                        showType = 2;
-//                        this.resultTabPane.addTab(fxTab);
-//                    }
-//                }
-//                if (showType == 2) {
-//                    this.resultTabPane.select(1);
-//                } else {
-//                    this.resultTabPane.selectFirst();
-//                }
-//            }
-//            this.showNode(showType);
-//        } catch (Exception ex) {
-//            MessageBox.exception(ex);
-//        } finally {
-//            this.resultTabPane.enable();
-//        }
-//    }
+    //    /**
+    //     * 解释
+    //     */
+    //    @FXML
+    //    private void explain() {
+    //        try {
+    //            String sql = this.queryArea.getTextTrim();
+    //            this.resultTabPane.disable();
+    //            MysqlQueryResults<MysqlExplainResult> results = this.dbItem.explainSql(sql);
+    //            this.clearTabs();
+    //            int showType = 1;
+    //            this.initInfoTab(results);
+    //            if (!results.isEmpty()) {
+    //                int index = 1;
+    //                this.initInfoTab(results);
+    //                for (MysqlExplainResult result : results.getResults()) {
+    //                    if (result.isSuccess()) {
+    //                        FXTab fxTab = this.initExplainTab(result, I18nHelper.explain() + index++);
+    //                        showType = 2;
+    //                        this.resultTabPane.addTab(fxTab);
+    //                    }
+    //                }
+    //                if (showType == 2) {
+    //                    this.resultTabPane.select(1);
+    //                } else {
+    //                    this.resultTabPane.selectFirst();
+    //                }
+    //            }
+    //            this.showNode(showType);
+    //        } catch (Exception ex) {
+    //            MessageBox.exception(ex);
+    //        } finally {
+    //            this.resultTabPane.enable();
+    //        }
+    //    }
 
     /**
      * 初始化信息tab组件
@@ -264,20 +264,20 @@ public class MysqlQueryMainTabController extends RichTabController {
         return selectTab;
     }
 
-//    /**
-//     * 初始化解释tab组件
-//     *
-//     * @param result 结果
-//     * @param title  标题
-//     * @return tab组件
-//     */
-//    private MysqlQueryExplainTab initExplainTab(MysqlExplainResult result, String title) {
-//        MysqlQueryExplainTab selectTab = new MysqlQueryExplainTab();
-//        selectTab.init(title, result);
-//        selectTab.setId("explainTab");
-//        selectTab.setProp("result", result);
-//        return selectTab;
-//    }
+    //    /**
+    //     * 初始化解释tab组件
+    //     *
+    //     * @param result 结果
+    //     * @param title  标题
+    //     * @return tab组件
+    //     */
+    //    private MysqlQueryExplainTab initExplainTab(MysqlExplainResult result, String title) {
+    //        MysqlQueryExplainTab selectTab = new MysqlQueryExplainTab();
+    //        selectTab.init(title, result);
+    //        selectTab.setId("explainTab");
+    //        selectTab.setProp("result", result);
+    //        return selectTab;
+    //    }
 
     /**
      * 保存查询

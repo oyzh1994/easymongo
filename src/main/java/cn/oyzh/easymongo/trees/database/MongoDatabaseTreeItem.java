@@ -245,17 +245,17 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         this.client().clearBucket(this.dbName(), bucketName);
     }
 
-    public MysqlExecuteResult executeSingleSql(String sql) throws Exception {
-        return this.client().executeSingleSql(this.dbName(), sql);
+    public MysqlExecuteResult executeSingleScript(String script) throws Exception {
+        return this.client().executeSingleScript(this.dbName(), script);
     }
 
-    public MysqlQueryResults<MysqlExecuteResult> executeScript(String sql) throws Exception {
-        return this.client().executeScript(this.dbName(), sql);
+    public MysqlQueryResults<MysqlExecuteResult> executeScript(String script) {
+        return this.client().executeScript(this.dbName(), script);
     }
 
-//    public MysqlQueryResults<MysqlExplainResult> explainSql(String sql) {
-//        return null;
-//    }
+    //    public MysqlQueryResults<MysqlExplainResult> explainSql(String sql) {
+    //        return null;
+    //    }
 
     public long deleteCollectionRecord(MongoRecord record) {
         return this.client().deleteCollectionRecord(record);

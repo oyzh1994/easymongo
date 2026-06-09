@@ -16,9 +16,9 @@ import java.util.List;
 public abstract class MysqlQueryResult {
 
     /**
-     * sql
+     * 脚本
      */
-    protected String sql;
+    protected String script;
 
     /**
      * 耗时，微妙
@@ -33,7 +33,7 @@ public abstract class MysqlQueryResult {
     /**
      * 变更总数
      */
-    protected int updateCount;
+    protected long updateCount;
 
     /**
      * 是否成功
@@ -117,12 +117,12 @@ public abstract class MysqlQueryResult {
         return this.columns;
     }
 
-    public String getSql() {
-        return sql;
+    public String getScript() {
+        return script;
     }
 
-    public void setSql(String sql) {
-        this.sql = sql;
+    public void setScript(String script) {
+        this.script = script;
     }
 
     public long getUsed() {
@@ -141,11 +141,11 @@ public abstract class MysqlQueryResult {
         this.msg = msg;
     }
 
-    public int getUpdateCount() {
+    public long getUpdateCount() {
         return updateCount;
     }
 
-    public void setUpdateCount(int updateCount) {
+    public void setUpdateCount(long updateCount) {
         this.updateCount = updateCount;
     }
 

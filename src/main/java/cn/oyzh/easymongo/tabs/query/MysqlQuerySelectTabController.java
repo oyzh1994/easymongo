@@ -46,10 +46,10 @@ public class MysqlQuerySelectTabController extends RichTabController {
     private FXVBox root;
 
     /**
-     * sql组件
+     * 脚本组件
      */
     @FXML
-    private FXText sql;
+    private FXText script;
 
     /**
      * 耗时组件
@@ -148,6 +148,9 @@ public class MysqlQuerySelectTabController extends RichTabController {
      * 初始化数据列表
      */
     private void initDataList() {
+        if (this.result == null || this.result.getRecords() == null) {
+            return;
+        }
         try {
             List<MongoRecord> records = this.result.getRecords();
             // 更新字段
@@ -156,8 +159,8 @@ public class MysqlQuerySelectTabController extends RichTabController {
             this.initRecords(records);
             // 纠正记录
             this.correctRecords();
-            // 初始化sql信息
-            this.sql.text(this.result.getSql());
+            // 初始化脚本信息
+            this.script.text(this.result.getScript());
             this.used.text(I18nHelper.time() + ": " + this.result.getUsedMs() + "ms");
             // 初始化计数
             this.initCount(this.result.getCount());
@@ -170,7 +173,7 @@ public class MysqlQuerySelectTabController extends RichTabController {
      * 初始化数据列表，带遮罩板
      */
     private void initDataListByMask() {
-        StageManager.showMask(() -> this.initDataList());
+        StageManager.showMask(this::initDataList);
     }
 
     /**
@@ -388,7 +391,7 @@ public class MysqlQuerySelectTabController extends RichTabController {
                 return;
             }
             // 执行查询
-            this.result = this.dbItem.executeSingleSql(this.result.getSql());
+            this.result = this.dbItem.executeSingleScript(this.result.getScript());
             // 初始化数据
             this.initDataListByMask();
             // 禁用组件

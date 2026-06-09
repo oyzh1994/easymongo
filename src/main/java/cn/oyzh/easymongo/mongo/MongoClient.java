@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.date.DateHelper;
+import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.NumberUtil;
@@ -9,7 +10,7 @@ import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
 import cn.oyzh.easymongo.query.MysqlExecuteResult;
 import cn.oyzh.easymongo.query.MysqlQueryResults;
-import cn.oyzh.easymongo.shell.DBSqlParser;
+import cn.oyzh.easymongo.shell.MongoScriptParser;
 import cn.oyzh.easymongo.shell.ShellCursor;
 import cn.oyzh.easymongo.shell.ShellEngine;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
@@ -718,13 +719,20 @@ public class MongoClient implements Closeable {
         return this.shellConnect;
     }
 
-    public MysqlExecuteResult executeSingleSql(String dbName, String sql) throws Exception {
+    /**
+     * 执行单段脚本
+     *
+     * @param dbName 数据库名称
+     * @param script 脚本
+     * @return 结果
+     */
+    public MysqlExecuteResult executeSingleScript(String dbName, String script) {
         this.shellEngine().db(dbName);
         MysqlExecuteResult result = new MysqlExecuteResult();
-        result.setSql(sql);
+        result.setScript(script);
         long start = System.currentTimeMillis();
         try {
-            Object obj = this.shellEngine().eval(sql);
+            Object obj = this.shellEngine().eval(script);
             this.parseResult(result, obj, dbName);
         } catch (ScriptException ex) {
             ex.printStackTrace();
@@ -751,13 +759,32 @@ public class MongoClient implements Closeable {
             result.setSuccess(true);
             List<MongoRecord> records = new ArrayList<>();
             for (Object o : list) {
-                records.add(toMongoRecord(o, dbName));
+                MongoRecord record = toMongoRecord(o, dbName);
+                if (record != null) {
+                    records.add(record);
+                }
             }
             result.parseResult(records);
+        } else if (obj instanceof DeleteResult result1) {
+            result.setSuccess(true);
+            result.setUpdateCount(result1.getDeletedCount());
+        } else if (obj instanceof InsertOneResult result1) {
+            result.setSuccess(true);
+            if (result1.getInsertedId() != null) {
+                result.setUpdateCount(1);
+            }
+        } else if (obj instanceof InsertManyResult result1) {
+            result.setSuccess(true);
+            result.setUpdateCount(result1.getInsertedIds().size());
+        } else if (obj instanceof UpdateResult result1) {
+            result.setSuccess(true);
+            result.setUpdateCount(result1.getModifiedCount());
         } else {
             result.setSuccess(true);
             MongoRecord record = toMongoRecord(obj, dbName);
-            result.parseResult(List.of(record));
+            if (record != null) {
+                result.parseResult(List.of(record));
+            }
         }
     }
 
@@ -771,12 +798,15 @@ public class MongoClient implements Closeable {
         if (obj instanceof Document document) {
             return MongoRecordUtil.docToRecord(dbName, null, document);
         }
-        MongoColumns columns = new MongoColumns();
-        MongoColumn column = new MongoColumn(I18nHelper.result());
-        columns.add(column);
-        MongoRecord record = new MongoRecord(columns);
-        record.putValue(column, obj.toString());
-        return record;
+        if (obj != null) {
+            MongoColumns columns = new MongoColumns();
+            MongoColumn column = new MongoColumn(I18nHelper.result());
+            columns.add(column);
+            MongoRecord record = new MongoRecord(columns);
+            record.putValue(column, JSONUtil.toJson(obj));
+            return record;
+        }
+        return null;
     }
 
     /**
@@ -790,10 +820,10 @@ public class MongoClient implements Closeable {
         this.shellEngine().db(dbName);
         MysqlQueryResults<MysqlExecuteResult> results = new MysqlQueryResults<>();
         try {
-            DBSqlParser parser = DBSqlParser.getParser(script, null);
-            List<String> sqlList = parser.parseSql();
+            MongoScriptParser parser = MongoScriptParser.getParser(script);
+            List<String> sqlList = parser.parseScript();
             for (String sql1 : sqlList) {
-                MysqlExecuteResult result = this.executeSingleSql(dbName, sql1);
+                MysqlExecuteResult result = this.executeSingleScript(dbName, sql1);
                 results.addResult(result);
             }
         } catch (Exception ex) {

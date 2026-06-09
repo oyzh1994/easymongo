@@ -3,10 +3,15 @@ package cn.oyzh.easymongo.shell;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class ShellMongoCollection {
@@ -27,9 +32,9 @@ public class ShellMongoCollection {
         return this.find(null);
     }
 
-    public ShellFindCursor find(Object query) {
+    public ShellFindCursor find(Object doc) {
         Document filter;
-        if (query instanceof Map map) {
+        if (doc instanceof Map map) {
             filter = new Document(map);
         } else {
             filter = new Document();
@@ -49,6 +54,22 @@ public class ShellMongoCollection {
         return null;
     }
 
+    public InsertManyResult insertMany(Object doc) {
+        if (doc instanceof ScriptObjectMirror mirror) {
+            return this.insertMany(mirror.values());
+        }
+        if (doc instanceof Collection collection) {
+            List<Document> list = new ArrayList<>();
+            for (Object o : collection) {
+                if (o instanceof Map map) {
+                    list.add(new Document(map));
+                }
+            }
+            return this.collection.insertMany(list);
+        }
+        return null;
+    }
+
     public DeleteResult delete(Object doc) {
         return this.deleteOne(doc);
     }
@@ -58,6 +79,20 @@ public class ShellMongoCollection {
             return this.collection.deleteOne(new Document(map));
         }
         return null;
+    }
+
+    public DeleteResult deleteMany() {
+        return this.deleteMany(null);
+    }
+
+    public DeleteResult deleteMany(Object doc) {
+        Document filter;
+        if (doc instanceof Map map) {
+            filter = new Document(map);
+        } else {
+            filter = new Document();
+        }
+        return this.collection.deleteMany(filter);
     }
 
     public UpdateResult update(Object filter, Object doc) {

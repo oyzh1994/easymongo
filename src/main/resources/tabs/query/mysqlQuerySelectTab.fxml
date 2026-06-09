@@ -44,7 +44,7 @@
                 <Insets left="10" top="10"/>
             </HBox.margin>
         </RefreshSVGGlyph>
-        <FXText fx:id="sql">
+        <FXText fx:id="script">
             <HBox.margin>
                 <Insets left="10" top="10"/>
             </HBox.margin>
