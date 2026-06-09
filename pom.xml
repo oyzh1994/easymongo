@@ -13,7 +13,7 @@
     <name>EasyMongo</name>
     <groupId>cn.oyzh</groupId>
     <artifactId>easymongo</artifactId>
-    <version>0.4.1</version>
+    <version>0.5.0</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

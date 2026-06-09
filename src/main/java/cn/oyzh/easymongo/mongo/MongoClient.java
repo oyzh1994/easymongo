@@ -7,7 +7,11 @@ import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
+import cn.oyzh.easymongo.query.MysqlExecuteResult;
+import cn.oyzh.easymongo.query.MysqlQueryResults;
+import cn.oyzh.easymongo.shell.DBSqlParser;
 import cn.oyzh.easymongo.shell.ShellEngine;
+import cn.oyzh.easymongo.shell.ShellFindCursor;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
@@ -48,7 +52,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -125,13 +128,18 @@ public class MongoClient implements Closeable {
 
     private com.mongodb.client.MongoClient mongoClient;
 
+    private ShellEngine engine;
+
     /**
      * 创建shell引擎
      *
      * @return 结果
      */
-    public ShellEngine createShellEngine() {
-        return new ShellEngine(this.mongoClient);
+    public ShellEngine shellEngine() {
+        if (this.engine == null) {
+            this.engine = new ShellEngine(this.mongoClient);
+        }
+        return this.engine;
     }
 
     /**
@@ -283,26 +291,26 @@ public class MongoClient implements Closeable {
             int limit = Math.toIntExact(param.getLimit());
             iterable = iterable.limit(limit);
         }
-        List<MongoRecord> records = new ArrayList<>();
-        for (Document document : iterable) {
-            Set<String> cols = document.keySet();
-            if (!cols.isEmpty()) {
-                MongoColumns columns = new MongoColumns();
-                MongoRecord record = new MongoRecord(columns);
-                for (String col : cols) {
-                    Object val = document.get(col);
-                    MongoColumn column = new MongoColumn();
-                    column.setName(col);
-                    column.setDbName(dbName);
-                    column.setCollectionName(collectionName);
-                    column.setType(MongoUtil.getType(val));
-                    columns.add(column);
-                    record.putValue(column, val);
-                }
-                records.add(record);
-            }
-        }
-        return records;
+        //        List<MongoRecord> records = new ArrayList<>();
+        //        for (Document document : iterable) {
+        //            Set<String> cols = document.keySet();
+        //            if (!cols.isEmpty()) {
+        //                MongoColumns columns = new MongoColumns();
+        //                MongoRecord record = new MongoRecord(columns);
+        //                for (String col : cols) {
+        //                    Object val = document.get(col);
+        //                    MongoColumn column = new MongoColumn();
+        //                    column.setName(col);
+        //                    column.setDbName(dbName);
+        //                    column.setCollectionName(collectionName);
+        //                    column.setType(MongoUtil.getType(val));
+        //                    columns.add(column);
+        //                    record.putValue(column, val);
+        //                }
+        //                records.add(record);
+        //            }
+        //        }
+        return MongoRecordUtil.docToRecord(dbName, collectionName, iterable);
     }
 
     /**
@@ -707,5 +715,56 @@ public class MongoClient implements Closeable {
 
     public MongoConnect getShellConnect() {
         return this.shellConnect;
+    }
+
+    public MysqlExecuteResult executeSingleSql(String dbName, String sql) throws Exception {
+        MysqlExecuteResult result = new MysqlExecuteResult();
+        result.setSql(sql);
+        long start = System.currentTimeMillis();
+        Object obj = this.shellEngine().eval(sql);
+        if (obj instanceof ShellFindCursor cursor) {
+            result.parseResult(cursor.toArray());
+        } else if (obj instanceof Document document) {
+            MongoRecord record = MongoRecordUtil.docToRecord(dbName, null, document);
+            if (record != null) {
+                result.parseResult(List.of(record));
+            }
+        }
+        long end = System.currentTimeMillis();
+        result.setUsed(end - start);
+        return result;
+    }
+
+    public MysqlQueryResults<MysqlExecuteResult> executeSql(String dbName, String sql) throws Exception {
+        this.shellEngine().db(dbName);
+        MysqlQueryResults<MysqlExecuteResult> results = new MysqlQueryResults<>();
+        DBSqlParser parser = DBSqlParser.getParser(sql, null);
+        List<String> sqlList = parser.parseSql();
+        for (String sql1 : sqlList) {
+            MysqlExecuteResult result = new MysqlExecuteResult();
+            long start = System.currentTimeMillis();
+            try {
+                result.setSql(sql1);
+                Object obj = this.shellEngine().eval(sql1);
+                if (obj instanceof ShellFindCursor cursor) {
+                    result.parseResult(cursor.toArray());
+                } else if (obj instanceof Document document) {
+                    MongoRecord record = MongoRecordUtil.docToRecord(dbName, null, document);
+                    if (record != null) {
+                        result.parseResult(List.of(record));
+                    }
+                }
+                result.setMsg("ok");
+                result.setSuccess(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                result.setSuccess(false);
+                result.setMsg(ex.getMessage());
+            }
+            long end = System.currentTimeMillis();
+            result.setUsed(end - start);
+            results.addResult(result);
+        }
+        return results;
     }
 }

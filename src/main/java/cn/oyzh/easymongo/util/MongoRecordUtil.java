@@ -20,6 +20,7 @@ import cn.oyzh.fx.plus.font.FontUtil;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.fx.plus.util.ControlUtil;
 import com.alibaba.fastjson2.JSONObject;
+import com.mongodb.client.FindIterable;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
@@ -30,11 +31,13 @@ import org.bson.BsonDbPointer;
 import org.bson.BsonNull;
 import org.bson.BsonObjectId;
 import org.bson.BsonValue;
+import org.bson.Document;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author oyzh
@@ -302,4 +305,52 @@ public class MongoRecordUtil {
         }
         return columns;
     }
+
+    /**
+     * 文档转为记录
+     *
+     * @param dbName         数据库名称
+     * @param collectionName 集合名称
+     * @param iterable       迭代器
+     * @return 结果
+     */
+    public static List<MongoRecord> docToRecord(String dbName, String collectionName, FindIterable<Document> iterable) {
+        List<MongoRecord> records = new ArrayList<>();
+        for (Document document : iterable) {
+            MongoRecord record = docToRecord(dbName, collectionName, document);
+            if (record != null) {
+                records.add(record);
+            }
+        }
+        return records;
+    }
+
+    /**
+     * 文档转为记录
+     *
+     * @param dbName         数据库名称
+     * @param collectionName 集合名称
+     * @param document       文档
+     * @return 结果
+     */
+    public static MongoRecord docToRecord(String dbName, String collectionName, Document document) {
+        Set<String> cols = document.keySet();
+        if (!cols.isEmpty()) {
+            MongoColumns columns = new MongoColumns();
+            MongoRecord record = new MongoRecord(columns);
+            for (String col : cols) {
+                Object val = document.get(col);
+                MongoColumn column = new MongoColumn();
+                column.setName(col);
+                column.setDbName(dbName);
+                column.setCollectionName(collectionName);
+                column.setType(MongoUtil.getType(val));
+                columns.add(column);
+                record.putValue(column, val);
+            }
+            return record;
+        }
+        return null;
+    }
+
 }

@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * db工具类
@@ -113,6 +114,44 @@ public class MongoUtil {
      */
     public static boolean isJsonType(Object val) {
         return StringUtil.equalsIgnoreCase(getType(val), "list");
+    }
 
+    /**
+     * 移除注释
+     *
+     * @param sql sql
+     * @return 结果
+     */
+    public static String removeComment(String sql) {
+        StringBuilder builder = new StringBuilder();
+        AtomicBoolean commentFlag = new AtomicBoolean(false);
+        sql.lines().forEach(line -> {
+            // 单行注释1
+            if (line.stripLeading().startsWith("-- ")) {
+                return;
+            }
+            // 单行注释2
+            if (line.stripLeading().startsWith("#")) {
+                return;
+            }
+            // 单行注释3
+            if (line.stripLeading().startsWith("//")) {
+                return;
+            }
+            // 多行注释开始
+            if (line.stripLeading().startsWith("/*")) {
+                commentFlag.set(true);
+            }
+            // 多行注释结束
+            if (line.stripTrailing().endsWith("*/")) {
+                commentFlag.set(false);
+                return;
+            }
+            // 正常行
+            if (!commentFlag.get() && StringUtil.isNotBlank(line)) {
+                builder.append(line).append("\n");
+            }
+        });
+        return builder.toString();
     }
 }

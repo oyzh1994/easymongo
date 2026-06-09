@@ -20,23 +20,23 @@ public class ShellCursor {
 
     public String pretty() {
         List list = new ArrayList<>();
-        cursor.forEach(list::add);
+        this.cursor.forEach(list::add);
         return JSONUtil.toPretty(list);
     }
 
     public List<?> toArray() {
-        if (cursor.first() instanceof Document) {
+        if (this.cursor.first() instanceof Document) {
             List<Map<String, Object>> list = new ArrayList<>();
-            for (Object doc : cursor) {
+            for (Object doc : this.cursor) {
                 Document d = (Document) doc;
-                list.add(new LinkedHashMap<>(d)); // 转为 Map 以便 JS 打印
+                list.add(new LinkedHashMap<>(d));
             }
             return list;
         }
 
-        if (cursor.first() instanceof String) {
+        if (this.cursor.first() instanceof String) {
             List list = new ArrayList<>();
-            cursor.forEach(list::add);
+            this.cursor.forEach(list::add);
             return list;
         }
         return Collections.emptyList();
@@ -44,7 +44,6 @@ public class ShellCursor {
 
     @Override
     public String toString() {
-        // 默认调用 toArray() 并打印
-        return JSONUtil.toJson(this.toArray());
+        return this.pretty();
     }
 }

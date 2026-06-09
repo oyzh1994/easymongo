@@ -7,10 +7,14 @@ import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoDatabase;
+import cn.oyzh.easymongo.mongo.MongoRecord;
+import cn.oyzh.easymongo.query.MysqlExecuteResult;
+import cn.oyzh.easymongo.query.MysqlExplainResult;
+import cn.oyzh.easymongo.query.MysqlQueryResults;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
+import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
-import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
 import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
@@ -24,6 +28,7 @@ import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
+import org.bson.BsonValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,5 +244,29 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
 
     public void clearBucket(String bucketName) {
         this.client().clearBucket(this.dbName(), bucketName);
+    }
+
+    public MysqlExecuteResult executeSingleSql(String sql) throws Exception {
+        return this.client().executeSingleSql(this.dbName(), sql);
+    }
+
+    public MysqlQueryResults<MysqlExecuteResult> executeSql(String sql) throws Exception {
+        return this.client().executeSql(this.dbName(), sql);
+    }
+
+    public MysqlQueryResults<MysqlExplainResult> explainSql(String sql) {
+        return null;
+    }
+
+    public long deleteCollectionRecord(MongoRecord record) {
+        return this.client().deleteCollectionRecord(record);
+    }
+
+    public long updateCollectionRecord(MongoRecord record) {
+        return this.client().updateCollectionRecord(record);
+    }
+
+    public BsonValue insertCollectionRecord(MongoRecord record) {
+        return this.client().insertCollectionRecord(record);
     }
 }

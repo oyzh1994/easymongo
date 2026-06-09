@@ -1,10 +1,13 @@
 package cn.oyzh.easymongo.tabs;
 
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
+import cn.oyzh.easymongo.event.query.MongoQueryAddEvent;
 import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
+import cn.oyzh.easymongo.tabs.query.MysqlQueryMainTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.EventSubscribe;
 import cn.oyzh.fx.gui.tabs.RichTabPane;
@@ -764,5 +767,23 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         this.select(tab);
         // 初始化节点
         tab.init(event.data());
+    }
+
+    /**
+     * 查询新增事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onMysqlQueryAdd(MongoQueryAddEvent event) {
+        try {
+            MysqlQueryMainTab tab = new MysqlQueryMainTab();
+            this.addTab(tab);
+            this.select(tab);
+            MongoQuery query = new MongoQuery();
+            tab.init(query, event.data());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

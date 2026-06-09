@@ -58,7 +58,7 @@ public abstract class DBDataRunSqlFileHandler extends DBDataHandler {
     public DBDataRunSqlFileHandler(MongoClient dbClient, String dbName) {
         this.dbClient = dbClient;
         this.dbName = dbName;
-        this.engine = dbClient.createShellEngine();
+        this.engine = dbClient.shellEngine();
         this.engine.db(this.dbName);
     }
 

@@ -68,6 +68,7 @@ public class ShellEngine {
         // 注入包装后的 db 对象
         MongoDatabase database = this.mongoClient.getDatabase(dbName);
         this.bindings.put("db", new ShellMongoDatabase(database));
+        this.engine.put("dbName", dbName);
     }
 
     public Object eval(String script) throws ScriptException {

@@ -20,7 +20,7 @@ public class ShellMongoDatabase {
 
     public ShellMongoCollection getCollection(String name) {
         MongoCollection<Document> collection = this.database.getCollection(name);
-        return new ShellMongoCollection(collection);
+        return new ShellMongoCollection(this.getName(), name, collection);
     }
 
     public ShellMongoDatabase createCollection(String name) {

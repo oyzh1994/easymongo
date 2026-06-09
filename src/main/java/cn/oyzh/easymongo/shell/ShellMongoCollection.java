@@ -11,9 +11,15 @@ import java.util.Map;
 
 public class ShellMongoCollection {
 
+    private final String dbName;
+
+    private final String collectionName;
+
     private final MongoCollection<Document> collection;
 
-    public ShellMongoCollection(MongoCollection<Document> collection) {
+    public ShellMongoCollection(String dbName, String collectionName, MongoCollection<Document> collection) {
+        this.dbName = dbName;
+        this.collectionName = collectionName;
         this.collection = collection;
     }
 
@@ -29,7 +35,7 @@ public class ShellMongoCollection {
             filter = new Document();
         }
         FindIterable<Document> iter = this.collection.find(filter);
-        return new ShellFindCursor(iter);
+        return new ShellFindCursor(this.dbName, this.collectionName, iter);
     }
 
     public InsertOneResult insert(Object doc) {

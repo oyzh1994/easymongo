@@ -122,6 +122,16 @@ public class ShellTest {
     }
 
     @Test
+    public void find_2() throws ScriptException {
+        // 初始化 GraalVM JS 环境
+        ScriptEngine engine = initJs();
+        //String cmd = "db.getCollection('test').find({'a':1})";
+        String cmd = "db.getCollection('test').find().explain()";
+        Object result = engine.eval(cmd);
+        printResult(result);
+    }
+
+    @Test
     public void insert() throws ScriptException {
         // 初始化 GraalVM JS 环境
         ScriptEngine engine = initJs();
