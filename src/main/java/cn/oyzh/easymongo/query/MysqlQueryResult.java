@@ -57,7 +57,7 @@ public abstract class MysqlQueryResult {
         return this.columns == null || this.columns.isEmpty();
     }
 
-    public void parseResult(List<MongoRecord> records) throws Exception{
+    public void parseResult(List<MongoRecord> records) {
         this.records = records;
         this.columns = MongoRecordUtil.columns(records);
     }

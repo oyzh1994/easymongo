@@ -32,8 +32,8 @@ public class ShellFindCursor extends ShellCursor {
        return this.cursor.explain();
     }
 
-    @Override
-    public List<MongoRecord> toArray() {
-        return MongoRecordUtil.docToRecord(this.dbName, this.collectionName, this.cursor);
-    }
+//    @Override
+//    public List<MongoRecord> toArray() {
+//        return MongoRecordUtil.docToRecord(this.dbName, this.collectionName, this.cursor);
+//    }
 }

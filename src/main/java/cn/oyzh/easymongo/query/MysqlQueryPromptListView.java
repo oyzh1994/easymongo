@@ -163,36 +163,17 @@ public class MysqlQueryPromptListView extends FXListView<FXHBox> {
      */
     private SVGLabel initPromptLabel(MysqlQueryPromptItem item) {
         SVGLabel label = null;
-        if (item.isDatabaseType()) {
-            DatabaseSVGGlyph svgGlyph = new DatabaseSVGGlyph("12");
-            svgGlyph.setColor(Color.BLACK);
-            label = new SVGLabel(item.getContent(), svgGlyph);
-        } else if (item.isKeywordType()) {
+         if (item.isKeywordType()) {
             KeywordsSVGGlyph svgGlyph = new KeywordsSVGGlyph("12");
             svgGlyph.setColor(Color.BLACK);
             label = new SVGLabel(item.getContent(), svgGlyph);
-        } else if (item.isTableType()) {
+        } else if (item.isCollectionType()) {
             SVGGlyph svgGlyph = new TableSVGGlyph("12");
-            svgGlyph.setColor(Color.BLACK);
-            label = new SVGLabel(item.getContent(), svgGlyph);
-            label.setRealWidth(240);
-        } else if (item.isColumnType()) {
-            SVGGlyph svgGlyph = new ColumnSVGGlyph("12");
-            svgGlyph.setColor(Color.BLACK);
-            label = new SVGLabel(item.getContent(), svgGlyph);
-            label.setRealWidth(240);
-        } else if (item.isViewType()) {
-            ViewSVGGlyph svgGlyph = new ViewSVGGlyph("12");
             svgGlyph.setColor(Color.BLACK);
             label = new SVGLabel(item.getContent(), svgGlyph);
             label.setRealWidth(240);
         } else if (item.isFunctionType()) {
             FunctionSVGGlyph svgGlyph = new FunctionSVGGlyph("12");
-            svgGlyph.setColor(Color.BLACK);
-            label = new SVGLabel(item.getContent(), svgGlyph);
-            label.setRealWidth(240);
-        } else if (item.isProcedureType()) {
-            ProcedureSVGGlyph svgGlyph = new ProcedureSVGGlyph("12");
             svgGlyph.setColor(Color.BLACK);
             label = new SVGLabel(item.getContent(), svgGlyph);
             label.setRealWidth(240);
@@ -211,7 +192,7 @@ public class MysqlQueryPromptListView extends FXListView<FXHBox> {
      */
     private FXLabel initExtLabel(MysqlQueryPromptItem item) {
         FXLabel label = null;
-        if (item.isTableType() || item.isViewType() || item.isColumnType()) {
+        if (item.isCollectionType()) {
             label = new FXLabel(item.getExtContent());
             label.setTextFill(Color.valueOf("#D3D3D3"));
         }

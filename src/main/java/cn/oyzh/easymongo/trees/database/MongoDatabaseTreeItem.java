@@ -249,8 +249,8 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         return this.client().executeSingleSql(this.dbName(), sql);
     }
 
-    public MysqlQueryResults<MysqlExecuteResult> executeSql(String sql) throws Exception {
-        return this.client().executeSql(this.dbName(), sql);
+    public MysqlQueryResults<MysqlExecuteResult> executeScript(String sql) throws Exception {
+        return this.client().executeScript(this.dbName(), sql);
     }
 
 //    public MysqlQueryResults<MysqlExplainResult> explainSql(String sql) {

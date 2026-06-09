@@ -10,8 +10,8 @@ import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
 import cn.oyzh.easymongo.query.MysqlExecuteResult;
 import cn.oyzh.easymongo.query.MysqlQueryResults;
 import cn.oyzh.easymongo.shell.DBSqlParser;
+import cn.oyzh.easymongo.shell.ShellCursor;
 import cn.oyzh.easymongo.shell.ShellEngine;
-import cn.oyzh.easymongo.shell.ShellFindCursor;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
@@ -725,16 +725,7 @@ public class MongoClient implements Closeable {
         long start = System.currentTimeMillis();
         try {
             Object obj = this.shellEngine().eval(sql);
-            if (obj instanceof ShellFindCursor cursor) {
-                result.setSuccess(true);
-                result.parseResult(cursor.toArray());
-            } else if (obj instanceof Document document) {
-                MongoRecord record = MongoRecordUtil.docToRecord(dbName, null, document);
-                if (record != null) {
-                    result.setSuccess(true);
-                    result.parseResult(List.of(record));
-                }
-            }
+            this.parseResult(result, obj, dbName);
         } catch (ScriptException ex) {
             ex.printStackTrace();
             result.setSuccess(false);
@@ -746,11 +737,60 @@ public class MongoClient implements Closeable {
         return result;
     }
 
-    public MysqlQueryResults<MysqlExecuteResult> executeSql(String dbName, String sql) throws Exception {
+    /**
+     * 解析结果
+     *
+     * @param result 结果
+     * @param obj    对象
+     * @param dbName 数据库名称
+     */
+    private void parseResult(MysqlExecuteResult result, Object obj, String dbName) {
+        if (obj instanceof ShellCursor cursor) {
+            parseResult(result, cursor.toArray(), dbName);
+        } else if (obj instanceof List<?> list) {
+            result.setSuccess(true);
+            List<MongoRecord> records = new ArrayList<>();
+            for (Object o : list) {
+                records.add(toMongoRecord(o, dbName));
+            }
+            result.parseResult(records);
+        } else {
+            result.setSuccess(true);
+            MongoRecord record = toMongoRecord(obj, dbName);
+            result.parseResult(List.of(record));
+        }
+    }
+
+    /**
+     * 转换为mongo记录
+     *
+     * @param obj    对象
+     * @param dbName 数据库名称
+     */
+    private MongoRecord toMongoRecord(Object obj, String dbName) {
+        if (obj instanceof Document document) {
+            return MongoRecordUtil.docToRecord(dbName, null, document);
+        }
+        MongoColumns columns = new MongoColumns();
+        MongoColumn column = new MongoColumn(I18nHelper.result());
+        columns.add(column);
+        MongoRecord record = new MongoRecord(columns);
+        record.putValue(column, obj.toString());
+        return record;
+    }
+
+    /**
+     * 执行脚本
+     *
+     * @param dbName 数据库名称
+     * @param script 脚本
+     * @return 结果
+     */
+    public MysqlQueryResults<MysqlExecuteResult> executeScript(String dbName, String script) {
         this.shellEngine().db(dbName);
         MysqlQueryResults<MysqlExecuteResult> results = new MysqlQueryResults<>();
         try {
-            DBSqlParser parser = DBSqlParser.getParser(sql, null);
+            DBSqlParser parser = DBSqlParser.getParser(script, null);
             List<String> sqlList = parser.parseSql();
             for (String sql1 : sqlList) {
                 MysqlExecuteResult result = this.executeSingleSql(dbName, sql1);

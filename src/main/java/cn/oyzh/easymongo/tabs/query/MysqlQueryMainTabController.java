@@ -5,6 +5,7 @@ import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.query.MysqlExecuteResult;
 import cn.oyzh.easymongo.query.MysqlQueryEditor;
 import cn.oyzh.easymongo.query.MysqlQueryResults;
+import cn.oyzh.easymongo.query.MysqlQueryUtil;
 import cn.oyzh.easymongo.store.MongoQueryStore;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.tabs.RichTabController;
@@ -102,6 +103,7 @@ public class MysqlQueryMainTabController extends RichTabController {
             this.unsaved = true;
             this.flushTab();
         });
+        MysqlQueryUtil.updateIndex(dbItem.client(),this.dbItem.dbName());
     }
 
     @Override
@@ -174,7 +176,7 @@ public class MysqlQueryMainTabController extends RichTabController {
     private void doRun(String sql) {
         try {
             this.resultTabPane.disable();
-            MysqlQueryResults<MysqlExecuteResult> results = this.dbItem.executeSql(sql);
+            MysqlQueryResults<MysqlExecuteResult> results = this.dbItem.executeScript(sql);
             this.clearTabs();
             int showType = 1;
             this.initInfoTab(results);

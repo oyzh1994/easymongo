@@ -27,10 +27,7 @@ public class MysqlQueryToken {
     /**
      * 1 空格
      * 2 .
-     * 3 `
-     * 4 \n
-     * 5 ,
-     * 6 \0
+     * 3 "
      */
     private Character token;
 
@@ -43,31 +40,15 @@ public class MysqlQueryToken {
     }
 
     public boolean isPossibilityKeyword() {
-        return ' ' == this.token || '\n' == this.token || '\0' == this.token;
-    }
-
-    public boolean isPossibilityTable() {
-        return ' ' == this.token || '`' == this.token || ',' == this.token || '.' == this.token;
-    }
-
-    public boolean isPossibilityView() {
-        return ' ' == this.token || '`' == this.token || ',' == this.token || '.' == this.token;
+        return ' ' == this.token || '\n' == this.token;
     }
 
     public boolean isPossibilityFunction() {
-        return ' ' == this.token || '`' == this.token || ',' == this.token || '.' == this.token;
+        return '.' == this.token;
     }
 
-    public boolean isPossibilityProcedure() {
-        return ' ' == this.token || '`' == this.token || ',' == this.token || '.' == this.token;
-    }
-
-    public boolean isPossibilityColumn() {
-        return ' ' == this.token || '`' == this.token || ',' == this.token || '.' == this.token;
-    }
-
-    public boolean isPossibilityDatabase() {
-        return '`' == this.token || ' ' == this.token;
+    public boolean isPossibilityCollection() {
+        return '"' == this.token;
     }
 
     public int getEndIndex() {
