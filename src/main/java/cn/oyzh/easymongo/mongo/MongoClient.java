@@ -20,6 +20,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.ListCollectionNamesIterable;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoIterable;
@@ -197,7 +198,12 @@ public class MongoClient implements Closeable {
         return database1;
     }
 
-    public List<MongoDatabase> databases() {
+    /**
+     * 列举数据库
+     *
+     * @return 结果
+     */
+    public List<MongoDatabase> listDatabases() {
         List<MongoDatabase> databases = new ArrayList<>();
         ListDatabasesIterable<Document> documents = this.mongoClient.listDatabases();
         for (Document document : documents) {
@@ -211,6 +217,20 @@ public class MongoClient implements Closeable {
             databases.add(database);
         }
         return databases;
+    }
+
+    /**
+     * 列举数据库名称
+     *
+     * @return 结果
+     */
+    public List<String> listDatabaseNames() {
+        MongoIterable<String> iterable = this.mongoClient.listDatabaseNames();
+        List<String> list = new ArrayList<>();
+        for (String s : iterable) {
+            list.add(s);
+        }
+        return list;
     }
 
     private com.mongodb.client.MongoCollection<Document> collection(String dbName, String collectionName) {
@@ -267,6 +287,22 @@ public class MongoClient implements Closeable {
         }
         collections = collections.stream().sorted(Comparator.comparing(MongoCollection::getName)).toList();
         return collections;
+    }
+
+    /**
+     * 列举集合名称
+     *
+     * @param dbName 数据库名称
+     * @return 结果
+     */
+    public List<String> listCollectionNames(String dbName) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        ListCollectionNamesIterable iterable = database.listCollectionNames();
+        List<String> list = new ArrayList<>();
+        for (String s : iterable) {
+            list.add(s);
+        }
+        return list;
     }
 
     /**

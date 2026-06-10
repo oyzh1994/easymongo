@@ -2,16 +2,14 @@ package cn.oyzh.easymongo.terminal.basic;
 
 import cn.oyzh.easymongo.terminal.MongoTerminalCommandHandler;
 import cn.oyzh.easymongo.terminal.MongoTerminalPane;
-import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
 import cn.oyzh.fx.terminal.command.TerminalCommand;
 import cn.oyzh.fx.terminal.execute.TerminalExecuteResult;
-import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
  * @since 2023/09/20
  */
-public class MongoConnectTerminalCommandHandler extends MongoTerminalCommandHandler<TerminalCommand> {
+public class MongoShowCollectionsTerminalCommandHandler extends MongoTerminalCommandHandler<TerminalCommand> {
 
     @Override
     protected TerminalCommand parseCommand(String line, String[] args) {
@@ -23,32 +21,23 @@ public class MongoConnectTerminalCommandHandler extends MongoTerminalCommandHand
 
     @Override
     protected boolean checkArgs(String[] args) throws RuntimeException {
-        return args != null && args.length >= 2 && args.length <= 6;
+        return args != null && args.length == 2;
     }
 
     @Override
     public String commandName() {
-        return "connect";
+        return "show";
     }
 
     @Override
-    public String commandDesc() {
-        // return "开始连接";
-        return I18nResourceBundle.i18nString("base.startConnect");
+    public String commandSubName() {
+        return "collections";
     }
 
     @Override
     public TerminalExecuteResult execute(TerminalCommand command, MongoTerminalPane terminal) {
-        if (terminal.isTemporary()) {
-            if (terminal.isConnected()) {
-                terminal.getClient().close();
-            }
-            terminal.connect(command.getCommand());
-        } else {
-            terminal.outputByPrompt(I18nHelper.operationNotSupport());
-        }
         TerminalExecuteResult result = TerminalExecuteResult.ok();
-        result.setIgnoreOutput(true);
+        result.setResult(terminal.getClient().listCollectionNames(terminal.getDbName()));
         return result;
     }
 }

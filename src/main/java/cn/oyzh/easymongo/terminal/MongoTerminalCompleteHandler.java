@@ -83,6 +83,8 @@ public class MongoTerminalCompleteHandler extends BaseTerminalCompleteHandler<Mo
                     }
                 }
             }
+        } else {
+            list = super.findCommandHandlers(terminal, line);
         }
         return list;
     }

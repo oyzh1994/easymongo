@@ -21,9 +21,9 @@ public class ShellMysqlDatabaseComboBox extends FXComboBox<String> {
 
     public void init(MongoClient client, String dbName) {
         this.clearItems();
-        List<MongoDatabase> databases = client.databases();
+        List<String> databases = client.listDatabaseNames();
         if (CollectionUtil.isNotEmpty(databases)) {
-            this.setItem(databases.stream().map(MongoDatabase::getName).toList());
+            this.setItem(databases);
         }
         if (dbName != null) {
             this.select(dbName);

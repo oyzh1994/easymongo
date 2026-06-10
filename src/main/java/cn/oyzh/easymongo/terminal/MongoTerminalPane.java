@@ -9,22 +9,19 @@ import cn.oyzh.easymongo.dto.ShellZKConnectInfo;
 import cn.oyzh.easymongo.exception.MongoExceptionParser;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoConnState;
-import cn.oyzh.easymongo.mongo.MonogoHelper;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.util.MongoI18nHelper;
 import cn.oyzh.easymongo.util.ShellZKConnectUtil;
 import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
-import cn.oyzh.fx.terminal.Terminal;
 import cn.oyzh.fx.terminal.TerminalPane;
 import cn.oyzh.fx.terminal.command.TerminalCommand;
 import cn.oyzh.fx.terminal.command.TerminalCommandHandler;
 import cn.oyzh.fx.terminal.execute.TerminalExecuteResult;
+import cn.oyzh.fx.terminal.util.TerminalManager;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.text.Font;
-
-import java.util.List;
 
 /**
  * zk终端文本域
@@ -75,7 +72,7 @@ public class MongoTerminalPane extends TerminalPane {
     public void flushPrompt() {
         String str;
         if (this.isTemporary()) {
-            str = "zk" + I18nHelper.connect();
+            str = "mongo" + I18nHelper.connect();
         } else {
             str = this.client.connectName();
         }
@@ -122,6 +119,11 @@ public class MongoTerminalPane extends TerminalPane {
 
     public String getDbName() {
         return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+        this.client.shellEngine().db(dbName);
     }
 
     /**
@@ -332,34 +334,25 @@ public class MongoTerminalPane extends TerminalPane {
         return result;
     }
 
-
     @Override
     protected TerminalCommandHandler findHandler(String input) {
-        TerminalCommandHandler<?, ?> commandHandler = new TerminalCommandHandler<>() {
+        // 特殊命令
+        TerminalCommandHandler<?, ?> handler = TerminalManager.findHandler(MongoTerminalPane.TERMINAL_NAME, input);
+        if (handler == null) {
+            handler = new MongoTerminalCommandHandler<>() {
 
-            @Override
-            public TerminalExecuteResult execute(TerminalCommand command, Terminal terminal) {
-                String input = command.getCommand();
-                return eval(input);
-            }
+                @Override
+                public String commandName() {
+                    return "";
+                }
 
-            @Override
-            public boolean completion(String input, Terminal terminal) {
-                return false;
-            }
-
-            @Override
-            public TerminalCommand parseCommand(String input) throws Exception {
-                TerminalCommand command = new TerminalCommand();
-                command.setCommand(input);
-                return command;
-            }
-
-            @Override
-            public String commandName() {
-                return "";
-            }
-        };
-        return commandHandler;
+                @Override
+                public TerminalExecuteResult execute(TerminalCommand command, MongoTerminalPane terminal) {
+                    String input = command.getCommand();
+                    return terminal.eval(input);
+                }
+            };
+        }
+        return handler;
     }
 }

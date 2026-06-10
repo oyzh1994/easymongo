@@ -307,7 +307,7 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
 
     @Override
     public void loadChild() {
-        List<MongoDatabase> databases = this.client.databases();
+        List<MongoDatabase> databases = this.client.listDatabases();
         List<TreeItem<?>> list = new ArrayList<>();
         for (MongoDatabase database : databases) {
             list.add(new MongoDatabaseTreeItem(database, this.getTreeView()));
