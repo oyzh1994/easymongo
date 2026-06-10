@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.shell;
+package cn.oyzh.easymongo.script;
 
 import com.mongodb.MongoNamespace;
 import com.mongodb.client.AggregateIterable;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class ShellMongoCollection {
+public class MongoScriptCollection {
 
     private final String dbName;
 
@@ -26,17 +26,17 @@ public class ShellMongoCollection {
 
     private final MongoCollection<Document> collection;
 
-    public ShellMongoCollection(String dbName, String collectionName, MongoCollection<Document> collection) {
+    public MongoScriptCollection(String dbName, String collectionName, MongoCollection<Document> collection) {
         this.dbName = dbName;
         this.collectionName = collectionName;
         this.collection = collection;
     }
 
-    public ShellFindCursor find() {
+    public MongoScriptFindCursor find() {
         return this.find(null);
     }
 
-    public ShellFindCursor find(Object doc) {
+    public MongoScriptFindCursor find(Object doc) {
         Document filter;
         if (doc instanceof Map map) {
             filter = new Document(map);
@@ -44,7 +44,7 @@ public class ShellMongoCollection {
             filter = new Document();
         }
         FindIterable<Document> iter = this.collection.find(filter);
-        return new ShellFindCursor(this.dbName, this.collectionName, iter);
+        return new MongoScriptFindCursor(this.dbName, this.collectionName, iter);
     }
 
     public InsertOneResult insert(Object doc) {
@@ -193,24 +193,24 @@ public class ShellMongoCollection {
 
     // --- distinct ---
 
-    public ShellCursor distinct(String fieldName) {
-        return new ShellCursor(this.collection.distinct(fieldName, String.class));
+    public MongoScriptCursor distinct(String fieldName) {
+        return new MongoScriptCursor(this.collection.distinct(fieldName, String.class));
     }
 
-    public ShellCursor distinct(String fieldName, Object filter) {
+    public MongoScriptCursor distinct(String fieldName, Object filter) {
         if (filter instanceof Map map) {
-            return new ShellCursor(this.collection.distinct(fieldName, new Document(map), String.class));
+            return new MongoScriptCursor(this.collection.distinct(fieldName, new Document(map), String.class));
         }
-        return new ShellCursor(this.collection.distinct(fieldName, String.class));
+        return new MongoScriptCursor(this.collection.distinct(fieldName, String.class));
     }
 
     // --- aggregate ---
 
-    public ShellCursor aggregate(Object pipeline) {
-        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+    public MongoScriptCursor aggregate(Object pipeline) {
+        List<Document> stages = MongoScriptUtil.toDocumentList(pipeline);
         AggregateIterable<Document> iter = this.collection.aggregate(stages);
         iter.allowDiskUse(true);
-        return new ShellCursor(iter);
+        return new MongoScriptCursor(iter);
     }
 
     // --- indexes ---
@@ -244,8 +244,8 @@ public class ShellMongoCollection {
         return this.collection.createIndex(new Document(k), opts);
     }
 
-    public ShellCursor listIndexes() {
-        return new ShellCursor(this.collection.listIndexes());
+    public MongoScriptCursor listIndexes() {
+        return new MongoScriptCursor(this.collection.listIndexes());
     }
 
     public void dropIndex(Object keys) {

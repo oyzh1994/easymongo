@@ -2,7 +2,7 @@ package cn.oyzh.easymongo.terminal;
 
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.common.util.TextUtil;
-import cn.oyzh.easymongo.shell.ShellUtil;
+import cn.oyzh.easymongo.script.MongoScriptUtil;
 import cn.oyzh.fx.terminal.command.TerminalCommand;
 import cn.oyzh.fx.terminal.command.TerminalCommandHandler;
 import cn.oyzh.fx.terminal.complete.BaseTerminalCompleteHandler;
@@ -54,7 +54,7 @@ public class MongoTerminalCompleteHandler extends BaseTerminalCompleteHandler<Mo
             list.add(this.newCommandHandler("db.getCollection(\"\")"));
         } else if (collectionPattern().matcher(line).matches()) {
             long count = StringUtil.count(line, ".");
-            Set<String> set = ShellUtil.collectionfuncions();
+            Set<String> set = MongoScriptUtil.collectionfuncions();
             if (count == 1) {
                 for (String s : set) {
                     list.add(this.newCommandHandler(line + "." + s + "()"));
@@ -70,7 +70,7 @@ public class MongoTerminalCompleteHandler extends BaseTerminalCompleteHandler<Mo
             }
         } else if (line.startsWith("db")) {
             long count = StringUtil.count(line, ".");
-            Set<String> set = ShellUtil.databasefuncions();
+            Set<String> set = MongoScriptUtil.databasefuncions();
             if (count == 0) {
                 for (String s : set) {
                     list.add(this.newCommandHandler("db." + s + "()"));

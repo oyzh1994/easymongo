@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.shell;
+package cn.oyzh.easymongo.script;
 
 import cn.oyzh.common.util.ReflectUtil;
 import org.bson.Document;
@@ -18,14 +18,14 @@ import java.util.Set;
  * @author oyzh
  * @since 2026-06-10
  */
-public class ShellUtil {
+public class MongoScriptUtil {
 
     public static Set<String> databasefuncions() {
-        return functions(ShellMongoDatabase.class);
+        return functions(MongoScriptDatabase.class);
     }
 
     public static Set<String> collectionfuncions() {
-        return functions(ShellMongoCollection.class);
+        return functions(MongoScriptCollection.class);
     }
 
     public static Set<String> functions(Class<?> clazz) {

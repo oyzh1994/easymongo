@@ -5,7 +5,7 @@ import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
-import cn.oyzh.easymongo.shell.ShellEngine;
+import cn.oyzh.easymongo.script.MongoScriptEngine;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public abstract class DBDataRunSqlFileHandler extends DBDataHandler {
      */
     protected boolean continueWithErrors = true;
 
-    protected ShellEngine engine;
+    protected MongoScriptEngine engine;
 
     public DBDataRunSqlFileHandler(MongoClient dbClient, String dbName) {
         this.dbClient = dbClient;

@@ -1,31 +1,27 @@
-package cn.oyzh.easymongo.shell;
+package cn.oyzh.easymongo.script;
 
-import cn.oyzh.easymongo.mongo.MongoRecord;
-import cn.oyzh.easymongo.util.MongoRecordUtil;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
 
-import java.util.List;
-
-public class ShellFindCursor extends ShellCursor {
+public class MongoScriptFindCursor extends MongoScriptCursor {
 
     private final FindIterable<Document> cursor;
     private final String dbName;
     private final String collectionName;
 
-    public ShellFindCursor(String dbName, String collectionName, FindIterable<Document> cursor) {
+    public MongoScriptFindCursor(String dbName, String collectionName, FindIterable<Document> cursor) {
         super(cursor);
         this.dbName = dbName;
         this.collectionName = collectionName;
         this.cursor = cursor;
     }
 
-    public ShellFindCursor limit(int n) {
-        return new ShellFindCursor(this.dbName, this.collectionName, this.cursor.limit(n));
+    public MongoScriptFindCursor limit(int n) {
+        return new MongoScriptFindCursor(this.dbName, this.collectionName, this.cursor.limit(n));
     }
 
-    public ShellFindCursor skip(int n) {
-        return new ShellFindCursor(this.dbName, this.collectionName, this.cursor.skip(n));
+    public MongoScriptFindCursor skip(int n) {
+        return new MongoScriptFindCursor(this.dbName, this.collectionName, this.cursor.skip(n));
     }
 
     public Document explain() {

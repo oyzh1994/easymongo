@@ -1,20 +1,16 @@
-package cn.oyzh.easymongo.shell;
+package cn.oyzh.easymongo.script;
 
 import cn.oyzh.common.json.JSONUtil;
 import com.mongodb.client.MongoIterable;
-import org.bson.Document;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ShellCursor {
+public class MongoScriptCursor {
 
     private final MongoIterable<?> cursor;
 
-    public ShellCursor(MongoIterable<?> cursor) {
+    public MongoScriptCursor(MongoIterable<?> cursor) {
         this.cursor = cursor;
     }
 

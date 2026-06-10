@@ -1,7 +1,7 @@
 package cn.oyzh.easymongo.test;
 
-import cn.oyzh.easymongo.shell.ShellCursor;
-import cn.oyzh.easymongo.shell.ShellMongoDatabase;
+import cn.oyzh.easymongo.script.MongoScriptCursor;
+import cn.oyzh.easymongo.script.MongoScriptDatabase;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -31,14 +31,14 @@ public class ShellTest {
         MongoDatabase database = mongoClient.getDatabase("test");
         // 注入包装后的 db 对象
         Bindings value = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-        value.put("db", new ShellMongoDatabase(database));
+        value.put("db", new MongoScriptDatabase(database));
         return engine;
     }
 
     private void printResult(Object result) {
         if (result != null) {
             // 如果是游标包装器，自动转为格式化的 JSON 字符串输出
-            if (result instanceof ShellCursor cursor) {
+            if (result instanceof MongoScriptCursor cursor) {
                 System.out.println(cursor.pretty());
             } else {
                 System.out.println(result);

@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.shell;
+package cn.oyzh.easymongo.script;
 
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.ChangeStreamIterable;
@@ -12,11 +12,11 @@ import org.bson.Document;
 import java.util.List;
 import java.util.Map;
 
-public class ShellMongoDatabase {
+public class MongoScriptDatabase {
 
     private final MongoDatabase database;
 
-    public ShellMongoDatabase(MongoDatabase database) {
+    public MongoScriptDatabase(MongoDatabase database) {
         this.database = database;
     }
 
@@ -24,17 +24,17 @@ public class ShellMongoDatabase {
         return this.database.getName();
     }
 
-    public ShellMongoCollection getCollection(String name) {
+    public MongoScriptCollection getCollection(String name) {
         MongoCollection<Document> collection = this.database.getCollection(name);
-        return new ShellMongoCollection(this.getName(), name, collection);
+        return new MongoScriptCollection(this.getName(), name, collection);
     }
 
-    public ShellMongoDatabase createCollection(String name) {
+    public MongoScriptDatabase createCollection(String name) {
         this.database.createCollection(name);
         return this;
     }
 
-    public ShellMongoDatabase createCollection(String name, Object options) {
+    public MongoScriptDatabase createCollection(String name, Object options) {
         CreateCollectionOptions opts = new CreateCollectionOptions();
         if (options instanceof Map optMap) {
             if (optMap.containsKey("capped")) {
@@ -63,41 +63,41 @@ public class ShellMongoDatabase {
     }
 
     public void createView(String name, String viewOn, Object pipeline) {
-        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+        List<Document> stages = MongoScriptUtil.toDocumentList(pipeline);
         this.database.createView(name, viewOn, stages);
     }
 
     public void createView(String name, String viewOn, Object pipeline, Object options) {
-        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+        List<Document> stages = MongoScriptUtil.toDocumentList(pipeline);
         CreateViewOptions opts = new CreateViewOptions();
         this.database.createView(name, viewOn, stages, opts);
     }
 
-    public ShellCursor aggregate(Object pipeline) {
-        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+    public MongoScriptCursor aggregate(Object pipeline) {
+        List<Document> stages = MongoScriptUtil.toDocumentList(pipeline);
         AggregateIterable<Document> iter = this.database.aggregate(stages);
         iter.allowDiskUse(true);
-        return new ShellCursor(iter);
+        return new MongoScriptCursor(iter);
     }
 
-    public ShellCursor watch() {
+    public MongoScriptCursor watch() {
         ChangeStreamIterable<Document> iter = this.database.watch();
-        return new ShellCursor(iter);
+        return new MongoScriptCursor(iter);
     }
 
-    public ShellCursor watch(Object pipeline) {
-        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+    public MongoScriptCursor watch(Object pipeline) {
+        List<Document> stages = MongoScriptUtil.toDocumentList(pipeline);
         ChangeStreamIterable<Document> iter = this.database.watch(stages);
-        return new ShellCursor(iter);
+        return new MongoScriptCursor(iter);
     }
 
-    public ShellCursor listCollectionNames() {
+    public MongoScriptCursor listCollectionNames() {
         ListCollectionNamesIterable iter = this.database.listCollectionNames();
-        return new ShellCursor(iter);
+        return new MongoScriptCursor(iter);
     }
 
-    public ShellCursor listCollections() {
+    public MongoScriptCursor listCollections() {
         ListCollectionsIterable<Document> iter = this.database.listCollections();
-        return new ShellCursor(iter);
+        return new MongoScriptCursor(iter);
     }
 }

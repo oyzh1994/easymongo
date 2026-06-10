@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.shell;
+package cn.oyzh.easymongo.script;
 
 import cn.oyzh.easymongo.util.MongoUtil;
 import com.mongodb.client.MongoClient;
@@ -8,7 +8,6 @@ import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.util.Date;
 
@@ -17,16 +16,16 @@ import java.util.Date;
  * @author oyzh
  * @since 2026-06-08
  */
-public class ShellEngine {
+public class MongoScriptEngine {
 
     private final MongoClient mongoClient;
 
-    public ShellEngine(MongoClient mongoClient) {
+    public MongoScriptEngine(MongoClient mongoClient) {
         this.mongoClient = mongoClient;
         this.initEngine();
     }
 
-    private ScriptEngine engine;
+    private javax.script.ScriptEngine engine;
 
     private Bindings bindings;
 
@@ -36,7 +35,7 @@ public class ShellEngine {
         this.bindings = this.engine.getBindings(ScriptContext.ENGINE_SCOPE);
 
         // 注入 MongoDB 特殊类型构造函数
-        this.engine.put("Binary", new ShellBinary());
+        this.engine.put("Binary", new MongoScriptBinary());
         this.engine.put("ObjectId", (java.util.function.Function<String, ObjectId>) ObjectId::new);
         this.engine.put("ISODate", (java.util.function.Function<String, Date>) dateStr -> {
             try {
@@ -60,14 +59,14 @@ public class ShellEngine {
         });
     }
 
-    public ScriptEngine getEngine() {
+    public javax.script.ScriptEngine getEngine() {
         return engine;
     }
 
     public void db(String dbName) {
         // 注入包装后的 db 对象
         MongoDatabase database = this.mongoClient.getDatabase(dbName);
-        this.bindings.put("db", new ShellMongoDatabase(database));
+        this.bindings.put("db", new MongoScriptDatabase(database));
         this.engine.put("dbName", dbName);
     }
 

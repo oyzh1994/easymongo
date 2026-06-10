@@ -10,9 +10,9 @@ import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
 import cn.oyzh.easymongo.query.MysqlExecuteResult;
 import cn.oyzh.easymongo.query.MysqlQueryResults;
-import cn.oyzh.easymongo.shell.MongoScriptParser;
-import cn.oyzh.easymongo.shell.ShellCursor;
-import cn.oyzh.easymongo.shell.ShellEngine;
+import cn.oyzh.easymongo.script.MongoScriptParser;
+import cn.oyzh.easymongo.script.MongoScriptCursor;
+import cn.oyzh.easymongo.script.MongoScriptEngine;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
@@ -127,16 +127,16 @@ public class MongoClient implements Closeable {
 
     private com.mongodb.client.MongoClient mongoClient;
 
-    private ShellEngine engine;
+    private MongoScriptEngine engine;
 
     /**
      * 创建shell引擎
      *
      * @return 结果
      */
-    public ShellEngine shellEngine() {
+    public MongoScriptEngine shellEngine() {
         if (this.engine == null) {
-            this.engine = new ShellEngine(this.mongoClient);
+            this.engine = new MongoScriptEngine(this.mongoClient);
         }
         return this.engine;
     }
@@ -785,7 +785,7 @@ public class MongoClient implements Closeable {
      * @param dbName 数据库名称
      */
     private void parseResult(MysqlExecuteResult result, Object obj, String dbName) {
-        if (obj instanceof ShellCursor cursor) {
+        if (obj instanceof MongoScriptCursor cursor) {
             parseResult(result, cursor.toArray(), dbName);
         } else if (obj instanceof List<?> list) {
             result.setSuccess(true);

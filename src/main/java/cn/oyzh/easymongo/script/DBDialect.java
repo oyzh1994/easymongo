@@ -1,7 +1,5 @@
-package cn.oyzh.easymongo.shell;
+package cn.oyzh.easymongo.script;
 
-
-import cn.oyzh.common.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

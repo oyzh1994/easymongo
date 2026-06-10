@@ -1,15 +1,11 @@
 package cn.oyzh.easymongo.query;
 
 import cn.oyzh.common.thread.ThreadUtil;
-import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.common.util.TextUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
-import cn.oyzh.easymongo.shell.ShellMongoCollection;
-import cn.oyzh.easymongo.shell.ShellMongoDatabase;
-import cn.oyzh.easymongo.shell.ShellUtil;
+import cn.oyzh.easymongo.script.MongoScriptUtil;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,8 +45,8 @@ public class MysqlQueryUtil {
 
     static {
         DB_KEYWORDS.add("db");
-        DB_FUNCTIONS.addAll(ShellUtil.databasefuncions());
-        DB_FUNCTIONS.addAll(ShellUtil.collectionfuncions());
+        DB_FUNCTIONS.addAll(MongoScriptUtil.databasefuncions());
+        DB_FUNCTIONS.addAll(MongoScriptUtil.collectionfuncions());
     }
 
     public static Set<String> getKeywords() {
