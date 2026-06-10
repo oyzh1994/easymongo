@@ -1,10 +1,16 @@
 package cn.oyzh.easymongo.shell;
 
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.ChangeStreamIterable;
 import com.mongodb.client.ListCollectionNamesIterable;
 import com.mongodb.client.ListCollectionsIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.CreateCollectionOptions;
+import com.mongodb.client.model.CreateViewOptions;
 import org.bson.Document;
+import java.util.List;
+import java.util.Map;
 
 public class ShellMongoDatabase {
 
@@ -28,6 +34,63 @@ public class ShellMongoDatabase {
         return this;
     }
 
+    public ShellMongoDatabase createCollection(String name, Object options) {
+        CreateCollectionOptions opts = new CreateCollectionOptions();
+        if (options instanceof Map optMap) {
+            if (optMap.containsKey("capped")) {
+                opts.capped(Boolean.parseBoolean(optMap.get("capped").toString()));
+            }
+            if (optMap.containsKey("sizeInBytes")) {
+                opts.sizeInBytes(Long.parseLong(optMap.get("sizeInBytes").toString()));
+            }
+            if (optMap.containsKey("maxDocuments")) {
+                opts.maxDocuments(Long.parseLong(optMap.get("maxDocuments").toString()));
+            }
+        }
+        this.database.createCollection(name, opts);
+        return this;
+    }
+
+    public void drop() {
+        this.database.drop();
+    }
+
+    public Document runCommand(Object command) {
+        if (command instanceof Map map) {
+            return this.database.runCommand(new Document(map));
+        }
+        return null;
+    }
+
+    public void createView(String name, String viewOn, Object pipeline) {
+        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+        this.database.createView(name, viewOn, stages);
+    }
+
+    public void createView(String name, String viewOn, Object pipeline, Object options) {
+        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+        CreateViewOptions opts = new CreateViewOptions();
+        this.database.createView(name, viewOn, stages, opts);
+    }
+
+    public ShellCursor aggregate(Object pipeline) {
+        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+        AggregateIterable<Document> iter = this.database.aggregate(stages);
+        iter.allowDiskUse(true);
+        return new ShellCursor(iter);
+    }
+
+    public ShellCursor watch() {
+        ChangeStreamIterable<Document> iter = this.database.watch();
+        return new ShellCursor(iter);
+    }
+
+    public ShellCursor watch(Object pipeline) {
+        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+        ChangeStreamIterable<Document> iter = this.database.watch(stages);
+        return new ShellCursor(iter);
+    }
+
     public ShellCursor listCollectionNames() {
         ListCollectionNamesIterable iter = this.database.listCollectionNames();
         return new ShellCursor(iter);
@@ -37,9 +100,4 @@ public class ShellMongoDatabase {
         ListCollectionsIterable<Document> iter = this.database.listCollections();
         return new ShellCursor(iter);
     }
-
-    //    @Override
-    //    public Object getMember(String name) {
-    //        return this.getCollection(name);
-    //    }
 }

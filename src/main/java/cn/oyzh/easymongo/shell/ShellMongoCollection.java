@@ -1,8 +1,10 @@
 package cn.oyzh.easymongo.shell;
 
-import cn.oyzh.common.util.ReflectUtil;
+import com.mongodb.MongoNamespace;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
@@ -10,14 +12,11 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class ShellMongoCollection {
 
@@ -115,5 +114,157 @@ public class ShellMongoCollection {
         this.collection.drop();
     }
 
+    // --- findOne ---
 
+    public Document findOne() {
+        return this.collection.find().first();
+    }
+
+    public Document findOne(Object filter) {
+        if (filter instanceof Map map) {
+            return this.collection.find(new Document(map)).first();
+        }
+        return this.collection.find().first();
+    }
+
+    // --- findOneAndDelete ---
+
+    public Document findOneAndDelete(Object filter) {
+        if (filter instanceof Map map) {
+            return this.collection.findOneAndDelete(new Document(map));
+        }
+        return null;
+    }
+
+    // --- findOneAndReplace ---
+
+    public Document findOneAndReplace(Object filter, Object replacement) {
+        if (filter instanceof Map f && replacement instanceof Map r) {
+            return this.collection.findOneAndReplace(new Document(f), new Document(r));
+        }
+        return null;
+    }
+
+    // --- findOneAndUpdate ---
+
+    public Document findOneAndUpdate(Object filter, Object update) {
+        if (filter instanceof Map f && update instanceof Map u) {
+            return this.collection.findOneAndUpdate(new Document(f), new Document(u));
+        }
+        return null;
+    }
+
+    // --- updateMany ---
+
+    public UpdateResult updateMany(Object filter, Object update) {
+        if (filter instanceof Map f && update instanceof Map u) {
+            return this.collection.updateMany(new Document(f), new Document(u));
+        }
+        return null;
+    }
+
+    // --- replaceOne ---
+
+    public UpdateResult replaceOne(Object filter, Object replacement) {
+        if (filter instanceof Map f && replacement instanceof Map r) {
+            return this.collection.replaceOne(new Document(f), new Document(r));
+        }
+        return null;
+    }
+
+    // --- countDocuments ---
+
+    public long countDocuments() {
+        return this.collection.countDocuments();
+    }
+
+    public long countDocuments(Object filter) {
+        if (filter instanceof Map map) {
+            return this.collection.countDocuments(new Document(map));
+        }
+        return this.collection.countDocuments();
+    }
+
+    // --- estimatedDocumentCount ---
+
+    public long estimatedDocumentCount() {
+        return this.collection.estimatedDocumentCount();
+    }
+
+    // --- distinct ---
+
+    public ShellCursor distinct(String fieldName) {
+        return new ShellCursor(this.collection.distinct(fieldName, String.class));
+    }
+
+    public ShellCursor distinct(String fieldName, Object filter) {
+        if (filter instanceof Map map) {
+            return new ShellCursor(this.collection.distinct(fieldName, new Document(map), String.class));
+        }
+        return new ShellCursor(this.collection.distinct(fieldName, String.class));
+    }
+
+    // --- aggregate ---
+
+    public ShellCursor aggregate(Object pipeline) {
+        List<Document> stages = ShellUtil.toDocumentList(pipeline);
+        AggregateIterable<Document> iter = this.collection.aggregate(stages);
+        iter.allowDiskUse(true);
+        return new ShellCursor(iter);
+    }
+
+    // --- indexes ---
+
+    public String createIndex(Object keys) {
+        return this.createIndex(keys, null);
+    }
+
+    public String createIndex(Object keys, Object options) {
+        if (!(keys instanceof Map k)) {
+            return null;
+        }
+        IndexOptions opts = new IndexOptions();
+        if (options instanceof Map optMap) {
+            if (optMap.containsKey("name")) {
+                opts.name(optMap.get("name").toString());
+            }
+            if (optMap.containsKey("unique")) {
+                opts.unique(Boolean.parseBoolean(optMap.get("unique").toString()));
+            }
+            if (optMap.containsKey("background")) {
+                opts.background(Boolean.parseBoolean(optMap.get("background").toString()));
+            }
+            if (optMap.containsKey("sparse")) {
+                opts.sparse(Boolean.parseBoolean(optMap.get("sparse").toString()));
+            }
+            if (optMap.containsKey("expireAfterSeconds")) {
+                opts.expireAfter(Long.parseLong(optMap.get("expireAfterSeconds").toString()), TimeUnit.SECONDS);
+            }
+        }
+        return this.collection.createIndex(new Document(k), opts);
+    }
+
+    public ShellCursor listIndexes() {
+        return new ShellCursor(this.collection.listIndexes());
+    }
+
+    public void dropIndex(Object keys) {
+        if (keys instanceof Map map) {
+            this.collection.dropIndex(new Document(map));
+        }
+    }
+
+    public void dropIndexByName(String name) {
+        this.collection.dropIndex(name);
+    }
+
+    public void dropIndexes() {
+        this.collection.dropIndexes();
+    }
+
+    // --- rename ---
+
+    public void rename(String newName) {
+        this.collection.renameCollection(new MongoNamespace(this.dbName, newName));
+    }
 }

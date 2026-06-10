@@ -1,10 +1,16 @@
 package cn.oyzh.easymongo.shell;
 
 import cn.oyzh.common.util.ReflectUtil;
+import org.bson.Document;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,5 +46,23 @@ public class ShellUtil {
             functions.add(mName);
         }
         return functions;
+    }
+
+    public static List<Document> toDocumentList(Object obj) {
+        List<Document> list = new ArrayList<>();
+        if (obj instanceof ScriptObjectMirror mirror) {
+            for (Object o : mirror.values()) {
+                if (o instanceof Map map) {
+                    list.add(new Document(map));
+                }
+            }
+        } else if (obj instanceof Collection collection) {
+            for (Object o : collection) {
+                if (o instanceof Map map) {
+                    list.add(new Document(map));
+                }
+            }
+        }
+        return list;
     }
 }
