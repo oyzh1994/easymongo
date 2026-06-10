@@ -16,7 +16,7 @@ public class DBConnectionConnectedEvent extends Event<MongoClient> implements  E
         return String.format("[%s] 客户端已连接", this.data().connectName());
     }
 
-    public MongoConnect dbConnect() {
-        return this.data().getDbConnect();
+    public MongoConnect shellConnect() {
+        return this.data().getShellConnect();
     }
 }

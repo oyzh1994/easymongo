@@ -1,0 +1,365 @@
+package cn.oyzh.easymongo.terminal;
+
+import cn.oyzh.common.log.JulLog;
+import cn.oyzh.common.thread.ExecutorUtil;
+import cn.oyzh.common.thread.TaskManager;
+import cn.oyzh.easymongo.domain.MongoConnect;
+import cn.oyzh.easymongo.domain.MongoSetting;
+import cn.oyzh.easymongo.dto.ShellZKConnectInfo;
+import cn.oyzh.easymongo.exception.MongoExceptionParser;
+import cn.oyzh.easymongo.mongo.MongoClient;
+import cn.oyzh.easymongo.mongo.MongoConnState;
+import cn.oyzh.easymongo.mongo.MonogoHelper;
+import cn.oyzh.easymongo.store.MongoSettingStore;
+import cn.oyzh.easymongo.util.MongoI18nHelper;
+import cn.oyzh.easymongo.util.ShellZKConnectUtil;
+import cn.oyzh.fx.plus.font.FontManager;
+import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
+import cn.oyzh.fx.terminal.Terminal;
+import cn.oyzh.fx.terminal.TerminalPane;
+import cn.oyzh.fx.terminal.command.TerminalCommand;
+import cn.oyzh.fx.terminal.command.TerminalCommandHandler;
+import cn.oyzh.fx.terminal.execute.TerminalExecuteResult;
+import cn.oyzh.i18n.I18nHelper;
+import javafx.beans.value.ChangeListener;
+import javafx.scene.text.Font;
+
+import java.util.List;
+
+/**
+ * zk终端文本域
+ *
+ * @author oyzh
+ * @since 2023/7/21
+ */
+public class MongoTerminalPane extends TerminalPane {
+
+    {
+        this.keyHandler(MongoTerminalKeyHandler.INSTANCE);
+        this.helpHandler(MongoTerminalHelpHandler.INSTANCE);
+        this.mouseHandler(MongoTerminalMouseHandler.INSTANCE);
+        this.historyHandler(MongoTerminalHistoryHandler.INSTANCE);
+        this.completeHandler(MongoTerminalCompleteHandler.INSTANCE);
+    }
+
+    @Override
+    protected Font getEditorFont() {
+        if (super.getEditorFont() == null) {
+            MongoSetting setting = MongoSettingStore.SETTING;
+            Font font = FontManager.toFont(setting.terminalFontConfig());
+            super.setEditorFont(font);
+        }
+        return super.getEditorFont();
+    }
+
+    /**
+     * zk客户端
+     */
+    private MongoClient client;
+
+    public MongoClient getClient() {
+        return client;
+    }
+
+    /**
+     * zk连接
+     */
+    private ShellZKConnectInfo connectInfo;
+
+    /**
+     * 客户端连接状态监听器
+     */
+    private ChangeListener<MongoConnState> stateChangeListener;
+
+    @Override
+    public void flushPrompt() {
+        String str;
+        if (this.isTemporary()) {
+            str = "zk" + I18nHelper.connect();
+        } else {
+            str = this.client.connectName();
+        }
+        if (this.shellConnect().getHost() != null) {
+            str += "@" + this.shellConnect().getHost();
+        }
+        if (this.isConnecting()) {
+            str += "(" + I18nHelper.connectIng() + ")> ";
+        } else if (this.isConnected()) {
+            str += "(" + I18nHelper.connected() + ")> ";
+        } else {
+            str += "> ";
+        }
+        this.prompt(str);
+    }
+
+    public static final String TERMINAL_NAME = "zookeeper";
+
+    @Override
+    public String terminalName() {
+        return TERMINAL_NAME;
+    }
+
+    private String dbName;
+
+    /**
+     * 初始化
+     *
+     * @param client 客户端
+     */
+    public void init(MongoClient client, String dbName) {
+        this.client = client;
+        this.dbName = dbName;
+        this.disableInput();
+        this.outputLine(MongoI18nHelper.welcome());
+        this.outputLine("Powered By oyzh(2026-2026).");
+        this.flushPrompt();
+        if (this.isTemporary()) {
+            this.initByTemporary();
+        } else {
+            this.initByPermanent();
+        }
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    /**
+     * 是否临时连接
+     *
+     * @return 结果
+     */
+    public boolean isTemporary() {
+        return this.client.iid() == null;
+    }
+
+    @Override
+    public void outputPrompt() {
+        if (!this.client.isConnecting()) {
+            super.outputPrompt();
+        }
+    }
+
+    /**
+     * 是否已连接
+     *
+     * @return 结果
+     */
+    public boolean isConnected() {
+        return this.client != null && this.client.isConnected();
+    }
+
+    /**
+     * 是否连接中
+     *
+     * @return 结果
+     */
+    public boolean isConnecting() {
+        return this.client != null && this.client.isConnecting();
+    }
+
+    /**
+     * 是否已关闭
+     *
+     * @return 结果
+     */
+    public boolean isClosed() {
+        return this.client != null && this.client.isClosed();
+    }
+
+    /**
+     * 执行连接
+     *
+     * @param input 输入内容
+     */
+    public void connect(String input) {
+        this.connectInfo = ShellZKConnectUtil.parse(input);
+        if (this.connectInfo != null) {
+            this.disable();
+            ShellZKConnectUtil.copyConnect(this.connectInfo, this.shellConnect());
+            this.start();
+        }
+    }
+
+    /**
+     * 临时连接处理
+     */
+    private void initByTemporary() {
+        this.outputLine("connect [-timeout timeout] [-server server] [-r]");
+        this.outputLine("-timeout " + I18nResourceBundle.i18nString("base.unit", "base.ms"));
+        this.outputLine("-server ip:" + I18nHelper.port());
+        this.outputLine("-r " + I18nHelper.readonlyMode());
+        this.appendByPrompt("connect -timeout 3000 -server localhost:2181");
+        this.enableInput();
+        this.flushAndMoveCaretEnd();
+    }
+
+    /**
+     * 常驻连接处理
+     */
+    private void initByPermanent() {
+        //        this.start();
+        this.flushPrompt();
+        this.appendByPrompt("");
+        this.enableInput();
+        this.flushAndMoveCaretEnd();
+    }
+
+    /**
+     * 开始连接
+     */
+    private void start() {
+        TaskManager.startSync(() -> {
+            try {
+                this.initStatListener();
+                this.client.start();
+            } catch (Throwable ex) {
+                this.onError(MongoExceptionParser.INSTANCE.apply(ex));
+            } finally {
+                this.enable();
+            }
+        });
+    }
+
+    /**
+     * 刷新光标并移动到尾部
+     */
+    private void flushAndMoveCaretEnd() {
+        ExecutorUtil.start(() -> {
+            this.flushCaret();
+            this.moveCaretEnd();
+        }, 50);
+    }
+
+    /**
+     * 初始化连接状态监听器
+     */
+    private void initStatListener() {
+        if (this.stateChangeListener == null) {
+            this.stateChangeListener = (observableValue, state, t1) -> {
+                this.flushPrompt();
+                // 获取连接
+                String host = this.shellConnect().getHost();
+                if (t1 == MongoConnState.CONNECTED) {
+                    this.outputLine(host + I18nHelper.connectSuccess() + " .");
+                    this.outputLine(I18nHelper.terminalTip2());
+                    this.outputLine(I18nHelper.terminalTip1());
+                    this.outputPrompt();
+                    this.flushCaret();
+                    super.enableInput();
+                } else if (t1 == MongoConnState.CLOSED) {
+                    this.outputLine(host + " " + I18nHelper.connectionClosed() + " .");
+                    this.enableInput();
+                } else if (t1 == MongoConnState.CONNECTING) {
+                    this.outputLine(host + " " + I18nHelper.connectionConnecting() + " .", false);
+                } else if (t1 == MongoConnState.INTERRUPTED) {
+                    this.outputLine(host + " " + I18nHelper.connectSuspended() + " .");
+                    this.enableInput();
+                } else if (t1 == MongoConnState.RECONNECTED) {
+                    this.outputLine(host + " " + I18nHelper.connectReconnected() + " .");
+                    this.outputPrompt();
+                    this.flushCaret();
+                    super.enableInput();
+                } else if (t1 == MongoConnState.FAILED) {
+                    this.outputLine(host + I18nHelper.connectFail() + " .");
+                    if (this.connectInfo != null) {
+                        this.appendByPrompt(this.connectInfo.getInput());
+                    }
+                    this.flushAndMoveCaretEnd();
+                    this.enableInput();
+                }
+                JulLog.info("connState={}", t1);
+            };
+            this.getClient().addStateListener(this.stateChangeListener);
+        }
+    }
+
+    @Override
+    public void enableInput() {
+        if (this.isConnecting()) {
+            return;
+        }
+        if (this.isConnected() || (!this.isConnected() && this.isTemporary())) {
+            super.enableInput();
+        }
+    }
+
+    public MongoConnect shellConnect() {
+        return this.getClient().getShellConnect();
+    }
+
+    @Override
+    public void fontSizeIncr() {
+        super.fontSizeIncr();
+        this.saveFontSize();
+    }
+
+    @Override
+    public void fontSizeDecr() {
+        super.fontSizeDecr();
+        this.saveFontSize();
+    }
+
+    /**
+     * 保存字体大小
+     */
+    private void saveFontSize() {
+        MongoSetting setting = MongoSettingStore.SETTING;
+        setting.setTerminalFontSize((byte) this.getFontSize());
+        MongoSettingStore.INSTANCE.replace(setting);
+    }
+
+    @Override
+    public void destroy() {
+        if (this.client != null) {
+            this.client.stateProperty().unbind();
+        }
+        this.stateChangeListener = null;
+        super.destroy();
+    }
+
+    public TerminalExecuteResult eval(String input) {
+        TerminalExecuteResult result = new TerminalExecuteResult();
+        try {
+            if (this.dbName != null) {
+                this.client.shellEngine().db(this.dbName);
+            }
+            Object o = this.client.shellEngine().eval(input);
+            result.setResult(o);
+        } catch (Exception ex) {
+            result.setException(ex);
+        }
+        return result;
+    }
+
+
+    @Override
+    protected TerminalCommandHandler findHandler(String input) {
+        TerminalCommandHandler<?, ?> commandHandler = new TerminalCommandHandler<>() {
+
+            @Override
+            public TerminalExecuteResult execute(TerminalCommand command, Terminal terminal) {
+                String input = command.getCommand();
+                return eval(input);
+            }
+
+            @Override
+            public boolean completion(String input, Terminal terminal) {
+                return false;
+            }
+
+            @Override
+            public TerminalCommand parseCommand(String input) throws Exception {
+                TerminalCommand command = new TerminalCommand();
+                command.setCommand(input);
+                return command;
+            }
+
+            @Override
+            public String commandName() {
+                return "";
+            }
+        };
+        return commandHandler;
+    }
+}

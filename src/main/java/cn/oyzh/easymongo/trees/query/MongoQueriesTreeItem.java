@@ -126,8 +126,8 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
         return dbQueries == null ? 0 : dbQueries.size();
     }
 
-    public MongoConnect dbConnect() {
-        return this.parent().dbConnect();
+    public MongoConnect shellConnect() {
+        return this.parent().shellConnect();
     }
 
     public void addQuery(MongoQuery query) {

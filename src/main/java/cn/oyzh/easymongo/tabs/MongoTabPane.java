@@ -2,19 +2,25 @@ package cn.oyzh.easymongo.tabs;
 
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoQuery;
-import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
+import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryAddEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
+import cn.oyzh.easymongo.event.terminal.MongoTerminalCloseEvent;
+import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
+import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
+import cn.oyzh.easymongo.tabs.home.MongoHomeTab;
 import cn.oyzh.easymongo.tabs.query.MysqlQueryMainTab;
+import cn.oyzh.easymongo.tabs.terminal.RedisTerminalTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.EventSubscribe;
 import cn.oyzh.fx.gui.tabs.RichTabPane;
 import cn.oyzh.fx.plus.event.FXEventListener;
-import cn.oyzh.easymongo.tabs.home.MongoHomeTab;
 import javafx.scene.control.Tab;
+
+import java.util.Objects;
 
 /**
  * db切换面板
@@ -24,23 +30,23 @@ import javafx.scene.control.Tab;
  */
 public class MongoTabPane extends RichTabPane implements FXEventListener {
 
-//     @Override
-//     protected void initTabPane() {
-//         super.initTabPane();
-//         this.initHomeTab();
-//         // 监听tab
-//         this.getTabs().addListener((ListChangeListener<? super Tab>) (c) -> {
-//             while (c.next()) {
-//                 if (c.wasAdded() || c.wasRemoved()) {
-//                     TaskManager.startDelay("db:homeTab:flush", this::flushHomeTab, 100);
-//                     // if (c.wasAdded()) {
-//                     //     TaskManager.startDelay("db:tableTab:flush", this::flushNodeTab, 100);
-//                     // }
-//                 }
-//             }
-//         });
-// //        new MysqlTabEventListener(this);
-//     }
+    //     @Override
+    //     protected void initTabPane() {
+    //         super.initTabPane();
+    //         this.initHomeTab();
+    //         // 监听tab
+    //         this.getTabs().addListener((ListChangeListener<? super Tab>) (c) -> {
+    //             while (c.next()) {
+    //                 if (c.wasAdded() || c.wasRemoved()) {
+    //                     TaskManager.startDelay("db:homeTab:flush", this::flushHomeTab, 100);
+    //                     // if (c.wasAdded()) {
+    //                     //     TaskManager.startDelay("db:tableTab:flush", this::flushNodeTab, 100);
+    //                     // }
+    //                 }
+    //             }
+    //         });
+    // //        new MysqlTabEventListener(this);
+    //     }
 
     /**
      * 刷新主页标签
@@ -175,32 +181,32 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //     return list;
     // }
     //
-     private MongoCollectionRecordTab getMysqlTableRecordTab(MongoDatabaseTreeItem dbItem, String tableName) {
-         for (Tab tab : this.getTabs()) {
-             if (tab instanceof MongoCollectionRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(tableName, tab1.collectionName())) {
-                 return tab1;
-             }
-         }
-         return null;
-     }
+    private MongoCollectionRecordTab getMysqlTableRecordTab(MongoDatabaseTreeItem dbItem, String tableName) {
+        for (Tab tab : this.getTabs()) {
+            if (tab instanceof MongoCollectionRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(tableName, tab1.collectionName())) {
+                return tab1;
+            }
+        }
+        return null;
+    }
 
-     /**
-      * 表打开事件
-      *
-      * @param event 事件
-      */
-     @EventSubscribe
-     private void onMysqlTableOpen(MongoCollectionOpenEvent event) {
-         MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.getDbItem(), event.collectionName());
-         if (tab == null) {
-             tab = new MongoCollectionRecordTab();
-             super.addTab(tab);
-         }
-         // 选中节点
-         this.select(tab);
-         // 初始化节点
-         tab.init(event.data());
-     }
+    /**
+     * 表打开事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onMysqlTableOpen(MongoCollectionOpenEvent event) {
+        MongoCollectionRecordTab tab = this.getMysqlTableRecordTab(event.getDbItem(), event.collectionName());
+        if (tab == null) {
+            tab = new MongoCollectionRecordTab();
+            super.addTab(tab);
+        }
+        // 选中节点
+        this.select(tab);
+        // 初始化节点
+        tab.init(event.data());
+    }
     //
     // /**
     //  * 表重命名事件
@@ -816,5 +822,63 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
             ex.printStackTrace();
         }
     }
+
+    /**
+     * 获取终端tab
+     *
+     * @param client redis客户端
+     * @param dbName db索引
+     * @return 终端tab
+     */
+    private RedisTerminalTab getTerminalTab(MongoClient client, String dbName) {
+        if (client != null) {
+            for (Tab tab : this.getTabs()) {
+                if (tab instanceof RedisTerminalTab tab1 && tab1.client() == client && Objects.equals(tab1.dbName(), dbName)) {
+                    return tab1;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 终端打开事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void terminalOpen(MongoTerminalOpenEvent event) {
+        RedisTerminalTab terminalTab = this.getTerminalTab(event.data(), event.getDbName());
+        if (terminalTab == null) {
+            terminalTab = new RedisTerminalTab(event.data(), event.getDbName());
+            super.addTab(terminalTab);
+        } else {
+            terminalTab.flushGraphic();
+        }
+        if (!terminalTab.isSelected()) {
+            this.select(terminalTab);
+        }
+    }
+
+    /**
+     * 终端关闭事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void terminalClose(MongoTerminalCloseEvent event) {
+        try {
+            // 寻找节点
+            RedisTerminalTab terminalTab = this.getTerminalTab(event.data(), event.getDbName());
+            // 移除节点
+            if (terminalTab != null) {
+                terminalTab.closeTab();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
 }

@@ -6,6 +6,8 @@ import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketDroppedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryDeletedEvent;
+import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
+import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
@@ -180,6 +182,18 @@ public class MongoEventUtil {
         MongoBucketOpenEvent event = new MongoBucketOpenEvent();
         event.data(collectionItem);
         event.setDbItem(dbItem);
+        EventUtil.post(event);
+    }
+
+    /**
+     * 终端打开事件
+     *
+     * @param client zk客户端
+     */
+    public static void terminalOpen(MongoClient client,String dbName) {
+        MongoTerminalOpenEvent event = new MongoTerminalOpenEvent();
+        event.data(client);
+        event.setDbName(dbName);
         EventUtil.post(event);
     }
 }

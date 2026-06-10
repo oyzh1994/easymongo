@@ -243,11 +243,11 @@ public class MongoMainController extends ParentStageController {
         if (event.data() instanceof MongoConnectTreeItem treeItem) {
             this.flushViewTitle(treeItem.value());
         } else if (event.data() instanceof MongoDatabaseTreeItem treeItem) {
-            this.flushViewTitle(treeItem.dbConnect());
+            this.flushViewTitle(treeItem.shellConnect());
         } else if (event.data() instanceof MongoQueryTreeItem treeItem) {
-            this.flushViewTitle(treeItem.dbConnect());
+            this.flushViewTitle(treeItem.shellConnect());
         } else if (event.data() instanceof MongoQueriesTreeItem treeItem) {
-            this.flushViewTitle(treeItem.dbConnect());
+            this.flushViewTitle(treeItem.shellConnect());
         } else {
             this.flushViewTitle(null);
         }

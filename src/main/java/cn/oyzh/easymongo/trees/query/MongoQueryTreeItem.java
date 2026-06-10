@@ -131,7 +131,7 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
         MongoEventUtil.queryOpen(this.value, this.dbItem());
     }
 
-    public MongoConnect dbConnect() {
-        return this.client().getDbConnect();
+    public MongoConnect shellConnect() {
+        return this.client().getShellConnect();
     }
 }

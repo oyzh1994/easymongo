@@ -8,6 +8,10 @@ import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
  */
 public class MongoI18nHelper {
 
+    public static String welcome() {
+        return I18nResourceBundle.i18nString("mongo.home.welcome");
+    }
+
     public static String tableTip2() {
         return I18nResourceBundle.i18nString("db.table.tip2");
     }

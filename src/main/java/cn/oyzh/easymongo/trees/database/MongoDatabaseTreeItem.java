@@ -15,6 +15,7 @@ import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
 import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
+import cn.oyzh.easymongo.trees.terminal.MongoTerminalTreeItem;
 import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeItem;
@@ -151,6 +152,7 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
                         typeItems.add(new MongoCollectionsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoBucketsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoQueriesTreeItem(this.getTreeView()));
+                        typeItems.add(new MongoTerminalTreeItem(this.getTreeView()));
                         super.setChild(typeItems);
                     })
                     .onSuccess(this::expend)
@@ -225,8 +227,8 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         this.refresh();
     }
 
-    public MongoConnect dbConnect() {
-        return this.client().getDbConnect();
+    public MongoConnect shellConnect() {
+        return this.client().getShellConnect();
     }
 
     public void dropCollection(String collectionName) {

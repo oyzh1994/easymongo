@@ -16,7 +16,7 @@ public class DBConnectionClosedEvent extends Event<MongoClient> implements Event
         return String.format("[%s] 客户端已断开", this.data().connectName());
     }
 
-    public MongoConnect dbConnect() {
-        return this.data().getDbConnect();
+    public MongoConnect shellConnect() {
+        return this.data().getShellConnect();
     }
 }

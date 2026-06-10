@@ -77,10 +77,6 @@ public class MongoClient implements Closeable {
         return this.shellConnect.getName();
     }
 
-    public MongoConnect getDbConnect() {
-        return this.shellConnect;
-    }
-
     public boolean isConnected() {
         return this.state.get() != null && this.state.get().isConnected();
     }
@@ -831,5 +827,17 @@ public class MongoClient implements Closeable {
             results.parseError(ex);
         }
         return results;
+    }
+
+    public void addStateListener(ChangeListener<MongoConnState> stateChangeListener) {
+        this.state.addListener(stateChangeListener);
+    }
+
+    public boolean isClosed() {
+        return !this.isConnected() && !this.isConnecting();
+    }
+
+    public String iid() {
+        return this.shellConnect.getId();
     }
 }
