@@ -4,6 +4,8 @@ import cn.oyzh.common.SysConst;
 import cn.oyzh.common.dto.Project;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.system.SystemUtil;
+import cn.oyzh.easymongo.terminal.MongoTerminalManager;
+import cn.oyzh.easymongo.terminal.MongoTerminalPane;
 import cn.oyzh.event.EventFactory;
 import cn.oyzh.fx.gui.tray.DesktopTrayItem;
 import cn.oyzh.fx.gui.tray.QuitTrayItem;
@@ -20,6 +22,7 @@ import cn.oyzh.fx.plus.tray.TrayManager;
 import cn.oyzh.fx.plus.util.FXUtil;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
+import cn.oyzh.fx.terminal.util.TerminalManager;
 import cn.oyzh.i18n.I18nManager;
 import cn.oyzh.easymongo.controller.MainController;
 import cn.oyzh.easymongo.controller.SettingController;
@@ -99,6 +102,8 @@ public class EasyMongoApp extends FXApplication {
     public void start(Stage primaryStage) {
         try {
             super.start(primaryStage);
+            // 注册命令
+            TerminalManager.setLoadHandler(MongoTerminalPane.TERMINAL_NAME, MongoTerminalManager::registerHandlers);
             // 开启定期gc
             SystemUtil.gcInterval(5_000);
         } catch (Exception ex) {

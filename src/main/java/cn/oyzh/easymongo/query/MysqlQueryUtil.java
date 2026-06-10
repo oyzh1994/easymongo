@@ -2,10 +2,12 @@ package cn.oyzh.easymongo.query;
 
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.common.util.TextUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
 import cn.oyzh.easymongo.shell.ShellMongoCollection;
 import cn.oyzh.easymongo.shell.ShellMongoDatabase;
+import cn.oyzh.easymongo.shell.ShellUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -47,32 +49,8 @@ public class MysqlQueryUtil {
 
     static {
         DB_KEYWORDS.add("db");
-        fillFunctions(ShellMongoDatabase.class);
-        fillFunctions(ShellMongoCollection.class);
-    }
-
-    /**
-     * 填充函数
-     *
-     * @param clazz 类
-     */
-    private static void fillFunctions(Class<?> clazz) {
-        Method[] methods = clazz.getMethods();
-        for (Method method : methods) {
-            String mName = method.getName();
-            if (!StringUtil.equalsAny(mName,
-                    "toString",
-                    "notify",
-                    "notifyAll",
-                    "wait",
-                    "getClass",
-                    "hashCode",
-                    "equals",
-                    "clone",
-                    "finalize")) {
-                DB_FUNCTIONS.add(mName);
-            }
-        }
+        DB_FUNCTIONS.addAll(ShellUtil.databasefuncions());
+        DB_FUNCTIONS.addAll(ShellUtil.collectionfuncions());
     }
 
     public static Set<String> getKeywords() {
@@ -128,7 +106,7 @@ public class MysqlQueryUtil {
         if (token.isPossibilityKeyword()) {
             tasks.add(() -> MysqlQueryUtil.getKeywords().parallelStream().forEach(keyword -> {
                 // 计算相关度
-                double corr = ShellQueryUtil.clacCorr(keyword, text);
+                double corr = TextUtil.clacCorr(keyword, text);
                 if (corr > minCorr) {
                     MysqlQueryPromptItem item = new MysqlQueryPromptItem();
                     item.setType((byte) 4);
@@ -142,7 +120,7 @@ public class MysqlQueryUtil {
         if (token.isPossibilityCollection()) {
             tasks.add(() -> MysqlQueryUtil.getCollections().parallelStream().forEach(collection -> {
                 // 计算相关度
-                double corr = ShellQueryUtil.clacCorr(collection.getName(), text);
+                double corr = TextUtil.clacCorr(collection.getName(), text);
                 if (corr > minCorr) {
                     MysqlQueryPromptItem item = new MysqlQueryPromptItem();
                     item.setType((byte) 1);
@@ -156,7 +134,7 @@ public class MysqlQueryUtil {
         if (token.isPossibilityFunction()) {
             tasks.add(() -> MysqlQueryUtil.getFunctions().parallelStream().forEach(member -> {
                 // 计算相关度
-                double corr = ShellQueryUtil.clacCorr(member, text);
+                double corr = TextUtil.clacCorr(member, text);
                 if (corr > minCorr) {
                     MysqlQueryPromptItem item = new MysqlQueryPromptItem();
                     item.setType((byte) 2);

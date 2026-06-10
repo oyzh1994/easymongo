@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.shell;
 
+import cn.oyzh.common.util.ReflectUtil;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
@@ -9,10 +10,14 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ShellMongoCollection {
 
@@ -109,4 +114,6 @@ public class ShellMongoCollection {
     public void drop() {
         this.collection.drop();
     }
+
+
 }
