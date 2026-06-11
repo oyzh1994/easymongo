@@ -199,9 +199,8 @@ public class MongoQueryPromptPopup extends FXPopup {
     public void autoComplete(MongoQueryEditor editor, MongoQueryPromptItem item) {
         try {
             if (this.token != null) {
-                // IndexRange range = new IndexRange(this.token.getStartIndex(), this.token.getEndIndex());
                 editor.replaceText(this.token.getStartIndex(), this.token.getEndIndex(), item.wrapContent());
-                editor.positionCaret(this.token.getEndIndex() + item.getContent().length() - 1);
+//                editor.positionCaret(this.token.getEndIndex() + item.getContent().length() - 1);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
