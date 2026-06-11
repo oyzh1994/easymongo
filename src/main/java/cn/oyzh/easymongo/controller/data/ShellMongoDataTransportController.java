@@ -3,7 +3,7 @@ package cn.oyzh.easymongo.controller.data;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.ShellMysqlDataTransportTableListView;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataTransportTableListView;
 import cn.oyzh.easymongo.data.handler.DBDataTransportHandler;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.fx.MongoConnectComboBox;
@@ -41,7 +41,7 @@ import javafx.stage.WindowEvent;
         modality = Modality.APPLICATION_MODAL,
         value = FXConst.FXML_PATH + "data/shellMysqlDataTransport.fxml"
 )
-public class ShellMysqlDataTransportController extends StageController {
+public class ShellMongoDataTransportController extends StageController {
 
     /**
      * 第一步

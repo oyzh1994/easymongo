@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.fx.data;
 
 import cn.oyzh.common.cache.CacheHelper;
 import cn.oyzh.common.util.StringUtil;

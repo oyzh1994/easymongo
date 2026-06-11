@@ -13,7 +13,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-04
  */
-public class MysqlHtmlTypeFileWriter extends MysqlTypeFileWriter {
+public class MongoHtmlTypeFileWriter extends MongoTypeFileWriter {
 
     /**
      * 字段列表
@@ -23,14 +23,14 @@ public class MysqlHtmlTypeFileWriter extends MysqlTypeFileWriter {
     /**
      * 导出配置
      */
-    private MysqlDataExportConfig config;
+    private MongoDataExportConfig config;
 
     /**
      * 文件写入器
      */
     private LineFileWriter writer;
 
-    public MysqlHtmlTypeFileWriter(String filePath, MysqlDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
+    public MongoHtmlTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
         this.columns = columns;
         this.config = config;
         this.writer = LineFileWriter.create(filePath, config.getCharset());

@@ -1,7 +1,7 @@
 package cn.oyzh.easymongo.fx;
 
 import cn.oyzh.common.util.CollectionUtil;
-import cn.oyzh.easymongo.data.ShellMysqlDataExportColumn;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportColumn;
 import cn.oyzh.fx.plus.controls.button.FXCheckBox;
 import cn.oyzh.fx.plus.controls.list.FXListView;
 import cn.oyzh.fx.plus.util.ListViewUtil;

@@ -1,7 +1,6 @@
 package cn.oyzh.easymongo.data;
 
 import cn.oyzh.common.file.LineFileWriter;
-import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.util.MongoUtil;
@@ -14,7 +13,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-04
  */
-public class MysqlJsonTypeFileWriter extends MysqlTypeFileWriter {
+public class MongoJsonTypeFileWriter extends MongoTypeFileWriter {
 
     /**
      * 字段列表
@@ -24,7 +23,7 @@ public class MysqlJsonTypeFileWriter extends MysqlTypeFileWriter {
     /**
      * 导出配置
      */
-    private MysqlDataExportConfig config;
+    private MongoDataExportConfig config;
 
     /**
      * 文件读取器
@@ -36,7 +35,7 @@ public class MysqlJsonTypeFileWriter extends MysqlTypeFileWriter {
      */
     private boolean firstWrite = true;
 
-    public MysqlJsonTypeFileWriter(String filePath, MysqlDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
+    public MongoJsonTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
         this.columns = columns;
         this.config = config;
         this.writer = LineFileWriter.create(filePath, config.getCharset());
@@ -105,7 +104,7 @@ public class MysqlJsonTypeFileWriter extends MysqlTypeFileWriter {
     }
 
     @Override
-    public Object parameterized(MongoColumn column, Object value, MysqlDataExportConfig config) {
+    public Object parameterized(MongoColumn column, Object value, MongoDataExportConfig config) {
         if (value == null) {
             return null;
         }

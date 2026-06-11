@@ -27,7 +27,7 @@
 <?import cn.oyzh.easymongo.fx.DBDataFieldSeparatorComboBox?>
 <?import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="cn.oyzh.easymongo.controller.data.ShellMysqlDataImportController" realWidth="700"
+        fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoDataImportController" realWidth="700"
         realHeight="650">
     <FXHeaderBar/>
     <FXVBox fx:id="step1" flexHeight="100% - 30" flexWidth="100%" managedBindVisible="true">

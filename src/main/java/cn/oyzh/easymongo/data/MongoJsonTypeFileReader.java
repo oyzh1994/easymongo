@@ -14,7 +14,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-03
  */
-public class MysqlJsonTypeFileReader extends MysqlTypeFileReader {
+public class MongoJsonTypeFileReader extends MongoTypeFileReader {
 
     /**
      * json读取器
@@ -24,9 +24,9 @@ public class MysqlJsonTypeFileReader extends MysqlTypeFileReader {
     /**
      * 导入配置
      */
-    private MysqlDataImportConfig config;
+    private MongoDataImportConfig config;
 
-    public MysqlJsonTypeFileReader(File file, MysqlDataImportConfig config) throws FileNotFoundException {
+    public MongoJsonTypeFileReader(File file, MongoDataImportConfig config) throws FileNotFoundException {
         super(file);
         this.config = config;
         this.reader = new JSONReader(FileUtil.getReader(file, Charset.forName(config.getCharset())));

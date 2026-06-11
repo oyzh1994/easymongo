@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="cn.oyzh.easymongo.controller.data.ShellMysqlRunSqlFileController" realWidth="700" realHeight="680">
+        fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoRunScriptFileController" realWidth="700" realHeight="680">
     <FXHeaderBar/>
     <InfoLabel text="%base.connect">
         <VBox.margin>

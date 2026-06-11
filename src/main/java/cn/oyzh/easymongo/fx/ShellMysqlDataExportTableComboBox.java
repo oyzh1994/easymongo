@@ -1,6 +1,6 @@
 package cn.oyzh.easymongo.fx;
 
-import cn.oyzh.easymongo.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportTable;
 import cn.oyzh.fx.plus.controls.combo.FXComboBox;
 import cn.oyzh.fx.plus.converter.SimpleStringConverter;
 

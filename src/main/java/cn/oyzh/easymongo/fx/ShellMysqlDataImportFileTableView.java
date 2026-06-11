@@ -1,6 +1,6 @@
 package cn.oyzh.easymongo.fx;
 
-import cn.oyzh.easymongo.data.ShellMysqlDataImportFile;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataImportFile;
 import cn.oyzh.fx.plus.controls.table.FXTableView;
 
 /**

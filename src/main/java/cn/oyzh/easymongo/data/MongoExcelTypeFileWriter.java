@@ -21,7 +21,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-04
  */
-public class MysqlExcelTypeFileWriter extends MysqlTypeFileWriter {
+public class MongoExcelTypeFileWriter extends MongoTypeFileWriter {
 
     /**
      * 字段列表
@@ -31,7 +31,7 @@ public class MysqlExcelTypeFileWriter extends MysqlTypeFileWriter {
     /**
      * 导出配置
      */
-    private MysqlDataExportConfig config;
+    private MongoDataExportConfig config;
 
     /**
      * xls工作薄
@@ -45,7 +45,7 @@ public class MysqlExcelTypeFileWriter extends MysqlTypeFileWriter {
 
     private String filePath;
 
-    public MysqlExcelTypeFileWriter(String filePath, MysqlDataExportConfig config, MongoColumns columns) throws IOException {
+    public MongoExcelTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws IOException {
         this.columns = columns;
         this.config = config;
         this.filePath = filePath;
@@ -134,7 +134,7 @@ public class MysqlExcelTypeFileWriter extends MysqlTypeFileWriter {
     }
 
     @Override
-    public Object parameterized(MongoColumn column, Object value, MysqlDataExportConfig config) {
+    public Object parameterized(MongoColumn column, Object value, MongoDataExportConfig config) {
         if (value == null) {
             return null;
         }

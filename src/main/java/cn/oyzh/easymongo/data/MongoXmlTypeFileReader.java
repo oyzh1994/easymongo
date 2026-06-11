@@ -1,8 +1,6 @@
 package cn.oyzh.easymongo.data;
 
 
-import cn.oyzh.easymongo.util.MongoDataUtil;
-
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.Attribute;
@@ -18,7 +16,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-03
  */
-public class MysqlXmlTypeFileReader extends MysqlTypeFileReader {
+public class MongoXmlTypeFileReader extends MongoTypeFileReader {
 
     /**
      * xml读取器
@@ -28,9 +26,9 @@ public class MysqlXmlTypeFileReader extends MysqlTypeFileReader {
     /**
      * 导入配置
      */
-    private MysqlDataImportConfig config;
+    private MongoDataImportConfig config;
 
-    public MysqlXmlTypeFileReader(File file, MysqlDataImportConfig config) throws Exception {
+    public MongoXmlTypeFileReader(File file, MongoDataImportConfig config) throws Exception {
         super(file);
         this.config = config;
         this.reader = XMLInputFactory.newInstance().createXMLEventReader(new FileInputStream(file), config.getCharset());
@@ -72,7 +70,7 @@ public class MysqlXmlTypeFileReader extends MysqlTypeFileReader {
                         if (map == null) {
                             map = new HashMap<>();
                         }
-                        Object val = MysqlDataImportHelper.parseValue(attribute.getValue());
+                        Object val = MongoDataImportHelper.parseValue(attribute.getValue());
                         map.put(attribute.getName().getLocalPart(), val);
                     }
                 }
@@ -95,7 +93,7 @@ public class MysqlXmlTypeFileReader extends MysqlTypeFileReader {
                     if (map == null) {
                         map = new HashMap<>();
                     }
-                    Object val = MysqlDataImportHelper.parseValue(value);
+                    Object val = MongoDataImportHelper.parseValue(value);
                     map.put(name, val);
                     name = null;
                     value = null;

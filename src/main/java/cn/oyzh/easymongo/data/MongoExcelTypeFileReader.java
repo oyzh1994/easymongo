@@ -19,7 +19,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-03
  */
-public class MysqlExcelTypeFileReader extends MysqlTypeFileReader {
+public class MongoExcelTypeFileReader extends MongoTypeFileReader {
 
     /**
      * xml读取器
@@ -34,14 +34,14 @@ public class MysqlExcelTypeFileReader extends MysqlTypeFileReader {
     /**
      * 导入配置
      */
-    private MysqlDataImportConfig config;
+    private MongoDataImportConfig config;
 
     /**
      * 当前行索引
      */
     private Integer currentRowIndex;
 
-    public MysqlExcelTypeFileReader(File file, MysqlDataImportConfig config) throws Exception {
+    public MongoExcelTypeFileReader(File file, MongoDataImportConfig config) throws Exception {
         super(file);
         this.config = config;
         boolean isXlsx = StringUtil.endWithIgnoreCase(file.getName(), ".xlsx");

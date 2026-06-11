@@ -1,7 +1,7 @@
 package cn.oyzh.easymongo.data.handler;
 
 import cn.oyzh.common.util.CollectionUtil;
-import cn.oyzh.easymongo.data.ShellMysqlDataTransportTable;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataTransportTable;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoSelectRecordParam;
 

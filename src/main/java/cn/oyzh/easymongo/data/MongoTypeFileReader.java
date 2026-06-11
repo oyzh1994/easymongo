@@ -12,11 +12,11 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-03
  */
-public abstract class MysqlTypeFileReader implements Closeable {
+public abstract class MongoTypeFileReader implements Closeable {
 
     private final File file;
 
-    public MysqlTypeFileReader(File file) {
+    public MongoTypeFileReader(File file) {
         this.file = file;
     }
 

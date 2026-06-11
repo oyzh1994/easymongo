@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import cn.oyzh.easymongo.fx.MongoConnectComboBox?>
 <?import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox?>
-<?import cn.oyzh.easymongo.data.ShellMysqlDataTransportTableListView?>
+<?import cn.oyzh.easymongo.fx.data.ShellMysqlDataTransportTableListView?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="cn.oyzh.easymongo.controller.data.ShellMysqlDataTransportController" realWidth="800"
+        fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoDataTransportController" realWidth="800"
         realHeight="600">
     <FXHeaderBar/>
     <FXHBox flexWidth="100%" realHeight="100">

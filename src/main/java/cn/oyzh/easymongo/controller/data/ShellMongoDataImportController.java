@@ -5,7 +5,7 @@ import cn.oyzh.common.date.DateUtil;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.ShellMysqlDataImportFile;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataImportFile;
 import cn.oyzh.easymongo.data.handler.ShellMysqlDataImportHandler;
 import cn.oyzh.easymongo.fx.DBDataDateTextFiled;
 import cn.oyzh.easymongo.fx.DBDataFieldSeparatorComboBox;
@@ -54,7 +54,7 @@ import java.util.Date;
         modality = Modality.APPLICATION_MODAL,
         value = FXConst.FXML_PATH + "data/shellMysqlDataImport.fxml"
 )
-public class ShellMysqlDataImportController extends StageController {
+public class ShellMongoDataImportController extends StageController {
 
     /**
      * 第一步

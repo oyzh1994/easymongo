@@ -43,7 +43,7 @@ import java.io.File;
         modality = Modality.APPLICATION_MODAL,
         value = FXConst.FXML_PATH + "data/shellMysqlRunSqlFile.fxml"
 )
-public class ShellMysqlRunSqlFileController extends StageController {
+public class ShellMongoRunScriptFileController extends StageController {
 
     /**
      * 连接信息

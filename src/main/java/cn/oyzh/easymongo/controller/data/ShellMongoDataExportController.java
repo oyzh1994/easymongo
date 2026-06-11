@@ -4,7 +4,7 @@ import cn.oyzh.common.date.DateUtil;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportTable;
 import cn.oyzh.easymongo.data.handler.ShellMysqlDataExportHandler;
 import cn.oyzh.easymongo.fx.DBDataDateTextFiled;
 import cn.oyzh.easymongo.fx.DBDataFieldSeparatorComboBox;
@@ -53,7 +53,7 @@ import java.util.List;
         modality = Modality.APPLICATION_MODAL,
         value = FXConst.FXML_PATH + "data/shellMysqlDataExport.fxml"
 )
-public class ShellMysqlDataExportController extends StageController {
+public class ShellMongoDataExportController extends StageController {
 
     /**
      * 第一步

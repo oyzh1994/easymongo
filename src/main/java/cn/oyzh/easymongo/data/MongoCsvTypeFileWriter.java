@@ -12,7 +12,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-04
  */
-public class MysqlCsvTypeFileWriter extends MysqlTypeFileWriter {
+public class MongoCsvTypeFileWriter extends MongoTypeFileWriter {
 
     /**
      * 字段列表
@@ -22,14 +22,14 @@ public class MysqlCsvTypeFileWriter extends MysqlTypeFileWriter {
     /**
      * 导出配置
      */
-    private MysqlDataExportConfig config;
+    private MongoDataExportConfig config;
 
     /**
      * 文件读取器
      */
     private final LineFileWriter writer;
 
-    public MysqlCsvTypeFileWriter(String filePath, MysqlDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
+    public MongoCsvTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
         this.columns = columns;
         this.config = config;
         this.writer = LineFileWriter.create(filePath, config.getCharset());

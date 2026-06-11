@@ -1,7 +1,7 @@
 package cn.oyzh.easymongo.controller;
 
 import cn.oyzh.common.SysConst;
-import cn.oyzh.easymongo.controller.data.ShellMysqlDataTransportController;
+import cn.oyzh.easymongo.controller.data.ShellMongoDataTransportController;
 import cn.oyzh.fx.plus.controller.SubStageController;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.StageAdapter;
@@ -23,11 +23,11 @@ public class HeaderController extends SubStageController {
      */
     @FXML
     private void transport() {
-        StageAdapter wrapper = StageManager.getStage(ShellMysqlDataTransportController.class);
+        StageAdapter wrapper = StageManager.getStage(ShellMongoDataTransportController.class);
         if (wrapper != null) {
             wrapper.toFront();
         } else {
-            StageManager.showStage(ShellMysqlDataTransportController.class);
+            StageManager.showStage(ShellMongoDataTransportController.class);
         }
     }
 

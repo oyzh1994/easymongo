@@ -3,15 +3,15 @@ package cn.oyzh.easymongo.data.handler;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.MysqlCsvTypeFileWriter;
-import cn.oyzh.easymongo.data.MysqlDataExportConfig;
-import cn.oyzh.easymongo.data.MysqlExcelTypeFileWriter;
-import cn.oyzh.easymongo.data.MysqlHtmlTypeFileWriter;
-import cn.oyzh.easymongo.data.MysqlJsonTypeFileWriter;
-import cn.oyzh.easymongo.data.MysqlTxtTypeFileWriter;
-import cn.oyzh.easymongo.data.MysqlTypeFileWriter;
-import cn.oyzh.easymongo.data.MysqlXmlTypeFileWriter;
-import cn.oyzh.easymongo.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.data.MongoCsvTypeFileWriter;
+import cn.oyzh.easymongo.data.MongoDataExportConfig;
+import cn.oyzh.easymongo.data.MongoExcelTypeFileWriter;
+import cn.oyzh.easymongo.data.MongoHtmlTypeFileWriter;
+import cn.oyzh.easymongo.data.MongoJsonTypeFileWriter;
+import cn.oyzh.easymongo.data.MongoTxtTypeFileWriter;
+import cn.oyzh.easymongo.data.MongoTypeFileWriter;
+import cn.oyzh.easymongo.data.MongoXmlTypeFileWriter;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportTable;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
@@ -58,12 +58,12 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     /**
      * 导出配置
      */
-    private final MysqlDataExportConfig config;
+    private final MongoDataExportConfig config;
 
     public DBDataExportHandler(MongoClient dbClient, String dbName) {
         this.dbClient = dbClient;
         this.dbName = dbName;
-        this.config = new MysqlDataExportConfig();
+        this.config = new MongoDataExportConfig();
     }
 
     /**
@@ -164,24 +164,24 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         this.message("Export Finished");
     }
 
-    private MysqlTypeFileWriter initWriter(String filePath, MongoColumns columns) throws IOException {
+    private MongoTypeFileWriter initWriter(String filePath, MongoColumns columns) throws IOException {
         if (this.isExcelType()) {
-            return new MysqlExcelTypeFileWriter(filePath, this.config, columns);
+            return new MongoExcelTypeFileWriter(filePath, this.config, columns);
         }
         if (this.isHtmlType()) {
-            return new MysqlHtmlTypeFileWriter(filePath, this.config, columns);
+            return new MongoHtmlTypeFileWriter(filePath, this.config, columns);
         }
         if (this.isJsonType()) {
-            return new MysqlJsonTypeFileWriter(filePath, this.config, columns);
+            return new MongoJsonTypeFileWriter(filePath, this.config, columns);
         }
         if (this.isXmlType()) {
-            return new MysqlXmlTypeFileWriter(filePath, this.config, columns);
+            return new MongoXmlTypeFileWriter(filePath, this.config, columns);
         }
         if (this.isCsvType()) {
-            return new MysqlCsvTypeFileWriter(filePath, this.config, columns);
+            return new MongoCsvTypeFileWriter(filePath, this.config, columns);
         }
         if (this.isTxtType()) {
-            return new MysqlTxtTypeFileWriter(filePath, this.config, columns);
+            return new MongoTxtTypeFileWriter(filePath, this.config, columns);
         }
         return null;
     }
@@ -198,7 +198,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         this.message("Exporting Records of Table " + table.getName());
         long start = 0;
         MongoColumns columns = new MongoColumns(table.selectedColumns());
-        try (MysqlTypeFileWriter writer = this.initWriter(table.getFilePath(), columns)) {
+        try (MongoTypeFileWriter writer = this.initWriter(table.getFilePath(), columns)) {
             this.writeHeader(writer, table, columns);
             if (!columns.isEmpty()) {
                 boolean stop = false;
@@ -247,7 +247,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
      * @param columns 字段列表
      * @throws IOException 异常
      */
-    private void writeHeader(MysqlTypeFileWriter writer, ShellMysqlDataExportTable table, MongoColumns columns) throws Exception {
+    private void writeHeader(MongoTypeFileWriter writer, ShellMysqlDataExportTable table, MongoColumns columns) throws Exception {
         writer.writeHeader();
     }
 
@@ -259,7 +259,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
      * @param records 记录列表
      * @throws IOException 异常
      */
-    private void writeRecord(MysqlTypeFileWriter writer, ShellMysqlDataExportTable table, MongoColumns columns, List<MongoRecord> records) throws Exception {
+    private void writeRecord(MongoTypeFileWriter writer, ShellMysqlDataExportTable table, MongoColumns columns, List<MongoRecord> records) throws Exception {
         List<Map<String, Object>> objects = new ArrayList<>();
         for (MongoRecord object : records) {
             objects.add(object.toMap());
@@ -272,7 +272,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
      *
      * @throws IOException 异常
      */
-    private void writeTail(MysqlTypeFileWriter writer) throws Exception {
+    private void writeTail(MongoTypeFileWriter writer) throws Exception {
         writer.writeTrial();
     }
 
@@ -353,7 +353,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         this.tables = tables;
     }
 
-    public MysqlDataExportConfig getConfig() {
+    public MongoDataExportConfig getConfig() {
         return config;
     }
 }

@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.fx.data;
 
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.easymongo.mongo.MongoCollection;

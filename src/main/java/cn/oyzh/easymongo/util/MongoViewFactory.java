@@ -2,12 +2,12 @@ package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.controller.collection.MongoDocumentAddController;
 import cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController;
-import cn.oyzh.easymongo.controller.data.ShellMysqlDataDumpController;
-import cn.oyzh.easymongo.controller.data.ShellMysqlDataExportController;
-import cn.oyzh.easymongo.controller.data.ShellMysqlDataImportController;
-import cn.oyzh.easymongo.controller.data.ShellMysqlRunSqlFileController;
+import cn.oyzh.easymongo.controller.data.ShellMongoDataDumpController;
+import cn.oyzh.easymongo.controller.data.ShellMongoDataExportController;
+import cn.oyzh.easymongo.controller.data.ShellMongoDataImportController;
+import cn.oyzh.easymongo.controller.data.ShellMongoRunScriptFileController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
-import cn.oyzh.easymongo.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportTable;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
@@ -102,7 +102,7 @@ public class MongoViewFactory {
      */
     public static void exportData(MongoClient client, String dbName, String collectionName, int exportMode, ShellMysqlDataExportTable exportTable) {
         try {
-            StageAdapter adapter = StageManager.parseStage(ShellMysqlDataExportController.class, StageManager.getFrontWindow());
+            StageAdapter adapter = StageManager.parseStage(ShellMongoDataExportController.class, StageManager.getFrontWindow());
             adapter.setProp("dbName", dbName);
             adapter.setProp("dbClient", client);
             adapter.setProp("collectionName", collectionName);
@@ -123,7 +123,7 @@ public class MongoViewFactory {
      */
     public static void importData(MongoClient client, String dbName) {
         try {
-            StageAdapter adapter = StageManager.parseStage(ShellMysqlDataImportController.class, StageManager.getFrontWindow());
+            StageAdapter adapter = StageManager.parseStage(ShellMongoDataImportController.class, StageManager.getFrontWindow());
             adapter.setProp("dbName", dbName);
             adapter.setProp("dbClient", client);
             adapter.display();
@@ -143,7 +143,7 @@ public class MongoViewFactory {
      */
     public static void dumpData(MongoClient client, String dbName, String tableName, int dumpType) {
         try {
-            StageAdapter adapter = StageManager.parseStage(ShellMysqlDataDumpController.class, StageManager.getFrontWindow());
+            StageAdapter adapter = StageManager.parseStage(ShellMongoDataDumpController.class, StageManager.getFrontWindow());
             adapter.setProp("dumpType", dumpType);
             adapter.setProp("dbName", dbName);
             adapter.setProp("dbClient", client);
@@ -163,7 +163,7 @@ public class MongoViewFactory {
      */
     public static void runScriptFile(MongoClient client, String dbName) {
         try {
-            StageAdapter adapter = StageManager.parseStage(ShellMysqlRunSqlFileController.class, StageManager.getFrontWindow());
+            StageAdapter adapter = StageManager.parseStage(ShellMongoRunScriptFileController.class, StageManager.getFrontWindow());
             adapter.setProp("dbName", dbName);
             adapter.setProp("dbClient", client);
             adapter.display();

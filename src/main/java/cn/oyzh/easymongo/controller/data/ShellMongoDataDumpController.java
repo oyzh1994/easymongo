@@ -46,7 +46,7 @@ import java.util.List;
         modality = Modality.APPLICATION_MODAL,
         value = FXConst.FXML_PATH + "data/shellMysqlDataDump.fxml"
 )
-public class ShellMysqlDataDumpController extends StageController {
+public class ShellMongoDataDumpController extends StageController {
 
     /**
      * 连接信息

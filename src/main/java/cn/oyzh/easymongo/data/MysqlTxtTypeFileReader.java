@@ -15,7 +15,7 @@
 // * @author oyzh
 // * @since 2024-09-04
 // */
-//public class MysqlTxtTypeFileReader extends MysqlTypeFileReader {
+//public class MysqlTxtTypeFileReader extends MongoTypeFileReader {
 //
 //    /**
 //     * 字段列表
@@ -25,14 +25,14 @@
 //    /**
 //     * 导入配置
 //     */
-//    private MysqlDataImportConfig config;
+//    private MongoDataImportConfig config;
 //
 //    /**
 //     * 文件读取器
 //     */
 //    private SkipAbleFileReader reader;
 //
-//    public MysqlTxtTypeFileReader(File file, MysqlDataImportConfig config) throws IOException {
+//    public MysqlTxtTypeFileReader(File file, MongoDataImportConfig config) throws IOException {
 //        super(file);
 //        this.config = config;
 //        this.reader = new SkipAbleFileReader(file, Charset.forName(config.getCharset()));
@@ -59,7 +59,7 @@
 //            List<String> arr = this.parseLine(line, this.config.txtIdentifierChar(), this.config.fieldSeparatorChar());
 //            Map<String, Object> map = new HashMap<>();
 //            for (int i = 0; i < arr.size(); i++) {
-//                Object val = MysqlDataImportHelper.parseValue(arr.get(i));
+//                Object val = MongoDataImportHelper.parseValue(arr.get(i));
 //                map.put(this.columns.get(i), val);
 //            }
 //            return map;

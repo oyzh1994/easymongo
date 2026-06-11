@@ -19,7 +19,7 @@ import java.util.Objects;
  * @author oyzh
  * @since 2024-09-04
  */
-public abstract class MysqlTypeFileWriter implements Closeable {
+public abstract class MongoTypeFileWriter implements Closeable {
 
     protected void init() throws Exception {
 
@@ -33,7 +33,7 @@ public abstract class MysqlTypeFileWriter implements Closeable {
      * @param config 导出配置
      * @return 参数化后的值
      */
-    public Object parameterized(MongoColumn column, Object value, MysqlDataExportConfig config) {
+    public Object parameterized(MongoColumn column, Object value, MongoDataExportConfig config) {
         if (value == null) {
             return "";
         }
