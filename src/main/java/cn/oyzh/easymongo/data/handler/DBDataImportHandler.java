@@ -10,7 +10,7 @@ import cn.oyzh.easymongo.data.MongoExcelTypeFileReader;
 import cn.oyzh.easymongo.data.MongoTypeFileReader;
 import cn.oyzh.easymongo.data.MongoJsonTypeFileReader;
 import cn.oyzh.easymongo.data.MongoXmlTypeFileReader;
-import cn.oyzh.easymongo.fx.data.ShellMongoDataImportFile;
+import cn.oyzh.easymongo.data.ui.ShellMongoDataImportFile;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;

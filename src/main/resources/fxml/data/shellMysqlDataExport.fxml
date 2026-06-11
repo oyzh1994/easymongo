@@ -19,13 +19,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox?>
-<?import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollectionTableView?>
-<?import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollectionComboBox?>
-<?import cn.oyzh.easymongo.fx.data.ShellMongoDataExportColumnListView?>
-<?import cn.oyzh.easymongo.fx.data.DBDataDateTextFiled?>
-<?import cn.oyzh.easymongo.fx.data.DBDataRecordSeparatorComboBox?>
-<?import cn.oyzh.easymongo.fx.data.DBDataFieldSeparatorComboBox?>
-<?import cn.oyzh.easymongo.fx.data.DBDataTxtIdentifierComboBox?>
+<?import cn.oyzh.easymongo.data.ui.ShellMongoDataExportCollectionTableView?>
+<?import cn.oyzh.easymongo.data.ui.ShellMongoDataExportCollectionComboBox?>
+<?import cn.oyzh.easymongo.data.ui.ShellMongoDataExportColumnListView?>
+<?import cn.oyzh.easymongo.data.ui.DBDataDateTextFiled?>
+<?import cn.oyzh.easymongo.data.ui.DBDataRecordSeparatorComboBox?>
+<?import cn.oyzh.easymongo.data.ui.DBDataFieldSeparatorComboBox?>
+<?import cn.oyzh.easymongo.data.ui.DBDataTxtIdentifierComboBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoDataExportController" realWidth="700"
         realHeight="650">

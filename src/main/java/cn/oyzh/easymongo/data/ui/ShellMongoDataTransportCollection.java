@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.fx.data;
+package cn.oyzh.easymongo.data.ui;
 
 /**
  * @author oyzh

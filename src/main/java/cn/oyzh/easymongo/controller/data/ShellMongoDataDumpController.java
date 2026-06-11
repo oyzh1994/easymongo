@@ -5,7 +5,7 @@ import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.easymongo.data.handler.DBDataDumpHandler;
 import cn.oyzh.easymongo.domain.MongoConnect;
-import cn.oyzh.easymongo.fx.data.DBDataDumpTypeComboBox;
+import cn.oyzh.easymongo.data.ui.DBDataDumpTypeComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.fx.gui.text.area.MsgTextArea;
 import cn.oyzh.fx.gui.text.field.ReadOnlyTextField;

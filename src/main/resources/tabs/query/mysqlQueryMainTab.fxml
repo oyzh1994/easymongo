@@ -8,7 +8,7 @@
 <?import cn.oyzh.fx.gui.svg.glyph.PrettySVGGlyph?>
 <?import cn.oyzh.fx.gui.svg.glyph.RunSVGGlyph?>
 <?import cn.oyzh.fx.gui.svg.glyph.database.ExplainSVGGlyph?>
-<?import cn.oyzh.easymongo.query.MongoQueryEditor?>
+<?import cn.oyzh.easymongo.query.ui.MongoQueryEditor?>
 <?import cn.oyzh.easymongo.tabs.query.MysqlQueryInfoTab?>
 <FXVBox xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"

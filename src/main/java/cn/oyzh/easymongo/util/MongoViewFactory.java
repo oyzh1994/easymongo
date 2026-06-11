@@ -7,7 +7,7 @@ import cn.oyzh.easymongo.controller.data.ShellMongoDataExportController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataImportController;
 import cn.oyzh.easymongo.controller.data.ShellMongoRunScriptFileController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
-import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollection;
+import cn.oyzh.easymongo.data.ui.ShellMongoDataExportCollection;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;

@@ -2,7 +2,7 @@ package cn.oyzh.easymongo.data.handler;
 
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.CollectionUtil;
-import cn.oyzh.easymongo.fx.data.ShellMongoDataTransportCollection;
+import cn.oyzh.easymongo.data.ui.ShellMongoDataTransportCollection;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoRecord;
