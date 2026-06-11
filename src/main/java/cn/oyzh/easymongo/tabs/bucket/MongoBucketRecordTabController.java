@@ -167,6 +167,16 @@ public class MongoBucketRecordTabController extends RichTabController {
     }
 
     /**
+     * 初始化计数
+     *
+     * @param count 计数
+     */
+    private void initCount(long count) {
+        this.pageData = new Paging<>(this.recordTable.itemList(), this.pageData.limit(), count);
+        this.pageBox.setPaging(this.pageData);
+    }
+
+    /**
      * 初始化列
      *
      * @param columns 列数据
@@ -305,21 +315,60 @@ public class MongoBucketRecordTabController extends RichTabController {
      */
     @FXML
     private void deleteRecord() {
+        if (!MessageBox.confirm(I18nHelper.deleteDocument() + "?")) {
+            return;
+        }
+        List<MongoRecord> records = new ArrayList<>(this.recordTable.getSelectedItems());
+        StageManager.showMask(() -> this.deleteRecords(records));
+    }
+
+    /**
+     * 删除记录
+     *
+     * @param records 记录
+     */
+    private void deleteRecords(List<MongoRecord> records) {
         try {
-            MongoRecord record = this.recordTable.getSelectedItem();
-            if (record == null) {
-                return;
+            boolean success = false;
+            for (MongoRecord record : records) {
+                success = this.deleteRecord(record);
+                if (!success) {
+                    break;
+                }
             }
-            if (!MessageBox.confirm(I18nHelper.deleteRecord() + "?")) {
-                return;
+            // 操作成功
+            if (success) {
+                this.recordTable.removeItem(records);
+                this.initCount(this.pageData.count() - records.size());
+            } else {// 操作失败
+                MessageBox.warnToast(I18nHelper.operationFail());
             }
-            StageManager.showMask(() -> {
-                this.getItem().deleteRecord((BsonValue) record._idValue());
-                this.recordTable.removeItem(record);
-            });
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
+    }
+
+    /**
+     * 删除记录
+     *
+     * @param record 记录
+     * @return 结果
+     */
+    private boolean deleteRecord(MongoRecord record) {
+        boolean success;
+        // 如果是新增的数据，直接删除
+        if (record.isCreated()) {
+            success = true;
+        } else {
+            success = this.getItem().deleteRecord(record) == 1;
+        }
+        // 操作成功
+        if (success) {
+            this.recordTable.removeItem(record);
+        } else {// 操作失败
+            MessageBox.warnToast(I18nHelper.operationFail());
+        }
+        return success;
     }
 
     /**
@@ -345,6 +394,7 @@ public class MongoBucketRecordTabController extends RichTabController {
                 }
                 this.recordTable.addItem(record);
                 this.recordTable.selectLast();
+                this.initCount(this.recordTable.getItemSize());
             } catch (Exception ex) {
                 MessageBox.exception(ex);
             }

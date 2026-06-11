@@ -18,6 +18,8 @@ import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.plus.controls.text.field.FXTextField;
 import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.font.FontUtil;
+import cn.oyzh.fx.plus.menu.ContextMenuManager;
+import cn.oyzh.fx.plus.menu.FXContextMenu;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.fx.plus.util.ControlUtil;
 import com.alibaba.fastjson2.JSONObject;
@@ -104,7 +106,14 @@ public class MongoRecordUtil {
             if (object == null) {
                 textField.setPromptText(nullPromptText());
             }
-            textField.setContextMenu(getColumnContextMenu(property));
+            textField.setOnContextMenuRequested(event -> {
+                if (textField.getContextMenu() == null) {
+                    List<FXMenuItem> menuItems = getColumnMenuItem(property);
+                    FXContextMenu contextMenu = ContextMenuManager.createContextMenu(textField, menuItems);
+                    ContextMenuManager.setContextMenu(textField, contextMenu);
+                    ContextMenuManager.showContextMenu(contextMenu, textField, event);
+                }
+            });
             textField.textProperty().addListener((observable, oldValue, newValue) -> property.setChanged(true));
         }
         return node;
@@ -154,12 +163,18 @@ public class MongoRecordUtil {
         return w3 + 50;
     }
 
-    public static ContextMenu getColumnContextMenu(MongoRecordProperty property) {
-        ContextMenu contextMenu = new ContextMenu();
-        contextMenu.getItems().setAll(getColumnMenuItem(property));
-        return contextMenu;
-    }
+//    public static ContextMenu getColumnContextMenu(MongoRecordProperty property) {
+//        ContextMenu contextMenu = new ContextMenu();
+//        contextMenu.getItems().setAll(getColumnMenuItem(property));
+//        return contextMenu;
+//    }
 
+    /**
+     * 获取字段菜单列表
+     *
+     * @param property 属性
+     * @return 菜单列表
+     */
     public static List<FXMenuItem> getColumnMenuItem(MongoRecordProperty property) {
         List<FXMenuItem> menuItems = new ArrayList<>();
         if (property.getColumn().is_id()) {

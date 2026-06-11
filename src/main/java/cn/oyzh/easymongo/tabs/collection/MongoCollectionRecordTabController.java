@@ -239,6 +239,16 @@ public class MongoCollectionRecordTabController extends RichTabController {
     }
 
     /**
+     * 初始化计数
+     *
+     * @param count 计数
+     */
+    private void initCount(long count) {
+        this.pageData = new Paging<>(this.recordTable.itemList(), this.pageData.limit(), count);
+        this.pageBox.setPaging(this.pageData);
+    }
+
+    /**
      * 初始化列
      *
      * @param columns 列数据
@@ -300,6 +310,8 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 }
                 this.recordTable.addItem(record);
                 this.recordTable.selectLast();
+                // 初始化计数
+                this.initCount(this.pageData.count() + 1);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -343,6 +355,8 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 // 纠正记录
                 this.correctRecords();
                 this.apply.disable();
+                // 初始化计数
+                this.initCount(this.pageData.count() + 1);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -419,6 +433,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
             }
             this.recordTable.removeItem(discardRecord);
             this.apply.disable();
+            this.initCount(this.recordTable.getItemSize());
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
@@ -532,39 +547,60 @@ public class MongoCollectionRecordTabController extends RichTabController {
      */
     @FXML
     private void deleteRecord() {
-        MongoRecord record = this.recordTable.getSelectedItem();
-        StageManager.showMask(() -> this.doDeleteRecord(record));
+        if (!MessageBox.confirm(I18nHelper.deleteDocument() + "?")) {
+            return;
+        }
+        List<MongoRecord> records = new ArrayList<>(this.recordTable.getSelectedItems());
+        StageManager.showMask(() -> this.deleteRecords(records));
     }
 
     /**
      * 删除记录
      *
-     * @param record 记录
+     * @param records 记录
      */
-    private void doDeleteRecord(MongoRecord record) {
+    private void deleteRecords(List<MongoRecord> records) {
         try {
-            if (record == null) {
-                return;
-            }
-            if (!MessageBox.confirm(I18nHelper.deleteRecord() + "?")) {
-                return;
-            }
-            // 如果是新增的数据，直接删除
-            boolean success;
-            if (record.isCreated()) {
-                success = true;
-            } else {
-                success = this.getItem().deleteRecord(record) == 1;
+            boolean success = false;
+            for (MongoRecord record : records) {
+                success = this.deleteRecord(record);
+                if (!success) {
+                    break;
+                }
             }
             // 操作成功
             if (success) {
-                this.recordTable.removeItem(record);
+                this.recordTable.removeItem(records);
+                this.initCount(this.pageData.count() - records.size());
             } else {// 操作失败
                 MessageBox.warnToast(I18nHelper.operationFail());
             }
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
+    }
+
+    /**
+     * 删除记录
+     *
+     * @param record 记录
+     * @return 结果
+     */
+    private boolean deleteRecord(MongoRecord record) {
+        boolean success;
+        // 如果是新增的数据，直接删除
+        if (record.isCreated()) {
+            success = true;
+        } else {
+            success = this.getItem().deleteRecord(record) == 1;
+        }
+        // 操作成功
+        if (success) {
+            this.recordTable.removeItem(record);
+        } else {// 操作失败
+            MessageBox.warnToast(I18nHelper.operationFail());
+        }
+        return success;
     }
 
     @Override

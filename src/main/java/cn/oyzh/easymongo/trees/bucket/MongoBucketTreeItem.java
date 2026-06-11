@@ -167,8 +167,13 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         this.client().downloadBucketRecord(this.dbName(), this.bucketName(), _id, file);
     }
 
-    public void deleteRecord(BsonValue _id) {
-        this.client().deleteBucketRecord(this.dbName(), this.bucketName(), _id);
+    public long deleteRecord(BsonValue _id) {
+       return this.client().deleteBucketRecord(this.dbName(), this.bucketName(), _id);
     }
+
+    public long deleteRecord(MongoRecord record) {
+        return this.deleteRecord((BsonValue) record._idValue());
+    }
+
 
 }

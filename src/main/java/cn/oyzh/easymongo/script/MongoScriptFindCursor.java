@@ -10,15 +10,25 @@ import org.bson.Document;
  */
 public class MongoScriptFindCursor extends MongoScriptCursor {
 
-    private final FindIterable<Document> cursor;
     private final String dbName;
+
     private final String collectionName;
+
+    private final FindIterable<Document> cursor;
 
     public MongoScriptFindCursor(String dbName, String collectionName, FindIterable<Document> cursor) {
         super(cursor);
         this.dbName = dbName;
         this.collectionName = collectionName;
         this.cursor = cursor;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public String getCollectionName() {
+        return collectionName;
     }
 
     public MongoScriptFindCursor limit(int n) {
@@ -32,9 +42,4 @@ public class MongoScriptFindCursor extends MongoScriptCursor {
     public Document explain() {
        return this.cursor.explain();
     }
-
-//    @Override
-//    public List<MongoRecord> toArray() {
-//        return MongoRecordUtil.docToRecord(this.dbName, this.collectionName, this.cursor);
-//    }
 }

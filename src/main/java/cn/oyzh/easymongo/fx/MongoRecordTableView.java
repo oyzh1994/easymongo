@@ -3,6 +3,7 @@ package cn.oyzh.easymongo.fx;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordProperty;
 import cn.oyzh.fx.plus.controls.table.FXTableView;
+import javafx.scene.control.SelectionMode;
 
 /**
  * @author oyzh
@@ -42,7 +43,7 @@ public class MongoRecordTableView extends FXTableView<MongoRecord> {
 
     @Override
     public void initNode() {
-//        this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.setSelectionMode(SelectionMode.MULTIPLE);
         this.setRowFactory(param -> new MongoRecordTableRow());
         // 监听移除
         super.destroyItemsOnRemoved();

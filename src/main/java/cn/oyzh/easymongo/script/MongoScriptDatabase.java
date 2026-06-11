@@ -9,6 +9,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.CreateViewOptions;
 import org.bson.Document;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class MongoScriptDatabase {
 
     public MongoScriptCollection getCollection(String name) {
         MongoCollection<Document> collection = this.database.getCollection(name);
-        return new MongoScriptCollection(this.getName(), name, collection);
+        return new MongoScriptCollection(collection);
     }
 
     public MongoScriptDatabase createCollection(String name) {

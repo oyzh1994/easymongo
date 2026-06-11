@@ -220,6 +220,15 @@ public class MongoQuerySelectTabController extends RichTabController {
     }
 
     /**
+     * 初始化计数
+     *
+     * @param count 计数
+     */
+    private void initCount(int count) {
+        this.count.text(I18nHelper.totalData() + ": " + count);
+    }
+
+    /**
      * 初始化列
      *
      * @param columns 列数据
@@ -406,43 +415,62 @@ public class MongoQuerySelectTabController extends RichTabController {
      */
     @FXML
     private void deleteRecord() {
-        MongoRecord record = this.recordTable.getSelectedItem();
-        StageManager.showMask(() -> this.doDeleteRecord(record));
+        if (!MessageBox.confirm(I18nHelper.deleteDocument() + "?")) {
+            return;
+        }
+        List<MongoRecord> records = new ArrayList<>(this.recordTable.getSelectedItems());
+        StageManager.showMask(() -> this.deleteRecords(records));
+    }
+
+    /**
+     * 删除记录
+     *
+     * @param records 记录
+     */
+    private void deleteRecords(List<MongoRecord> records) {
+        try {
+            boolean success = false;
+            for (MongoRecord record : records) {
+                success = this.deleteRecord(record);
+                if (!success) {
+                    break;
+                }
+            }
+            // 操作成功
+            if (success) {
+                this.recordTable.removeItem(records);
+                // 初始化计数
+                this.initCount(this.recordTable.getItemSize());
+            } else {// 操作失败
+                MessageBox.warnToast(I18nHelper.operationFail());
+            }
+        } catch (Exception ex) {
+            MessageBox.exception(ex);
+        }
     }
 
     /**
      * 删除记录
      *
      * @param record 记录
+     * @return 结果
      */
-    private void doDeleteRecord(MongoRecord record) {
-        try {
-            if (record == null) {
-                return;
-            }
-            if (!MessageBox.confirm(I18nHelper.deleteRecord() + "?")) {
-                return;
-            }
-            // 如果是新增的数据，直接删除
-            boolean success;
-            if (record.isCreated()) {
-                success = true;
-            } else {
-                success = this.dbItem.deleteCollectionRecord(record) == 1;
-            }
-            // 操作成功
-            if (success) {
-                this.recordTable.removeItem(record);
-            } else {// 操作失败
-                MessageBox.warnToast(I18nHelper.operationFail());
-            }
-            // 初始化计数
-            this.initCount(this.recordTable.getItemSize());
-        } catch (Exception ex) {
-            MessageBox.exception(ex);
+    private boolean deleteRecord(MongoRecord record) {
+        boolean success;
+        // 如果是新增的数据，直接删除
+        if (record.isCreated()) {
+            success = true;
+        } else {
+            success = this.dbItem.deleteCollectionRecord(record) == 1;
         }
+        // 操作成功
+        if (success) {
+            this.recordTable.removeItem(record);
+        } else {// 操作失败
+            MessageBox.warnToast(I18nHelper.operationFail());
+        }
+        return success;
     }
-
     @Override
     public void onTabClosed(Event event) {
         super.onTabClosed(event);
@@ -479,14 +507,5 @@ public class MongoQuerySelectTabController extends RichTabController {
         });
         this.recordTable.setCtrlSAction(this::apply);
         NodeUtil.nodeOnCtrlS(this.root, this::apply);
-    }
-
-    /**
-     * 初始化计数
-     *
-     * @param count 计数
-     */
-    private void initCount(int count) {
-        this.count.text(I18nHelper.totalData() + ": " + count);
     }
 }

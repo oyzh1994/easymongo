@@ -12,6 +12,7 @@ import cn.oyzh.easymongo.query.MongoExecuteResult;
 import cn.oyzh.easymongo.query.MongoQueryResults;
 import cn.oyzh.easymongo.script.MongoScriptCursor;
 import cn.oyzh.easymongo.script.MongoScriptEngine;
+import cn.oyzh.easymongo.script.MongoScriptFindCursor;
 import cn.oyzh.easymongo.script.MongoScriptParser;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
@@ -761,13 +762,15 @@ public class MongoClient implements Closeable {
      * @param dbName     数据库名称
      * @param bucketName 桶名称
      * @param _id        数据id
+     * @return 结果
      */
-    public void deleteBucketRecord(String dbName, String bucketName, BsonValue _id) {
+    public long deleteBucketRecord(String dbName, String bucketName, BsonValue _id) {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
         GridFSBucket bucket = this.bucket(dbName, bucketName);
         bucket.delete(_id);
+        return 1;
     }
 
     public List<? extends MongoColumn> selectColumns(MongoSelectRecordParam param) {
@@ -804,7 +807,7 @@ public class MongoClient implements Closeable {
         long start = System.currentTimeMillis();
         try {
             Object obj = this.shellEngine().eval(script);
-            this.parseResult(result, obj, dbName);
+            this.parseResult(result, obj, dbName, null);
         } catch (ScriptException ex) {
             ex.printStackTrace();
             result.setSuccess(false);
@@ -823,14 +826,16 @@ public class MongoClient implements Closeable {
      * @param obj    对象
      * @param dbName 数据库名称
      */
-    private void parseResult(MongoExecuteResult result, Object obj, String dbName) {
-        if (obj instanceof MongoScriptCursor cursor) {
-            parseResult(result, cursor.toArray(), dbName);
+    private void parseResult(MongoExecuteResult result, Object obj, String dbName, String collectionName) {
+        if (obj instanceof MongoScriptFindCursor cursor) {
+            parseResult(result, cursor.toArray(), cursor.getDbName(), cursor.getCollectionName());
+        } else if (obj instanceof MongoScriptCursor cursor) {
+            parseResult(result, cursor.toArray(), dbName, collectionName);
         } else if (obj instanceof List<?> list) {
             result.setSuccess(true);
             List<MongoRecord> records = new ArrayList<>();
             for (Object o : list) {
-                MongoRecord record = toMongoRecord(o, dbName);
+                MongoRecord record = toMongoRecord(o, dbName, collectionName);
                 if (record != null) {
                     records.add(record);
                 }
@@ -852,7 +857,7 @@ public class MongoClient implements Closeable {
             result.setUpdateCount(result1.getModifiedCount());
         } else {
             result.setSuccess(true);
-            MongoRecord record = toMongoRecord(obj, dbName);
+            MongoRecord record = toMongoRecord(obj, dbName, collectionName);
             if (record != null) {
                 result.parseResult(List.of(record));
             }
@@ -862,16 +867,19 @@ public class MongoClient implements Closeable {
     /**
      * 转换为mongo记录
      *
-     * @param obj    对象
-     * @param dbName 数据库名称
+     * @param obj            对象
+     * @param dbName         数据库名称
+     * @param collectionName 集合名称
      */
-    private MongoRecord toMongoRecord(Object obj, String dbName) {
+    private MongoRecord toMongoRecord(Object obj, String dbName, String collectionName) {
         if (obj instanceof Document document) {
-            return MongoRecordUtil.docToRecord(dbName, null, document);
+            return MongoRecordUtil.docToRecord(dbName, collectionName, document);
         }
         if (obj != null) {
             MongoColumns columns = new MongoColumns();
             MongoColumn column = new MongoColumn(I18nHelper.result());
+            column.setDbName(dbName);
+            column.setCollectionName(collectionName);
             columns.add(column);
             MongoRecord record = new MongoRecord(columns);
             record.putValue(column, JSONUtil.toJson(obj));

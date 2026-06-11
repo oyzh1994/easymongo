@@ -28,9 +28,9 @@ public class MongoScriptCollection {
 
     private final MongoCollection<Document> collection;
 
-    public MongoScriptCollection(String dbName, String collectionName, MongoCollection<Document> collection) {
-        this.dbName = dbName;
-        this.collectionName = collectionName;
+    public MongoScriptCollection(MongoCollection<Document> collection) {
+        this.dbName = collection.getNamespace().getDatabaseName();
+        this.collectionName = collection.getNamespace().getCollectionName();
         this.collection = collection;
     }
 
