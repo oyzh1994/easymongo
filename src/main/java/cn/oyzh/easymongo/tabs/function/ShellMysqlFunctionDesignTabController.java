@@ -3,13 +3,13 @@ package cn.oyzh.easymongo.tabs.function;
 import cn.oyzh.common.cache.CacheHelper;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.event.MongoEventUtil;
-import cn.oyzh.easymongo.fx.ShellMysqlEditor;
 import cn.oyzh.easymongo.mongo.DBObjectStatus;
 import cn.oyzh.easymongo.mongo.DBStatusListener;
 import cn.oyzh.easymongo.mongo.DBStatusListenerManager;
 import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.easymongo.util.MongoDataUtil;
+import cn.oyzh.fx.editor.incubator.control.SqlEditor;
 import cn.oyzh.fx.gui.tabs.RichTabController;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.plus.controls.tab.FXTabPane;
@@ -56,13 +56,13 @@ public class ShellMysqlFunctionDesignTabController extends RichTabController {
      * 定义
      */
     @FXML
-    private ShellMysqlEditor definition;
+    private SqlEditor definition;
 
     /**
      * 预览
      */
     @FXML
-    private ShellMysqlEditor preview;
+    private SqlEditor preview;
 
     /**
      * 切换面板

@@ -16,8 +16,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import cn.oyzh.easymongo.fx.MongoConnectComboBox?>
-<?import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox?>
-<?import cn.oyzh.easymongo.fx.data.ShellMysqlDataTransportTableListView?>
+<?import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox?>
+<?import cn.oyzh.easymongo.fx.data.ShellMongoDataTransportTableListView?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoDataTransportController" realWidth="800"
         realHeight="600">
@@ -97,11 +97,11 @@
                         <Insets left="30" top="15"/>
                     </VBox.margin>
                 </FXLabel>
-                <ShellMysqlDatabaseComboBox fx:id="sourceDatabase" realHeight="30" flexWidth="100% - 60">
+                <ShellMongoDatabaseComboBox fx:id="sourceDatabase" realHeight="30" flexWidth="100% - 60">
                     <VBox.margin>
                         <Insets left="30" top="5"/>
                     </VBox.margin>
-                </ShellMysqlDatabaseComboBox>
+                </ShellMongoDatabaseComboBox>
                 <FXLabel text="%base.info" realHeight="30" fontWeight="BOLD" fontSize="16"
                          style="-fx-text-fill: yellowgreen">
                     <VBox.margin>
@@ -167,11 +167,11 @@
                         <Insets left="30" top="15"/>
                     </VBox.margin>
                 </FXLabel>
-                <ShellMysqlDatabaseComboBox fx:id="targetDatabase" realHeight="30" flexWidth="100% - 50">
+                <ShellMongoDatabaseComboBox fx:id="targetDatabase" realHeight="30" flexWidth="100% - 50">
                     <VBox.margin>
                         <Insets left="30" top="5"/>
                     </VBox.margin>
-                </ShellMysqlDatabaseComboBox>
+                </ShellMongoDatabaseComboBox>
                 <FXLabel text="%base.info" realHeight="30" fontWeight="BOLD" fontSize="16"
                          style="-fx-text-fill: mediumturquoise">
                     <VBox.margin>
@@ -229,8 +229,8 @@
         <FXAccordion flexHeight="100% - 60" flexWidth="100%">
             <panes>
                 <FXTitledPane text="%base.table" groupId="config" fx:id="tablePane">
-                    <ShellMysqlDataTransportTableListView fx:id="tableList" flexHeight="100%" flexWidth="100% - 10">
-                    </ShellMysqlDataTransportTableListView>
+                    <ShellMongoDataTransportTableListView fx:id="tableList" flexHeight="100%" flexWidth="100% - 10">
+                    </ShellMongoDataTransportTableListView>
                 </FXTitledPane>
             </panes>
         </FXAccordion>

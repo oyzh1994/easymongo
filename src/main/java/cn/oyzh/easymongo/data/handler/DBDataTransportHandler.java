@@ -2,7 +2,7 @@ package cn.oyzh.easymongo.data.handler;
 
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.CollectionUtil;
-import cn.oyzh.easymongo.fx.data.ShellMysqlDataTransportTable;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataTransportCollection;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoRecord;
@@ -50,7 +50,7 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
     /**
      * 表
      */
-    protected List<ShellMysqlDataTransportTable> tables;
+    protected List<ShellMongoDataTransportCollection> tables;
 
     /**
      * 执行传输
@@ -178,11 +178,11 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
         this.batchLimit = batchLimit;
     }
 
-    public List<ShellMysqlDataTransportTable> getTables() {
+    public List<ShellMongoDataTransportCollection> getTables() {
         return tables;
     }
 
-    public void setTables(List<ShellMysqlDataTransportTable> tables) {
+    public void setTables(List<ShellMongoDataTransportCollection> tables) {
         this.tables = tables;
     }
 }

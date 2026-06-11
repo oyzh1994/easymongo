@@ -13,24 +13,24 @@ import java.util.List;
  * @author oyzh
  * @since 2024/09/05
  */
-public class ShellMysqlDataTransportTableListView extends FXListView<FXCheckBox> {
+public class ShellMongoDataTransportTableListView extends FXListView<FXCheckBox> {
 
     private Runnable selectedChanged;
 
     public void of(List<MongoCollection> tables) {
-        List<ShellMysqlDataTransportTable> list = CollectionUtil.newArrayList();
+        List<ShellMongoDataTransportCollection> list = CollectionUtil.newArrayList();
         for (MongoCollection table : tables) {
-            ShellMysqlDataTransportTable obj = new ShellMysqlDataTransportTable();
+            ShellMongoDataTransportCollection obj = new ShellMongoDataTransportCollection();
             obj.setName(table.getName());
             list.add(obj);
         }
         this.init(list);
     }
 
-    public void init(List<ShellMysqlDataTransportTable> tables) {
+    public void init(List<ShellMongoDataTransportCollection> tables) {
         this.clearItems();
         if (CollectionUtil.isNotEmpty(tables)) {
-            for (ShellMysqlDataTransportTable table : tables) {
+            for (ShellMongoDataTransportCollection table : tables) {
                 FXCheckBox checkBox = new FXCheckBox();
                 checkBox.setText(table.getName());
                 checkBox.setSelected(table.isSelected());
@@ -50,8 +50,8 @@ public class ShellMysqlDataTransportTableListView extends FXListView<FXCheckBox>
         }
     }
 
-    public List<ShellMysqlDataTransportTable> getSelectedTables() {
-        List<ShellMysqlDataTransportTable> list = new ArrayList<>();
+    public List<ShellMongoDataTransportCollection> getSelectedTables() {
+        List<ShellMongoDataTransportCollection> list = new ArrayList<>();
         for (FXCheckBox item : this.getItems()) {
             if (item.isSelected()) {
                 list.add(item.getProp("data"));

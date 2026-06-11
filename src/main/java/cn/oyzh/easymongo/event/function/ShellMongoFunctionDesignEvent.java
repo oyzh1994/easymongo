@@ -8,7 +8,7 @@ import cn.oyzh.event.Event;
  * @author oyzh
  * @since 2024/06/29
  */
-public class ShellMysqlFunctionDesignEvent extends Event<MongoFunction> {
+public class ShellMongoFunctionDesignEvent extends Event<MongoFunction> {
 
     private MongoDatabaseTreeItem dbItem;
 

@@ -11,7 +11,7 @@ import cn.oyzh.easymongo.data.MongoJsonTypeFileWriter;
 import cn.oyzh.easymongo.data.MongoTxtTypeFileWriter;
 import cn.oyzh.easymongo.data.MongoTypeFileWriter;
 import cn.oyzh.easymongo.data.MongoXmlTypeFileWriter;
-import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollection;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
@@ -53,7 +53,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     /**
      * 导出表
      */
-    private List<ShellMysqlDataExportTable> tables;
+    private List<ShellMongoDataExportCollection> tables;
 
     /**
      * 导出配置
@@ -155,7 +155,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     public void doExport() throws Exception {
         this.message("Export Starting");
         if (CollectionUtil.isNotEmpty(this.tables)) {
-            for (ShellMysqlDataExportTable table : this.tables) {
+            for (ShellMongoDataExportCollection table : this.tables) {
                 this.checkInterrupt();
                 this.exportTable(table);
                 this.processedIncr();
@@ -192,7 +192,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
      * @param table 表
      * @throws Exception 异常
      */
-    protected void exportTable(ShellMysqlDataExportTable table) throws Exception {
+    protected void exportTable(ShellMongoDataExportCollection table) throws Exception {
         String tableName = table.getName();
         this.message("Exporting Table " + table.getName());
         this.message("Exporting Records of Table " + table.getName());
@@ -247,7 +247,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
      * @param columns 字段列表
      * @throws IOException 异常
      */
-    private void writeHeader(MongoTypeFileWriter writer, ShellMysqlDataExportTable table, MongoColumns columns) throws Exception {
+    private void writeHeader(MongoTypeFileWriter writer, ShellMongoDataExportCollection table, MongoColumns columns) throws Exception {
         writer.writeHeader();
     }
 
@@ -259,7 +259,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
      * @param records 记录列表
      * @throws IOException 异常
      */
-    private void writeRecord(MongoTypeFileWriter writer, ShellMysqlDataExportTable table, MongoColumns columns, List<MongoRecord> records) throws Exception {
+    private void writeRecord(MongoTypeFileWriter writer, ShellMongoDataExportCollection table, MongoColumns columns, List<MongoRecord> records) throws Exception {
         List<Map<String, Object>> objects = new ArrayList<>();
         for (MongoRecord object : records) {
             objects.add(object.toMap());
@@ -345,11 +345,11 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         this.queryLimit = queryLimit;
     }
 
-    public List<ShellMysqlDataExportTable> getTables() {
+    public List<ShellMongoDataExportCollection> getTables() {
         return tables;
     }
 
-    public void setTables(List<ShellMysqlDataExportTable> tables) {
+    public void setTables(List<ShellMongoDataExportCollection> tables) {
         this.tables = tables;
     }
 

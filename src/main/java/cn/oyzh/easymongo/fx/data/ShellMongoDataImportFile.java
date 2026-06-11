@@ -2,7 +2,7 @@ package cn.oyzh.easymongo.fx.data;
 
 import cn.oyzh.common.cache.CacheHelper;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.fx.ShellMysqlTableComboBox;
+import cn.oyzh.easymongo.fx.ShellMongoCollectionComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.fx.gui.text.field.ChooseFileTextField;
 import cn.oyzh.fx.plus.tableview.TableViewUtil;
@@ -15,7 +15,7 @@ import java.io.File;
  * @author oyzh
  * @since 2024/08/30
  */
-public class ShellMysqlDataImportFile {
+public class ShellMongoDataImportFile {
 
     /**
      * 文件路径属性
@@ -61,8 +61,8 @@ public class ShellMysqlDataImportFile {
         return textField;
     }
 
-    public ShellMysqlTableComboBox getTargetTableControl() {
-        ShellMysqlTableComboBox comboBox = new ShellMysqlTableComboBox();
+    public ShellMongoCollectionComboBox getTargetTableControl() {
+        ShellMongoCollectionComboBox comboBox = new ShellMongoCollectionComboBox();
         String dbName = CacheHelper.get("dbName");
         MongoClient dbClient = CacheHelper.get("dbClient");
         comboBox.init(dbName, this.getTableName(), dbClient);

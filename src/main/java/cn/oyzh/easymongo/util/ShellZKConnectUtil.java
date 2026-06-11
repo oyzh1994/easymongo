@@ -2,7 +2,7 @@ package cn.oyzh.easymongo.util;
 
 
 import cn.oyzh.easymongo.domain.MongoConnect;
-import cn.oyzh.easymongo.dto.ShellZKConnectInfo;
+import cn.oyzh.easymongo.dto.ShellMongoConnectInfo;
 
 /**
  * zk连接工具类
@@ -19,11 +19,11 @@ public class ShellZKConnectUtil {
      * @param input 输入内容
      * @return 连接
      */
-    public static ShellZKConnectInfo parse(String input) {
+    public static ShellMongoConnectInfo parse(String input) {
         if (input != null) {
             try {
                 String[] words = input.split(" ");
-                ShellZKConnectInfo connect = new ShellZKConnectInfo();
+                ShellMongoConnectInfo connect = new ShellMongoConnectInfo();
                 connect.setInput(input);
                 for (int i = 0; i < words.length; i++) {
                     String word = words[i];
@@ -65,7 +65,7 @@ public class ShellZKConnectUtil {
      * @param connectInfo 连接信息
      * @param connect     连接
      */
-    public static void copyConnect(ShellZKConnectInfo connectInfo, MongoConnect connect) {
+    public static void copyConnect(ShellMongoConnectInfo connectInfo, MongoConnect connect) {
         if (connectInfo != null && connect != null) {
             connect.setReadonly(connectInfo.isReadonly());
             connect.setConnectTimeOut(connectInfo.getTimeout());

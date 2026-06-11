@@ -4,9 +4,9 @@ import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
-import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDesignEvent;
-import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDroppedEvent;
-import cn.oyzh.easymongo.event.function.ShellMysqlFunctionRenamedEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionDesignEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionDroppedEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionRenamedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryAddEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalCloseEvent;
@@ -906,7 +906,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
      * @param event 事件
      */
     @EventSubscribe
-    private void onFunctionRenamed(ShellMysqlFunctionRenamedEvent event) {
+    private void onFunctionRenamed(ShellMongoFunctionRenamedEvent event) {
         try {
             ShellMysqlFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
             if (tab != null) {
@@ -923,7 +923,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
      * @param event 事件
      */
     @EventSubscribe
-    private void onFunctionDesign(ShellMysqlFunctionDesignEvent event) {
+    private void onFunctionDesign(ShellMongoFunctionDesignEvent event) {
         try {
             ShellMysqlFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
             if (tab == null) {
@@ -943,7 +943,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
      * @param event 事件
      */
     @EventSubscribe
-    private void onFunctionDropped(ShellMysqlFunctionDroppedEvent event) {
+    private void onFunctionDropped(ShellMongoFunctionDroppedEvent event) {
         try {
             ShellMysqlFunctionDesignTab tab1 = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
             if (tab1 != null) {

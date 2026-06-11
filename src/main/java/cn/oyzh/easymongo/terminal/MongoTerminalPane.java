@@ -5,7 +5,7 @@ import cn.oyzh.common.thread.ExecutorUtil;
 import cn.oyzh.common.thread.TaskManager;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.domain.MongoSetting;
-import cn.oyzh.easymongo.dto.ShellZKConnectInfo;
+import cn.oyzh.easymongo.dto.ShellMongoConnectInfo;
 import cn.oyzh.easymongo.exception.MongoExceptionParser;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoConnState;
@@ -61,7 +61,7 @@ public class MongoTerminalPane extends TerminalPane {
     /**
      * zk连接
      */
-    private ShellZKConnectInfo connectInfo;
+    private ShellMongoConnectInfo connectInfo;
 
     /**
      * 客户端连接状态监听器

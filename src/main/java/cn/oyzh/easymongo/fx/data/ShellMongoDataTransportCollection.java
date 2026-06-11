@@ -1,17 +1,28 @@
 package cn.oyzh.easymongo.fx.data;
 
-import cn.oyzh.easymongo.mongo.MongoColumn;
-
 /**
  * @author oyzh
- * @since 2024/8/27
+ * @since 2024-09-06
  */
-public class ShellMysqlDataExportColumn extends MongoColumn {
+public class ShellMongoDataTransportCollection {
+
+    /**
+     * 表名称
+     */
+    private String name;
 
     /**
      * 是否选中
      */
     private boolean selected = true;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public boolean isSelected() {
         return selected;

@@ -2,7 +2,6 @@ package cn.oyzh.easymongo.fx;
 
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
-import cn.oyzh.easymongo.mongo.MongoDatabase;
 import cn.oyzh.fx.plus.controls.combo.FXComboBox;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
  * @author oyzh
  * @since 2024/01/25
  */
-public class ShellMysqlDatabaseComboBox extends FXComboBox<String> {
+public class ShellMongoDatabaseComboBox extends FXComboBox<String> {
 
     public void init(MongoClient client) {
         this.init(client, null);

@@ -3,11 +3,11 @@ package cn.oyzh.easymongo.controller.data;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.fx.data.ShellMysqlDataTransportTableListView;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataTransportTableListView;
 import cn.oyzh.easymongo.data.handler.DBDataTransportHandler;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.fx.MongoConnectComboBox;
-import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox;
+import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoClientUtil;
 import cn.oyzh.fx.gui.text.area.MsgTextArea;
@@ -101,13 +101,13 @@ public class ShellMongoDataTransportController extends StageController {
      * 来源库组件
      */
     @FXML
-    private ShellMysqlDatabaseComboBox sourceDatabase;
+    private ShellMongoDatabaseComboBox sourceDatabase;
 
     /**
      * 目标库组件
      */
     @FXML
-    private ShellMysqlDatabaseComboBox targetDatabase;
+    private ShellMongoDatabaseComboBox targetDatabase;
 
     /**
      * 来源主机
@@ -213,7 +213,7 @@ public class ShellMongoDataTransportController extends StageController {
      * 表列表
      */
     @FXML
-    private ShellMysqlDataTransportTableListView tableList;
+    private ShellMongoDataTransportTableListView tableList;
 
     /**
      * 传输操作任务

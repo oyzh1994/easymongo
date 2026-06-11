@@ -14,7 +14,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox?>
+<?import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoRunScriptFileController" realWidth="700" realHeight="680">
     <FXHeaderBar/>
@@ -33,11 +33,11 @@
             <Insets left="30" top="10"/>
         </VBox.margin>
     </InfoLabel>
-    <ShellMysqlDatabaseComboBox fx:id="database" realHeight="30" flexWidth="100% - 180">
+    <ShellMongoDatabaseComboBox fx:id="database" realHeight="30" flexWidth="100% - 180">
         <VBox.margin>
             <Insets left="30" top="5"/>
         </VBox.margin>
-    </ShellMysqlDatabaseComboBox>
+    </ShellMongoDatabaseComboBox>
     <InfoLabel text="%base.options">
         <VBox.margin>
             <Insets left="30" top="10"/>

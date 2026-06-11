@@ -4,16 +4,16 @@ import cn.oyzh.common.date.DateUtil;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollection;
 import cn.oyzh.easymongo.data.handler.ShellMysqlDataExportHandler;
 import cn.oyzh.easymongo.fx.DBDataDateTextFiled;
 import cn.oyzh.easymongo.fx.DBDataFieldSeparatorComboBox;
 import cn.oyzh.easymongo.fx.DBDataRecordSeparatorComboBox;
 import cn.oyzh.easymongo.fx.DBDataTxtIdentifierComboBox;
-import cn.oyzh.easymongo.fx.ShellMysqlDataExportColumnListView;
-import cn.oyzh.easymongo.fx.ShellMysqlDataExportTableComboBox;
-import cn.oyzh.easymongo.fx.ShellMysqlDataExportTableTableView;
-import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataExportColumnListView;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollectionComboBox;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollectionTableView;
+import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
 import cn.oyzh.easymongo.mongo.MongoSelectRecordParam;
@@ -89,25 +89,25 @@ public class ShellMongoDataExportController extends StageController {
      * 数据库
      */
     @FXML
-    private ShellMysqlDatabaseComboBox database;
+    private ShellMongoDatabaseComboBox database;
 
     /**
      * 导出表下拉框
      */
     @FXML
-    private ShellMysqlDataExportTableComboBox tableCombobox;
+    private ShellMongoDataExportCollectionComboBox tableCombobox;
 
     /**
      * 导出表字段列表
      */
     @FXML
-    private ShellMysqlDataExportColumnListView tableColumns;
+    private ShellMongoDataExportColumnListView tableColumns;
 
     /**
      * 导出表组件
      */
     @FXML
-    private ShellMysqlDataExportTableTableView exportTableView;
+    private ShellMongoDataExportCollectionTableView exportTableView;
 
     /**
      * 文件类型
@@ -220,7 +220,7 @@ public class ShellMongoDataExportController extends StageController {
     /**
      * 导出表
      */
-    private ShellMysqlDataExportTable exportTable;
+    private ShellMongoDataExportCollection exportTable;
 
     /**
      * 执行导出
@@ -410,7 +410,7 @@ public class ShellMongoDataExportController extends StageController {
         if (this.exportMode == 0) {
             List<MongoCollection> tables = this.dbClient.selectCollections(this.dbName);
             for (MongoCollection table : tables) {
-                ShellMysqlDataExportTable exportTable = new ShellMysqlDataExportTable();
+                ShellMongoDataExportCollection exportTable = new ShellMongoDataExportCollection();
                 exportTable.setName(table.getName());
                 exportTable.setSelected(StringUtil.equals(table.getName(), this.collectionName));
                 this.exportTableView.addItem(exportTable);
@@ -428,7 +428,7 @@ public class ShellMongoDataExportController extends StageController {
             return;
         }
         this.initTables();
-        for (ShellMysqlDataExportTable exportTable : this.exportTableView.getItems()) {
+        for (ShellMongoDataExportCollection exportTable : this.exportTableView.getItems()) {
             exportTable.setExtension(FXChooser.extensionFilter(button.getUserData().toString()));
         }
         this.step1.disappear();
@@ -443,7 +443,7 @@ public class ShellMongoDataExportController extends StageController {
             return;
         }
         this.tableCombobox.clearItems();
-        for (ShellMysqlDataExportTable o : this.exportTableView.getSelectedTables()) {
+        for (ShellMongoDataExportCollection o : this.exportTableView.getSelectedTables()) {
             if (!o.hasColumns()) {
                 o.columns(this.dbClient.selectColumns(new MongoSelectRecordParam(this.dbName, o.getName())));
             }
@@ -523,14 +523,14 @@ public class ShellMongoDataExportController extends StageController {
 
     @FXML
     private void selectAllTable() {
-        for (ShellMysqlDataExportTable item : this.exportTableView.getItems()) {
+        for (ShellMongoDataExportCollection item : this.exportTableView.getItems()) {
             item.setSelected(true);
         }
     }
 
     @FXML
     private void unselectAllTable() {
-        for (ShellMysqlDataExportTable item : this.exportTableView.getItems()) {
+        for (ShellMongoDataExportCollection item : this.exportTableView.getItems()) {
             item.setSelected(false);
         }
     }

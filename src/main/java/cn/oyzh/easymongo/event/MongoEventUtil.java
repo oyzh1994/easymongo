@@ -5,9 +5,9 @@ import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketDroppedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
-import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDesignEvent;
-import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDroppedEvent;
-import cn.oyzh.easymongo.event.function.ShellMysqlFunctionRenamedEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionDesignEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionDroppedEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionRenamedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryDeletedEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -203,20 +203,20 @@ public class MongoEventUtil {
     }
 
     public static void dropFunction(ShellMysqlFunctionTreeItem treeItem) {
-        ShellMysqlFunctionDroppedEvent event = new ShellMysqlFunctionDroppedEvent();
+        ShellMongoFunctionDroppedEvent event = new ShellMongoFunctionDroppedEvent();
         event.data(treeItem);
         EventUtil.postSync(event);
     }
 
     public static void designFunction(MongoFunction function, MongoDatabaseTreeItem dbItem) {
-        ShellMysqlFunctionDesignEvent event = new ShellMysqlFunctionDesignEvent();
+        ShellMongoFunctionDesignEvent event = new ShellMongoFunctionDesignEvent();
         event.data(function);
         event.setDbItem(dbItem);
         EventUtil.post(event);
     }
 
     public static void functionRenamed(String functionName, String newFunctionName, MongoDatabaseTreeItem dbItem) {
-        ShellMysqlFunctionRenamedEvent event = new ShellMysqlFunctionRenamedEvent();
+        ShellMongoFunctionRenamedEvent event = new ShellMongoFunctionRenamedEvent();
         event.setDbItem(dbItem);
         event.data(functionName);
         event.setNewFunctionName(newFunctionName);

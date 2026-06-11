@@ -7,7 +7,7 @@ import cn.oyzh.easymongo.controller.data.ShellMongoDataExportController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataImportController;
 import cn.oyzh.easymongo.controller.data.ShellMongoRunScriptFileController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
-import cn.oyzh.easymongo.fx.data.ShellMysqlDataExportTable;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollection;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
@@ -100,7 +100,7 @@ public class MongoViewFactory {
      * @param exportMode  导出模式
      * @param exportTable 导出表
      */
-    public static void exportData(MongoClient client, String dbName, String collectionName, int exportMode, ShellMysqlDataExportTable exportTable) {
+    public static void exportData(MongoClient client, String dbName, String collectionName, int exportMode, ShellMongoDataExportCollection exportTable) {
         try {
             StageAdapter adapter = StageManager.parseStage(ShellMongoDataExportController.class, StageManager.getFrontWindow());
             adapter.setProp("dbName", dbName);

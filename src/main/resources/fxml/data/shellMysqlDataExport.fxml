@@ -18,10 +18,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox?>
-<?import cn.oyzh.easymongo.fx.ShellMysqlDataExportTableTableView?>
-<?import cn.oyzh.easymongo.fx.ShellMysqlDataExportTableComboBox?>
-<?import cn.oyzh.easymongo.fx.ShellMysqlDataExportColumnListView?>
+<?import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox?>
+<?import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollectionTableView?>
+<?import cn.oyzh.easymongo.fx.data.ShellMongoDataExportCollectionComboBox?>
+<?import cn.oyzh.easymongo.fx.data.ShellMongoDataExportColumnListView?>
 <?import cn.oyzh.easymongo.fx.DBDataDateTextFiled?>
 <?import cn.oyzh.easymongo.fx.DBDataRecordSeparatorComboBox?>
 <?import cn.oyzh.easymongo.fx.DBDataFieldSeparatorComboBox?>
@@ -101,17 +101,17 @@
                     <Insets left="30" top="10"/>
                 </VBox.margin>
             </InfoLabel>
-            <ShellMysqlDatabaseComboBox prefHeight="30" fx:id="database">
+            <ShellMongoDatabaseComboBox prefHeight="30" fx:id="database">
                 <VBox.margin>
                     <Insets left="30" top="5"/>
                 </VBox.margin>
-            </ShellMysqlDatabaseComboBox>
+            </ShellMongoDatabaseComboBox>
             <InfoLabel text="%base.table">
                 <VBox.margin>
                     <Insets left="30" top="10"/>
                 </VBox.margin>
             </InfoLabel>
-            <ShellMysqlDataExportTableTableView fx:id="exportTableView" flexHeight="100% - 180" flexWidth="100% - 40">
+            <ShellMongoDataExportCollectionTableView fx:id="exportTableView" flexHeight="100% - 180" flexWidth="100% - 40">
                 <columns>
                     <FXTableColumn realWidth="50" valueName="selectedControl"/>
                     <FXTableColumn flexWidth="35%" valueName="name" text="%base.source" resizable="true"/>
@@ -121,7 +121,7 @@
                 <VBox.margin>
                     <Insets left="30" top="5"/>
                 </VBox.margin>
-            </ShellMysqlDataExportTableTableView>
+            </ShellMongoDataExportCollectionTableView>
             <FXHBox flexWidth="100%" realHeight="50">
                 <FXButton text="%base.selectAll" onAction="#selectAllTable" realHeight="30">
                     <HBox.margin>
@@ -160,16 +160,16 @@
             </VBox.margin>
         </InfoLabel>
         <FXVBox flexHeight="100% - 100" flexWidth="100%">
-            <ShellMysqlDataExportTableComboBox realHeight="30" flexWidth="100% - 140" fx:id="tableCombobox">
+            <ShellMongoDataExportCollectionComboBox realHeight="30" flexWidth="100% - 140" fx:id="tableCombobox">
                 <VBox.margin>
                     <Insets left="30" top="10"/>
                 </VBox.margin>
-            </ShellMysqlDataExportTableComboBox>
-            <ShellMysqlDataExportColumnListView flexHeight="100% - 100" flexWidth="100% - 140" fx:id="tableColumns">
+            </ShellMongoDataExportCollectionComboBox>
+            <ShellMongoDataExportColumnListView flexHeight="100% - 100" flexWidth="100% - 140" fx:id="tableColumns">
                 <VBox.margin>
                     <Insets left="30" top="10"/>
                 </VBox.margin>
-            </ShellMysqlDataExportColumnListView>
+            </ShellMongoDataExportColumnListView>
             <FXHBox flexWidth="100%" realHeight="50">
                 <FXButton text="%base.selectAll" onAction="#selectAllFiled" realHeight="30">
                     <HBox.margin>

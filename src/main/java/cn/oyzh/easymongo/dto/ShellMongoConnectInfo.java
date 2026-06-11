@@ -7,7 +7,7 @@ package cn.oyzh.easymongo.dto;
  * @author oyzh
  * @since 2023/9/20
  */
-public class ShellZKConnectInfo {
+public class ShellMongoConnectInfo {
 
     /**
      * 原始输入内容

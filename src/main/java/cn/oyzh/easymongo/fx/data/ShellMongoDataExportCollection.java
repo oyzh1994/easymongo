@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author oyzh
  * @since 2024/08/27
  */
-public class ShellMysqlDataExportTable {
+public class ShellMongoDataExportCollection {
 
     /**
      * 表名称
@@ -39,7 +39,7 @@ public class ShellMysqlDataExportTable {
     /**
      * 字段列表
      */
-    private List<ShellMysqlDataExportColumn> columns;
+    private List<ShellMongoDataExportColumn> columns;
 
     /**
      * 文件路径属性
@@ -155,7 +155,7 @@ public class ShellMysqlDataExportTable {
     public void columns(List<? extends MongoColumn> columns) {
         this.columns = new ArrayList<>();
         for (MongoColumn column : columns) {
-            ShellMysqlDataExportColumn exportColumn = new ShellMysqlDataExportColumn();
+            ShellMongoDataExportColumn exportColumn = new ShellMongoDataExportColumn();
             exportColumn.copy(column);
             this.columns.add(exportColumn);
         }
@@ -167,7 +167,7 @@ public class ShellMysqlDataExportTable {
 
     public List<MongoColumn> selectedColumns() {
         List<MongoColumn> selectedColumns = new ArrayList<>();
-        for (ShellMysqlDataExportColumn column : this.columns) {
+        for (ShellMongoDataExportColumn column : this.columns) {
             if (column.isSelected()) {
                 selectedColumns.add(column);
             }
@@ -201,11 +201,11 @@ public class ShellMysqlDataExportTable {
         this.name = name;
     }
 
-    public List<ShellMysqlDataExportColumn> getColumns() {
+    public List<ShellMongoDataExportColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<ShellMysqlDataExportColumn> columns) {
+    public void setColumns(List<ShellMongoDataExportColumn> columns) {
         this.columns = columns;
     }
 

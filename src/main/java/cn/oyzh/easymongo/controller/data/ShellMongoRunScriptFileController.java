@@ -5,7 +5,7 @@ import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.data.handler.DBDataRunSqlFileHandler;
 import cn.oyzh.easymongo.domain.MongoConnect;
-import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox;
+import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.fx.gui.text.area.MsgTextArea;
 import cn.oyzh.fx.gui.text.field.ChooseFileTextField;
@@ -83,7 +83,7 @@ public class ShellMongoRunScriptFileController extends StageController {
      * 数据库
      */
     @FXML
-    private ShellMysqlDatabaseComboBox database;
+    private ShellMongoDatabaseComboBox database;
 
     /**
      * 遇到错误时继续

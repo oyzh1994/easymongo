@@ -5,15 +5,15 @@ import cn.oyzh.common.date.DateUtil;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.fx.data.ShellMysqlDataImportFile;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataImportFile;
 import cn.oyzh.easymongo.data.handler.ShellMysqlDataImportHandler;
 import cn.oyzh.easymongo.fx.DBDataDateTextFiled;
 import cn.oyzh.easymongo.fx.DBDataFieldSeparatorComboBox;
 import cn.oyzh.easymongo.fx.DBDataRecordLabelComboBox;
 import cn.oyzh.easymongo.fx.DBDataRecordSeparatorComboBox;
 import cn.oyzh.easymongo.fx.DBDataTxtIdentifierComboBox;
-import cn.oyzh.easymongo.fx.ShellMysqlDataImportFileTableView;
-import cn.oyzh.easymongo.fx.ShellMysqlDatabaseComboBox;
+import cn.oyzh.easymongo.fx.data.ShellMongoDataImportFileTableView;
+import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.fx.gui.text.area.MsgTextArea;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
@@ -96,7 +96,7 @@ public class ShellMongoDataImportController extends StageController {
      * 导入表组件
      */
     @FXML
-    private ShellMysqlDataImportFileTableView importFileTableView;
+    private ShellMongoDataImportFileTableView importFileTableView;
 
     /**
      * 文件类型
@@ -206,7 +206,7 @@ public class ShellMongoDataImportController extends StageController {
      * 数据库
      */
     @FXML
-    private ShellMysqlDatabaseComboBox database;
+    private ShellMongoDatabaseComboBox database;
 
     /**
      * 数据库
@@ -314,7 +314,7 @@ public class ShellMongoDataImportController extends StageController {
         this.dateFormat.textProperty().addListener((observable, oldValue, newValue) -> this.flushDatePreview());
         // this.targetTableCombobox.selectedItemChanged((observable, oldValue, newValue) -> {
         //     if (newValue != null) {
-        //         ShellMysqlDataImportFile file = this.sourceTableCombobox.getSelectedItem();
+        //         ShellMongoDataImportFile file = this.sourceTableCombobox.getSelectedItem();
         //         file.setTargetTableName(newValue);
         //     }
         // });
@@ -490,7 +490,7 @@ public class ShellMongoDataImportController extends StageController {
         FileExtensionFilter filter = FXChooser.extensionFilter(fileType);
         File file = FileChooserHelper.choose(I18nHelper.pleaseSelectFile(), filter);
         if (file != null) {
-            ShellMysqlDataImportFile importFile = new ShellMysqlDataImportFile();
+            ShellMongoDataImportFile importFile = new ShellMongoDataImportFile();
             importFile.setFile(file);
             this.importFileTableView.addItem(importFile);
         }
