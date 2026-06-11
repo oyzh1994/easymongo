@@ -3,6 +3,11 @@ package cn.oyzh.easymongo.script;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
 
+/**
+ *
+ * @author oyzh
+ * @since 2026-06-08
+ */
 public class MongoScriptFindCursor extends MongoScriptCursor {
 
     private final FindIterable<Document> cursor;

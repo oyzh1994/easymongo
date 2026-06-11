@@ -6,6 +6,11 @@ import com.mongodb.client.MongoIterable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author oyzh
+ * @since 2026-06-08
+ */
 public class MongoScriptCursor {
 
     private final MongoIterable<?> cursor;

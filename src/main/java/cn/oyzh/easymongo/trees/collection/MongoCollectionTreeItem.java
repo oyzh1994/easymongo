@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.trees.collection;
 
 import cn.oyzh.common.dto.Paging;
+import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -22,6 +23,7 @@ import org.bson.BsonValue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * db树表节点
@@ -73,6 +75,8 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         List<MenuItem> items = new ArrayList<>();
         FXMenuItem openCollection = MenuItemHelper.openCollection("12", this::onPrimaryDoubleClick);
         items.add(openCollection);
+        FXMenuItem renameCollection = MenuItemHelper.renameCollection("12", this::rename);
+        items.add(renameCollection);
         FXMenuItem clearCollection = MenuItemHelper.clearCollection("12", this::clearCollection);
         items.add(clearCollection);
         FXMenuItem deleteCollection = MenuItemHelper.deleteCollection("12", this::delete);
@@ -82,9 +86,6 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         items.add(dumpTable);
         FXMenuItem exportTable = MenuItemHelper.exportData("12", this::export);
         items.add(exportTable);
-        FXMenuItem tableInfo = MenuItemHelper.tableInfo("12", this::tableInfo);
-        items.add(tableInfo);
-
         return items;
     }
 
@@ -127,10 +128,29 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         }
     }
 
-    private void tableInfo() {
-//        StageAdapter fxView = StageManager.parseStage(MysqlTableInfoController.class, this.window());
-//        fxView.setProp("tableItem", this);
-//        fxView.display();
+    @Override
+    public void rename() {
+        try {
+            String collectionName = MessageBox.prompt(I18nHelper.pleaseInputName(), this.value.getName());
+            // 名称为null或者跟当前名称相同，则忽略
+            if (collectionName == null || Objects.equals(collectionName, this.value.getName())) {
+                return;
+            }
+            // 检查名称
+            if (StringUtil.isBlank(collectionName)) {
+                MessageBox.warn(I18nHelper.pleaseInputContent());
+                return;
+            }
+            String oldName = this.value.getName();
+            // 修改名称
+            this.dbItem().renameCollection(oldName, collectionName);
+            this.value.setName(collectionName);
+            this.refresh();
+            MongoEventUtil.collectionRenamed(oldName, collectionName, this.dbItem());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
     }
 
     public MongoDatabaseTreeItem dbItem() {
@@ -139,34 +159,14 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         }
         return this.parent().parent();
     }
-//
-//    public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, List<MysqlColumn> columns) {
-//        MongoSelectRecordParam param = new MongoSelectRecordParam();
-//        param.setLimit(limit);
-//        param.setFilters(filters);
-//        param.setColumns(columns);
-//        param.setDbName(this.dbName());
-//        param.setStart(pageNo * limit);
-//        param.setTableName(this.tableName());
-//        List<MysqlRecord> rows = this.client().selectRecords(param);
-//        long count = this.client().selectRecordCount(param);
-//        Paging<MysqlRecord> paging = new Paging<>(rows, limit, count);
-//        paging.currentPage(pageNo);
-//        return paging;
-//    }
 
     public String infoName() {
         return parent().infoName();
     }
 
-
     @Override
     public void onPrimaryDoubleClick() {
         MongoEventUtil.collectionOpen(this, this.dbItem());
-    }
-
-    @Override
-    public void loadChild() {
     }
 
     @Override
@@ -196,14 +196,14 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     }
 
     public BsonValue insertRecord(MongoRecord record) {
-        return this.client().insertCollectionRecord(record);
+        return this.dbItem().insertCollectionRecord(record);
     }
 
     public long deleteRecord(MongoRecord record) {
-        return this.client().deleteCollectionRecord(record);
+        return this.dbItem().deleteCollectionRecord(record);
     }
 
     public long updateRecord(MongoRecord record) {
-        return this.client().updateCollectionRecord(record);
+        return this.dbItem().updateCollectionRecord(record);
     }
 }

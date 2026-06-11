@@ -272,10 +272,6 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         return this.client().executeScript(this.dbName(), script);
     }
 
-    //    public MongoQueryResults<MysqlExplainResult> explainSql(String sql) {
-    //        return null;
-    //    }
-
     public long deleteCollectionRecord(MongoRecord record) {
         return this.client().deleteCollectionRecord(record);
     }
@@ -307,4 +303,9 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
     public void alertFunction(MongoFunction function) {
         this.client().alertFunction(this.dbName(), function.getName(), function.getCode());
     }
+
+    public void renameCollection(String oldName, String newName) {
+        this.client().renameCollection(this.dbName(), oldName, newName);
+    }
+
 }

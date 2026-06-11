@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.event;
 
 import cn.oyzh.easymongo.event.collection.MongoCollectionDroppedEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
+import cn.oyzh.easymongo.event.collection.MongoCollectionRenamedEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketDroppedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
@@ -173,6 +174,14 @@ public class MongoEventUtil {
         MongoCollectionOpenEvent event = new MongoCollectionOpenEvent();
         event.data(collectionItem);
         event.setDbItem(dbItem);
+        EventUtil.post(event);
+    }
+
+    public static void collectionRenamed(String collectionName, String newCollectionName, MongoDatabaseTreeItem dbItem) {
+        MongoCollectionRenamedEvent event = new MongoCollectionRenamedEvent();
+        event.setDbItem(dbItem);
+        event.data(collectionName);
+        event.setNewCollectionName(newCollectionName);
         EventUtil.post(event);
     }
 

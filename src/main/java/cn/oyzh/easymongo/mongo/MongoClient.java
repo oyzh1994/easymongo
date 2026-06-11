@@ -18,6 +18,7 @@ import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
+import com.mongodb.MongoNamespace;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.ListCollectionNamesIterable;
@@ -471,6 +472,19 @@ public class MongoClient implements Closeable {
     }
 
     /**
+     * 重命名集合
+     *
+     * @param dbName  数据库名称
+     * @param oldName 旧名称
+     * @param newName 新名称
+     */
+    public void renameCollection(String dbName, String oldName, String newName) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, oldName);
+        MongoNamespace namespace = new MongoNamespace(dbName, newName);
+        collection.renameCollection(namespace);
+    }
+
+    /**
      * 更新集合记录
      *
      * @param record 数据
@@ -889,7 +903,6 @@ public class MongoClient implements Closeable {
         }
         return results;
     }
-
 
     /**
      * 执行脚本
