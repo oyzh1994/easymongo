@@ -68,7 +68,7 @@ public class MongoRecordUtil {
             node = textField;
         } else if (column.supportDate()) {
             DateTimeTextField textField = new DateTimeTextField();
-            textField.setDateFormat(DateTimeTextField.FORMAT);
+            textField.setDateFormat(MongoUtil.DATE_FORMAT);
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#F1E1F5")));
             node = textField;
@@ -90,11 +90,7 @@ public class MongoRecordUtil {
             node = textField;
         } else {
             FXTextField textField = new FXTextField();
-            //if (column.is_id()) {
-            //    textField.setEditable(false);
-            //} else {
             textField.setBackground(ControlUtil.background(Color.valueOf("#FDD4D3")));
-            //}
             textField.setValue(object);
             node = textField;
         }
@@ -121,7 +117,7 @@ public class MongoRecordUtil {
         } else if (column.supportObject() || column.supportList()) {
             val = JsonTextFiled.format(object);
         } else if (column.supportDate()) {
-            val = DateTimeTextField.FORMAT.format(object);
+            val = MongoUtil.DATE_FORMAT.format(object);
         } else if (column.supportBoolean()) {
             val = BooleanTextFiled.format(object);
         } else {

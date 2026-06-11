@@ -6,6 +6,8 @@ import cn.oyzh.easymongo.util.MongoUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Date;
+
 /**
  * db字段
  *
@@ -241,6 +243,24 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         }
         if (this.supportDigits()) {
             return 0d;
+        }
+        if (this.supportObject()) {
+            return "{}";
+        }
+        if (this.supportList()) {
+            return "[]";
+        }
+        if (this.supportDate()) {
+            return MongoUtil.DATE_FORMAT.format(new Date());
+        }
+        if (this.supportBinary()) {
+            return new byte[]{};
+        }
+        if (this.supportBoolean()) {
+            return false;
+        }
+        if (this.supportObjectId()) {
+            return null;
         }
         return "";
     }

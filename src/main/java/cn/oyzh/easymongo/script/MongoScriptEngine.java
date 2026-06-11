@@ -3,6 +3,7 @@ package cn.oyzh.easymongo.script;
 import cn.oyzh.easymongo.util.MongoUtil;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import org.bson.types.Code;
 import org.bson.types.ObjectId;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
@@ -10,6 +11,7 @@ import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptException;
 import java.util.Date;
+import java.util.function.Function;
 
 /**
  *
@@ -36,8 +38,9 @@ public class MongoScriptEngine {
 
         // 注入 MongoDB 特殊类型构造函数
         this.engine.put("Binary", new MongoScriptBinary());
-        this.engine.put("ObjectId", (java.util.function.Function<String, ObjectId>) ObjectId::new);
-        this.engine.put("ISODate", (java.util.function.Function<String, Date>) dateStr -> {
+        this.engine.put("Code", (Function<String, Code>) Code::new);
+        this.engine.put("ObjectId", (Function<String, ObjectId>) ObjectId::new);
+        this.engine.put("ISODate", (Function<String, Date>) dateStr -> {
             try {
                 return MongoUtil.DATE_FORMAT.parse(dateStr);
             } catch (Exception ex) {

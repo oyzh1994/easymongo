@@ -55,13 +55,13 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     private final boolean readonly;
 
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
-        if (readonly && column.is_id()) {
-            super.set(MongoRecordUtil.idValue(value));
-        } else {
-            super.set(value);
-        }
         this.column = column;
         this.record = record;
+        if (readonly && column.is_id()) {
+            this.set(MongoRecordUtil.idValue(value));
+        } else {
+            this.set(value);
+        }
         //this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
         //    this.refreshNode();
         //    this.setChanged(true);
@@ -90,12 +90,12 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     @Override
     public void set(Object newValue) {
         super.set(newValue);
+        this.setChanged(true);
         if (this.node != null) {
             String type = MongoUtil.getType(newValue);
             if (StringUtil.notEquals(type, this.column.getType())) {
                 this.column.setType(type);
                 this.refreshNode();
-                this.setChanged(true);
             }
             Object value = this.column.is_id() ? MongoRecordUtil.idValue(newValue) : newValue;
             MongoNodeUtil.setNodeVal(this.node, value);
