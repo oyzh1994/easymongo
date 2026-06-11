@@ -13,7 +13,7 @@ import javafx.fxml.FXML;
  * @author oyzh
  * @since 2023/07/21
  */
-public class RedisTerminalTabController extends RichTabController {
+public class MongoTerminalTabController extends RichTabController {
 
     /**
      * redis命令行文本域

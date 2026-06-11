@@ -11,7 +11,7 @@ import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoConnState;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.util.MongoI18nHelper;
-import cn.oyzh.easymongo.util.ShellZKConnectUtil;
+import cn.oyzh.easymongo.util.ShellMongoConnectUtil;
 import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
 import cn.oyzh.fx.terminal.TerminalPane;
@@ -175,10 +175,10 @@ public class MongoTerminalPane extends TerminalPane {
      * @param input 输入内容
      */
     public void connect(String input) {
-        this.connectInfo = ShellZKConnectUtil.parse(input);
+        this.connectInfo = ShellMongoConnectUtil.parse(input);
         if (this.connectInfo != null) {
             this.disable();
-            ShellZKConnectUtil.copyConnect(this.connectInfo, this.shellConnect());
+            ShellMongoConnectUtil.copyConnect(this.connectInfo, this.shellConnect());
             this.start();
         }
     }

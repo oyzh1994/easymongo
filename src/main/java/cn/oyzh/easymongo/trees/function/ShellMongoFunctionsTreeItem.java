@@ -27,12 +27,12 @@ import java.util.List;
  * @author oyzh
  * @since 2024/06/29
  */
-public class ShellMysqlFunctionsTreeItem extends MongoTreeItem<ShellMysqlFunctionsTreeItemValue> {
+public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctionsTreeItemValue> {
 
-    public ShellMysqlFunctionsTreeItem(RichTreeView treeView) {
+    public ShellMongoFunctionsTreeItem(RichTreeView treeView) {
         super(treeView);
         super.setFilterable(true);
-        this.setValue(new ShellMysqlFunctionsTreeItemValue(this));
+        this.setValue(new ShellMongoFunctionsTreeItemValue(this));
         super.unfilteredChildren().addListener((ListChangeListener<TreeItem<?>>) change -> {
             this.functionSize = null;
         });
@@ -76,15 +76,15 @@ public class ShellMysqlFunctionsTreeItem extends MongoTreeItem<ShellMysqlFunctio
                         if (this.isChildEmpty()) {
                             List<TreeItem<?>> list = new ArrayList<>();
                             for (MongoFunction function : functions) {
-                                list.add(new ShellMysqlFunctionTreeItem(function, this.getTreeView()));
+                                list.add(new ShellMongoFunctionTreeItem(function, this.getTreeView()));
                             }
                             this.setChild(list);
                         } else {// 有数据则执行删除、新增、更新操作
-                            ObservableList<ShellMysqlFunctionTreeItem> list = (ObservableList) this.richChildren();
-                            List<ShellMysqlFunctionTreeItem> delList = new ArrayList<>();
-                            List<ShellMysqlFunctionTreeItem> addList = new ArrayList<>();
+                            ObservableList<ShellMongoFunctionTreeItem> list = (ObservableList) this.richChildren();
+                            List<ShellMongoFunctionTreeItem> delList = new ArrayList<>();
+                            List<ShellMongoFunctionTreeItem> addList = new ArrayList<>();
                             // 删除
-                            for (ShellMysqlFunctionTreeItem item : list) {
+                            for (ShellMongoFunctionTreeItem item : list) {
                                 if (functions.parallelStream().noneMatch(f -> f.compare(item.value()))) {
                                     delList.add(item);
                                 }
@@ -92,11 +92,11 @@ public class ShellMysqlFunctionsTreeItem extends MongoTreeItem<ShellMysqlFunctio
                             // 新增
                             for (MongoFunction f : functions) {
                                 if (list.parallelStream().noneMatch(item -> f.compare(item.value()))) {
-                                    addList.add(new ShellMysqlFunctionTreeItem(f, this.getTreeView()));
+                                    addList.add(new ShellMongoFunctionTreeItem(f, this.getTreeView()));
                                 }
                             }
                             // 更新
-                            for (ShellMysqlFunctionTreeItem item : list) {
+                            for (ShellMongoFunctionTreeItem item : list) {
                                 if (!addList.contains(item) && !delList.contains(item)) {
                                     functions.parallelStream().filter(f -> f.compare(item.value())).findFirst().ifPresent(f -> item.value().copy(f));
                                 }
@@ -173,7 +173,7 @@ public class ShellMysqlFunctionsTreeItem extends MongoTreeItem<ShellMysqlFunctio
     }
 
     public void addFunction(MongoFunction function) {
-        this.addChild(new ShellMysqlFunctionTreeItem(function, this.getTreeView()));
+        this.addChild(new ShellMongoFunctionTreeItem(function, this.getTreeView()));
         this.sortChild(this.isSortAsc());
     }
 }

@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
  * @author oyzh
  * @since 2024/02/18
  */
-public class MysqlQueryMainTabController extends RichTabController {
+public class MongoQueryMainTabController extends RichTabController {
 
     /**
      * 查询对象
@@ -79,12 +79,12 @@ public class MysqlQueryMainTabController extends RichTabController {
      * 结果信息tab
      */
     @FXML
-    private MysqlQueryInfoTab infoTab;
+    private MongoQueryInfoTab infoTab;
 
     /**
      * tab组件
      */
-    private MysqlQueryMainTab tab;
+    private MongoQueryMainTab tab;
 
     /**
      * 执行初始化
@@ -92,7 +92,7 @@ public class MysqlQueryMainTabController extends RichTabController {
      * @param query  查询对象
      * @param dbItem db库树节点
      */
-    public void init(MysqlQueryMainTab tab, MongoQuery query, MongoDatabaseTreeItem dbItem) {
+    public void init(MongoQueryMainTab tab, MongoQuery query, MongoDatabaseTreeItem dbItem) {
         this.tab = tab;
         this.query = query;
         this.dbItem = dbItem;
@@ -256,8 +256,8 @@ public class MysqlQueryMainTabController extends RichTabController {
      * @param title  标题
      * @return tab组件
      */
-    private MysqlQuerySelectTab initSelectTab(MongoExecuteResult result, String title) {
-        MysqlQuerySelectTab selectTab = new MysqlQuerySelectTab();
+    private MongoQuerySelectTab initSelectTab(MongoExecuteResult result, String title) {
+        MongoQuerySelectTab selectTab = new MongoQuerySelectTab();
         selectTab.init(title, result, this.dbItem);
         selectTab.setId("resultTab");
         selectTab.setProp("result", result);

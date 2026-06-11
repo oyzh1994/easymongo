@@ -37,7 +37,7 @@ import java.util.Set;
  * @author oyzh
  * @since 2024/08/12
  */
-public class MysqlQuerySelectTabController extends RichTabController {
+public class MongoQuerySelectTabController extends RichTabController {
 
     /**
      * 根节点

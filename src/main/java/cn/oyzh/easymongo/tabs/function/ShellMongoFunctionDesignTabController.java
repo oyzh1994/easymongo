@@ -2,8 +2,6 @@ package cn.oyzh.easymongo.tabs.function;
 
 import cn.oyzh.common.cache.CacheHelper;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.event.MongoEventUtil;
-import cn.oyzh.easymongo.mongo.DBObjectStatus;
 import cn.oyzh.easymongo.mongo.DBStatusListener;
 import cn.oyzh.easymongo.mongo.DBStatusListenerManager;
 import cn.oyzh.easymongo.mongo.MongoFunction;
@@ -11,23 +9,16 @@ import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.fx.editor.incubator.control.SqlEditor;
 import cn.oyzh.fx.gui.tabs.RichTabController;
-import cn.oyzh.fx.gui.text.field.NumberTextField;
 import cn.oyzh.fx.plus.controls.tab.FXTabPane;
-import cn.oyzh.fx.plus.controls.text.area.FXTextArea;
-import cn.oyzh.fx.plus.controls.text.field.FXTextField;
 import cn.oyzh.fx.plus.information.MessageBox;
-import cn.oyzh.fx.plus.node.NodeGroupUtil;
 import cn.oyzh.fx.plus.node.NodeUtil;
-import cn.oyzh.fx.plus.tableview.TableViewUtil;
 import cn.oyzh.fx.plus.util.FXUtil;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -36,7 +27,7 @@ import java.util.ResourceBundle;
  * @author oyzh
  * @since 2024/07/08
  */
-public class ShellMysqlFunctionDesignTabController extends RichTabController {
+public class ShellMongoFunctionDesignTabController extends RichTabController {
 
     /**
      * 函数

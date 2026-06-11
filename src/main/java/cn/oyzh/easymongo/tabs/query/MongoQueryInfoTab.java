@@ -10,7 +10,7 @@ import cn.oyzh.fx.gui.tabs.RichTab;
  * @author oyzh
  * @since 2024/08/12
  */
-public class MysqlQueryInfoTab extends RichTab {
+public class MongoQueryInfoTab extends RichTab {
 
     {
         this.setClosable(false);
@@ -26,7 +26,7 @@ public class MysqlQueryInfoTab extends RichTab {
     }
 
     @Override
-    public MysqlQueryInfoTabController controller() {
-        return (MysqlQueryInfoTabController) super.controller();
+    public MongoQueryInfoTabController controller() {
+        return (MongoQueryInfoTabController) super.controller();
     }
 }

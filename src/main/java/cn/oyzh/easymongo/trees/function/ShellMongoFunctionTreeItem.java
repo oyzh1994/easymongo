@@ -11,7 +11,6 @@ import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
-import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
 
@@ -25,23 +24,23 @@ import java.util.Objects;
  * @author oyzh
  * @since 2024/06/29
  */
-public class ShellMysqlFunctionTreeItem extends MongoTreeItem<ShellMysqlFunctionTreeItemValue> {
+public class ShellMongoFunctionTreeItem extends MongoTreeItem<ShellMongoFunctionTreeItemValue> {
 
     /**
      * 当前值
      */
     private final MongoFunction value;
 
-    public ShellMysqlFunctionTreeItem(MongoFunction function, RichTreeView treeView) {
+    public ShellMongoFunctionTreeItem(MongoFunction function, RichTreeView treeView) {
         super(treeView);
         this.value = function;
         super.setFilterable(true);
-        this.setValue(new ShellMysqlFunctionTreeItemValue(this));
+        this.setValue(new ShellMongoFunctionTreeItemValue(this));
     }
 
     @Override
-    public ShellMysqlFunctionsTreeItem parent() {
-        return (ShellMysqlFunctionsTreeItem) super.parent();
+    public ShellMongoFunctionsTreeItem parent() {
+        return (ShellMongoFunctionsTreeItem) super.parent();
     }
 
     /**

@@ -15,7 +15,7 @@ import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
-import cn.oyzh.easymongo.trees.function.ShellMysqlFunctionTreeItem;
+import cn.oyzh.easymongo.trees.function.ShellMongoFunctionTreeItem;
 import cn.oyzh.event.EventUtil;
 import cn.oyzh.fx.gui.event.Layout1Event;
 import cn.oyzh.fx.gui.event.Layout2Event;
@@ -202,7 +202,7 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
-    public static void dropFunction(ShellMysqlFunctionTreeItem treeItem) {
+    public static void dropFunction(ShellMongoFunctionTreeItem treeItem) {
         ShellMongoFunctionDroppedEvent event = new ShellMongoFunctionDroppedEvent();
         event.data(treeItem);
         EventUtil.postSync(event);

@@ -14,7 +14,7 @@ import javafx.scene.Cursor;
  * @author oyzh
  * @since 2024/02/18
  */
-public class MysqlQueryMainTab extends MongoTab {
+public class MongoQueryMainTab extends MongoTab {
 
     {
         this.setClosable(true);
@@ -83,7 +83,7 @@ public class MysqlQueryMainTab extends MongoTab {
     }
 
     @Override
-    public MysqlQueryMainTabController controller() {
-        return (MysqlQueryMainTabController) super.controller();
+    public MongoQueryMainTabController controller() {
+        return (MongoQueryMainTabController) super.controller();
     }
 }

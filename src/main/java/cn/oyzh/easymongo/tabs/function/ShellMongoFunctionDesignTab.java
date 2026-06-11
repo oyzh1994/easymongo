@@ -17,7 +17,7 @@ import javafx.scene.Cursor;
  * @author oyzh
  * @since 2024/02/18
  */
-public class ShellMysqlFunctionDesignTab extends MongoTab {
+public class ShellMongoFunctionDesignTab extends MongoTab {
 
     {
         this.setClosable(true);
@@ -82,8 +82,8 @@ public class ShellMysqlFunctionDesignTab extends MongoTab {
     }
 
     @Override
-    public ShellMysqlFunctionDesignTabController controller() {
-        return (ShellMysqlFunctionDesignTabController) super.controller();
+    public ShellMongoFunctionDesignTabController controller() {
+        return (ShellMongoFunctionDesignTabController) super.controller();
     }
 
     public boolean isUnsaved() {

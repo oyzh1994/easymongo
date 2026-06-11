@@ -10,16 +10,16 @@ import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
  * @author oyzh
  * @since 2023/12/22
  */
-public class ShellMysqlFunctionTreeItemValue extends RichTreeItemValue {
+public class ShellMongoFunctionTreeItemValue extends RichTreeItemValue {
 
-    public ShellMysqlFunctionTreeItemValue(ShellMysqlFunctionTreeItem item) {
+    public ShellMongoFunctionTreeItemValue(ShellMongoFunctionTreeItem item) {
         super(item);
         this.setRichMode(true);
     }
 
     @Override
-    public ShellMysqlFunctionTreeItem item() {
-        return (ShellMysqlFunctionTreeItem) super.item();
+    public ShellMongoFunctionTreeItem item() {
+        return (ShellMongoFunctionTreeItem) super.item();
     }
 
     @Override

@@ -13,15 +13,15 @@ import javafx.scene.Cursor;
  * @author oyzh
  * @since 2023/7/21
  */
-public class RedisTerminalTab extends RichTab {
+public class MongoTerminalTab extends RichTab {
 
-    public RedisTerminalTab(MongoClient client, String dbName) {
+    public MongoTerminalTab(MongoClient client, String dbName) {
         this.init(client, dbName);
     }
 
     @Override
-    public RedisTerminalTabController controller() {
-        return (RedisTerminalTabController) super.controller();
+    public MongoTerminalTabController controller() {
+        return (MongoTerminalTabController) super.controller();
     }
 
     @Override

@@ -11,7 +11,7 @@ import cn.oyzh.fx.gui.tabs.RichTab;
  * @author oyzh
  * @since 2024/08/12
  */
-public class MysqlQuerySelectTab extends RichTab {
+public class MongoQuerySelectTab extends RichTab {
 
     {
         this.setClosable(false);
@@ -28,7 +28,7 @@ public class MysqlQuerySelectTab extends RichTab {
     }
 
     @Override
-    public MysqlQuerySelectTabController controller() {
-        return (MysqlQuerySelectTabController) super.controller();
+    public MongoQuerySelectTabController controller() {
+        return (MongoQuerySelectTabController) super.controller();
     }
 }

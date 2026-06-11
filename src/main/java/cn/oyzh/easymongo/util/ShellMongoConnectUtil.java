@@ -11,7 +11,7 @@ import cn.oyzh.easymongo.dto.ShellMongoConnectInfo;
  * @since 2022/8/26
  */
 
-public class ShellZKConnectUtil {
+public class ShellMongoConnectUtil {
 
     /**
      * 解析连接

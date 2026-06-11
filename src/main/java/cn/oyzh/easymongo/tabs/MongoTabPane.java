@@ -14,10 +14,10 @@ import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
-import cn.oyzh.easymongo.tabs.function.ShellMysqlFunctionDesignTab;
+import cn.oyzh.easymongo.tabs.function.ShellMongoFunctionDesignTab;
 import cn.oyzh.easymongo.tabs.home.MongoHomeTab;
-import cn.oyzh.easymongo.tabs.query.MysqlQueryMainTab;
-import cn.oyzh.easymongo.tabs.terminal.RedisTerminalTab;
+import cn.oyzh.easymongo.tabs.query.MongoQueryMainTab;
+import cn.oyzh.easymongo.tabs.terminal.MongoTerminalTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.EventSubscribe;
 import cn.oyzh.fx.gui.tabs.RichTabPane;
@@ -335,9 +335,9 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //     }
     // }
     //
-    // private MysqlQueryMainTab getMysqlQueryMainTab(String queryId) {
+    // private MongoQueryMainTab getMysqlQueryMainTab(String queryId) {
     //     for (Tab tab : this.getTabs()) {
-    //         if (tab instanceof MysqlQueryMainTab tab1 && StrUtil.equals(tab1.queryId(), queryId)) {
+    //         if (tab instanceof MongoQueryMainTab tab1 && StrUtil.equals(tab1.queryId(), queryId)) {
     //             return tab1;
     //         }
     //     }
@@ -352,7 +352,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     // @EventSubscribe
     // private void onMysqlQueryAdd(MongoQueryAddEvent event) {
     //     try {
-    //         MysqlQueryMainTab tab = new MysqlQueryMainTab();
+    //         MongoQueryMainTab tab = new MongoQueryMainTab();
     //         super.addTab(tab);
     //         this.select(tab);
     //         DBQuery query = new DBQuery();
@@ -369,7 +369,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     //  */
     // @EventSubscribe
     // private void onMysqlQueryDeleted(MongoQueryDeletedEvent event) {
-    //     MysqlQueryMainTab tab = this.getMysqlQueryMainTab(event.data());
+    //     MongoQueryMainTab tab = this.getMysqlQueryMainTab(event.data());
     //     if (tab != null) {
     //         super.removeTab(tab);
     //     }
@@ -383,9 +383,9 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     // @EventSubscribe
     // private void onMysqlQueryOpen(MongoQueryOpenEvent event) {
     //     try {
-    //         MysqlQueryMainTab tab = this.getMysqlQueryMainTab(event.queryId());
+    //         MongoQueryMainTab tab = this.getMysqlQueryMainTab(event.queryId());
     //         if (tab == null) {
-    //             tab = new MysqlQueryMainTab();
+    //             tab = new MongoQueryMainTab();
     //             tab.init(event.data(), event.item());
     //             super.addTab(tab);
     //         }
@@ -780,9 +780,9 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         tab.init(event.data());
     }
 
-    private MysqlQueryMainTab getMysqlQueryMainTab(String queryId) {
+    private MongoQueryMainTab getMysqlQueryMainTab(String queryId) {
         for (Tab tab : this.getTabs()) {
-            if (tab instanceof MysqlQueryMainTab tab1 && StringUtil.equals(tab1.queryId(), queryId)) {
+            if (tab instanceof MongoQueryMainTab tab1 && StringUtil.equals(tab1.queryId(), queryId)) {
                 return tab1;
             }
         }
@@ -797,7 +797,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     @EventSubscribe
     private void onMysqlQueryAdd(MongoQueryAddEvent event) {
         try {
-            MysqlQueryMainTab tab = new MysqlQueryMainTab();
+            MongoQueryMainTab tab = new MongoQueryMainTab();
             this.addTab(tab);
             this.select(tab);
             MongoQuery query = new MongoQuery();
@@ -815,9 +815,9 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     @EventSubscribe
     private void onMysqlQueryOpen(MongoQueryOpenEvent event) {
         try {
-            MysqlQueryMainTab tab = this.getMysqlQueryMainTab(event.queryId());
+            MongoQueryMainTab tab = this.getMysqlQueryMainTab(event.queryId());
             if (tab == null) {
-                tab = new MysqlQueryMainTab();
+                tab = new MongoQueryMainTab();
                 tab.init(event.data(), event.getDbItem());
                 this.addTab(tab);
             }
@@ -834,10 +834,10 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
      * @param dbName db索引
      * @return 终端tab
      */
-    private RedisTerminalTab getTerminalTab(MongoClient client, String dbName) {
+    private MongoTerminalTab getTerminalTab(MongoClient client, String dbName) {
         if (client != null) {
             for (Tab tab : this.getTabs()) {
-                if (tab instanceof RedisTerminalTab tab1 && tab1.client() == client && Objects.equals(tab1.dbName(), dbName)) {
+                if (tab instanceof MongoTerminalTab tab1 && tab1.client() == client && Objects.equals(tab1.dbName(), dbName)) {
                     return tab1;
                 }
             }
@@ -853,9 +853,9 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
      */
     @EventSubscribe
     private void terminalOpen(MongoTerminalOpenEvent event) {
-        RedisTerminalTab terminalTab = this.getTerminalTab(event.data(), event.getDbName());
+        MongoTerminalTab terminalTab = this.getTerminalTab(event.data(), event.getDbName());
         if (terminalTab == null) {
-            terminalTab = new RedisTerminalTab(event.data(), event.getDbName());
+            terminalTab = new MongoTerminalTab(event.data(), event.getDbName());
             super.addTab(terminalTab);
         } else {
             terminalTab.flushGraphic();
@@ -874,7 +874,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     private void terminalClose(MongoTerminalCloseEvent event) {
         try {
             // 寻找节点
-            RedisTerminalTab terminalTab = this.getTerminalTab(event.data(), event.getDbName());
+            MongoTerminalTab terminalTab = this.getTerminalTab(event.data(), event.getDbName());
             // 移除节点
             if (terminalTab != null) {
                 terminalTab.closeTab();
@@ -891,9 +891,9 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
      * @param functionName 函数名称
      * @return 结果
      */
-    private ShellMysqlFunctionDesignTab getFunctionDesignTab(MongoDatabaseTreeItem dbItem, String functionName) {
+    private ShellMongoFunctionDesignTab getFunctionDesignTab(MongoDatabaseTreeItem dbItem, String functionName) {
         for (Tab tab : this.getTabs()) {
-            if (tab instanceof ShellMysqlFunctionDesignTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(functionName, tab1.functionName())) {
+            if (tab instanceof ShellMongoFunctionDesignTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(functionName, tab1.functionName())) {
                 return tab1;
             }
         }
@@ -908,7 +908,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     @EventSubscribe
     private void onFunctionRenamed(ShellMongoFunctionRenamedEvent event) {
         try {
-            ShellMysqlFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
+            ShellMongoFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
             if (tab != null) {
                 tab.closeTab();
             }
@@ -925,9 +925,9 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     @EventSubscribe
     private void onFunctionDesign(ShellMongoFunctionDesignEvent event) {
         try {
-            ShellMysqlFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
+            ShellMongoFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
             if (tab == null) {
-                tab = new ShellMysqlFunctionDesignTab();
+                tab = new ShellMongoFunctionDesignTab();
                 tab.init(event.data(), event.getDbItem());
                 this.addTab(tab);
             }
@@ -945,7 +945,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     @EventSubscribe
     private void onFunctionDropped(ShellMongoFunctionDroppedEvent event) {
         try {
-            ShellMysqlFunctionDesignTab tab1 = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
+            ShellMongoFunctionDesignTab tab1 = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
             if (tab1 != null) {
                 tab1.closeTab();
             }

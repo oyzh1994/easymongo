@@ -15,7 +15,7 @@ import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
-import cn.oyzh.easymongo.trees.function.ShellMysqlFunctionsTreeItem;
+import cn.oyzh.easymongo.trees.function.ShellMongoFunctionsTreeItem;
 import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
 import cn.oyzh.easymongo.trees.terminal.MongoTerminalTreeItem;
 import cn.oyzh.easymongo.util.MongoViewFactory;
@@ -153,7 +153,7 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
                         List<TreeItem<?>> typeItems = new ArrayList<>();
                         typeItems.add(new MongoCollectionsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoBucketsTreeItem(this.getTreeView()));
-                        typeItems.add(new ShellMysqlFunctionsTreeItem(this.getTreeView()));
+                        typeItems.add(new ShellMongoFunctionsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoQueriesTreeItem(this.getTreeView()));
                         typeItems.add(new MongoTerminalTreeItem(this.getTreeView()));
                         super.setChild(typeItems);
@@ -189,9 +189,9 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
      *
      * @return 函数类型子节点
      */
-    public ShellMysqlFunctionsTreeItem getFunctionTypeChild() {
+    public ShellMongoFunctionsTreeItem getFunctionTypeChild() {
         for (RichTreeItem<?> child : this.richChildren()) {
-            if (child instanceof ShellMysqlFunctionsTreeItem treeItem) {
+            if (child instanceof ShellMongoFunctionsTreeItem treeItem) {
                 return treeItem;
             }
         }

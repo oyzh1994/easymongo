@@ -12,15 +12,15 @@ import javafx.scene.paint.Color;
  * @author oyzh
  * @since 2024/06/28
  */
-public class ShellMysqlFunctionsTreeItemValue extends RichTreeItemValue {
+public class ShellMongoFunctionsTreeItemValue extends RichTreeItemValue {
 
-    public ShellMysqlFunctionsTreeItemValue(ShellMysqlFunctionsTreeItem item) {
+    public ShellMongoFunctionsTreeItemValue(ShellMongoFunctionsTreeItem item) {
         super(item);
     }
 
     @Override
-    public ShellMysqlFunctionsTreeItem item() {
-        return (ShellMysqlFunctionsTreeItem) super.item();
+    public ShellMongoFunctionsTreeItem item() {
+        return (ShellMongoFunctionsTreeItem) super.item();
     }
 
     @Override
