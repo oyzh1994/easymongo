@@ -879,11 +879,13 @@ public class MongoClient implements Closeable {
         FindIterable<Document> iter = collection.find();
         for (Document document : iter) {
             MongoFunction function = new MongoFunction();
-            Code code = (Code) document.get("value");
-            function.setName(document.getString("_id"));
-            function.setCode(code.getCode());
-            function.setDbName(dbName);
-            functions.add(function);
+            Object value = document.get("value");
+            if (value instanceof Code code) {
+                function.setName(document.getString("_id"));
+                function.setCode(code.getCode());
+                function.setDbName(dbName);
+                functions.add(function);
+            }
         }
         return functions;
     }

@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.util;
 
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.common.util.TextUtil;
+import cn.oyzh.easymongo.fx.CodeTextFiled;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
@@ -75,7 +76,7 @@ public class MongoRecordUtil {
         } else if (column.supportBoolean()) {
             BooleanTextFiled textField = new BooleanTextFiled();
             textField.setValue(object);
-            textField.setBackground(ControlUtil.background(Color.valueOf("#43A5F5")));
+            textField.setBackground(ControlUtil.background(Color.valueOf("#FCE1E4")));
             node = textField;
         } else if (column.supportList()) {
             JsonTextFiled textField = new JsonTextFiled();
@@ -86,7 +87,12 @@ public class MongoRecordUtil {
         } else if (column.supportObject()) {
             JsonTextFiled textField = new JsonTextFiled();
             textField.setValue(object);
-            textField.setBackground(ControlUtil.background(Color.valueOf("#FDE5CF")));
+            textField.setBackground(ControlUtil.background(Color.valueOf("#C9E4E8")));
+            node = textField;
+        } else if (column.supportCode()) {
+            CodeTextFiled textField = new CodeTextFiled();
+            textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#D4E0D0")));
             node = textField;
         } else {
             FXTextField textField = new FXTextField();

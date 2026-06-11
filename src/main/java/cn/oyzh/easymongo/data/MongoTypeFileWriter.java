@@ -64,7 +64,7 @@ public abstract class MongoTypeFileWriter implements Closeable {
             }
             return "0x" + HexUtil.encodeHexStr(bytes, false);
         }
-        if (column.supportList() || column.supportObject()) {
+        if (column.supportList() || column.supportObject() || column.supportCode()) {
             return JSONUtil.toJson(value);
         }
         return value.toString();

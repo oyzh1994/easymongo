@@ -168,6 +168,15 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         return StringUtil.equalsIgnoreCase(this.getType(), "obejectid");
     }
 
+    /**
+     * 是否支持代码
+     *
+     * @return 结果
+     */
+    public boolean supportCode() {
+        return StringUtil.equalsIgnoreCase(this.getType(), "code");
+    }
+
     public void setName(String name) {
         this.name = name;
         super.putOriginalData("name", name);
@@ -258,6 +267,11 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         }
         if (this.supportBoolean()) {
             return false;
+        }
+        if (this.supportCode()) {
+            return """
+                    function (){}
+                    """;
         }
         if (this.supportObjectId()) {
             return null;

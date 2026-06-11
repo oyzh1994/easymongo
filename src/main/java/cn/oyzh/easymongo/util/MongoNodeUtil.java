@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.util;
 
+import cn.oyzh.easymongo.fx.CodeTextFiled;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.fx.editor.incubator.control.JsonTextFiled;
 import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
@@ -32,6 +33,8 @@ public class MongoNodeUtil {
         } else if (node instanceof BinaryTextFiled textField) {
             val = textField.getValue();
         } else if (node instanceof BooleanTextFiled textField) {
+            val = textField.getValue();
+        } else if (node instanceof CodeTextFiled textField) {
             val = textField.getValue();
         } else if (node instanceof JsonTextFiled textField) {
             val = textField.getValue();
@@ -79,9 +82,11 @@ public class MongoNodeUtil {
             filed.setArray(true);
             node = filed;
         } else if (column.supportObject()) {
-            node = new JsonTextFiled();;
+            node = new JsonTextFiled();
+        } else if (column.supportCode()) {
+            node = new CodeTextFiled();
         } else if (column.supportBoolean()) {
-            node = new BooleanTextFiled();;
+            node = new BooleanTextFiled();
         } else {
             node = new FXTextField();
         }

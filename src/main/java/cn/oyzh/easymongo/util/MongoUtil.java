@@ -4,6 +4,7 @@ import cn.oyzh.common.util.StringUtil;
 import org.bson.BsonValue;
 import org.bson.Document;
 import org.bson.types.Binary;
+import org.bson.types.Code;
 import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
@@ -62,6 +63,9 @@ public class MongoUtil {
         }
         if (val instanceof Document) {
             return "object";
+        }
+        if (val instanceof Code) {
+            return "code";
         }
         if (val instanceof BsonValue bsonValue) {
             if (bsonValue.isInt32() || bsonValue.isInt64()) {
