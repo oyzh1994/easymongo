@@ -14,6 +14,7 @@ import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.store.MongoQueryStore;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
+import javafx.collections.ListChangeListener;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 
@@ -32,6 +33,9 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
         super(treeView);
         super.setFilterable(true);
         this.setValue(new MongoQueriesTreeItemValue(this));
+        super.unfilteredChildren().addListener((ListChangeListener<TreeItem<?>>) change -> {
+            this.querySize = null;
+        });
     }
 
     @Override
@@ -121,9 +125,18 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
         this.refresh();
     }
 
-    public Integer querySize() {
+    public long querySize() {
         List<MongoQuery> dbQueries = MongoQueryStore.INSTANCE.list(this.info().getId(), this.dbName());
         return dbQueries == null ? 0 : dbQueries.size();
+    }
+
+    private Integer querySize;
+
+    public Integer getQuerySize() {
+        if (this.querySize == null) {
+            this.querySize = Math.toIntExact(this.querySize());
+        }
+        return this.querySize;
     }
 
     public MongoConnect shellConnect() {

@@ -16,6 +16,7 @@ import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.i18n.I18nHelper;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
@@ -35,6 +36,9 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
         super(treeView);
         super.setFilterable(true);
         this.setValue(new MongoCollectionsTreeItemValue(this));
+        super.unfilteredChildren().addListener((ListChangeListener<TreeItem<?>>) change -> {
+            this.collectionsSize = null;
+        });
     }
 
     @Override
@@ -183,5 +187,18 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
     public void addTable(MongoCollection table) {
         this.addChild(new MongoCollectionTreeItem(table, this.getTreeView()));
         this.sortChild(this.isSortAsc());
+    }
+
+    public long collectionsSize() {
+        return this.parent().listCollectionNames().size();
+    }
+
+    private Integer collectionsSize;
+
+    public Integer getCollectionsSize() {
+        if (this.collectionsSize == null) {
+            this.collectionsSize = Math.toIntExact(this.collectionsSize());
+        }
+        return this.collectionsSize;
     }
 }

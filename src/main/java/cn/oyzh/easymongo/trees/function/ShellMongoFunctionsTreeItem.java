@@ -158,16 +158,15 @@ public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctio
         this.refresh();
     }
 
-    public Integer functionSize() {
-        long l = this.client().functionSize(this.dbName());
-        return Math.toIntExact(l);
+    public long functionSize() {
+       return this.client().functionSize(this.dbName());
     }
 
     private Integer functionSize;
 
     public Integer getFunctionSize() {
         if (this.functionSize == null) {
-            this.functionSize = this.functionSize();
+            this.functionSize = Math.toIntExact(this.functionSize());
         }
         return this.functionSize;
     }

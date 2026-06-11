@@ -16,6 +16,7 @@ public class MongoCollectionsTreeItemValue extends RichTreeItemValue {
 
     public MongoCollectionsTreeItemValue(MongoCollectionsTreeItem item) {
         super(item);
+        super.setRichMode(true);
     }
 
     @Override
@@ -37,16 +38,12 @@ public class MongoCollectionsTreeItemValue extends RichTreeItemValue {
         return super.graphic();
     }
 
-//    @Override
-//    public Color graphicColor() {
-//        if (!this.item().isChildEmpty()) {
-//            return Color.GREEN;
-//        }
-//        return super.graphicColor();
-//    }
-
     @Override
     public String extra() {
+        Integer size = this.item().getCollectionsSize();
+        if (size != null) {
+            return " (" + size + ")";
+        }
         return super.extra();
     }
 

@@ -308,4 +308,11 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         this.client().renameCollection(this.dbName(), oldName, newName);
     }
 
+    public List<String> listCollectionNames() {
+       return this.client().listCollectionNames(this.dbName());
+    }
+
+    public List<String> listBucketNames() {
+       return this.client().listBucketNames(this.dbName());
+    }
 }

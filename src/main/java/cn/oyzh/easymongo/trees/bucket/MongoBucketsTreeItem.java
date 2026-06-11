@@ -16,6 +16,7 @@ import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.i18n.I18nHelper;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
@@ -35,6 +36,9 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
         super(treeView);
         super.setFilterable(true);
         this.setValue(new MongoBucketsTreeItemValue(this));
+        super.unfilteredChildren().addListener((ListChangeListener<TreeItem<?>>) change -> {
+            this.bucketsSize = null;
+        });
     }
 
     @Override
@@ -162,5 +166,18 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
     public void addTable(MongoCollection table) {
         this.addChild(new MongoCollectionTreeItem(table, this.getTreeView()));
         this.sortChild(this.isSortAsc());
+    }
+
+    public long bucketsSize() {
+       return this.parent().listBucketNames().size();
+    }
+
+    private Integer bucketsSize;
+
+    public Integer getBucketsSize() {
+        if (this.bucketsSize == null) {
+            this.bucketsSize = Math.toIntExact(this.bucketsSize());
+        }
+        return this.bucketsSize;
     }
 }

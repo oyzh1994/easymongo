@@ -16,6 +16,7 @@ public class MongoQueriesTreeItemValue extends RichTreeItemValue {
 
     public MongoQueriesTreeItemValue(MongoQueriesTreeItem item) {
         super(item);
+        super.setRichMode(true);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MongoQueriesTreeItemValue extends RichTreeItemValue {
 
     @Override
     public String extra() {
-        Integer size = this.item().querySize();
+        Integer size = this.item().getQuerySize();
         if (size != null) {
             return " (" + size + ")";
         }

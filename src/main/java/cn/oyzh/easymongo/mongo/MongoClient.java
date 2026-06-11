@@ -314,8 +314,10 @@ public class MongoClient implements Closeable {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         ListCollectionNamesIterable iterable = database.listCollectionNames();
         List<String> list = new ArrayList<>();
-        for (String s : iterable) {
-            list.add(s);
+        for (String name : iterable) {
+            if (MongoRecordUtil.isCollection(name)) {
+                list.add(name);
+            }
         }
         return list;
     }
@@ -554,6 +556,25 @@ public class MongoClient implements Closeable {
             buckets.add(gridFS);
         }
         buckets = buckets.stream().sorted(Comparator.comparing(MongoBucket::getName)).toList();
+        return buckets;
+    }
+
+    /**
+     * 列举存储桶名称
+     *
+     * @param dbName 数据库名称
+     * @return 结果
+     */
+    public List<String> listBucketNames(String dbName) {
+        com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
+        MongoIterable<String> collectionNames = database.listCollectionNames();
+        List<String> buckets = new ArrayList<>();
+        for (String collectionName : collectionNames) {
+            if (!MongoRecordUtil.isBucket(collectionName)) {
+                continue;
+            }
+            buckets.add(collectionName);
+        }
         return buckets;
     }
 

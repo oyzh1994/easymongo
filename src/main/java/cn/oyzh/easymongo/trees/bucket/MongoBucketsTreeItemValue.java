@@ -15,6 +15,7 @@ public class MongoBucketsTreeItemValue extends RichTreeItemValue {
 
     public MongoBucketsTreeItemValue(MongoBucketsTreeItem item) {
         super(item);
+        super.setRichMode(true);
     }
 
     @Override
@@ -36,16 +37,12 @@ public class MongoBucketsTreeItemValue extends RichTreeItemValue {
         return super.graphic();
     }
 
-//    @Override
-//    public Color graphicColor() {
-//        if (!this.item().isChildEmpty()) {
-//            return Color.GREEN;
-//        }
-//        return super.graphicColor();
-//    }
-
     @Override
     public String extra() {
+        Integer size = this.item().getBucketsSize();
+        if (size != null) {
+            return " (" + size + ")";
+        }
         return super.extra();
     }
 

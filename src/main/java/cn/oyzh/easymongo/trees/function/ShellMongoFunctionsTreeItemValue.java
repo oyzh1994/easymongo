@@ -16,6 +16,7 @@ public class ShellMongoFunctionsTreeItemValue extends RichTreeItemValue {
 
     public ShellMongoFunctionsTreeItemValue(ShellMongoFunctionsTreeItem item) {
         super(item);
+        super.setRichMode(true);
     }
 
     @Override
