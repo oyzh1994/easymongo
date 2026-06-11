@@ -25,7 +25,7 @@ public class ShellMongoFunctionDesignTab extends MongoTab {
 
     @Override
     protected String url() {
-        return FXConst.TAB_PATH + "function/shellMysqlFunctionDesignTab.fxml";
+        return FXConst.TAB_PATH + "function/shellMongoFunctionDesignTab.fxml";
     }
 
     @Override

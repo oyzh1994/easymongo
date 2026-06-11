@@ -39,7 +39,7 @@ import javafx.stage.WindowEvent;
 @StageAttribute(
         stageStyle = FXStageStyle.EXTENDED,
         modality = Modality.APPLICATION_MODAL,
-        value = FXConst.FXML_PATH + "data/shellMysqlDataTransport.fxml"
+        value = FXConst.FXML_PATH + "data/shellMongoDataTransport.fxml"
 )
 public class ShellMongoDataTransportController extends StageController {
 

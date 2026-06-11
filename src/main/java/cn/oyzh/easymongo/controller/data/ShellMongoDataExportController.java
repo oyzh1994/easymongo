@@ -51,7 +51,7 @@ import java.util.List;
 @StageAttribute(
         stageStyle = FXStageStyle.EXTENDED,
         modality = Modality.APPLICATION_MODAL,
-        value = FXConst.FXML_PATH + "data/shellMysqlDataExport.fxml"
+        value = FXConst.FXML_PATH + "data/shellMongoDataExport.fxml"
 )
 public class ShellMongoDataExportController extends StageController {
 

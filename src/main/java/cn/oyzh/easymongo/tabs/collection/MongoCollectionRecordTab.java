@@ -6,6 +6,7 @@ import cn.oyzh.easymongo.tabs.MongoTab;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.svg.glyph.database.TableSVGGlyph;
+import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import javafx.scene.Cursor;
 
@@ -25,7 +26,7 @@ public class MongoCollectionRecordTab extends MongoTab {
 
     @Override
     protected String url() {
-        return super.getBasePath() + "collection/mongoCollectionRecordTab.fxml";
+        return FXConst.TAB_PATH + "collection/mongoCollectionRecordTab.fxml";
     }
 
     @Override

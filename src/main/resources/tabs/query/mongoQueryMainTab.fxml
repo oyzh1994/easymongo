@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import cn.oyzh.easymongo.query.ui.MongoQueryEditor?>
+<?import cn.oyzh.easymongo.tabs.query.MongoQueryInfoTab?>
+<?import cn.oyzh.fx.gui.svg.glyph.RunSVGGlyph?>
+<?import cn.oyzh.fx.gui.svg.glyph.SaveSVGGlyph?>
 <?import cn.oyzh.fx.plus.controls.box.FXHBox?>
 <?import cn.oyzh.fx.plus.controls.box.FXVBox?>
 <?import cn.oyzh.fx.plus.controls.tab.FXTabPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
-<?import cn.oyzh.fx.gui.svg.glyph.SaveSVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.PrettySVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.RunSVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.database.ExplainSVGGlyph?>
-<?import cn.oyzh.easymongo.query.ui.MongoQueryEditor?>
-<?import cn.oyzh.easymongo.tabs.query.MongoQueryInfoTab?>
 <FXVBox xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
         fx:controller="cn.oyzh.easymongo.tabs.query.MongoQueryMainTabController" flexWidth="100%" flexHeight="100%"

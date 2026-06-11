@@ -4,6 +4,7 @@ import cn.oyzh.easymongo.query.MongoExecuteResult;
 import cn.oyzh.easymongo.tabs.MongoTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.tabs.RichTab;
+import cn.oyzh.fx.plus.FXConst;
 
 /**
  * db查询tab
@@ -19,7 +20,7 @@ public class MongoQuerySelectTab extends RichTab {
 
     @Override
     protected String url() {
-        return MongoTab.BASE_PATH + "query/mysqlQuerySelectTab.fxml";
+        return FXConst.TAB_PATH + "query/mongoQuerySelectTab.fxml";
     }
 
     public void init(String title, MongoExecuteResult result, MongoDatabaseTreeItem dbItem) {

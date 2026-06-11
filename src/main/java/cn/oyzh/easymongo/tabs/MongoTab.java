@@ -9,11 +9,5 @@ import cn.oyzh.fx.gui.tabs.RichTab;
  */
 public abstract class MongoTab extends RichTab {
 
-    public static final String BASE_PATH = "/tabs/";
-
-    protected String getBasePath() {
-        return BASE_PATH;
-    }
-
     public abstract MongoDatabaseTreeItem dbItem() ;
 }

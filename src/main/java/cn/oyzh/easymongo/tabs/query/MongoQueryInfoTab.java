@@ -3,6 +3,7 @@ package cn.oyzh.easymongo.tabs.query;
 import cn.oyzh.easymongo.query.MongoQueryResults;
 import cn.oyzh.easymongo.tabs.MongoTab;
 import cn.oyzh.fx.gui.tabs.RichTab;
+import cn.oyzh.fx.plus.FXConst;
 
 /**
  * db查询信息tab
@@ -18,7 +19,7 @@ public class MongoQueryInfoTab extends RichTab {
 
     @Override
     protected String url() {
-        return MongoTab.BASE_PATH + "query/mysqlQueryInfoTab.fxml";
+        return FXConst.TAB_PATH + "query/mongoQueryInfoTab.fxml";
     }
 
     public void init(MongoQueryResults<?> results) {

@@ -4,6 +4,7 @@ import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.tabs.MongoTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.svg.glyph.QuerySVGGlyph;
+import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.Cursor;
@@ -22,7 +23,7 @@ public class MongoQueryMainTab extends MongoTab {
 
     @Override
     protected String url() {
-        return super.getBasePath() + "query/mysqlQueryMainTab.fxml";
+        return FXConst.TAB_PATH + "query/mongoQueryMainTab.fxml";
     }
 
     @Override

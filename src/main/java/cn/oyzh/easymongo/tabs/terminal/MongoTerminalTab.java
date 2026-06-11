@@ -4,6 +4,7 @@ import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.fx.gui.svg.glyph.TerminalSVGGlyph;
 import cn.oyzh.fx.gui.tabs.RichTab;
+import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.Cursor;
 
@@ -26,7 +27,7 @@ public class MongoTerminalTab extends RichTab {
 
     @Override
     protected String url() {
-        return "/tabs/terminal/redisTerminalTab.fxml";
+        return FXConst.TAB_PATH + "terminal/mongoTerminalTab.fxml";
     }
 
     @Override
