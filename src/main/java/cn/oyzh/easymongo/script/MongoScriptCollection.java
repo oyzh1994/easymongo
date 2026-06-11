@@ -1,10 +1,12 @@
 package cn.oyzh.easymongo.script;
 
+import cn.oyzh.common.json.JSONUtil;
 import com.mongodb.MongoNamespace;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
@@ -168,6 +170,14 @@ public class MongoScriptCollection {
     public UpdateResult replaceOne(Object filter, Object replacement) {
         if (filter instanceof Map f && replacement instanceof Map r) {
             return this.collection.replaceOne(new Document(f), new Document(r));
+        }
+        return null;
+    }
+
+    public UpdateResult replaceOne(Object filter, Object replacement, Object option) {
+        if (filter instanceof Map f && replacement instanceof Map r && option instanceof Map<?, ?> o) {
+            ReplaceOptions options = JSONUtil.toBean(o, ReplaceOptions.class);
+            return this.collection.replaceOne(new Document(f), new Document(r), options);
         }
         return null;
     }

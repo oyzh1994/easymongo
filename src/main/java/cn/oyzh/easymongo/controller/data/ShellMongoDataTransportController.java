@@ -468,7 +468,7 @@ public class ShellMongoDataTransportController extends StageController {
             return;
         }
         if (this.tableList.isItemEmpty()) {
-            this.tableList.of(this.sourceClient.selectCollections(this.sourceDatabase.getSelectedItem()));
+            this.tableList.of(this.sourceClient.listCollections(this.sourceDatabase.getSelectedItem()));
         }
         this.step1.disappear();
         this.step3.disappear();

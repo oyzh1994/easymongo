@@ -223,7 +223,7 @@ public class MongoRecordUtil {
      * @return 结果
      */
     public static boolean isCollection(String name) {
-        return !StringUtil.endWithAny(name, ".files", ".chunks");
+        return !StringUtil.endWithAny(name, ".files", ".chunks") && StringUtil.notEquals(name, MongoUtil.SYSTEM_JS);
     }
 
     /**

@@ -29,12 +29,12 @@ public class ShellMysqlDataDumpHandler extends DBDataDumpHandler {
         this.message("Dump Starting");
         this.writeHeader();
         if (this.dumpType == 1) {
-            this.dumpTable();
+            this.dumpCollection();
         } else if (this.dumpType == 2) {
-            MongoCollection table = new MongoCollection();
-            table.setDbName(this.dbName);
-            table.setName(this.tableName);
-            this.dumpTable(table);
+            MongoCollection collection = new MongoCollection();
+            collection.setDbName(this.dbName);
+            collection.setName(this.tableName);
+            this.dumpCollection(collection);
             this.writeTail();
             this.fileWriter.close();
             this.message("Dump Finished");
@@ -42,29 +42,29 @@ public class ShellMysqlDataDumpHandler extends DBDataDumpHandler {
         }
     }
 
-    protected void dumpTable() throws InterruptedException, IOException {
-        List<MongoCollection> tables = this.dbClient.selectCollections(this.dbName);
-        if (CollectionUtil.isNotEmpty(tables)) {
-            for (MongoCollection table : tables) {
+    protected void dumpCollection() throws InterruptedException, IOException {
+        List<MongoCollection> collections = this.dbClient.listCollections(this.dbName);
+        if (CollectionUtil.isNotEmpty(collections)) {
+            for (MongoCollection table : collections) {
                 this.checkInterrupt();
-                this.dumpTable(table);
+                this.dumpCollection(table);
             }
-            this.processed(tables.size());
+            this.processed(collections.size());
         }
     }
 
-    protected void dumpTable(MongoCollection table) throws InterruptedException, IOException {
+    protected void dumpCollection(MongoCollection collection) throws InterruptedException, IOException {
         String line0 = "";
         String line1 = "// ----------------------------";
-        String line2 = "// Collection structure for " + table.getName();
+        String line2 = "// Collection structure for " + collection.getName();
         String line3 = "// ----------------------------";
-        String line4 = "db.getCollection(\"" + table.getName() + "\").drop();";
-        String line5 = "db.createCollection(\"" + table.getName() + "\");";
-        this.message("Dumping Collection " + table.getName());
+        String line4 = "db.getCollection(\"" + collection.getName() + "\").drop();";
+        String line5 = "db.createCollection(\"" + collection.getName() + "\");";
+        this.message("Dumping Collection " + collection.getName());
         this.fileWriter.appendLines(List.of(line0, line1, line2, line3, line4, line5));
         if (this.isDumpRecord()) {
-            this.message("Dumping Records of Collection " + table.getName());
-            this.dumpRecord(table.getName());
+            this.message("Dumping Records of Collection " + collection.getName());
+            this.dumpRecord(collection.getName());
         }
     }
 

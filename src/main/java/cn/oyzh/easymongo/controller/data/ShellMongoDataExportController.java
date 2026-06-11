@@ -315,9 +315,6 @@ public class ShellMongoDataExportController extends StageController {
     @Override
     protected void bindListeners() {
         super.bindListeners();
-        // this.exportTableName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        // this.exportTableSelected.setCellValueFactory(new PropertyValueFactory<>("selectedControl"));
-        // this.exportTableFilePath.setCellValueFactory(new PropertyValueFactory<>("filePathControl"));
         this.tableCombobox.selectedItemChanged((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 this.tableColumns.init(newValue.getColumns());
@@ -385,16 +382,6 @@ public class ShellMongoDataExportController extends StageController {
         return I18nHelper.exportTitle();
     }
 
-    // @Override
-    // public void onStageInitialize(StageAdapter stage) {
-    //     super.onStageInitialize(stage);
-    //     this.step1.managedBindVisible();
-    //     this.step2.managedBindVisible();
-    //     this.step3.managedBindVisible();
-    //     this.step4.managedBindVisible();
-    //     this.step5.managedBindVisible();
-    // }
-
     @FXML
     private void showStep1() {
         this.step1.display();
@@ -408,12 +395,12 @@ public class ShellMongoDataExportController extends StageController {
         this.exportTableView.clearItems();
         // 正常导出
         if (this.exportMode == 0) {
-            List<MongoCollection> tables = this.dbClient.selectCollections(this.dbName);
-            for (MongoCollection table : tables) {
-                ShellMongoDataExportCollection exportTable = new ShellMongoDataExportCollection();
-                exportTable.setName(table.getName());
-                exportTable.setSelected(StringUtil.equals(table.getName(), this.collectionName));
-                this.exportTableView.addItem(exportTable);
+            List<MongoCollection> collections = this.dbClient.listCollections(this.dbName);
+            for (MongoCollection collection : collections) {
+                ShellMongoDataExportCollection exportCollection = new ShellMongoDataExportCollection();
+                exportCollection.setName(collection.getName());
+                exportCollection.setSelected(StringUtil.equals(collection.getName(), this.collectionName));
+                this.exportTableView.addItem(exportCollection);
             }
         } else {// 查询导出
             this.exportTableView.addItem(this.exportTable);

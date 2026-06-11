@@ -67,8 +67,8 @@ public class MongoQueryUtil {
                 try {
                     indexStatus = 1;
                     DB_COLLECTIONS.clear();
-                    // 更新库索引
-                    List<MongoCollection> collections = client.selectCollections(dbName);
+                    // 更新集合索引
+                    List<MongoCollection> collections = client.listCollections(dbName);
                     DB_COLLECTIONS.addAll(collections);
                     indexStatus = 2;
                 } catch (Exception ex) {

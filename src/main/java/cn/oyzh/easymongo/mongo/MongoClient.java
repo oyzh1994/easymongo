@@ -269,12 +269,24 @@ public class MongoClient implements Closeable {
         return false;
     }
 
+    /**
+     * 删除集合
+     *
+     * @param dbName         数据库名称
+     * @param collectionName 集合名称
+     */
     public void dropCollection(String dbName, String collectionName) {
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
         collection.drop();
     }
 
-    public List<MongoCollection> selectCollections(String dbName) {
+    /**
+     * 列举集合
+     *
+     * @param dbName 数据库名称
+     * @return 结果
+     */
+    public List<MongoCollection> listCollections(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         List<MongoCollection> collections = new ArrayList<>();
         for (String name : database.listCollectionNames()) {
@@ -435,11 +447,23 @@ public class MongoClient implements Closeable {
         return result.getDeletedCount();
     }
 
+    /**
+     * 创建集合
+     *
+     * @param collection 集合
+     */
     public void createCollection(MongoCollection collection) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(collection.getDbName());
         database.createCollection(collection.getName());
     }
 
+    /**
+     * 清空集合
+     *
+     * @param dbName         数据库名称
+     * @param collectionName 集合名称
+     * @return 结果
+     */
     public long clearCollection(String dbName, String collectionName) {
         com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, collectionName);
         DeleteResult result = collection1.deleteMany(new Document());
@@ -496,12 +520,12 @@ public class MongoClient implements Closeable {
     }
 
     /**
-     * 获取存储桶
+     * 列举存储桶
      *
      * @param dbName 数据库名称
      * @return 结果
      */
-    public List<MongoBucket> selectBuckets(String dbName) {
+    public List<MongoBucket> listBuckets(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         MongoIterable<String> collectionNames = database.listCollectionNames();
         List<MongoBucket> buckets = new ArrayList<>();

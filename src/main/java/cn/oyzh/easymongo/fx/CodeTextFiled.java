@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.fx;
 
 
 import cn.oyzh.fx.editor.incubator.control.JsonTextFiled;
+import javafx.scene.control.Skin;
 import org.bson.types.Code;
 
 /**
@@ -9,6 +10,24 @@ import org.bson.types.Code;
  * @since 2024/7/21
  */
 public class CodeTextFiled extends JsonTextFiled {
+
+    @Override
+    public CodeTextFiledSkin skin() {
+        if (this.getSkin() == null) {
+            this.setSkin(this.createDefaultSkin());
+        }
+        return (CodeTextFiledSkin) this.getSkin();
+    }
+
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new CodeTextFiledSkin(this);
+    }
+
+    @Override
+    public void setArray(boolean array) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public Object getValue() {

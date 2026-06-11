@@ -19,7 +19,7 @@ public class ShellMongoCollectionComboBox extends FXComboBox<String> {
     }
 
     public void init(String dbName, String tableName, MongoClient client) {
-        List<MongoCollection> list = client.selectCollections(dbName);
+        List<MongoCollection> list = client.listCollections(dbName);
         this.setItem(list.parallelStream().map(MongoCollection::getName).toList());
         if (tableName != null) {
             this.select(tableName);

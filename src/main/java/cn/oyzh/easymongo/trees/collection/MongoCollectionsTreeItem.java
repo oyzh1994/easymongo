@@ -94,12 +94,12 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
             this.setLoading(true);
             Task task = TaskBuilder.newBuilder()
                     .onStart(() -> {
-                        List<MongoCollection> tables = this.client().selectCollections(this.dbName());
+                        List<MongoCollection> collections = this.client().listCollections(this.dbName());
                         // 无数据直接更新列表
                         if (this.isChildEmpty()) {
                             List<TreeItem<?>> list = new ArrayList<>();
-                            for (MongoCollection table : tables) {
-                                list.add(new MongoCollectionTreeItem(table, this.getTreeView()));
+                            for (MongoCollection collection : collections) {
+                                list.add(new MongoCollectionTreeItem(collection, this.getTreeView()));
                             }
                             this.setChild(list);
                         } else {// 有数据则执行删除、新增、更新操作
@@ -109,20 +109,20 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
                             List<MongoCollectionTreeItem> addList = new ArrayList<>();
                             // 删除
                             for (MongoCollectionTreeItem item : list) {
-                                if (tables.parallelStream().noneMatch(f -> f.compare(item.value()))) {
+                                if (collections.parallelStream().noneMatch(f -> f.compare(item.value()))) {
                                     delList.add(item);
                                 }
                             }
                             // 新增
-                            for (MongoCollection table : tables) {
-                                if (list.parallelStream().noneMatch(item -> table.compare(item.value()))) {
-                                    addList.add(new MongoCollectionTreeItem(table, this.getTreeView()));
+                            for (MongoCollection collection : collections) {
+                                if (list.parallelStream().noneMatch(item -> collection.compare(item.value()))) {
+                                    addList.add(new MongoCollectionTreeItem(collection, this.getTreeView()));
                                 }
                             }
                             // 更新
                             for (MongoCollectionTreeItem item : list) {
                                 if (!addList.contains(item) && !delList.contains(item)) {
-                                    tables.parallelStream().filter(f -> f.compare(item.value())).findFirst().ifPresent(f -> item.value().copy(f));
+                                    collections.parallelStream().filter(f -> f.compare(item.value())).findFirst().ifPresent(f -> item.value().copy(f));
                                 }
                             }
                             list.removeAll(delList);
