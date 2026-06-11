@@ -7,6 +7,7 @@ import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoDatabase;
+import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.query.MysqlExecuteResult;
 import cn.oyzh.easymongo.query.MysqlQueryResults;
@@ -14,6 +15,7 @@ import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
+import cn.oyzh.easymongo.trees.function.ShellMysqlFunctionsTreeItem;
 import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
 import cn.oyzh.easymongo.trees.terminal.MongoTerminalTreeItem;
 import cn.oyzh.easymongo.util.MongoViewFactory;
@@ -151,6 +153,7 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
                         List<TreeItem<?>> typeItems = new ArrayList<>();
                         typeItems.add(new MongoCollectionsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoBucketsTreeItem(this.getTreeView()));
+                        typeItems.add(new ShellMysqlFunctionsTreeItem(this.getTreeView()));
                         typeItems.add(new MongoQueriesTreeItem(this.getTreeView()));
                         typeItems.add(new MongoTerminalTreeItem(this.getTreeView()));
                         super.setChild(typeItems);
@@ -175,6 +178,20 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
     public MongoQueriesTreeItem getQueryTypeChild() {
         for (RichTreeItem<?> child : this.richChildren()) {
             if (child instanceof MongoQueriesTreeItem treeItem) {
+                return treeItem;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取函数类型子节点
+     *
+     * @return 函数类型子节点
+     */
+    public ShellMysqlFunctionsTreeItem getFunctionTypeChild() {
+        for (RichTreeItem<?> child : this.richChildren()) {
+            if (child instanceof ShellMysqlFunctionsTreeItem treeItem) {
                 return treeItem;
             }
         }
@@ -269,5 +286,25 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
 
     public BsonValue insertCollectionRecord(MongoRecord record) {
         return this.client().insertCollectionRecord(record);
+    }
+
+    public void dropFunction(MongoFunction value) {
+        this.client().dropFunction(this.dbName(), value.getName());
+    }
+
+    public void renameFunction(String oldName, String newName) {
+        this.client().renameFunction(this.dbName(), oldName, newName);
+    }
+
+    public MongoFunction selectFunction(String functionName) {
+        return this.client().selectFunction(this.dbName(), functionName);
+    }
+
+    public void createFunction(MongoFunction function) {
+        this.client().createFunction(this.dbName(), function.getName(), function.getCode());
+    }
+
+    public void alertFunction(MongoFunction function) {
+        this.client().alertFunction(this.dbName(), function.getName(), function.getCode());
     }
 }

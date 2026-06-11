@@ -20,6 +20,8 @@ public class MongoUtil {
 
     public static final String ID = "_id";
 
+    public static final String SYSTEM_JS = "system.js";
+
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     /**

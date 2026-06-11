@@ -5,12 +5,17 @@ import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketDroppedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
+import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDesignEvent;
+import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDroppedEvent;
+import cn.oyzh.easymongo.event.function.ShellMysqlFunctionRenamedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryDeletedEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
 import cn.oyzh.easymongo.mongo.MongoClient;
+import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
+import cn.oyzh.easymongo.trees.function.ShellMysqlFunctionTreeItem;
 import cn.oyzh.event.EventUtil;
 import cn.oyzh.fx.gui.event.Layout1Event;
 import cn.oyzh.fx.gui.event.Layout2Event;
@@ -194,6 +199,27 @@ public class MongoEventUtil {
         MongoTerminalOpenEvent event = new MongoTerminalOpenEvent();
         event.data(client);
         event.setDbName(dbName);
+        EventUtil.post(event);
+    }
+
+    public static void dropFunction(ShellMysqlFunctionTreeItem treeItem) {
+        ShellMysqlFunctionDroppedEvent event = new ShellMysqlFunctionDroppedEvent();
+        event.data(treeItem);
+        EventUtil.postSync(event);
+    }
+
+    public static void designFunction(MongoFunction function, MongoDatabaseTreeItem dbItem) {
+        ShellMysqlFunctionDesignEvent event = new ShellMysqlFunctionDesignEvent();
+        event.data(function);
+        event.setDbItem(dbItem);
+        EventUtil.post(event);
+    }
+
+    public static void functionRenamed(String functionName, String newFunctionName, MongoDatabaseTreeItem dbItem) {
+        ShellMysqlFunctionRenamedEvent event = new ShellMysqlFunctionRenamedEvent();
+        event.setDbItem(dbItem);
+        event.data(functionName);
+        event.setNewFunctionName(newFunctionName);
         EventUtil.post(event);
     }
 }

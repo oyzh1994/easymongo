@@ -10,9 +10,9 @@ import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
 import cn.oyzh.easymongo.query.MysqlExecuteResult;
 import cn.oyzh.easymongo.query.MysqlQueryResults;
-import cn.oyzh.easymongo.script.MongoScriptParser;
 import cn.oyzh.easymongo.script.MongoScriptCursor;
 import cn.oyzh.easymongo.script.MongoScriptEngine;
+import cn.oyzh.easymongo.script.MongoScriptParser;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.i18n.I18nHelper;
@@ -41,6 +41,7 @@ import org.bson.BsonObjectId;
 import org.bson.BsonValue;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.Code;
 import org.bson.types.ObjectId;
 
 import javax.script.ScriptException;
@@ -865,6 +866,90 @@ public class MongoClient implements Closeable {
         return results;
     }
 
+
+    /**
+     * 执行脚本
+     *
+     * @param dbName 数据库名称
+     * @return 结果
+     */
+    public List<MongoFunction> listFunctions(String dbName) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
+        List<MongoFunction> functions = new ArrayList<>();
+        FindIterable<Document> iter = collection.find();
+        for (Document document : iter) {
+            MongoFunction function = new MongoFunction();
+            Code code = (Code) document.get("value");
+            function.setName(document.getString("_id"));
+            function.setCode(code.getCode());
+            function.setDbName(dbName);
+            functions.add(function);
+        }
+        return functions;
+    }
+
+    public BsonValue createFunction(String dbName, String functionName, String code) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
+        Document funcDoc = new Document()
+                .append("_id", functionName)
+                .append("value", new Code(code));
+        InsertOneResult result = collection.insertOne(funcDoc);
+        return result.getInsertedId();
+    }
+
+    public boolean alertFunction(String dbName, String functionName, String code) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
+        Bson filter = Filters.eq("_id", functionName);
+        Bson update = Updates.set("value", new Code(code));
+        UpdateResult result = collection.updateOne(filter, update);
+        return result.getMatchedCount() == 1;
+    }
+
+    public MongoFunction selectFunction(String dbName, String functionName) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
+        Bson filter = Filters.eq("_id", functionName);
+        FindIterable<Document> iter = collection.find(filter);
+        Document document = iter.first();
+        if (document != null) {
+            MongoFunction function = new MongoFunction();
+            Code code = (Code) document.get("value");
+            function.setName(document.getString("_id"));
+            function.setCode(code.getCode());
+            function.setDbName(dbName);
+            return function;
+        }
+        return null;
+    }
+
+    public boolean dropFunction(String dbName, String functionName) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
+        Bson filter = Filters.eq("_id", functionName);
+        Document document = collection.findOneAndDelete(filter);
+        return document != null;
+    }
+
+    public boolean renameFunction(String dbName, String oldName, String newName) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
+        Bson filter = Filters.eq("_id", oldName);
+        FindIterable<Document> iter = collection.find(filter);
+        Document document = iter.first();
+        if (document != null) {
+            Document newFunc = new Document()
+                    .append("_id", newName)
+                    .append("value", document.get("value"));
+            collection.insertOne(newFunc);
+            collection.deleteOne(filter);
+
+            return true;
+        }
+        return false;
+    }
+
+    public long functionSize(String dbName) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
+        return collection.countDocuments();
+    }
+
     public void addStateListener(ChangeListener<MongoConnState> stateChangeListener) {
         this.state.addListener(stateChangeListener);
     }
@@ -876,4 +961,5 @@ public class MongoClient implements Closeable {
     public String iid() {
         return this.shellConnect.getId();
     }
+
 }

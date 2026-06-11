@@ -34,17 +34,17 @@ public class MongoCollection implements ObjectComparator<MongoCollection>, Objec
     }
 
     @Override
-    public boolean compare(MongoCollection table) {
-        if (table == null) {
+    public boolean compare(MongoCollection collection) {
+        if (collection == null) {
             return false;
         }
-        if (table == this) {
+        if (collection == this) {
             return true;
         }
-        if (!StringUtil.equals(this.getName(), table.getName())) {
+        if (!StringUtil.equals(this.getName(), collection.getName())) {
             return false;
         }
-        return StringUtil.equals(this.getDbName(), table.getDbName());
+        return StringUtil.equals(this.getDbName(), collection.getDbName());
     }
 
     @Override

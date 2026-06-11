@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.util;
 
 import cn.oyzh.common.util.Base64Util;
 import cn.oyzh.easymongo.mongo.MongoColumn;
+import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordProperty;
 import org.bson.BsonBinary;
@@ -81,7 +82,7 @@ public class MongoDataUtil {
      * 构建记录值
      *
      * @param value 值
-     * @param deep 当前深度
+     * @param deep  当前深度
      * @return 结果
      */
     private static Object buildRecordValue(Object value, int deep) {
@@ -143,10 +144,11 @@ public class MongoDataUtil {
 
     /**
      * 构建记录数据
+     *
      * @param colName 字段名
-     * @param value 值
+     * @param value   值
      * @param builder 缓存
-     * @param deep 深度
+     * @param deep    深度
      */
     private static void buildRecordData(String colName, Object value, StringBuilder builder, int deep) {
         builder.append(",\n");
@@ -158,6 +160,7 @@ public class MongoDataUtil {
 
     /**
      * 转换为插入脚本
+     *
      * @param record 记录
      * @return 结果
      */
@@ -172,6 +175,7 @@ public class MongoDataUtil {
 
     /**
      * 转换为更新脚本
+     *
      * @param record 记录
      * @return 结果
      */
@@ -187,6 +191,7 @@ public class MongoDataUtil {
 
     /**
      * 转换为插入脚本
+     *
      * @param records 记录列表
      * @return 结果
      */
@@ -197,4 +202,27 @@ public class MongoDataUtil {
         }
         return list;
     }
+
+    /**
+     * 转换为替换脚本
+     *
+     * @param function 记录
+     * @return 结果
+     */
+    public static String toReplaceScript(MongoFunction function) {
+        String script = """
+                db.getCollection("$collectionName").replaceOne(
+                    { _id: "$name" },
+                    { _id: "$name", value: Code("$code") },
+                    { upsert: true }
+                );
+                """;
+        script = script.replace("$collectionName", MongoUtil.SYSTEM_JS);
+        script = script.replace("$name", function.getName());
+        script = script.replace("$name", function.getName());
+        script = script.replace("$code", function.getCode());
+        return script;
+    }
+
+
 }

@@ -4,6 +4,9 @@ import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
+import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDesignEvent;
+import cn.oyzh.easymongo.event.function.ShellMysqlFunctionDroppedEvent;
+import cn.oyzh.easymongo.event.function.ShellMysqlFunctionRenamedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryAddEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalCloseEvent;
@@ -11,6 +14,7 @@ import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
+import cn.oyzh.easymongo.tabs.function.ShellMysqlFunctionDesignTab;
 import cn.oyzh.easymongo.tabs.home.MongoHomeTab;
 import cn.oyzh.easymongo.tabs.query.MysqlQueryMainTab;
 import cn.oyzh.easymongo.tabs.terminal.RedisTerminalTab;
@@ -874,6 +878,76 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
             // 移除节点
             if (terminalTab != null) {
                 terminalTab.closeTab();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取函数tab
+     *
+     * @param dbItem       db节点
+     * @param functionName 函数名称
+     * @return 结果
+     */
+    private ShellMysqlFunctionDesignTab getFunctionDesignTab(MongoDatabaseTreeItem dbItem, String functionName) {
+        for (Tab tab : this.getTabs()) {
+            if (tab instanceof ShellMysqlFunctionDesignTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(functionName, tab1.functionName())) {
+                return tab1;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 函数重命名事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onFunctionRenamed(ShellMysqlFunctionRenamedEvent event) {
+        try {
+            ShellMysqlFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
+            if (tab != null) {
+                tab.closeTab();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * 函数设计事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onFunctionDesign(ShellMysqlFunctionDesignEvent event) {
+        try {
+            ShellMysqlFunctionDesignTab tab = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
+            if (tab == null) {
+                tab = new ShellMysqlFunctionDesignTab();
+                tab.init(event.data(), event.getDbItem());
+                this.addTab(tab);
+            }
+            this.select(tab);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * 函数删除事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onFunctionDropped(ShellMysqlFunctionDroppedEvent event) {
+        try {
+            ShellMysqlFunctionDesignTab tab1 = this.getFunctionDesignTab(event.getDbItem(), event.functionName());
+            if (tab1 != null) {
+                tab1.closeTab();
             }
         } catch (Exception ex) {
             ex.printStackTrace();

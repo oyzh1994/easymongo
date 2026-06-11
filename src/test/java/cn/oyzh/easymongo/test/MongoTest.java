@@ -170,5 +170,4 @@ public class MongoTest {
             collection.insertOne(document);
         }
     }
-
 }
