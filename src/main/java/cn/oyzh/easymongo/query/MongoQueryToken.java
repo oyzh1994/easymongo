@@ -7,7 +7,7 @@ import cn.oyzh.common.util.StringUtil;
  * @author oyzh
  * @since 2024/8/15
  */
-public class MysqlQueryToken {
+public class MongoQueryToken {
 
     /**
      * 结束位置

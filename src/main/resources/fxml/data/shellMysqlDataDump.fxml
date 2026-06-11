@@ -12,7 +12,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import cn.oyzh.easymongo.fx.DBDumpDataTypeComboBox?>
+<?import cn.oyzh.easymongo.fx.data.DBDataDumpTypeComboBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoDataDumpController" realWidth="700" realHeight="550">
     <FXHeaderBar/>
@@ -53,11 +53,11 @@
             <Insets left="30" top="10"/>
         </VBox.margin>
     </InfoLabel>
-    <DBDumpDataTypeComboBox initIndex="0" fx:id="dataType" realHeight="30" flexWidth="100% - 180">
+    <DBDataDumpTypeComboBox initIndex="0" fx:id="dataType" realHeight="30" flexWidth="100% - 180">
         <VBox.margin>
             <Insets left="30" top="5"/>
         </VBox.margin>
-    </DBDumpDataTypeComboBox>
+    </DBDataDumpTypeComboBox>
     <InfoLabel text="%base.processMessage" >
         <VBox.margin>
             <Insets left="30" top="10"/>

@@ -1,7 +1,7 @@
 package cn.oyzh.easymongo.tabs.query;
 
-import cn.oyzh.easymongo.query.MysqlQueryResult;
-import cn.oyzh.easymongo.query.MysqlQueryResults;
+import cn.oyzh.easymongo.query.MongoQueryResult;
+import cn.oyzh.easymongo.query.MongoQueryResults;
 import cn.oyzh.fx.gui.tabs.RichTabController;
 import cn.oyzh.fx.plus.controls.text.area.FXTextArea;
 import cn.oyzh.i18n.I18nHelper;
@@ -19,10 +19,10 @@ public class MysqlQueryInfoTabController extends RichTabController {
     @FXML
     private FXTextArea infoArea;
 
-    public void init(MysqlQueryResults<?> results) {
+    public void init(MongoQueryResults<?> results) {
         this.infoArea.clear();
         if (results.isSuccess()) {
-            for (MysqlQueryResult result : results.getResults()) {
+            for (MongoQueryResult result : results.getResults()) {
                 this.infoArea.appendLine(result.getScript());
                 if (result.isSuccess()) {
                     if (result.getUpdateCount() > 0) {

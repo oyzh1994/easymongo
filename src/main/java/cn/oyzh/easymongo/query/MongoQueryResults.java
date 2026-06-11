@@ -10,7 +10,7 @@ import java.util.List;
  * @author oyzh
  * @since 2024/02/19
  */
-public class MysqlQueryResults<R extends MysqlQueryResult> {
+public class MongoQueryResults<R extends MongoQueryResult> {
 
     private String errMsg;
 

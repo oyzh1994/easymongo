@@ -9,8 +9,8 @@ import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoDatabase;
 import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.mongo.MongoRecord;
-import cn.oyzh.easymongo.query.MysqlExecuteResult;
-import cn.oyzh.easymongo.query.MysqlQueryResults;
+import cn.oyzh.easymongo.query.MongoExecuteResult;
+import cn.oyzh.easymongo.query.MongoQueryResults;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketsTreeItem;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionsTreeItem;
@@ -264,15 +264,15 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         this.client().clearBucket(this.dbName(), bucketName);
     }
 
-    public MysqlExecuteResult executeSingleScript(String script) throws Exception {
+    public MongoExecuteResult executeSingleScript(String script) throws Exception {
         return this.client().executeSingleScript(this.dbName(), script);
     }
 
-    public MysqlQueryResults<MysqlExecuteResult> executeScript(String script) {
+    public MongoQueryResults<MongoExecuteResult> executeScript(String script) {
         return this.client().executeScript(this.dbName(), script);
     }
 
-    //    public MysqlQueryResults<MysqlExplainResult> explainSql(String sql) {
+    //    public MongoQueryResults<MysqlExplainResult> explainSql(String sql) {
     //        return null;
     //    }
 

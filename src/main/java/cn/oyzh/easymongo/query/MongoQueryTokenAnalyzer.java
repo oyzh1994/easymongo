@@ -10,11 +10,11 @@ import cn.oyzh.common.util.StringUtil;
  * @author oyzh
  * @since 2024/02/18
  */
-public class MysqlQueryTokenAnalyzer {
+public class MongoQueryTokenAnalyzer {
 
-    public static final MysqlQueryTokenAnalyzer INSTANCE = new MysqlQueryTokenAnalyzer();
+    public static final MongoQueryTokenAnalyzer INSTANCE = new MongoQueryTokenAnalyzer();
 
-    public MysqlQueryToken currentToken(String content, int currentIndex) {
+    public MongoQueryToken currentToken(String content, int currentIndex) {
         try {
             if (StringUtil.isEmpty(content)) {
                 return null;
@@ -25,7 +25,7 @@ public class MysqlQueryTokenAnalyzer {
             if (currentIndex > content.length()) {
                 return null;
             }
-            MysqlQueryToken token = new MysqlQueryToken();
+            MongoQueryToken token = new MongoQueryToken();
             // 截取字符串
             content = content.substring(0, currentIndex);
             // 当前位置

@@ -1,6 +1,6 @@
 package cn.oyzh.easymongo.tabs.query;
 
-import cn.oyzh.easymongo.query.MysqlQueryResults;
+import cn.oyzh.easymongo.query.MongoQueryResults;
 import cn.oyzh.easymongo.tabs.MongoTab;
 import cn.oyzh.fx.gui.tabs.RichTab;
 
@@ -21,7 +21,7 @@ public class MysqlQueryInfoTab extends RichTab {
         return MongoTab.BASE_PATH + "query/mysqlQueryInfoTab.fxml";
     }
 
-    public void init(MysqlQueryResults<?> results) {
+    public void init(MongoQueryResults<?> results) {
         this.controller().init(results);
     }
 

@@ -1,12 +1,8 @@
 package cn.oyzh.easymongo.query;
 
 import cn.oyzh.fx.gui.svg.glyph.KeywordsSVGGlyph;
-import cn.oyzh.fx.gui.svg.glyph.database.ColumnSVGGlyph;
-import cn.oyzh.fx.gui.svg.glyph.database.DatabaseSVGGlyph;
 import cn.oyzh.fx.gui.svg.glyph.database.FunctionSVGGlyph;
-import cn.oyzh.fx.gui.svg.glyph.database.ProcedureSVGGlyph;
 import cn.oyzh.fx.gui.svg.glyph.database.TableSVGGlyph;
-import cn.oyzh.fx.gui.svg.glyph.database.ViewSVGGlyph;
 import cn.oyzh.fx.plus.controls.box.FXHBox;
 import cn.oyzh.fx.plus.controls.label.FXLabel;
 import cn.oyzh.fx.plus.controls.list.FXListView;
@@ -25,7 +21,7 @@ import java.util.List;
  * @author oyzh
  * @since 2024/02/21
  */
-public class MysqlQueryPromptListView extends FXListView<FXHBox> {
+public class MongoQueryPromptListView extends FXListView<FXHBox> {
 
     {
         this.setRealWidth(360);
@@ -85,10 +81,10 @@ public class MysqlQueryPromptListView extends FXListView<FXHBox> {
      *
      * @return 结果
      */
-    public MysqlQueryPromptItem getPickedItem() {
+    public MongoQueryPromptItem getPickedItem() {
         FXHBox hBox = this.getSelectedItem();
         if (hBox != null) {
-            MysqlQueryPromptItem item = hBox.getProp("item");
+            MongoQueryPromptItem item = hBox.getProp("item");
             if (item != null) {
                 this.applyBackground(-1);
                 return item;
@@ -131,13 +127,13 @@ public class MysqlQueryPromptListView extends FXListView<FXHBox> {
      *
      * @param items 提示
      */
-    public void init(List<MysqlQueryPromptItem> items) {
+    public void init(List<MongoQueryPromptItem> items) {
         // 应用背景色
         this.applyBackground(-1);
         // 初始化数据
         List<FXHBox> boxList = new ArrayList<>();
         // 初始化节点内容
-        for (MysqlQueryPromptItem item : items) {
+        for (MongoQueryPromptItem item : items) {
             // 初始化组件
             FXHBox box = new FXHBox();
             this.initBox(box);
@@ -161,7 +157,7 @@ public class MysqlQueryPromptListView extends FXListView<FXHBox> {
      * @param item 提示词
      * @return 组件
      */
-    private SVGLabel initPromptLabel(MysqlQueryPromptItem item) {
+    private SVGLabel initPromptLabel(MongoQueryPromptItem item) {
         SVGLabel label = null;
          if (item.isKeywordType()) {
             KeywordsSVGGlyph svgGlyph = new KeywordsSVGGlyph("12");
@@ -190,7 +186,7 @@ public class MysqlQueryPromptListView extends FXListView<FXHBox> {
      * @param item 提示词
      * @return 组件
      */
-    private FXLabel initExtLabel(MysqlQueryPromptItem item) {
+    private FXLabel initExtLabel(MongoQueryPromptItem item) {
         FXLabel label = null;
         if (item.isCollectionType()) {
             label = new FXLabel(item.getExtContent());

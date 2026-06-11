@@ -2,8 +2,7 @@ package cn.oyzh.easymongo.query;
 
 import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.fx.editor.incubator.Editor;
-import cn.oyzh.fx.editor.incubator.EditorFormatType;
+import cn.oyzh.fx.editor.incubator.control.SqlEditor;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.plus.keyboard.KeyboardUtil;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
@@ -22,12 +21,12 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author oyzh
  * @since 2024/02/18
  */
-public class MysqlQueryEditor extends Editor {
+public class MongoQueryEditor extends SqlEditor {
 
     /**
      * 提示词组件
      */
-    private final MysqlQueryPromptPopup promptPopup = new MysqlQueryPromptPopup();
+    private final MongoQueryPromptPopup promptPopup = new MongoQueryPromptPopup();
 
     {
         // this.showLineNum();
@@ -68,7 +67,7 @@ public class MysqlQueryEditor extends Editor {
             StringBuilder textNew = new StringBuilder();
             // 无内容
             if (StringUtil.isEmpty(text)) {
-                textNew.append("-- ").append(System.lineSeparator());
+                textNew.append("// ").append(System.lineSeparator());
                 changed.set(true);
                 fixedStart = fixedEnd = -3;
             } else {
@@ -99,7 +98,7 @@ public class MysqlQueryEditor extends Editor {
                         if (undoComment.get()) {
                             str = str.stripLeading().substring(3);
                         } else {
-                            str = "-- " + str;
+                            str = "// " + str;
                         }
                         changed.set(true);
                     }
@@ -121,11 +120,11 @@ public class MysqlQueryEditor extends Editor {
         }
     }
 
-    @Override
-    public void initNode() {
-        super.initNode();
-        super.setFormatType(EditorFormatType.SQL);
-    }
+//    @Override
+//    public void initNode() {
+//        super.initNode();
+//        super.setFormatType(EditorFormatType.SQL);
+//    }
 
     @Override
     public List<? extends MenuItem> getMenuItems() {

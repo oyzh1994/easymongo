@@ -7,7 +7,7 @@ package cn.oyzh.easymongo.query;
  * @author oyzh
  * @since 2024/02/21
  */
-public class MysqlQueryPromptItem {
+public class MongoQueryPromptItem {
 
     /**
      * 类型

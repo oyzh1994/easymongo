@@ -23,14 +23,14 @@ import java.util.function.Consumer;
  * @author oyzh
  * @since 2024/02/21
  */
-public class MysqlQueryPromptPopup extends FXPopup {
+public class MongoQueryPromptPopup extends FXPopup {
 
     /**
      * 选中事件
      */
-    protected Consumer<MysqlQueryPromptItem> onItemSelected;
+    protected Consumer<MongoQueryPromptItem> onItemSelected;
 
-    public MysqlQueryPromptPopup() {
+    public MongoQueryPromptPopup() {
         this.setAutoFix(true);
         this.setAutoHide(true);
         this.initContent();
@@ -41,9 +41,9 @@ public class MysqlQueryPromptPopup extends FXPopup {
      * 初始化内容组件
      */
     protected void initContent() {
-        MysqlQueryPromptListView listView = this.listView();
+        MongoQueryPromptListView listView = this.listView();
         if (listView == null) {
-            listView = new MysqlQueryPromptListView();
+            listView = new MongoQueryPromptListView();
             this.getContent().setAll(listView);
             listView.setFontSize(12.0);
             listView.setCursor(Cursor.HAND);
@@ -59,8 +59,8 @@ public class MysqlQueryPromptPopup extends FXPopup {
      *
      * @return 列表组件
      */
-    public MysqlQueryPromptListView listView() {
-        return (MysqlQueryPromptListView) CollectionUtil.getFirst(this.getContent());
+    public MongoQueryPromptListView listView() {
+        return (MongoQueryPromptListView) CollectionUtil.getFirst(this.getContent());
     }
 
     /**
@@ -69,9 +69,9 @@ public class MysqlQueryPromptPopup extends FXPopup {
      * @param token 提示词
      * @return 结果
      */
-    public synchronized boolean initPrompts(MysqlQueryToken token) {
+    public synchronized boolean initPrompts(MongoQueryToken token) {
         // 提示词列表
-        List<MysqlQueryPromptItem> items = MysqlQueryUtil.initPrompts(token, 0.5f);
+        List<MongoQueryPromptItem> items = MongoQueryUtil.initPrompts(token, 0.5f);
         // 初始化数据
         this.listView().init(items);
         // 判断是否为空
@@ -81,7 +81,7 @@ public class MysqlQueryPromptPopup extends FXPopup {
     /**
      * token
      */
-    private MysqlQueryToken token;
+    private MongoQueryToken token;
 
     /**
      * 提示词标志位
@@ -94,7 +94,7 @@ public class MysqlQueryPromptPopup extends FXPopup {
      * @param area  文本域
      * @param event 键盘按键事件
      */
-    public void prompt(MysqlQueryEditor area, KeyEvent event) {
+    public void prompt(MongoQueryEditor area, KeyEvent event) {
         // 常规按键不处理
         if (this.isGeneralKeyEvent(event)) {
             this.hide();
@@ -138,7 +138,7 @@ public class MysqlQueryPromptPopup extends FXPopup {
         // 文本内容
         String content = area.getText();
         // 获取token
-        this.token = MysqlQueryTokenAnalyzer.INSTANCE.currentToken(content, cartPos);
+        this.token = MongoQueryTokenAnalyzer.INSTANCE.currentToken(content, cartPos);
         // 处理token
         if (this.token != null && this.token.isNotEmpty()) {
             // 生成标志位
@@ -165,7 +165,7 @@ public class MysqlQueryPromptPopup extends FXPopup {
      *
      * @param area 文本域
      */
-    private void show(MysqlQueryEditor area) {
+    private void show(MongoQueryEditor area) {
         RenderService.submitFXLater(() -> {
             try {
                 Optional<Bounds> optional = area.getCaretBounds();
@@ -191,7 +191,7 @@ public class MysqlQueryPromptPopup extends FXPopup {
      * @param editor 编辑器
      * @param item   提示内容
      */
-    public void autoComplete(MysqlQueryEditor editor, MysqlQueryPromptItem item) {
+    public void autoComplete(MongoQueryEditor editor, MongoQueryPromptItem item) {
         try {
             if (this.token != null) {
                 // IndexRange range = new IndexRange(this.token.getStartIndex(), this.token.getEndIndex());
@@ -208,7 +208,7 @@ public class MysqlQueryPromptPopup extends FXPopup {
      */
     private void pickItem() {
         if (this.onItemSelected != null && this.isShowing()) {
-            MysqlQueryPromptItem pickedItem = this.listView().getPickedItem();
+            MongoQueryPromptItem pickedItem = this.listView().getPickedItem();
             if (pickedItem != null) {
                 this.onItemSelected.accept(pickedItem);
             }
@@ -258,11 +258,11 @@ public class MysqlQueryPromptPopup extends FXPopup {
         return false;
     }
 
-    public Consumer<MysqlQueryPromptItem> getOnItemSelected() {
+    public Consumer<MongoQueryPromptItem> getOnItemSelected() {
         return onItemSelected;
     }
 
-    public void setOnItemSelected(Consumer<MysqlQueryPromptItem> onItemSelected) {
+    public void setOnItemSelected(Consumer<MongoQueryPromptItem> onItemSelected) {
         this.onItemSelected = onItemSelected;
     }
 }

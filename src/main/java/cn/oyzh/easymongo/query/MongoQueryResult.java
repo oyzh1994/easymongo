@@ -13,7 +13,7 @@ import java.util.List;
  * @author oyzh
  * @since 2024/08/19
  */
-public abstract class MysqlQueryResult {
+public abstract class MongoQueryResult {
 
     /**
      * 脚本

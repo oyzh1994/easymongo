@@ -8,7 +8,7 @@
 <?import cn.oyzh.fx.gui.svg.glyph.PrettySVGGlyph?>
 <?import cn.oyzh.fx.gui.svg.glyph.RunSVGGlyph?>
 <?import cn.oyzh.fx.gui.svg.glyph.database.ExplainSVGGlyph?>
-<?import cn.oyzh.easymongo.query.MysqlQueryEditor?>
+<?import cn.oyzh.easymongo.query.MongoQueryEditor?>
 <?import cn.oyzh.easymongo.tabs.query.MysqlQueryInfoTab?>
 <FXVBox xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
@@ -31,7 +31,7 @@
         <!--     </HBox.margin> -->
         <!-- </ExplainSVGGlyph> -->
     </FXHBox>
-    <MysqlQueryEditor fontSize="12" fx:id="queryArea" flexHeight="100% - 35" flexWidth="100%"
+    <MongoQueryEditor fontSize="12" fx:id="queryArea" flexHeight="100% - 35" flexWidth="100%"
                       onKeyPressed="#queryKeyPressed"/>
     <FXTabPane fx:id="resultTabPane" flexHeight="70% - 40" flexWidth="100%" visible="false" managed="false">
         <MysqlQueryInfoTab fx:id="infoTab" text="%base.info">

@@ -2,10 +2,10 @@ package cn.oyzh.easymongo.tabs.query;
 
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoQuery;
-import cn.oyzh.easymongo.query.MysqlExecuteResult;
-import cn.oyzh.easymongo.query.MysqlQueryEditor;
-import cn.oyzh.easymongo.query.MysqlQueryResults;
-import cn.oyzh.easymongo.query.MysqlQueryUtil;
+import cn.oyzh.easymongo.query.MongoExecuteResult;
+import cn.oyzh.easymongo.query.MongoQueryEditor;
+import cn.oyzh.easymongo.query.MongoQueryResults;
+import cn.oyzh.easymongo.query.MongoQueryUtil;
 import cn.oyzh.easymongo.store.MongoQueryStore;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.tabs.RichTabController;
@@ -61,7 +61,7 @@ public class MysqlQueryMainTabController extends RichTabController {
      * 查询文本域
      */
     @FXML
-    private MysqlQueryEditor queryArea;
+    private MongoQueryEditor queryArea;
 
     /**
      * 结果文本域
@@ -103,7 +103,7 @@ public class MysqlQueryMainTabController extends RichTabController {
             this.unsaved = true;
             this.flushTab();
         });
-        MysqlQueryUtil.updateIndex(dbItem.client(), this.dbItem.dbName());
+        MongoQueryUtil.updateIndex(dbItem.client(), this.dbItem.dbName());
     }
 
     @Override
@@ -176,14 +176,14 @@ public class MysqlQueryMainTabController extends RichTabController {
     private void doRun(String sql) {
         try {
             this.resultTabPane.disable();
-            MysqlQueryResults<MysqlExecuteResult> results = this.dbItem.executeScript(sql);
+            MongoQueryResults<MongoExecuteResult> results = this.dbItem.executeScript(sql);
             this.clearTabs();
             int showType = 1;
             this.initInfoTab(results);
             if (!results.isEmpty()) {
                 int index = 1;
                 this.initInfoTab(results);
-                for (MysqlExecuteResult result : results.getResults()) {
+                for (MongoExecuteResult result : results.getResults()) {
                     if (result.isSuccess() && result.getRecords() != null) {
                         FXTab fxTab = this.initSelectTab(result, I18nHelper.result() + index++);
                         showType = 2;
@@ -212,7 +212,7 @@ public class MysqlQueryMainTabController extends RichTabController {
     //        try {
     //            String sql = this.queryArea.getTextTrim();
     //            this.resultTabPane.disable();
-    //            MysqlQueryResults<MysqlExplainResult> results = this.dbItem.explainSql(sql);
+    //            MongoQueryResults<MysqlExplainResult> results = this.dbItem.explainSql(sql);
     //            this.clearTabs();
     //            int showType = 1;
     //            this.initInfoTab(results);
@@ -245,7 +245,7 @@ public class MysqlQueryMainTabController extends RichTabController {
      *
      * @param results 结果
      */
-    private void initInfoTab(MysqlQueryResults<?> results) {
+    private void initInfoTab(MongoQueryResults<?> results) {
         this.infoTab.init(results);
     }
 
@@ -256,7 +256,7 @@ public class MysqlQueryMainTabController extends RichTabController {
      * @param title  标题
      * @return tab组件
      */
-    private MysqlQuerySelectTab initSelectTab(MysqlExecuteResult result, String title) {
+    private MysqlQuerySelectTab initSelectTab(MongoExecuteResult result, String title) {
         MysqlQuerySelectTab selectTab = new MysqlQuerySelectTab();
         selectTab.init(title, result, this.dbItem);
         selectTab.setId("resultTab");

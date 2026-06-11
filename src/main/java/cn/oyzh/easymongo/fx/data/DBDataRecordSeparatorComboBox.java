@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.fx;
+package cn.oyzh.easymongo.fx.data;
 
 import cn.oyzh.common.system.OSUtil;
 import cn.oyzh.fx.plus.controls.combo.FXComboBox;

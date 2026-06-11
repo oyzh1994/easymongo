@@ -8,8 +8,8 @@ import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
-import cn.oyzh.easymongo.query.MysqlExecuteResult;
-import cn.oyzh.easymongo.query.MysqlQueryResults;
+import cn.oyzh.easymongo.query.MongoExecuteResult;
+import cn.oyzh.easymongo.query.MongoQueryResults;
 import cn.oyzh.easymongo.script.MongoScriptCursor;
 import cn.oyzh.easymongo.script.MongoScriptEngine;
 import cn.oyzh.easymongo.script.MongoScriptParser;
@@ -759,9 +759,9 @@ public class MongoClient implements Closeable {
      * @param script 脚本
      * @return 结果
      */
-    public MysqlExecuteResult executeSingleScript(String dbName, String script) {
+    public MongoExecuteResult executeSingleScript(String dbName, String script) {
         this.shellEngine().db(dbName);
-        MysqlExecuteResult result = new MysqlExecuteResult();
+        MongoExecuteResult result = new MongoExecuteResult();
         result.setScript(script);
         long start = System.currentTimeMillis();
         try {
@@ -785,7 +785,7 @@ public class MongoClient implements Closeable {
      * @param obj    对象
      * @param dbName 数据库名称
      */
-    private void parseResult(MysqlExecuteResult result, Object obj, String dbName) {
+    private void parseResult(MongoExecuteResult result, Object obj, String dbName) {
         if (obj instanceof MongoScriptCursor cursor) {
             parseResult(result, cursor.toArray(), dbName);
         } else if (obj instanceof List<?> list) {
@@ -849,14 +849,14 @@ public class MongoClient implements Closeable {
      * @param script 脚本
      * @return 结果
      */
-    public MysqlQueryResults<MysqlExecuteResult> executeScript(String dbName, String script) {
+    public MongoQueryResults<MongoExecuteResult> executeScript(String dbName, String script) {
         this.shellEngine().db(dbName);
-        MysqlQueryResults<MysqlExecuteResult> results = new MysqlQueryResults<>();
+        MongoQueryResults<MongoExecuteResult> results = new MongoQueryResults<>();
         try {
             MongoScriptParser parser = MongoScriptParser.getParser(script);
             List<String> sqlList = parser.parseScript();
             for (String sql1 : sqlList) {
-                MysqlExecuteResult result = this.executeSingleScript(dbName, sql1);
+                MongoExecuteResult result = this.executeSingleScript(dbName, sql1);
                 results.addResult(result);
             }
         } catch (Exception ex) {

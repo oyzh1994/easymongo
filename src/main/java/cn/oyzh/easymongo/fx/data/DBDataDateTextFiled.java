@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.fx;
+package cn.oyzh.easymongo.fx.data;
 
 
 import cn.oyzh.fx.gui.text.field.SelectTextFiled;

@@ -10,7 +10,7 @@
 // * @author oyzh
 // * @since 2024/08/16
 // */
-//public class MysqlExplainResult extends MysqlQueryResult {
+//public class MysqlExplainResult extends MongoQueryResult {
 //
 //
 //}
