@@ -7,6 +7,7 @@ import cn.oyzh.fx.editor.incubator.Editor;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controller.StageController;
 import cn.oyzh.fx.plus.information.MessageBox;
+import cn.oyzh.fx.plus.window.FXStageStyle;
 import cn.oyzh.fx.plus.window.StageAttribute;
 import cn.oyzh.i18n.I18nHelper;
 import com.alibaba.fastjson2.JSONObject;
@@ -22,6 +23,7 @@ import javafx.stage.WindowEvent;
  */
 @StageAttribute(
         modality = Modality.WINDOW_MODAL,
+        stageStyle = FXStageStyle.EXTENDED,
         value = FXConst.FXML_PATH + "record/mongoDocumentUpdate.fxml"
 )
 public class MongoDocumentUpdateController extends StageController {

@@ -21,7 +21,7 @@ public class MongoStoreUtil {
         JdbcConst.dbCacheSize(65535);
         JdbcConst.dbPageSize(1024);
         JdbcConst.dbDialect(JdbcDialect.H2);
-        JdbcConst.dbFile(MongoConst.STORE_PATH + "db");
+        JdbcConst.dbFile(MongoConst.getStorePath() + "db");
         try {
             JdbcManager.takeoff();
         } catch (Exception ex) {

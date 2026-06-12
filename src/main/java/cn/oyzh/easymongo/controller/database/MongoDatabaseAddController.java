@@ -1,14 +1,15 @@
 package cn.oyzh.easymongo.controller.database;
 
+import cn.oyzh.easymongo.event.MongoEventUtil;
+import cn.oyzh.easymongo.mongo.MongoDatabase;
+import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controller.StageController;
 import cn.oyzh.fx.plus.information.MessageBox;
+import cn.oyzh.fx.plus.window.FXStageStyle;
 import cn.oyzh.fx.plus.window.StageAttribute;
 import cn.oyzh.i18n.I18nHelper;
-import cn.oyzh.easymongo.event.MongoEventUtil;
-import cn.oyzh.easymongo.mongo.MongoDatabase;
-import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
 import javafx.fxml.FXML;
 import javafx.stage.Modality;
 import javafx.stage.WindowEvent;
@@ -21,6 +22,7 @@ import javafx.stage.WindowEvent;
  */
 @StageAttribute(
         modality = Modality.APPLICATION_MODAL,
+        stageStyle = FXStageStyle.EXTENDED,
         value = FXConst.FXML_PATH + "database/mongoDatabaseAdd.fxml"
 )
 public class MongoDatabaseAddController extends StageController {

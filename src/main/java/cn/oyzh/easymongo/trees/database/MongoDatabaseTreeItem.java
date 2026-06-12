@@ -2,7 +2,6 @@ package cn.oyzh.easymongo.trees.database;
 
 import cn.oyzh.common.thread.Task;
 import cn.oyzh.common.thread.TaskBuilder;
-import cn.oyzh.easymongo.controller.database.MongoDatabaseUpdateController;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -80,8 +79,8 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
             FXMenuItem closeDB = MenuItemHelper.closeDatabase("10", this::closeDB);
             items.add(closeDB);
         }
-        FXMenuItem editDB = MenuItemHelper.editDatabase("11", this::editDB);
-        items.add(editDB);
+//        FXMenuItem editDB = MenuItemHelper.editDatabase("11", this::editDB);
+//        items.add(editDB);
         FXMenuItem dropDB = MenuItemHelper.deleteDatabase("12", this::delete);
         items.add(dropDB);
         FXMenuItem dumpData = MenuItemHelper.dumpData("12", this::dump);
@@ -123,15 +122,15 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         super.startWaiting(task);
     }
 
-    /**
-     * 编辑数据库
-     */
-    public void editDB() {
-        StageAdapter fxView = StageManager.parseStage(MongoDatabaseUpdateController.class, this.window());
-        fxView.setProp("database", this.value);
-        fxView.setProp("connectItem", this.parent());
-        fxView.display();
-    }
+//    /**
+//     * 编辑数据库
+//     */
+//    public void editDB() {
+//        StageAdapter fxView = StageManager.parseStage(MongoDatabaseUpdateController.class, this.window());
+//        fxView.setProp("database", this.value);
+//        fxView.setProp("connectItem", this.parent());
+//        fxView.display();
+//    }
 
     /**
      * 关闭数据库

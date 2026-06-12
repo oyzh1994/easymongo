@@ -9,7 +9,6 @@ import cn.oyzh.fx.plus.controller.SubStageController;
 import cn.oyzh.fx.plus.controls.tab.FXTabPane;
 import cn.oyzh.fx.plus.keyboard.KeyListener;
 import cn.oyzh.easymongo.controller.main.ConnectController;
-import cn.oyzh.easymongo.controller.main.MessageController;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.domain.MongoSetting;
 import cn.oyzh.easymongo.event.connect.MongoConnectUpdatedEvent;
@@ -70,11 +69,11 @@ public class MongoMainController extends ParentStageController {
     @FXML
     private ConnectController connectController;
 
-    /**
-     * redis消息
-     */
-    @FXML
-    private MessageController messageController;
+//    /**
+//     * redis消息
+//     */
+//    @FXML
+//    private MessageController messageController;
 
     /**
      * db信息修改事件
@@ -122,29 +121,11 @@ public class MongoMainController extends ParentStageController {
     @Override
     public void onWindowShown(WindowEvent event) {
         super.onWindowShown(event);
-        // 注册事件处理
-//        EventUtil.register(this.tree);
-//        EventUtil.register(this.tabPane);
-//        EventUtil.register(this.msgArea);
-
-        // 初始化过滤
-        // this.tree.itemFilter(this.treeItemFilter);
-        // this.treeItemFilter.initFilters();
-//        this.filter();
-
-//        // 设置上次保存的页面拉伸
-//        if (this.setting.isRememberPageResize()) {
-//            this.resizeMainLeft(this.pageInfo.getMainLeftWidth());
-//        }
     }
 
     @Override
     public void onWindowHidden(WindowEvent event) {
         super.onWindowHidden(event);
-        // 取消注册事件处理
-//        EventUtil.unregister(this.tree);
-//        EventUtil.unregister(this.tabPane);
-//        EventUtil.unregister(this.msgArea);
         // 关闭连接
         this.tree.closeConnects();
         // 保存页面拉伸
@@ -286,6 +267,6 @@ public class MongoMainController extends ParentStageController {
 
     @Override
     public List<SubStageController> getSubControllers() {
-        return List.of(this.connectController, this.messageController);
+        return List.of(this.connectController);
     }
 }

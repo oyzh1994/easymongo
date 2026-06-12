@@ -2,8 +2,15 @@ package cn.oyzh.easymongo;
 
 import cn.oyzh.common.SysConst;
 import cn.oyzh.common.dto.Project;
+import cn.oyzh.common.exception.ExceptionUtil;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.system.SystemUtil;
+import cn.oyzh.easymongo.controller.MainController;
+import cn.oyzh.easymongo.controller.SettingController;
+import cn.oyzh.easymongo.domain.MongoSetting;
+import cn.oyzh.easymongo.exception.MongoExceptionParser;
+import cn.oyzh.easymongo.store.MongoSettingStore;
+import cn.oyzh.easymongo.store.MongoStoreUtil;
 import cn.oyzh.easymongo.terminal.MongoTerminalManager;
 import cn.oyzh.easymongo.terminal.MongoTerminalPane;
 import cn.oyzh.event.EventFactory;
@@ -24,12 +31,6 @@ import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.fx.terminal.util.TerminalManager;
 import cn.oyzh.i18n.I18nManager;
-import cn.oyzh.easymongo.controller.MainController;
-import cn.oyzh.easymongo.controller.SettingController;
-import cn.oyzh.easymongo.domain.MongoSetting;
-import cn.oyzh.easymongo.exception.MongoExceptionParser;
-import cn.oyzh.easymongo.store.MongoSettingStore;
-import cn.oyzh.easymongo.store.MongoStoreUtil;
 import javafx.stage.Stage;
 
 import java.awt.event.MouseEvent;
@@ -50,18 +51,30 @@ public class EasyMongoApp extends FXApplication {
 
     public static void main(String[] args) {
         try {
+            // 开启fx的预览功能
             FXUtil.enablePreview();
+            // 设置默认异常捕捉器
+            Thread.setDefaultUncaughtExceptionHandler((t, ex) -> {
+                if (!ExceptionUtil.hasMessage(ex, "isImageAutoSize")) {
+                    ex.printStackTrace();
+                    JulLog.error("thread:{} caught error:{}", t.getName(), ex.getMessage());
+                }
+            });
             SysConst.projectName(PROJECT.getName());
-            JulLog.info("项目启动中...");
+            SysConst.storeDir(MongoConst.getStorePath());
+            SysConst.cacheDir(MongoConst.getCachePath());
             // 储存初始化
             MongoStoreUtil.init();
-            SysConst.storeDir(MongoConst.STORE_PATH);
-            SysConst.cacheDir(MongoConst.CACHE_PATH);
+            // 系统图标
             FXConst.appIcon(MongoConst.ICON_PATH);
+            // 事件总线
             EventFactory.registerEventBus(FXEventBus.class);
             EventFactory.syncEventConfig(FXEventConfig.SYNC);
             EventFactory.asyncEventConfig(FXEventConfig.ASYNC);
             EventFactory.defaultEventConfig(FXEventConfig.DEFAULT);
+            if (JulLog.isInfoEnabled()) {
+                JulLog.info("程序启动中...");
+            }
             launch(EasyMongoApp.class, args);
         } catch (Exception ex) {
             ex.printStackTrace();
