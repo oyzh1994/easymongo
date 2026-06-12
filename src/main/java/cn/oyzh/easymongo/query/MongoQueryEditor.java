@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.query.ui;
+package cn.oyzh.easymongo.query;
 
 import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.common.util.StringUtil;

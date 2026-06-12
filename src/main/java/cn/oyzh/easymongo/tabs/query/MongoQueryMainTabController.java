@@ -3,7 +3,7 @@ package cn.oyzh.easymongo.tabs.query;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.query.MongoExecuteResult;
-import cn.oyzh.easymongo.query.ui.MongoQueryEditor;
+import cn.oyzh.easymongo.query.MongoQueryEditor;
 import cn.oyzh.easymongo.query.MongoQueryResults;
 import cn.oyzh.easymongo.query.MongoQueryUtil;
 import cn.oyzh.easymongo.store.MongoQueryStore;

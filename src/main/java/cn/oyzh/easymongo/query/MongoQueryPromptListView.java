@@ -1,6 +1,5 @@
-package cn.oyzh.easymongo.query.ui;
+package cn.oyzh.easymongo.query;
 
-import cn.oyzh.easymongo.query.MongoQueryPromptItem;
 import cn.oyzh.fx.gui.svg.glyph.KeywordsSVGGlyph;
 import cn.oyzh.fx.gui.svg.glyph.database.FunctionSVGGlyph;
 import cn.oyzh.fx.gui.svg.glyph.database.TableSVGGlyph;

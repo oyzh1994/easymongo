@@ -1,11 +1,7 @@
-package cn.oyzh.easymongo.query.ui;
+package cn.oyzh.easymongo.query;
 
 import cn.oyzh.common.thread.TaskManager;
 import cn.oyzh.common.util.CollectionUtil;
-import cn.oyzh.easymongo.query.MongoQueryPromptItem;
-import cn.oyzh.easymongo.query.MongoQueryToken;
-import cn.oyzh.easymongo.query.MongoQueryTokenAnalyzer;
-import cn.oyzh.easymongo.query.ShellQueryUtil;
 import cn.oyzh.fx.plus.controls.popup.FXPopup;
 import cn.oyzh.fx.plus.keyboard.KeyboardUtil;
 import cn.oyzh.fx.plus.theme.ThemeManager;
