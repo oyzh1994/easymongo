@@ -341,9 +341,10 @@ public class MongoCollectionRecordTabController extends RichTabController {
             }
             record.set_id(_id);
             record.clearStatus();
+            // 刷新记录
             if (this.recordTable.isItemEmpty()) {
                 this.reload();
-            } else {
+            } else {// 更新记录
                 // 更新字段
                 List<MongoRecord> list = new ArrayList<>(this.recordTable.getItems());
                 list.add(record);

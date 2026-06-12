@@ -57,15 +57,11 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
         this.column = column;
         this.record = record;
-        if (readonly && column.is_id()) {
+        if (column.is_id()) {
             this.set(MongoRecordUtil.idValue(value));
         } else {
             this.set(value);
         }
-        //this.column.typeProperty().addListener((observable, oldValue, newValue) -> {
-        //    this.refreshNode();
-        //    this.setChanged(true);
-        //});
         if (!readonly || column.is_id()) {
             this.original = value;
         }
