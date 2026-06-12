@@ -69,8 +69,7 @@ public class MongoRecordColumn extends FarkerResizeTableColumn<MongoRecord, Obje
         vBox.addChild(colName);
 
         // 字段类型
-        FXLabel colType;
-        colType = new FXLabel(this.column.getType());
+        FXLabel colType = new FXLabel(this.column.getType());
         colType.setTextFill(Color.GREEN);
         colType.setTextOverrun(OverrunStyle.ELLIPSIS);
         vBox.addChild(colType);

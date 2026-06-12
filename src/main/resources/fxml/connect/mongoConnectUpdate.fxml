@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.connect.MongoConnectUpdateController" realWidth="750"
-        realHeight="420">
+        realHeight="500">
     <FXHeaderBar/>
     <FXVBox flexWidth="100%" flexHeight="100% - 30">
         <FXTabPane flexWidth="100%" flexHeight="100% - 60" fx:id="tabPane">

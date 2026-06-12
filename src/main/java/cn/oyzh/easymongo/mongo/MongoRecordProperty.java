@@ -166,7 +166,7 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
 
     public void updateOriginal() {
         try {
-            if (this.node != null) {
+            if (!this.column.is_id() && this.node != null) {
                 super.set(MongoNodeUtil.getNodeVal(this.node));
                 this.original = super.get();
             }

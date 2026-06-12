@@ -281,8 +281,6 @@ public class MongoRecord extends DBObjectStatus implements Destroyable, ObjectCo
                 MongoColumn mongoColumn = this.column(column.getName());
                 if (mongoColumn == null) {
                     addList.add(column);
-//                } else {
-//                    mongoColumn.copy(column);
                 }
             }
             this.columns.addAll(addList);
