@@ -62,17 +62,25 @@ public class MongoConditionUtil {
         if (filters == null || filters.isEmpty()) {
             return bson;
         }
+        boolean first = true;
+        MongoRecordFilter lastFilter = null;
         for (MongoRecordFilter filter : filters) {
             if (!filter.isEnabled()) {
                 continue;
             }
             Bson bson1 = filter.condition();
             if (bson1 != null) {
-                if ("and".equalsIgnoreCase(filter.getJoinSymbol())) {
-                    bson = Filters.and(bson1);
+                if (first) {
+                    bson = bson1;
+                    first = false;
                 } else {
-                    bson = Filters.or(bson1);
+                    if ("and".equalsIgnoreCase(lastFilter.getJoinSymbol())) {
+                        bson = Filters.and(bson, bson1);
+                    } else {
+                        bson = Filters.or(bson, bson1);
+                    }
                 }
+                lastFilter = filter;
             }
         }
         return bson;
