@@ -107,12 +107,6 @@ public class MongoClient implements Closeable {
      */
     private final SimpleObjectProperty<MongoConnState> state = new SimpleObjectProperty<>();
 
-    /**
-     * 当前状态监听器
-     */
-    private final ChangeListener<MongoConnState> stateListener = (state1, state2, state3) -> {
-    };
-
     public ObjectProperty<MongoConnState> stateProperty() {
         return this.state;
     }
@@ -128,8 +122,14 @@ public class MongoClient implements Closeable {
         return host;
     }
 
+    /**
+     * mongo客户端
+     */
     private com.mongodb.client.MongoClient mongoClient;
 
+    /**
+     * 脚本引擎
+     */
     private MongoScriptEngine engine;
 
     /**
@@ -150,25 +150,25 @@ public class MongoClient implements Closeable {
     private void initClient() {
         // 连接信息
         String host = this.initHost();
+        String hostIp = host.split(":")[0];
+        int port = Integer.parseInt(host.split(":")[1]);
+        // 超时设置
+        int timeoutMs = this.shellConnect.connectTimeOutMs();
+        MongoClientSettings.Builder builder = MongoClientSettings.builder()
+                .applyToClusterSettings(b -> b
+                        .hosts(Collections.singletonList(new ServerAddress(hostIp, port)))
+                        .serverSelectionTimeout(timeoutMs, java.util.concurrent.TimeUnit.MILLISECONDS))
+                .applyToSocketSettings(b -> b
+                        .connectTimeout(timeoutMs, java.util.concurrent.TimeUnit.MILLISECONDS));
         // 密码认证
         if (this.shellConnect.isPasswordAuth()) {
-            String hostIp = host.split(":")[0];
-            int port = Integer.parseInt(host.split(":")[1]);
             String user = this.shellConnect.getUser();
             String database = this.shellConnect.getAuthDatabase();
             String password = this.shellConnect.getPassword();
             MongoCredential credential = MongoCredential.createCredential(user, database, password.toCharArray());
-            MongoClientSettings settings = MongoClientSettings.builder()
-                    .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(new ServerAddress(hostIp, port))))
-                    .credential(credential)
-                    .build();
-            // 创建客户端
-            this.mongoClient = MongoClients.create(settings);
-        } else {
-            String connStr = "mongodb://" + host;
-            // 创建客户端
-            this.mongoClient = MongoClients.create(connStr);
+            builder.credential(credential);
         }
+        this.mongoClient = MongoClients.create(builder.build());
     }
 
     public void start() {
@@ -182,8 +182,8 @@ public class MongoClient implements Closeable {
             final AtomicLong starTime = new AtomicLong(System.currentTimeMillis());
             // 更新连接状态
             this.state.set(MongoConnState.CONNECTING);
-            // 检查连接
-            this.mongoClient.listDatabases();
+            // 检查连接（需迭代才能触发实际网络请求和认证）
+            this.mongoClient.listDatabases().first();
             // 更新连接状态
             this.state.set(MongoConnState.CONNECTED);
             // 开始连接时间
