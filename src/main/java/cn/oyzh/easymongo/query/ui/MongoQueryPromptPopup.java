@@ -5,7 +5,6 @@ import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.easymongo.query.MongoQueryPromptItem;
 import cn.oyzh.easymongo.query.MongoQueryToken;
 import cn.oyzh.easymongo.query.MongoQueryTokenAnalyzer;
-import cn.oyzh.easymongo.query.MongoQueryUtil;
 import cn.oyzh.easymongo.query.ShellQueryUtil;
 import cn.oyzh.fx.plus.controls.popup.FXPopup;
 import cn.oyzh.fx.plus.keyboard.KeyboardUtil;
@@ -76,7 +75,7 @@ public class MongoQueryPromptPopup extends FXPopup {
      */
     public synchronized boolean initPrompts(MongoQueryToken token) {
         // 提示词列表
-        List<MongoQueryPromptItem> items = MongoQueryUtil.initPrompts(token, 0.5f);
+        List<MongoQueryPromptItem> items = MongoQueryTokenAnalyzer.INSTANCE.initPrompts(token, 0.5f);
         // 初始化数据
         this.listView().init(items);
         // 判断是否为空
@@ -199,8 +198,12 @@ public class MongoQueryPromptPopup extends FXPopup {
     public void autoComplete(MongoQueryEditor editor, MongoQueryPromptItem item) {
         try {
             if (this.token != null) {
-                editor.replaceText(this.token.getStartIndex(), this.token.getEndIndex(), item.wrapContent());
-//                editor.positionCaret(this.token.getEndIndex() + item.getContent().length() - 1);
+                editor.replaceText(this.token.getStartIndex(), this.token.getEndIndex(), item.getContent());
+                int caretPos = editor.caretPosition();
+                int targetPos = this.token.getEndIndex() + item.getContent().length();
+                if (caretPos != targetPos) {
+                    editor.positionCaret(targetPos);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

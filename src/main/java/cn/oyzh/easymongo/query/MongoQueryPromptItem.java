@@ -59,10 +59,6 @@ public class MongoQueryPromptItem {
         return 4 == this.type;
     }
 
-    public String wrapContent( ) {
-        return this.content;
-    }
-
     public byte getType() {
         return type;
     }
