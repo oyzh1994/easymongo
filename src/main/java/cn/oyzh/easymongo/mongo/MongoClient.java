@@ -385,8 +385,8 @@ public class MongoClient implements Closeable {
      * @return 结果
      */
     public BsonValue insertCollectionRecord(MongoRecord record) {
-        String dbName = record._idColumn().getDbName();
-        String collectionName = record._idColumn().getCollectionName();
+        String dbName = record.getColumns().getFirst().getDbName();
+        String collectionName = record.getColumns().getFirst().getCollectionName();
         Document document = new Document();
         for (MongoColumn column : record.getColumns()) {
             Object value = record.getValue(column.getName());
