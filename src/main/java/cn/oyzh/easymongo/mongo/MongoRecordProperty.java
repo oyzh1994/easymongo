@@ -86,7 +86,9 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
     @Override
     public void set(Object newValue) {
         super.set(newValue);
-        this.setChanged(true);
+        if (super.get() != newValue) {
+            this.setChanged(true);
+        }
         if (this.node != null) {
             String type = MongoUtil.getType(newValue);
             if (StringUtil.notEquals(type, this.column.getType())) {
