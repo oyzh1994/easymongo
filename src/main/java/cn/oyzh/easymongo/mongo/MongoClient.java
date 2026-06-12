@@ -641,24 +641,19 @@ public class MongoClient implements Closeable {
         Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
         GridFSFindIterable iterable = fsBucket.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
-        MongoColumns columns = new MongoColumns();
-        MongoColumn idColumn = new MongoColumn(MongoUtil.ID, I18nHelper.id());
-        columns.add(idColumn);
-        MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
-        columns.add(fileNameColumn);
-        MongoColumn lengthColumn = new MongoColumn("length", I18nHelper.length());
-        columns.add(lengthColumn);
-        MongoColumn chunkSizeColumn = new MongoColumn("chunkSize", I18nHelper.chunkSize());
-        columns.add(chunkSizeColumn);
-        MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
-        columns.add(uploadDateColumn);
+        MongoColumns columns = this.bucketColumns();
         for (GridFSFile file : iterable) {
             MongoRecord record = new MongoRecord(columns, true);
-            record.putValue(idColumn, file.getId());
-            record.putValue(fileNameColumn, file.getFilename());
-            record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength(), 2));
-            record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize(), 2));
-            record.putValue(uploadDateColumn, DateHelper.formatDateTimeSimple(file.getUploadDate()));
+            record.putValue(columns.column(MongoUtil.ID), file.getId());
+            record.putValue(columns.column("filename"), file.getFilename());
+            record.putValue(columns.column("length"), NumberUtil.formatSize(file.getLength(), 2));
+            record.putValue(columns.column("chunkSize"), NumberUtil.formatSize(file.getChunkSize(), 2));
+            record.putValue(columns.column("uploadDate"), DateHelper.formatDateTimeSimple(file.getUploadDate()));
+            if (file.getMetadata() == null) {
+                record.putValue(columns.column("metadata"), "");
+            } else {
+                record.putValue(columns.column("metadata"), JSONUtil.toJson(file.getMetadata()));
+            }
             records.add(record);
         }
         return records;
@@ -693,25 +688,20 @@ public class MongoClient implements Closeable {
         GridFSBucket bucket = this.bucket(dbName, bucketName);
         Bson filters = Filters.eq(MongoUtil.ID, _id);
         GridFSFindIterable iterable = bucket.find(filters).limit(1);
-        MongoColumns columns = new MongoColumns();
-        MongoColumn idColumn = new MongoColumn(MongoUtil.ID, I18nHelper.id());
-        columns.add(idColumn);
-        MongoColumn fileNameColumn = new MongoColumn("filename", I18nHelper.fileName());
-        columns.add(fileNameColumn);
-        MongoColumn lengthColumn = new MongoColumn("length", I18nHelper.length());
-        columns.add(lengthColumn);
-        MongoColumn chunkSizeColumn = new MongoColumn("chunkSize", I18nHelper.chunkSize());
-        columns.add(chunkSizeColumn);
-        MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
-        columns.add(uploadDateColumn);
+        MongoColumns columns = this.bucketColumns();
         GridFSFile file = iterable.first();
         if (file != null) {
             MongoRecord record = new MongoRecord(columns, true);
-            record.putValue(idColumn, file.getId());
-            record.putValue(fileNameColumn, file.getFilename());
-            record.putValue(lengthColumn, NumberUtil.formatSize(file.getLength(), 2));
-            record.putValue(chunkSizeColumn, NumberUtil.formatSize(file.getChunkSize(), 2));
-            record.putValue(uploadDateColumn, DateHelper.formatDateTimeSimple(file.getUploadDate()));
+            record.putValue(columns.column(MongoUtil.ID), file.getId());
+            record.putValue(columns.column("filename"), file.getFilename());
+            record.putValue(columns.column("length"), NumberUtil.formatSize(file.getLength(), 2));
+            record.putValue(columns.column("chunkSize"), NumberUtil.formatSize(file.getChunkSize(), 2));
+            record.putValue(columns.column("uploadDate"), DateHelper.formatDateTimeSimple(file.getUploadDate()));
+            if (file.getMetadata() == null) {
+                record.putValue(columns.column("metadata"), "");
+            } else {
+                record.putValue(columns.column("metadata"), JSONUtil.toJson(file.getMetadata()));
+            }
             return record;
         }
         return null;
@@ -734,6 +724,8 @@ public class MongoClient implements Closeable {
         columns.add(chunkSizeColumn);
         MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
         columns.add(uploadDateColumn);
+        MongoColumn metadataColumn = new MongoColumn("metadata", I18nHelper.metadata());
+        columns.add(metadataColumn);
         return columns;
     }
 

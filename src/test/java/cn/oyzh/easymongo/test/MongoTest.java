@@ -4,16 +4,16 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -26,81 +26,81 @@ import java.util.Map;
  */
 public class MongoTest {
 
-//    @Test
-//    public void test1() throws ClassNotFoundException, SQLException {
-//
-//        String model = """
-//                {
-//                  "version": "1.0",
-//                  "defaultSchema": "mongo",
-//                  "schemas": [
-//                    {
-//                      "name": "mongo",
-//                      "type": "custom",
-//                      "factory": "org.apache.calcite.adapter.mongodb.MongoSchemaFactory",
-//                      "operand": {
-//                        "host": "127.0.0.1:27017",
-//                        "database": "test",
-//                        "authMechanism": "SCRAM-SHA-1",
-//                        "username": "admin",
-//                        "password": "123456"
-//                      }
-//                    }
-//                  ]
-//                }
-//                """;
-//
-//        // 1. 加载 Calcite JDBC 驱动
-//        Class.forName("org.apache.calcite.jdbc.Driver");
-//
-//        // 2. 指定模型文件路径（或内联）
-//        Connection connection = DriverManager.getConnection(
-//                "jdbc:calcite:inline:" + model);
-//
-//        // 3. 创建 Statement 并执行 SQL
-//        Statement stmt = connection.createStatement();
-//        String sql = "SELECT name, age FROM \"users\" WHERE age > 12";
-//        ResultSet rs = stmt.executeQuery(sql);
-//
-//        // 4. 遍历结果
-//        while (rs.next()) {
-//            String name = rs.getString("name");
-//            int age = rs.getInt("age");
-//            System.out.println(name + " - " + age);
-//        }
-//
-//        rs.close();
-//        stmt.close();
-//        connection.close();
-//    }
-//
-//    @Test
-//    public void test2() throws ClassNotFoundException, SQLException {
-//        // 1. 加载 Calcite JDBC 驱动
-//        Class.forName("org.apache.calcite.jdbc.Driver");
-//
-//        String modelPath = MongoTest.class.getResource("/model.json").getPath();
-//
-//        // 2. 指定模型文件路径（或内联）
-//        Connection connection = DriverManager.getConnection(
-//                "jdbc:calcite:model=" + modelPath);
-//
-//        // 3. 创建 Statement 并执行 SQL
-//        Statement stmt = connection.createStatement();
-//        String sql = "SELECT name, age FROM \"users\" WHERE age > 12";
-//        ResultSet rs = stmt.executeQuery(sql);
-//
-//        // 4. 遍历结果
-//        while (rs.next()) {
-//            String name = rs.getString("name");
-//            int age = rs.getInt("age");
-//            System.out.println(name + " - " + age);
-//        }
-//
-//        rs.close();
-//        stmt.close();
-//        connection.close();
-//    }
+    //    @Test
+    //    public void test1() throws ClassNotFoundException, SQLException {
+    //
+    //        String model = """
+    //                {
+    //                  "version": "1.0",
+    //                  "defaultSchema": "mongo",
+    //                  "schemas": [
+    //                    {
+    //                      "name": "mongo",
+    //                      "type": "custom",
+    //                      "factory": "org.apache.calcite.adapter.mongodb.MongoSchemaFactory",
+    //                      "operand": {
+    //                        "host": "127.0.0.1:27017",
+    //                        "database": "test",
+    //                        "authMechanism": "SCRAM-SHA-1",
+    //                        "username": "admin",
+    //                        "password": "123456"
+    //                      }
+    //                    }
+    //                  ]
+    //                }
+    //                """;
+    //
+    //        // 1. 加载 Calcite JDBC 驱动
+    //        Class.forName("org.apache.calcite.jdbc.Driver");
+    //
+    //        // 2. 指定模型文件路径（或内联）
+    //        Connection connection = DriverManager.getConnection(
+    //                "jdbc:calcite:inline:" + model);
+    //
+    //        // 3. 创建 Statement 并执行 SQL
+    //        Statement stmt = connection.createStatement();
+    //        String sql = "SELECT name, age FROM \"users\" WHERE age > 12";
+    //        ResultSet rs = stmt.executeQuery(sql);
+    //
+    //        // 4. 遍历结果
+    //        while (rs.next()) {
+    //            String name = rs.getString("name");
+    //            int age = rs.getInt("age");
+    //            System.out.println(name + " - " + age);
+    //        }
+    //
+    //        rs.close();
+    //        stmt.close();
+    //        connection.close();
+    //    }
+    //
+    //    @Test
+    //    public void test2() throws ClassNotFoundException, SQLException {
+    //        // 1. 加载 Calcite JDBC 驱动
+    //        Class.forName("org.apache.calcite.jdbc.Driver");
+    //
+    //        String modelPath = MongoTest.class.getResource("/model.json").getPath();
+    //
+    //        // 2. 指定模型文件路径（或内联）
+    //        Connection connection = DriverManager.getConnection(
+    //                "jdbc:calcite:model=" + modelPath);
+    //
+    //        // 3. 创建 Statement 并执行 SQL
+    //        Statement stmt = connection.createStatement();
+    //        String sql = "SELECT name, age FROM \"users\" WHERE age > 12";
+    //        ResultSet rs = stmt.executeQuery(sql);
+    //
+    //        // 4. 遍历结果
+    //        while (rs.next()) {
+    //            String name = rs.getString("name");
+    //            int age = rs.getInt("age");
+    //            System.out.println(name + " - " + age);
+    //        }
+    //
+    //        rs.close();
+    //        stmt.close();
+    //        connection.close();
+    //    }
 
     private com.mongodb.client.MongoClient mongoClient() {
         return MongoClients.create("mongodb://admin:123456@127.0.0.1:27017/admin");
@@ -168,6 +168,21 @@ public class MongoTest {
             document.append("binary", new byte[]{1, 2, 3});
             document.append("object", new Document(Map.of("key1", "value1", "key2", "value2")));
             collection.insertOne(document);
+        }
+    }
+
+    @Test
+    public void test7() throws FileNotFoundException {
+        try (com.mongodb.client.MongoClient mongoClient = this.mongoClient()) {
+            MongoDatabase db = mongoClient.getDatabase("type");
+            GridFSBucket bucket = GridFSBuckets.create(db, "aa");
+            String file = "/Users/oyzh/Downloads/11.txt";
+            Document mate = new Document();
+            mate.put("k1", "v1");
+            mate.put("k2", "v2");
+            GridFSUploadOptions options = new GridFSUploadOptions();
+            options.metadata(mate);
+            bucket.uploadFromStream("11.txt", new FileInputStream(file), options);
         }
     }
 }

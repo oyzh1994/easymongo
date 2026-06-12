@@ -139,7 +139,6 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return this.client().bucketColumns();
     }
 
-
     public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, MongoColumns columns) {
         MongoSelectRecordParam param = new MongoSelectRecordParam();
         param.setLimit(limit);
