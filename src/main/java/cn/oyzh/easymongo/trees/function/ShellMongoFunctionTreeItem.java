@@ -7,6 +7,7 @@ import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
@@ -85,6 +86,16 @@ public class ShellMongoFunctionTreeItem extends MongoTreeItem<ShellMongoFunction
      * 克隆函数
      */
     private void cloneFunction() {
+        try {
+            String cloneFunction = this.functionName() + MongoUtil.genCloneName();
+            MongoFunction function = new MongoFunction();
+            function.setName(cloneFunction);
+            function.setCode(this.value.getCode());
+            this.dbItem().createFunction(function);
+            this.dbItem().getFunctionTypeChild().addFunction(function);
+        } catch (Exception ex) {
+            MessageBox.exception(ex);
+        }
     }
 
     @Override
@@ -178,7 +189,7 @@ public class ShellMongoFunctionTreeItem extends MongoTreeItem<ShellMongoFunction
             this.dbItem().renameFunction(oldName, newName);
             this.value.setName(newName);
             this.refresh();
-            MongoEventUtil.functionRenamed(oldName,newName, this.dbItem());
+            MongoEventUtil.functionRenamed(oldName, newName, this.dbItem());
         } catch (Exception ex) {
             ex.printStackTrace();
             MessageBox.exception(ex);

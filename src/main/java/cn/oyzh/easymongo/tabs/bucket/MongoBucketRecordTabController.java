@@ -195,9 +195,9 @@ public class MongoBucketRecordTabController extends RichTabController {
             if (recordColumn.getName().equals("uploadDate")) {
                 recordColumn.setPrefWidth(150);
             } else if (recordColumn.getName().equals("filename")) {
-                recordColumn.setPrefWidth(300);
+                recordColumn.setPrefWidth(250);
             } else if (recordColumn.getName().equals("metadata")) {
-                recordColumn.setPrefWidth(200);
+                recordColumn.setPrefWidth(150);
             } else {
                 recordColumn.setPrefWidth(MongoRecordUtil.suitableColumnWidth(column));
             }

@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.common.util.UUIDUtil;
 import org.bson.BsonValue;
 import org.bson.Document;
 import org.bson.types.Binary;
@@ -159,5 +160,14 @@ public class MongoUtil {
             }
         });
         return builder.toString();
+    }
+
+    /**
+     * 生成克隆名称
+     *
+     * @return 复制名称
+     */
+    public static String genCloneName() {
+        return "_clone_" + UUIDUtil.uuidSimple().substring(0, 5);
     }
 }
