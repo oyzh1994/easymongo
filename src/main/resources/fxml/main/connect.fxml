@@ -28,7 +28,7 @@
                 <Insets left="5" top="10"/>
             </HBox.margin>
         </SortSVGPane>
-        <PositioningSVGGlyph size="17" onMousePrimaryClicked="#positionNode">
+        <PositioningSVGGlyph onMousePrimaryClicked="#positionNode">
             <HBox.margin>
                 <Insets left="5" top="10"/>
             </HBox.margin>

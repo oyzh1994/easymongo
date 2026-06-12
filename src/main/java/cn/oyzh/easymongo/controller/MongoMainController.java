@@ -1,28 +1,18 @@
 package cn.oyzh.easymongo.controller;
 
-import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.EventSubscribe;
 import cn.oyzh.fx.gui.event.Layout1Event;
 import cn.oyzh.fx.gui.event.Layout2Event;
 import cn.oyzh.fx.plus.controller.ParentStageController;
 import cn.oyzh.fx.plus.controller.SubStageController;
-import cn.oyzh.fx.plus.controls.tab.FXTabPane;
-import cn.oyzh.fx.plus.keyboard.KeyListener;
+import cn.oyzh.fx.plus.controls.box.FXVBox;
 import cn.oyzh.easymongo.controller.main.ConnectController;
 import cn.oyzh.easymongo.domain.MongoConnect;
-import cn.oyzh.easymongo.domain.MongoSetting;
-import cn.oyzh.easymongo.event.connect.MongoConnectUpdatedEvent;
 import cn.oyzh.easymongo.event.tree.MongoTreeItemChangedEvent;
-import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.tabs.MongoTabPane;
-import cn.oyzh.easymongo.trees.MongoTreeView;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
-import cn.oyzh.easymongo.trees.query.MongoQueriesTreeItem;
-import cn.oyzh.easymongo.trees.query.MongoQueryTreeItem;
+import cn.oyzh.fx.plus.node.NodeWidthResizer;
 import javafx.fxml.FXML;
-import javafx.scene.control.TreeItem;
-import javafx.scene.input.KeyCode;
-import javafx.stage.WindowEvent;
 
 import java.util.List;
 
@@ -35,27 +25,22 @@ import java.util.List;
  */
 public class MongoMainController extends ParentStageController {
 
-    /**
-     * 配置对象
-     */
-    private final MongoSetting setting = MongoSettingStore.SETTING;
+//    /**
+//     * 配置对象
+//     */
+//    private final MongoSetting setting = MongoSettingStore.SETTING;
 
-    /**
-     * 当前激活的db信息
-     */
-    private MongoConnect info;
-
-    /**
-     * 左侧db树
-     */
-    @FXML
-    public MongoTreeView tree;
+    //     /**
+    //      * 左侧组件
+    //      */
+    //     @FXML
+    //     private FXTabPane tabPaneLeft;
 
     /**
      * 左侧组件
      */
     @FXML
-    private FXTabPane tabPaneLeft;
+    private FXVBox connect;
 
     /**
      * db切换面板
@@ -64,28 +49,16 @@ public class MongoMainController extends ParentStageController {
     public MongoTabPane tabPane;
 
     /**
-     * redis连接
+     * 连接
      */
     @FXML
     private ConnectController connectController;
 
-//    /**
-//     * redis消息
-//     */
-//    @FXML
-//    private MessageController messageController;
-
-    /**
-     * db信息修改事件
-     *
-     * @param event 事件
-     */
-    @EventSubscribe
-    private void onInfoUpdate(MongoConnectUpdatedEvent event) {
-        if (this.info == event.data()) {
-            this.stage.appendTitle(" (" + event.data().getName() + ")");
-        }
-    }
+    // /**
+    //  * ssh消息
+    //  */
+    // @FXML
+    // private MessageController messageController;
 
     /**
      * 刷新窗口标题
@@ -98,120 +71,60 @@ public class MongoMainController extends ParentStageController {
         } else {
             this.stage.restoreTitle();
         }
-        this.info = info;
     }
 
-    /**
-     * 树节点变化事件
-     *
-     * @param item 节点
-     */
-    private void treeItemChanged(TreeItem<?> item) {
-         if (item instanceof MongoQueryTreeItem treeItem) {
-            this.flushViewTitle(treeItem.info());
-        } else if (item instanceof MongoDatabaseTreeItem treeItem) {
-            this.flushViewTitle(treeItem.info());
-        } else if (item instanceof MongoConnectTreeItem treeItem) {
-            this.flushViewTitle(treeItem.value());
-        } else {
-            this.flushViewTitle(null);
-        }
-    }
-
-    @Override
-    public void onWindowShown(WindowEvent event) {
-        super.onWindowShown(event);
-    }
-
-    @Override
-    public void onWindowHidden(WindowEvent event) {
-        super.onWindowHidden(event);
-        // 关闭连接
-        this.tree.closeConnects();
-        // 保存页面拉伸
-        this.savePageResize();
-        // 取消F5按键监听
-        KeyListener.unListenReleased(this.tree, KeyCode.F5);
-        KeyListener.unListenReleased(this.tabPane, KeyCode.F5);
-    }
+    // @Override
+    // public void onWindowShown(WindowEvent event) {
+    //     super.onWindowShown(event);
+    //     // 设置上次保存的页面拉伸
+    //     if (this.setting.isRememberPageResize()) {
+    //         this.resizeLeft(this.setting.getPageLeftWidth());
+    //     }
+    // }
+    //
+    // @Override
+    // public void onWindowHidden(WindowEvent event) {
+    //     super.onWindowHidden(event);
+    //     // 保存页面拉伸
+    //     this.savePageResize();
+    // }
 
     /**
      * 左侧组件重新布局
      *
      * @param newWidth 新宽度
      */
-    private void resizeMainLeft(Float newWidth) {
+    private void resizeLeft(Float newWidth) {
         if (newWidth != null && !Double.isNaN(newWidth)) {
             // 设置组件宽
-            this.tabPaneLeft.setRealWidth(newWidth);
+            this.connect.setRealWidth(newWidth);
             this.tabPane.setLayoutX(newWidth);
             this.tabPane.setFlexWidth("100% - " + newWidth);
-            this.tabPaneLeft.parentAutosize();
+            //this.tabPaneLeft.parentAutosize();
         }
     }
 
-    @Override
-    public void onSystemExit() {
-        // 保存页面拉伸
-        this.savePageResize();
-    }
+    // @Override
+    // public void onSystemExit() {
+    //     // 保存页面拉伸
+    //     this.savePageResize();
+    // }
 
-    /**
-     * 保存页面拉伸
-     */
-    private void savePageResize() {
-        if (this.setting.isRememberPageResize()) {
-//            this.pageInfo.setMainLeftWidth(this.tabPaneLeft.getMinWidth());
-//            this.pageInfoStore.update(this.pageInfo);
-        }
-    }
-
+    // /**
+    //  * 保存页面拉伸
+    //  */
+    // private void savePageResize() {
+    //     if (this.setting.isRememberPageResize()) {
+    //         this.setting.setPageLeftWidth((float) this.tabPaneLeft.getMinWidth());
+    //         ShellSettingStore.INSTANCE.replace(this.setting);
+    //     }
+    // }
+    //
     @Override
     protected void bindListeners() {
-        // // 左侧栏业务
-        // this.onlyCollect.selectedChanged((obs, o, n) -> {
-        //     if (n) {
-        //         this.showSet.disable();
-        //         this.showZSet.disable();
-        //         this.showHash.disable();
-        //         this.showList.disable();
-        //         this.showString.disable();
-        //         this.showStream.disable();
-        //     } else {
-        //         this.showSet.enable();
-        //         this.showZSet.enable();
-        //         this.showHash.enable();
-        //         this.showList.enable();
-        //         this.showString.enable();
-        //         this.showStream.enable();
-        //     }
-        //     this.filter();
-        // });
-        // this.showSet.selectedChanged((obs, o, n) -> this.filter());
-        // this.showHash.selectedChanged((obs, o, n) -> this.filter());
-        // this.showList.selectedChanged((obs, o, n) -> this.filter());
-        // this.showZSet.selectedChanged((obs, o, n) -> this.filter());
-        // this.showString.selectedChanged((obs, o, n) -> this.filter());
-        // this.showStream.selectedChanged((obs, o, n) -> this.filter());
-        // this.sortAsc.managedBindVisible();
-        // this.sortDesc.managedBindVisible();
-        // // redis树变化事件
-        // this.tree.selectItemChanged(this::treeItemChanged);
-        // // 文件拖拽初始化
-        // this.stage.initDragFile(this.tree.getDragContent(), this.tree.getRoot()::dragFile);
-        // 拖动改变redis树大小处理
-        // NodeResizer resizeHelper = new NodeResizer(this.tabPaneLeft, Cursor.DEFAULT, this::resizeMainLeft);
-        // resizeHelper.widthLimit(240f, 650f);
-        // // // 初始化拉伸事件
-        // // this.tree.setOnMouseMoved(resizeHelper.mouseMoved());
-        // resizeHelper.initResizeEvent();
-
-        // 搜索触发事件
-        // KeyListener.listenReleased(this.stage, new KeyHandler().keyCode(KeyCode.F).controlDown(true).data(t1 -> RedisEventUtil.searchFire()));
-        // // 刷新触发事件
-        // KeyListener.listenReleased(this.tree, KeyCode.F5, keyEvent -> this.tree.reload());
-        // // 刷新触发事件
-        // KeyListener.listenReleased(this.tabPane, KeyCode.F5, keyEvent -> this.tabPane.reload());
+        super.bindListeners();
+        // 大小调整增强
+        NodeWidthResizer.of(this.connect, this::resizeLeft, 240, 650);
     }
 
     /**
@@ -223,23 +136,9 @@ public class MongoMainController extends ParentStageController {
     private void treeItemChanged(MongoTreeItemChangedEvent event) {
         if (event.data() instanceof MongoConnectTreeItem treeItem) {
             this.flushViewTitle(treeItem.value());
-        } else if (event.data() instanceof MongoDatabaseTreeItem treeItem) {
-            this.flushViewTitle(treeItem.shellConnect());
-        } else if (event.data() instanceof MongoQueryTreeItem treeItem) {
-            this.flushViewTitle(treeItem.shellConnect());
-        } else if (event.data() instanceof MongoQueriesTreeItem treeItem) {
-            this.flushViewTitle(treeItem.shellConnect());
         } else {
             this.flushViewTitle(null);
         }
-    }
-
-    /**
-     * 定位节点
-     */
-    @FXML
-    private void positionNode() {
-        this.tree.scrollTo(this.tree.getSelectedItem());
     }
 
     /**
@@ -247,11 +146,11 @@ public class MongoMainController extends ParentStageController {
      */
     @EventSubscribe
     private void layout2(Layout2Event event) {
-        this.tabPaneLeft.display();
-        double w = this.tabPaneLeft.getRealWidth();
+        this.connect.display();
+        double w = this.connect.getRealWidth();
         this.tabPane.setLayoutX(w);
         this.tabPane.setFlexWidth("100% - " + w);
-        this.tabPaneLeft.parentAutosize();
+        this.connect.parentAutosize();
     }
 
     /**
@@ -259,14 +158,25 @@ public class MongoMainController extends ParentStageController {
      */
     @EventSubscribe
     private void layout1(Layout1Event event) {
-        this.tabPaneLeft.disappear();
+        this.connect.disappear();
         this.tabPane.setLayoutX(0);
         this.tabPane.setFlexWidth("100%");
-        this.tabPaneLeft.parentAutosize();
+        this.connect.parentAutosize();
     }
 
     @Override
     public List<SubStageController> getSubControllers() {
+//         return List.of(this.connectController, this.messageController);
         return List.of(this.connectController);
     }
+
+    // /**
+    //  * 显示消息
+    //  *
+    //  * @param event 事件
+    //  */
+    // @EventSubscribe
+    // private void showMessage(ShellShowMessageEvent event) {
+    //     this.tabPaneLeft.select(1);
+    // }
 }
