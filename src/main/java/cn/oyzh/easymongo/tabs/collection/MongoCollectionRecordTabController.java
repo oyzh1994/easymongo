@@ -339,12 +339,17 @@ public class MongoCollectionRecordTabController extends RichTabController {
                 MessageBox.warn(I18nHelper.addDocumentFail());
                 return;
             }
-            record.set_id(_id);
-            record.clearStatus();
             // 刷新记录
             if (this.recordTable.isItemEmpty()) {
+                this.apply.disable();
                 this.reload();
             } else {// 更新记录
+                // 获取最后一个段落
+                MongoRecord r = this.recordTable.getItems().getFirst();
+                // 更新id信息
+                record.getColumns().add(r._idColumn());
+                record.set_id(_id);
+                record.clearStatus();
                 // 更新字段
                 List<MongoRecord> list = new ArrayList<>(this.recordTable.getItems());
                 list.add(record);
