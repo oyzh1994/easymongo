@@ -25,7 +25,6 @@ import cn.oyzh.fx.plus.util.ControlUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.mongodb.client.FindIterable;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import org.bson.BsonBinary;
@@ -50,10 +49,15 @@ public class MongoRecordUtil {
 
     public static Node getNode(MongoRecordProperty property, Object object, MongoColumn column) {
         Node node;
-        if (column.supportInteger()) {
+        if (column.supportInt32()) {
             NumberTextField textField = new NumberTextField();
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#D7EED0")));
+            node = textField;
+        } else if (column.supportInt64()) {
+            NumberTextField textField = new NumberTextField();
+            textField.setValue(object);
+            textField.setBackground(ControlUtil.background(Color.valueOf("#CBE8C3")));
             node = textField;
         } else if (column.supportDigits()) {
             DecimalTextField textField = new DecimalTextField();
@@ -95,6 +99,11 @@ public class MongoRecordUtil {
             CodeTextFiled textField = new CodeTextFiled();
             textField.setValue(object);
             textField.setBackground(ControlUtil.background(Color.valueOf("#D4E0D0")));
+            node = textField;
+        } else if (column.supportObjectId()) {
+            FXTextField textField = new FXTextField();
+            textField.setBackground(ControlUtil.background(Color.valueOf("#FEE9E4")));
+            textField.setValue(object);
             node = textField;
         } else {
             FXTextField textField = new FXTextField();

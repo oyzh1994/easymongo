@@ -73,15 +73,7 @@ public class MongoDocumentAddController extends StageController {
                 if (column.is_id()) {
                     continue;
                 }
-                Object defVal;
-                if (column.supportInteger()) {
-                    defVal = 1;
-                } else if (column.supportDigits()) {
-                    defVal = 1d;
-                } else {
-                    defVal = "";
-                }
-                object.put(column.getName(), defVal);
+                object.put(column.getName(), column.defaultValue());
             }
             this.doc.setText(JSONUtil.toPretty(object));
         }
