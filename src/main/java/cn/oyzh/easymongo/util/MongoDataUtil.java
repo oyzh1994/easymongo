@@ -58,7 +58,7 @@ public class MongoDataUtil {
     /**
      * 获取记录脚本
      *
-     * @param record
+     * @param record 记录
      * @return 脚本
      */
     public static String getRecordScript(MongoRecord record) {
@@ -69,7 +69,7 @@ public class MongoDataUtil {
             if (property == null) {
                 continue;
             }
-            Object value = property.get();
+            Object value = column.is_id() ? property.getOriginal() : property.get();
             if (value == null) {
                 continue;
             }
@@ -90,6 +90,10 @@ public class MongoDataUtil {
 
         if ("int".equals(type)) {
             return "Int32(" + value + ")";
+        }
+
+        if ("long".equals(type)) {
+            return "Long(" + value + ")";
         }
 
         if ("double".equals(type) || "boolean".equals(type)) {
@@ -186,7 +190,8 @@ public class MongoDataUtil {
                 db.getCollection("$collection").update({_id: $id},{$set: $doc});
                 """;
         String script = getRecordScript(record);
-        return sql.replace("$collection", column.getCollectionName()).replace("$id", id.toString()).replace("$doc", script);
+        Object idVal = buildRecordValue(id, 0);
+        return sql.replace("$collection", column.getCollectionName()).replace("$id", idVal.toString()).replace("$doc", script);
     }
 
     /**

@@ -5,6 +5,7 @@ import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionRenamedEvent;
+import cn.oyzh.easymongo.event.database.MongoDatabaseClosedEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionDesignEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionDroppedEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionRenamedEvent;
@@ -25,6 +26,8 @@ import cn.oyzh.fx.gui.tabs.RichTabPane;
 import cn.oyzh.fx.plus.event.FXEventListener;
 import javafx.scene.control.Tab;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -324,5 +327,30 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         }
     }
 
+    /**
+     * 获取tab列表
+     *
+     * @param dbItem 数据节点
+     * @return tab列表
+     */
+    private List<MongoTab> getBaseTabs(MongoDatabaseTreeItem dbItem) {
+        List<MongoTab> list = new ArrayList<>();
+        for (Tab tab : this.getTabs()) {
+            if (tab instanceof MongoTab tab1 && tab1.dbItem() == dbItem) {
+                list.add(tab1);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 数据库关闭事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onDatabaseClosed(MongoDatabaseClosedEvent event) {
+        this.removeTab(this.getBaseTabs(event.data()));
+    }
 
 }

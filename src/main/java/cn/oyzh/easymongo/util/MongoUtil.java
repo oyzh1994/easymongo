@@ -72,9 +72,6 @@ public class MongoUtil {
             if (bsonValue.isInt32() || bsonValue.isInt64()) {
                 return "int";
             }
-            if (bsonValue.isDouble() || bsonValue.isDecimal128()) {
-                return "double";
-            }
             if (bsonValue.isDouble() || bsonValue.isDecimal128() || bsonValue.isNumber()) {
                 return "double";
             }
@@ -110,17 +107,7 @@ public class MongoUtil {
      * @return 类型
      */
     public static boolean isPrimaryType(Object val) {
-        return StringUtil.equalsAnyIgnoreCase(getType(val), "int", "double", "list", "boolean");
-    }
-
-    /**
-     * 是否json类型
-     *
-     * @param val 值
-     * @return 类型
-     */
-    public static boolean isJsonType(Object val) {
-        return StringUtil.equalsIgnoreCase(getType(val), "list");
+        return StringUtil.equalsAnyIgnoreCase(getType(val), "int","long", "double", "list", "object", "boolean");
     }
 
     /**

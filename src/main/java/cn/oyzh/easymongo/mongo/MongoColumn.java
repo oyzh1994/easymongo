@@ -241,7 +241,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
     }
 
     public Object defaultValue() {
-        if (this.is_id()) {
+        if (this.is_id() || this.supportObjectId()) {
             return null;
         }
         if (this.supportInt32()) {
@@ -270,11 +270,8 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         }
         if (this.supportCode()) {
             return """
-                    function (){}
+                    function func(){}
                     """;
-        }
-        if (this.supportObjectId()) {
-            return null;
         }
         return "";
     }
