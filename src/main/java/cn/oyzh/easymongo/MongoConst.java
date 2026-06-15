@@ -27,12 +27,12 @@ public class MongoConst {
     /**
      * icon地址
      */
-    public final static String ICON_PATH = "/image/db_clip.png";
+    public final static String ICON_PATH = "/image/db.png";
 
     /**
      * 托盘icon地址
      */
-    public final static String TRAY_ICON_PATH = "/image/db_clip.png";
+    public final static String TRAY_ICON_PATH = "/image/db.png";
 
 
     /**
