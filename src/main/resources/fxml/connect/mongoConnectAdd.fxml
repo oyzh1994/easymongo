@@ -19,6 +19,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import cn.oyzh.fx.gui.text.field.PasswordTextField?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.connect.MongoConnectAddController" realWidth="750"
         realHeight="500">
@@ -92,13 +93,13 @@
                                 <Insets left="30" top="5"/>
                             </HBox.margin>
                         </ClearableTextField>
-                        <ClearableTextField fx:id="password" tipText="%base.passwordTip"
+                        <PasswordTextField fx:id="password" tipText="%base.passwordTip"
                                             require="true"
                                             realHeight="30" flexWidth="50% - 95">
                             <HBox.margin>
                                 <Insets left="5" top="5"/>
                             </HBox.margin>
-                        </ClearableTextField>
+                        </PasswordTextField>
                     </FXHBox>
                 </FXVBox>
             </FXTab>

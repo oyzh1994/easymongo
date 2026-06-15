@@ -4,6 +4,7 @@ import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.fx.MonogoAuthMethodComboBox;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
+import cn.oyzh.fx.gui.text.field.PasswordTextField;
 import cn.oyzh.fx.gui.text.field.PortTextField;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controller.StageController;
@@ -62,7 +63,7 @@ public class MongoConnectAddController extends StageController {
      * 认证密码
      */
     @FXML
-    private ClearableTextField password;
+    private PasswordTextField password;
 
     /**
      * 备注
@@ -205,7 +206,7 @@ public class MongoConnectAddController extends StageController {
             mongoConnect.setUser(this.user.getText());
             mongoConnect.setAuthType(this.authMethod.getType());
             mongoConnect.setAuthDatabase(this.authDatabase.getTextTrim());
-            mongoConnect.setPassword(this.password.getText());
+            mongoConnect.setPassword(this.password.getPassword());
             mongoConnect.setSshForward(this.sshForward.isSelected());
             if (mongoConnect.isSSHForward()) {
                 mongoConnect.setSshConfig(this.getSSHConfig());
@@ -239,8 +240,7 @@ public class MongoConnectAddController extends StageController {
             mysqlConnect.setAuthDatabase(authDatabase);
             mysqlConnect.setUser(this.user.getText());
             mysqlConnect.setRemark(this.remark.getTextTrim());
-            mysqlConnect.setPassword(this.password.getText());
-            mysqlConnect.setPassword(this.password.getText());
+            mysqlConnect.setPassword(this.password.getPassword());
             mysqlConnect.setGroupId(this.group == null ? null : this.group.getGid());
             mysqlConnect.setConnectTimeOut(connectTimeOut == null ? 5 : connectTimeOut.intValue());
             mysqlConnect.setSshConfig(this.getSSHConfig());

@@ -4,6 +4,7 @@ import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.fx.MonogoAuthMethodComboBox;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.gui.text.field.NumberTextField;
+import cn.oyzh.fx.gui.text.field.PasswordTextField;
 import cn.oyzh.fx.gui.text.field.PortTextField;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controller.StageController;
@@ -41,12 +42,6 @@ import javafx.stage.WindowEvent;
 public class MongoConnectUpdateController extends StageController {
 
     /**
-     * 只读模式
-     */
-    @FXML
-    private FXCheckBox readonly;
-
-    /**
      * tab组件
      */
     @FXML
@@ -79,7 +74,7 @@ public class MongoConnectUpdateController extends StageController {
      * 认证密码
      */
     @FXML
-    private ClearableTextField password;
+    private PasswordTextField password;
 
     /**
      * 连接ip
@@ -216,7 +211,7 @@ public class MongoConnectUpdateController extends StageController {
             mongoConnect.setAuthType(this.authMethod.getType());
             mongoConnect.setAuthDatabase(this.authDatabase.getTextTrim());
             mongoConnect.setUser(this.user.getText());
-            mongoConnect.setPassword(this.password.getText());
+            mongoConnect.setPassword(this.password.getPassword());
             mongoConnect.setSshForward(this.sshForward.isSelected());
             if (mongoConnect.isSSHForward()) {
                 mongoConnect.setSshConfig(this.getSSHConfig());
@@ -255,7 +250,7 @@ public class MongoConnectUpdateController extends StageController {
             this.mysqlConnect.setSshConfig(this.getSSHConfig());
             this.mysqlConnect.setSshForward(this.sshForward.isSelected());
             this.mysqlConnect.setRemark(this.remark.getTextTrim());
-            this.mysqlConnect.setPassword(this.password.getText());
+            this.mysqlConnect.setPassword(this.password.getPassword());
             this.mysqlConnect.setConnectTimeOut(connectTimeOut == null ? 5 : connectTimeOut.intValue());
             // 保存数据
             if (this.connectStore.replace(this.mysqlConnect)) {
