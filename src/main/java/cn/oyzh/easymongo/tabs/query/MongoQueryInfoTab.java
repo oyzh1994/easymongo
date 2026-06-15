@@ -13,10 +13,6 @@ import cn.oyzh.fx.plus.FXConst;
  */
 public class MongoQueryInfoTab extends RichTab {
 
-    {
-        this.setClosable(false);
-    }
-
     @Override
     protected String url() {
         return FXConst.TAB_PATH + "query/mongoQueryInfoTab.fxml";
@@ -29,5 +25,11 @@ public class MongoQueryInfoTab extends RichTab {
     @Override
     public MongoQueryInfoTabController controller() {
         return (MongoQueryInfoTabController) super.controller();
+    }
+
+    @Override
+    public void initNode() {
+        this.setClosable(false);
+        super.initNode();
     }
 }

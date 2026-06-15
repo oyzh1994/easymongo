@@ -17,7 +17,6 @@ public class MongoHomeTab extends RichTab {
     public MongoHomeTab() {
         super();
         super.flush();
-        this.setClosable(false);
     }
 
     @Override
@@ -29,7 +28,7 @@ public class MongoHomeTab extends RichTab {
     public void flushGraphic() {
         SVGGlyph graphic = (SVGGlyph) this.getGraphic();
         if (graphic == null) {
-            graphic = new HomeSVGGlyph("13");
+            graphic = new HomeSVGGlyph();
             graphic.setCursor(Cursor.DEFAULT);
             this.setGraphic(graphic);
         }
@@ -38,5 +37,11 @@ public class MongoHomeTab extends RichTab {
     @Override
     protected String getTabTitle() {
         return I18nResourceBundle.i18nString("base.title.home");
+    }
+
+    @Override
+    public void initNode() {
+        this.setClosable(false);
+        super.initNode();
     }
 }

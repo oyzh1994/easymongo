@@ -19,10 +19,6 @@ import javafx.scene.Cursor;
  */
 public class ShellMongoFunctionDesignTab extends MongoTab {
 
-    {
-        this.setClosable(true);
-    }
-
     @Override
     protected String url() {
         return FXConst.TAB_PATH + "function/shellMongoFunctionDesignTab.fxml";
@@ -97,5 +93,11 @@ public class ShellMongoFunctionDesignTab extends MongoTab {
         } else {
             this.closeTab();
         }
+    }
+
+    @Override
+    public void initNode() {
+        this.setClosable(true);
+        super.initNode();
     }
 }

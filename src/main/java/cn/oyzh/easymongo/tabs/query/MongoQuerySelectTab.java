@@ -14,10 +14,6 @@ import cn.oyzh.fx.plus.FXConst;
  */
 public class MongoQuerySelectTab extends RichTab {
 
-    {
-        this.setClosable(false);
-    }
-
     @Override
     protected String url() {
         return FXConst.TAB_PATH + "query/mongoQuerySelectTab.fxml";
@@ -31,5 +27,11 @@ public class MongoQuerySelectTab extends RichTab {
     @Override
     public MongoQuerySelectTabController controller() {
         return (MongoQuerySelectTabController) super.controller();
+    }
+
+    @Override
+    public void initNode() {
+        this.setClosable(false);
+        super.initNode();
     }
 }

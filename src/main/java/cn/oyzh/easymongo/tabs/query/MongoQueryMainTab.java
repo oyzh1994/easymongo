@@ -17,10 +17,6 @@ import javafx.scene.Cursor;
  */
 public class MongoQueryMainTab extends MongoTab {
 
-    {
-        this.setClosable(true);
-    }
-
     @Override
     protected String url() {
         return FXConst.TAB_PATH + "query/mongoQueryMainTab.fxml";
@@ -86,5 +82,11 @@ public class MongoQueryMainTab extends MongoTab {
     @Override
     public MongoQueryMainTabController controller() {
         return (MongoQueryMainTabController) super.controller();
+    }
+
+    @Override
+    public void initNode() {
+        this.setClosable(true);
+        super.initNode();
     }
 }

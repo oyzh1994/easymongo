@@ -31,14 +31,6 @@ import javafx.scene.text.Font;
  */
 public class MongoTerminalPane extends TerminalPane {
 
-    {
-        this.keyHandler(MongoTerminalKeyHandler.INSTANCE);
-        this.helpHandler(MongoTerminalHelpHandler.INSTANCE);
-        this.mouseHandler(MongoTerminalMouseHandler.INSTANCE);
-        this.historyHandler(MongoTerminalHistoryHandler.INSTANCE);
-        this.completeHandler(MongoTerminalCompleteHandler.INSTANCE);
-    }
-
     @Override
     protected Font getEditorFont() {
         if (super.getEditorFont() == null) {
@@ -354,5 +346,15 @@ public class MongoTerminalPane extends TerminalPane {
             };
         }
         return handler;
+    }
+
+    @Override
+    public void initNode() {
+        this.keyHandler(MongoTerminalKeyHandler.INSTANCE);
+        this.helpHandler(MongoTerminalHelpHandler.INSTANCE);
+        this.mouseHandler(MongoTerminalMouseHandler.INSTANCE);
+        this.historyHandler(MongoTerminalHistoryHandler.INSTANCE);
+        this.completeHandler(MongoTerminalCompleteHandler.INSTANCE);
+        super.initNode();
     }
 }

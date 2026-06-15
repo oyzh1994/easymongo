@@ -20,10 +20,6 @@ import java.util.List;
  */
 public class MongoBucketRecordTab extends MongoTab {
 
-    {
-        this.setClosable(true);
-    }
-
     @Override
     protected String url() {
         return FXConst.TAB_PATH + "bucket/mongoBucketRecordTab.fxml";
@@ -91,5 +87,11 @@ public class MongoBucketRecordTab extends MongoTab {
 
     public String dbName() {
         return this.item().dbName();
+    }
+
+    @Override
+    public void initNode() {
+        this.setClosable(true);
+        super.initNode();
     }
 }

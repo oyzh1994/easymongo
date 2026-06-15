@@ -34,7 +34,7 @@ public class MongoTerminalTab extends RichTab {
     public void flushGraphic() {
         TerminalSVGGlyph graphic = (TerminalSVGGlyph) this.getGraphic();
         if (graphic == null) {
-            graphic = new TerminalSVGGlyph("13");
+            graphic = new TerminalSVGGlyph();
             graphic.setCursor(Cursor.DEFAULT);
             this.setGraphic(graphic);
         }
