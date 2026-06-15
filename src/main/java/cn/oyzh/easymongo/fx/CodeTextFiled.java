@@ -13,14 +13,11 @@ public class CodeTextFiled extends JsonTextFiled {
 
     @Override
     public CodeTextFiledSkin skin() {
-        if (this.getSkin() == null) {
-            this.setSkin(this.createDefaultSkin());
-        }
-        return (CodeTextFiledSkin) this.getSkin();
+        return (CodeTextFiledSkin) super.skin();
     }
 
     @Override
-    protected Skin<?> createDefaultSkin() {
+    protected CodeTextFiledSkin createDefaultSkin() {
         return new CodeTextFiledSkin(this);
     }
 
