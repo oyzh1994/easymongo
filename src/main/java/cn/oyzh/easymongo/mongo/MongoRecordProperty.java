@@ -8,6 +8,7 @@ import cn.oyzh.easymongo.util.MongoNodeUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.easymongo.util.MongoViewFactory;
+import cn.oyzh.fx.gui.text.field.BinaryTextFiled;
 import cn.oyzh.fx.plus.node.NodeDestroyUtil;
 import cn.oyzh.fx.plus.tableview.TableViewUtil;
 import cn.oyzh.fx.plus.util.ClipboardUtil;
@@ -159,12 +160,15 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
 
     public void setChanged(boolean changed) {
         this.changedProperty().set(changed);
-        DBStatusListener listener;
-        listener = DBStatusListenerManager.getListener(this.column.getDbName() + ":" + this.column.getCollectionName());
+        DBStatusListener listener = DBStatusListenerManager.getListener(this.column.getDbName() + ":" + this.column.getCollectionName());
         if (listener != null) {
             listener.changed(null, null, null);
         }
         this.setToNullFlag = false;
+        // 重新格式化值
+        if (!changed && this.node instanceof BinaryTextFiled filed) {
+            filed.setText(BinaryTextFiled.format(filed.getValue(), filed.getScale()));
+        }
     }
 
     public void updateOriginal() {
