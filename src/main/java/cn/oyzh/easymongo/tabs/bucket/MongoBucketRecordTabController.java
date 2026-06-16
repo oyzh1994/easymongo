@@ -25,6 +25,7 @@ import cn.oyzh.fx.plus.chooser.FileExtensionFilter;
 import cn.oyzh.fx.plus.controls.box.FXVBox;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import cn.oyzh.fx.plus.controls.table.FXTableColumn;
+import cn.oyzh.fx.plus.controls.table.IconTableCell;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.PopupAdapter;
 import cn.oyzh.fx.plus.window.PopupManager;
@@ -196,6 +197,7 @@ public class MongoBucketRecordTabController extends RichTabController {
                 recordColumn.setPrefWidth(150);
             } else if (recordColumn.getName().equals("filename")) {
                 recordColumn.setPrefWidth(250);
+                recordColumn.setCellFactory(col -> new IconTableCell<>());
             } else if (recordColumn.getName().equals("metadata")) {
                 recordColumn.setPrefWidth(150);
             } else {
