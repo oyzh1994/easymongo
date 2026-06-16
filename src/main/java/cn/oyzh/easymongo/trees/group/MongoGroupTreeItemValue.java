@@ -1,10 +1,8 @@
 package cn.oyzh.easymongo.trees.group;
 
-import cn.oyzh.fx.gui.svg.glyph.FolderSVGGlyph;
-import cn.oyzh.fx.gui.svg.glyph.GroupSVGGlyph;
+import cn.oyzh.fx.gui.svg.glyph.file.FolderSVGGlyph;
 import cn.oyzh.fx.gui.tree.view.RichTreeItemValue;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
-import javafx.scene.paint.Color;
 
 
 /**
