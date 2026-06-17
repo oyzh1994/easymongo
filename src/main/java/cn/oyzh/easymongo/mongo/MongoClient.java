@@ -1048,4 +1048,21 @@ public class MongoClient implements Closeable {
         return this.shellConnect.getId();
     }
 
+    /**
+     * 执行脚本
+     *
+     * @param dbName 数据库名称
+     * @param script 脚本
+     * @return 结果
+     * @throws Exception 异常
+     */
+    public Object eval(String dbName, String script) throws Exception {
+        try {
+            this.shellEngine().db(dbName);
+            return this.shellEngine().eval(script);
+        } catch (Exception ex) {
+            JulLog.warn("script:\n" + script);
+            throw ex;
+        }
+    }
 }

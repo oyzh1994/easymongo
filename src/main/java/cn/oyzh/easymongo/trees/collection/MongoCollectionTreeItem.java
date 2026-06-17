@@ -206,4 +206,8 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     public long updateRecord(MongoRecord record) {
         return this.dbItem().updateCollectionRecord(record);
     }
+
+    public Object eval(String script) throws Exception {
+        return this.dbItem().eval(script);
+    }
 }

@@ -12,6 +12,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import cn.oyzh.easymongo.fx.MongoRecordTableView?>
 <?import cn.oyzh.fx.gui.svg.glyph.AddDocumentSVGGlyph?>
+<?import cn.oyzh.fx.gui.svg.glyph.EditSVGGlyph?>
+<?import cn.oyzh.fx.gui.svg.glyph.AddFillSVGGlyph?>
 <FXVBox xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
         fx:controller="cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTabController" fx:id="root" flexWidth="100%"
@@ -32,6 +34,11 @@
                 <Insets left="5" top="10"/>
             </HBox.margin>
         </AddDocumentSVGGlyph>
+        <EditSVGGlyph groupId="action2" onMousePrimaryClicked="#editDocument">
+            <HBox.margin>
+                <Insets left="5" top="10"/>
+            </HBox.margin>
+        </EditSVGGlyph>
         <Apply1SVGGlyph onMousePrimaryClicked="#apply" fx:id="apply" disable="true">
             <HBox.margin>
                 <Insets left="5" top="10"/>

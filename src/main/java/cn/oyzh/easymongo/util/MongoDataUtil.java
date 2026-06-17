@@ -70,10 +70,7 @@ public class MongoDataUtil {
                 continue;
             }
             Object value = column.is_id() ? property.getOriginal() : property.get();
-            if (value == null) {
-                continue;
-            }
-            buildRecordData(colName, value, builder, 1);
+            buildRecordData(column, value, builder, 1);
         }
         return "{" + builder.substring(1) + "\n}";
     }
@@ -87,30 +84,56 @@ public class MongoDataUtil {
      */
     private static Object buildRecordValue(Object value, int deep) {
         String type = MongoUtil.getType(value);
+        return buildRecordValue(value, type, deep);
+    }
 
-        if ("int".equals(type)) {
+    /**
+     * 构建记录值
+     *
+     * @param value 值
+     * @param type  类型
+     * @param deep  当前深度
+     * @return 结果
+     */
+    private static Object buildRecordValue(Object value, String type, int deep) {
+        if ("int".equalsIgnoreCase(type)) {
+            if (value == null) {
+                return "Int32()";
+            }
             return "Int32(" + value + ")";
         }
 
-        if ("long".equals(type)) {
+        if ("long".equalsIgnoreCase(type)) {
+            if (value == null) {
+                return "Long()";
+            }
             return "Long(" + value + ")";
         }
 
-        if ("double".equals(type) || "boolean".equals(type)) {
+        if ("double".equalsIgnoreCase(type) || "boolean".equalsIgnoreCase(type)) {
             return value;
         }
 
-        if ("obejectid".equals(type)) {
+        if ("obejectid".equalsIgnoreCase(type)) {
+            if (value == null) {
+                return "ObjectId()";
+            }
             ObjectId id = (ObjectId) value;
             return "ObjectId(\"" + id.toHexString() + "\")";
         }
 
-        if ("date".equals(type)) {
+        if ("date".equalsIgnoreCase(type)) {
+            if (value == null) {
+                return "ISODate()";
+            }
             Date date = (Date) value;
             return "ISODate(\"" + MongoUtil.DATE_FORMAT.format(date) + "\")";
         }
 
-        if ("binary".equals(type)) {
+        if ("binary".equalsIgnoreCase(type)) {
+            if (value == null) {
+                return "Binary.createFromBase64()";
+            }
             byte[] bytes;
             if (value instanceof byte[] bytes1) {
                 bytes = bytes1;
@@ -124,26 +147,55 @@ public class MongoDataUtil {
             return "Binary.createFromBase64(\"" + Base64Util.encodeToString(bytes) + "\", 0)";
         }
 
-        if ("list".equals(type)) {
+        if ("list".equalsIgnoreCase(type)) {
+            StringBuilder sb = new StringBuilder();
             List<?> list = (List<?>) value;
-            StringBuilder sb = new StringBuilder();
-            for (Object val1 : list) {
-                Object val = buildRecordValue(val1, deep + 1);
-                sb.append(",\n").repeat("\t", deep + 1).append(val);
+            if (list != null && !list.isEmpty()) {
+                for (Object val1 : list) {
+                    Object val = buildRecordValue(val1, deep + 1);
+                    sb.append(",\n").repeat("\t", deep + 1).append(val);
+                }
+                sb = new StringBuilder(sb.substring(1));
             }
-            return "[" + sb.substring(1) + "\n" + "\t".repeat(deep) + "]";
+            return "[" + sb + "\n" + "\t".repeat(deep) + "]";
         }
 
-        if ("object".equals(type)) {
+        if ("object".equalsIgnoreCase(type)) {
+            StringBuilder sb = new StringBuilder();
             Document document = (Document) value;
-            StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, Object> entry : document.entrySet()) {
-                buildRecordData(entry.getKey(), entry.getValue(), sb, deep + 1);
+            if (document != null && !document.isEmpty()) {
+                for (Map.Entry<String, Object> entry : document.entrySet()) {
+                    buildRecordData(entry.getKey(), entry.getValue(), sb, deep + 1);
+                }
+                sb = new StringBuilder(sb.substring(1));
             }
-            return "{" + sb.substring(1) + "\n\t".repeat(deep) + "}";
+            return "{" + sb + "\n" + "\t".repeat(deep) + "}";
         }
 
-        return "\"" + value + "\"";
+        if (value != null) {
+            return "\"" + value + "\"";
+        }
+        return "\"\"";
+    }
+
+    /**
+     * 构建记录数据
+     *
+     * @param column  字段
+     * @param value   值
+     * @param builder 缓存
+     * @param deep    深度
+     */
+    private static void buildRecordData(MongoColumn column, Object value, StringBuilder builder, int deep) {
+        builder.append(",\n");
+        builder.repeat("\t", deep);
+        builder.append(column.getName())
+                .append(": ");
+        if (value == null) {
+            builder.append(buildRecordValue(null, column.getType(), deep));
+        } else {
+            builder.append(buildRecordValue(value, deep));
+        }
     }
 
     /**
@@ -169,29 +221,23 @@ public class MongoDataUtil {
      * @return 结果
      */
     public static String toInsertScript(MongoRecord record) {
-        MongoColumn column = record._idColumn();
-        String sql = """
-                db.getCollection("$collection").insert($doc);
-                """;
+        MongoColumn column = record.getColumns().getFirst();
         String script = getRecordScript(record);
-        return sql.replace("$collection", column.getCollectionName()).replace("$doc", script);
+        return toInsertScript(column.getCollectionName(), script);
     }
 
     /**
-     * 转换为更新脚本
+     * 转换为插入脚本
      *
-     * @param record 记录
+     * @param collectionName 记录
+     * @param doc            文档
      * @return 结果
      */
-    public static String toUpdateScript(MongoRecord record) {
-        MongoColumn column = record._idColumn();
-        Object id = record._idValue();
+    public static String toInsertScript(String collectionName, String doc) {
         String sql = """
-                db.getCollection("$collection").update({_id: $id},{$set: $doc});
+                db.getCollection("$collection").insert($doc);
                 """;
-        String script = getRecordScript(record);
-        Object idVal = buildRecordValue(id, 0);
-        return sql.replace("$collection", column.getCollectionName()).replace("$id", idVal.toString()).replace("$doc", script);
+        return sql.replace("$collection", collectionName).replace("$doc", doc);
     }
 
     /**
@@ -206,6 +252,35 @@ public class MongoDataUtil {
             list.add(toInsertScript(record));
         }
         return list;
+    }
+
+    /**
+     * 转换为更新脚本
+     *
+     * @param record 记录
+     * @return 结果
+     */
+    public static String toUpdateScript(MongoRecord record) {
+        MongoColumn column = record._idColumn();
+        Object id = record._idValue();
+        String script = getRecordScript(record);
+        return toUpdateScript(column.getCollectionName(), id, script);
+    }
+
+    /**
+     * 转换为更新脚本
+     *
+     * @param collectionName 记录
+     * @param id             id
+     * @param doc            文档
+     * @return 结果
+     */
+    public static String toUpdateScript(String collectionName, Object id, String doc) {
+        String sql = """
+                db.getCollection("$collection").update({_id: $id},{$set: $doc});
+                """;
+        Object idVal = buildRecordValue(id, 0);
+        return sql.replace("$collection", collectionName).replace("$id", idVal.toString()).replace("$doc", doc);
     }
 
     /**

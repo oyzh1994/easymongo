@@ -18,6 +18,7 @@ import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
+import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.page.PageBox;
@@ -333,37 +334,45 @@ public class MongoCollectionRecordTabController extends RichTabController {
             if (StringUtil.isBlank(doc)) {
                 return;
             }
-            MongoRecord record = MongoRecordUtil.docToRecord(doc, this.getItem().dbName(), this.getItem().collectionName());
-            BsonValue _id = this.getItem().insertRecord(record);
-            if (_id == null) {
-                MessageBox.warn(I18nHelper.addDocumentFail());
+            // 转换为脚本
+            String script = MongoDataUtil.toInsertScript(this.getItem().collectionName(), doc);
+            // 更新数据
+            this.getItem().eval(script);
+            // 刷新记录
+            this.apply.disable();
+            this.reload();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+    }
+
+    /**
+     * 编辑文档
+     */
+    @FXML
+    private void editDocument() {
+        try {
+            MongoRecord record = this.recordTable.getSelectedItem();
+            if (record == null) {
                 return;
             }
-            // 刷新记录
-            if (this.recordTable.isItemEmpty()) {
-                this.apply.disable();
-                this.reload();
-            } else {// 更新记录
-                // 获取最后一个段落
-                MongoRecord r = this.recordTable.getItems().getFirst();
-                // 更新id信息
-                record.getColumns().add(r._idColumn());
-                record.set_id(_id);
-                record.clearStatus();
-                // 更新字段
-                List<MongoRecord> list = new ArrayList<>(this.recordTable.getItems());
-                list.add(record);
-                // 更新字段
-                this.updateColumns(list);
-                // 追加内容
-                this.recordTable.addItem(record);
-                this.recordTable.selectLast();
-                // 纠正记录
-                this.correctRecords();
-                this.apply.disable();
-                // 初始化计数
-                this.initCount(this.pageData.count() + 1);
+            StageAdapter adapter = MongoViewFactory.documentUpdate(record);
+            if (adapter == null) {
+                return;
             }
+            String doc = adapter.getProp("doc");
+            if (doc == null) {
+                return;
+            }
+            Object id = record._idValue();
+            // 转换为脚本
+            String script = MongoDataUtil.toUpdateScript(this.getItem().collectionName(), id, doc);
+            // 更新数据
+            this.getItem().eval(script);
+            // 刷新记录
+            this.apply.disable();
+            this.reload();
         } catch (Exception ex) {
             ex.printStackTrace();
             MessageBox.exception(ex);

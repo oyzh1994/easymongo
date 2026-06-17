@@ -186,22 +186,22 @@ public class MongoRecordUtil {
      */
     public static List<FXMenuItem> getColumnMenuItem(MongoRecordProperty property) {
         List<FXMenuItem> menuItems = new ArrayList<>();
-        if (property.getColumn().is_id()) {
-            FXMenuItem copy = MenuItemHelper.copy(property::vCopy);
-            menuItems.add(copy);
-            FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
-            menuItems.add(edit);
-            FXMenuItem copyAsInsertStatement = MenuItemHelper.copyAsInsertStatement(property::vCopyAsInsertSql);
-            menuItems.add(copyAsInsertStatement);
-            FXMenuItem copyAsUpdateStatement = MenuItemHelper.copyAsUpdateStatement(property::vCopyAsUpdateSql);
-            menuItems.add(copyAsUpdateStatement);
-        } else {
+//        if (property.getColumn().is_id()) {
+//            FXMenuItem copy = MenuItemHelper.copy(property::vCopy);
+//            menuItems.add(copy);
+////            FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
+////            menuItems.add(edit);
+//            FXMenuItem copyAsInsertStatement = MenuItemHelper.copyAsInsertStatement(property::vCopyAsInsertSql);
+//            menuItems.add(copyAsInsertStatement);
+//            FXMenuItem copyAsUpdateStatement = MenuItemHelper.copyAsUpdateStatement(property::vCopyAsUpdateSql);
+//            menuItems.add(copyAsUpdateStatement);
+//        } else {
             FXMenuItem copy = MenuItemHelper.copy(property::vCopy);
             menuItems.add(copy);
             FXMenuItem paste = MenuItemHelper.paste(property::vPaste);
             menuItems.add(paste);
-            FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
-            menuItems.add(edit);
+//            FXMenuItem edit = MenuItemHelper.edit(property::vEdit);
+//            menuItems.add(edit);
             FXMenuItem setToNull = MenuItemHelper.setToNull(property::vSetToNull);
             menuItems.add(setToNull);
             FXMenuItem setToEmptyString = MenuItemHelper.setToEmptyString(property::vSetToEmptyString);
@@ -210,7 +210,7 @@ public class MongoRecordUtil {
             menuItems.add(copyAsInsertStatement);
             FXMenuItem copyAsUpdateStatement = MenuItemHelper.copyAsUpdateStatement(property::vCopyAsUpdateSql);
             menuItems.add(copyAsUpdateStatement);
-        }
+//        }
         return menuItems;
     }
 

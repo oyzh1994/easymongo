@@ -199,18 +199,18 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         ClipboardUtil.paste(this.node);
     }
 
-    public void vEdit() {
-        StageAdapter adapter = MongoViewFactory.documentUpdate(this.record);
-        if (adapter == null) {
-            return;
-        }
-        String doc = adapter.getProp("doc");
-        if (doc == null) {
-            return;
-        }
-        MongoRecord record = MongoRecordUtil.docToRecord(doc, this.column.getDbName(), this.column.getCollectionName());
-        this.record.copy(record);
-    }
+//    public void vEdit() {
+//        StageAdapter adapter = MongoViewFactory.documentUpdate(this.record);
+//        if (adapter == null) {
+//            return;
+//        }
+//        String doc = adapter.getProp("doc");
+//        if (doc == null) {
+//            return;
+//        }
+//        MongoRecord record = MongoRecordUtil.docToRecord(doc, this.column.getDbName(), this.column.getCollectionName());
+//        this.record.copy(record);
+//    }
 
     /**
      * 复制为insert语句

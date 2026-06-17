@@ -1,8 +1,9 @@
 package cn.oyzh.easymongo.controller.collection;
 
-import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
+import cn.oyzh.easymongo.mongo.MongoRecord;
+import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.fx.editor.incubator.Editor;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controller.StageController;
@@ -10,7 +11,6 @@ import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.FXStageStyle;
 import cn.oyzh.fx.plus.window.StageAttribute;
 import cn.oyzh.i18n.I18nHelper;
-import com.alibaba.fastjson2.JSONObject;
 import javafx.fxml.FXML;
 import javafx.stage.Modality;
 import javafx.stage.WindowEvent;
@@ -42,12 +42,12 @@ public class MongoDocumentAddController extends StageController {
         try {
             // 检查字段是否存在
             String doc = this.doc.getText();
-            if (JSONUtil.isJson(doc)) {
+//            if (JSONUtil.isJson(doc)) {
                 this.setProp("doc", doc);
                 this.closeWindow();
-            } else {
-                MessageBox.warn(I18nHelper.documentInvalid());
-            }
+//            } else {
+//                MessageBox.warn(I18nHelper.documentInvalid());
+//            }
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
@@ -68,17 +68,17 @@ public class MongoDocumentAddController extends StageController {
                     
                     }""");
         } else {
-            JSONObject object = new JSONObject();
+            //            JSONObject object = new JSONObject();
+            //            for (MongoColumn column : columns) {
+            //                object.put(column.getName(), column.defaultValue());
+            //            }
+            //            this.doc.setText(JSONUtil.toPretty(object));
+            MongoRecord record = new MongoRecord(columns);
             for (MongoColumn column : columns) {
-                if (column.is_id()) {
-                    continue;
-                }
-                object.put(column.getName(), column.defaultValue());
+                record.putValue(column.getName(), column.defaultValue());
             }
-            this.doc.setText(JSONUtil.toPretty(object));
+            this.doc.setText(MongoDataUtil.getRecordScript(record));
         }
-
-
         this.stage.switchOnTab();
         this.stage.hideOnEscape();
     }

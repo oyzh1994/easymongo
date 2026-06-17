@@ -1,17 +1,19 @@
 package cn.oyzh.easymongo.script;
 
-import cn.oyzh.easymongo.util.MongoUtil;
+import cn.oyzh.easymongo.script.function.MongoScriptBinaryFcuntion;
+import cn.oyzh.easymongo.script.function.MongoScriptCodeFunction;
+import cn.oyzh.easymongo.script.function.MongoScriptISODateFunction;
+import cn.oyzh.easymongo.script.function.MongoScriptInit32Function;
+import cn.oyzh.easymongo.script.function.MongoScriptLongFunction;
+import cn.oyzh.easymongo.script.function.MongoScriptObjectIdFunction;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
-import org.bson.types.Code;
-import org.bson.types.ObjectId;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-import java.util.Date;
-import java.util.function.Function;
 
 /**
  *
@@ -37,32 +39,15 @@ public class MongoScriptEngine {
         this.bindings = this.engine.getBindings(ScriptContext.ENGINE_SCOPE);
 
         // 注入 MongoDB 特殊类型构造函数
-        this.engine.put("Binary", new MongoScriptBinary());
-        this.engine.put("Code", (Function<String, Code>) Code::new);
-        this.engine.put("ObjectId", (Function<String, ObjectId>) ObjectId::new);
-        this.engine.put("ISODate", (Function<String, Date>) dateStr -> {
-            try {
-                return MongoUtil.DATE_FORMAT.parse(dateStr);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return null;
-        });
-        this.engine.put("Int32", (java.util.function.Function<Object, Integer>) val -> {
-            if (val instanceof Number) {
-                return ((Number) val).intValue();
-            }
-            return Integer.parseInt(val.toString());
-        });
-        this.engine.put("Long", (java.util.function.Function<Object, Long>) val -> {
-            if (val instanceof Number) {
-                return ((Number) val).longValue();
-            }
-            return Long.parseLong(val.toString());
-        });
+        this.engine.put("Code", new MongoScriptCodeFunction());
+        this.engine.put("Long", new MongoScriptLongFunction());
+        this.engine.put("Int32", new MongoScriptInit32Function());
+        this.engine.put("Binary", new MongoScriptBinaryFcuntion());
+        this.engine.put("ISODate", new MongoScriptISODateFunction());
+        this.engine.put("ObjectId", new MongoScriptObjectIdFunction());
     }
 
-    public javax.script.ScriptEngine getEngine() {
+    public ScriptEngine getEngine() {
         return engine;
     }
 

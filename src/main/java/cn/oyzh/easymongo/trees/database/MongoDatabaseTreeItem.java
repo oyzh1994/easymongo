@@ -24,8 +24,6 @@ import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
-import cn.oyzh.fx.plus.window.StageAdapter;
-import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
@@ -79,8 +77,8 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
             FXMenuItem closeDB = MenuItemHelper.closeDatabase("10", this::closeDB);
             items.add(closeDB);
         }
-//        FXMenuItem editDB = MenuItemHelper.editDatabase("11", this::editDB);
-//        items.add(editDB);
+        //        FXMenuItem editDB = MenuItemHelper.editDatabase("11", this::editDB);
+        //        items.add(editDB);
         FXMenuItem dropDB = MenuItemHelper.deleteDatabase("12", this::delete);
         items.add(dropDB);
         FXMenuItem dumpData = MenuItemHelper.dumpData("12", this::dump);
@@ -122,15 +120,15 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         super.startWaiting(task);
     }
 
-//    /**
-//     * 编辑数据库
-//     */
-//    public void editDB() {
-//        StageAdapter fxView = StageManager.parseStage(MongoDatabaseUpdateController.class, this.window());
-//        fxView.setProp("database", this.value);
-//        fxView.setProp("connectItem", this.parent());
-//        fxView.display();
-//    }
+    //    /**
+    //     * 编辑数据库
+    //     */
+    //    public void editDB() {
+    //        StageAdapter fxView = StageManager.parseStage(MongoDatabaseUpdateController.class, this.window());
+    //        fxView.setProp("database", this.value);
+    //        fxView.setProp("connectItem", this.parent());
+    //        fxView.display();
+    //    }
 
     /**
      * 关闭数据库
@@ -308,10 +306,14 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
     }
 
     public List<String> listCollectionNames() {
-       return this.client().listCollectionNames(this.dbName());
+        return this.client().listCollectionNames(this.dbName());
     }
 
     public List<String> listBucketNames() {
-       return this.client().listBucketNames(this.dbName());
+        return this.client().listBucketNames(this.dbName());
+    }
+
+    public Object eval(String script) throws Exception {
+        return this.client().eval(this.dbName(), script);
     }
 }

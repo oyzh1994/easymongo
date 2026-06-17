@@ -240,6 +240,22 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
         return MongoUtil.ID.equalsIgnoreCase(this.name);
     }
 
+    public String getAliasName() {
+        return aliasName;
+    }
+
+    public void setAliasName(String aliasName) {
+        this.aliasName = aliasName;
+    }
+
+    public String displayName() {
+        return this.aliasName == null ? this.name : this.aliasName;
+    }
+
+    public boolean supportInteger() {
+        return this.supportInt32() || this.supportInt64();
+    }
+
     public Object defaultValue() {
         if (this.is_id() || this.supportObjectId()) {
             return null;
@@ -274,21 +290,5 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
                     """;
         }
         return "";
-    }
-
-    public String getAliasName() {
-        return aliasName;
-    }
-
-    public void setAliasName(String aliasName) {
-        this.aliasName = aliasName;
-    }
-
-    public String displayName() {
-        return this.aliasName == null ? this.name : this.aliasName;
-    }
-
-    public boolean supportInteger() {
-        return this.supportInt32() || this.supportInt64();
     }
 }

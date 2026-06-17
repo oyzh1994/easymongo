@@ -315,10 +315,7 @@ public class MongoTerminalPane extends TerminalPane {
     public TerminalExecuteResult eval(String input) {
         TerminalExecuteResult result = new TerminalExecuteResult();
         try {
-            if (this.dbName != null) {
-                this.client.shellEngine().db(this.dbName);
-            }
-            Object o = this.client.shellEngine().eval(input);
+            Object o = this.client.eval(this.dbName, input);
             result.setResult(o);
         } catch (Exception ex) {
             result.setException(ex);
