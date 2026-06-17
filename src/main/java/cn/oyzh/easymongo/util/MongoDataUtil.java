@@ -126,6 +126,9 @@ public class MongoDataUtil {
             if (value == null) {
                 return "ISODate()";
             }
+            if (value instanceof String s) {
+                return "ISODate(\"" + s + "\")";
+            }
             Date date = (Date) value;
             return "ISODate(\"" + MongoUtil.DATE_FORMAT.format(date) + "\")";
         }
@@ -148,6 +151,9 @@ public class MongoDataUtil {
         }
 
         if ("list".equalsIgnoreCase(type)) {
+            if (value instanceof String s) {
+                return s;
+            }
             StringBuilder sb = new StringBuilder();
             List<?> list = (List<?>) value;
             if (list != null && !list.isEmpty()) {
@@ -161,6 +167,9 @@ public class MongoDataUtil {
         }
 
         if ("object".equalsIgnoreCase(type)) {
+            if (value instanceof String s) {
+                return s;
+            }
             StringBuilder sb = new StringBuilder();
             Document document = (Document) value;
             if (document != null && !document.isEmpty()) {
@@ -190,12 +199,8 @@ public class MongoDataUtil {
         builder.append(",\n");
         builder.repeat("\t", deep);
         builder.append(column.getName())
-                .append(": ");
-        if (value == null) {
-            builder.append(buildRecordValue(null, column.getType(), deep));
-        } else {
-            builder.append(buildRecordValue(value, deep));
-        }
+                .append(": ")
+                .append(buildRecordValue(value, column.getType(), deep));
     }
 
     /**
