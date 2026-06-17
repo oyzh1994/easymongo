@@ -5,7 +5,7 @@ import cn.oyzh.easymongo.mongo.MongoRecordFilter;
 import cn.oyzh.easymongo.tabs.MongoTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
-import cn.oyzh.fx.gui.svg.glyph.database.TableSVGGlyph;
+import cn.oyzh.fx.gui.svg.glyph.BucketSVGGlyph;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import javafx.scene.Cursor;
@@ -29,7 +29,7 @@ public class MongoBucketRecordTab extends MongoTab {
     public void flushGraphic() {
         SVGGlyph graphic = (SVGGlyph) this.getGraphic();
         if (graphic == null) {
-            graphic = new TableSVGGlyph();
+            graphic = new BucketSVGGlyph();
             graphic.setCursor(Cursor.DEFAULT);
             this.setGraphic(graphic);
         }
@@ -89,9 +89,9 @@ public class MongoBucketRecordTab extends MongoTab {
         return this.item().dbName();
     }
 
-    @Override
-    public void initNode() {
-        this.setClosable(true);
-        super.initNode();
-    }
+//    @Override
+//    public void initNode() {
+//        this.setClosable(true);
+//        super.initNode();
+//    }
 }

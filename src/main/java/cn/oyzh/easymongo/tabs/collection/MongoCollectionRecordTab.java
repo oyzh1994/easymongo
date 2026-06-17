@@ -89,9 +89,9 @@ public class MongoCollectionRecordTab extends MongoTab {
         return this.item().dbName();
     }
 
-    @Override
-    public void initNode() {
-        this.setClosable(true);
-        super.initNode();
-    }
+//    @Override
+//    public void initNode() {
+//        this.setClosable(true);
+//        super.initNode();
+//    }
 }

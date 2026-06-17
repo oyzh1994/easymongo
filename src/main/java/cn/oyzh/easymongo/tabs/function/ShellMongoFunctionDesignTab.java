@@ -95,9 +95,9 @@ public class ShellMongoFunctionDesignTab extends MongoTab {
         }
     }
 
-    @Override
-    public void initNode() {
-        this.setClosable(true);
-        super.initNode();
-    }
+//    @Override
+//    public void initNode() {
+//        this.setClosable(true);
+//        super.initNode();
+//    }
 }

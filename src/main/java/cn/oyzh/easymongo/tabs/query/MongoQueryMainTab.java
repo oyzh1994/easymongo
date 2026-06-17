@@ -84,9 +84,9 @@ public class MongoQueryMainTab extends MongoTab {
         return (MongoQueryMainTabController) super.controller();
     }
 
-    @Override
-    public void initNode() {
-        this.setClosable(true);
-        super.initNode();
-    }
+//    @Override
+//    public void initNode() {
+//        this.setClosable(true);
+//        super.initNode();
+//    }
 }

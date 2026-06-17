@@ -28,8 +28,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
-import com.mongodb.client.gridfs.GridFSFindIterable;
-import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
@@ -680,25 +678,29 @@ public class MongoClient implements Closeable {
     public List<MongoRecord> selectBucketRecords(MongoSelectRecordParam param) {
         String dbName = param.getDbName();
         String collectionName = param.getCollectionName();
-        GridFSBucket fsBucket = this.bucket(dbName, collectionName);
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName + ".files");
         int skip = Math.toIntExact(param.getStart());
         int limit = Math.toIntExact(param.getLimit());
-
         Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
-        GridFSFindIterable iterable = fsBucket.find(filters).limit(limit).skip(skip);
+        FindIterable<Document> iterable = collection.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         MongoColumns columns = this.bucketColumns();
-        for (GridFSFile file : iterable) {
+        for (Document file : iterable) {
             MongoRecord record = new MongoRecord(columns, true);
-            record.putValue(columns.column(MongoUtil.ID), file.getId());
-            record.putValue(columns.column("filename"), file.getFilename());
-            record.putValue(columns.column("length"), NumberUtil.formatSize(file.getLength(), 2));
-            record.putValue(columns.column("chunkSize"), NumberUtil.formatSize(file.getChunkSize(), 2));
-            record.putValue(columns.column("uploadDate"), DateHelper.formatDateTimeSimple(file.getUploadDate()));
-            if (file.getMetadata() == null) {
+            record.putValue(columns.column(MongoUtil.ID), file.get("_id"));
+            record.putValue(columns.column("filename"), file.get("filename"));
+            Number length = (Number) file.get("length");
+            Number chunkSize = (Number) file.get("chunkSize");
+            record.putValue(columns.column("length"), NumberUtil.formatSize(length.doubleValue(), 2));
+            record.putValue(columns.column("chunkSize"), NumberUtil.formatSize(chunkSize.doubleValue(), 2));
+            record.putValue(columns.column("uploadDate"), DateHelper.formatDateTimeSimple(file.getDate("uploadDate")));
+            record.putValue(columns.column("contentType"), file.get("contentType"));
+            record.putValue(columns.column("md5"), file.get("md5"));
+            Object metadata = file.get("metadata");
+            if (metadata == null) {
                 record.putValue(columns.column("metadata"), "");
             } else {
-                record.putValue(columns.column("metadata"), JSONUtil.toJson(file.getMetadata()));
+                record.putValue(columns.column("metadata"), JSONUtil.toJson(metadata));
             }
             records.add(record);
         }
@@ -731,22 +733,27 @@ public class MongoClient implements Closeable {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
-        GridFSBucket bucket = this.bucket(dbName, bucketName);
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, bucketName + ".files");
         Bson filters = Filters.eq(MongoUtil.ID, _id);
-        GridFSFindIterable iterable = bucket.find(filters).limit(1);
+        FindIterable<Document> iterable = collection.find(filters).limit(1);
         MongoColumns columns = this.bucketColumns();
-        GridFSFile file = iterable.first();
+        Document file = iterable.first();
         if (file != null) {
             MongoRecord record = new MongoRecord(columns, true);
-            record.putValue(columns.column(MongoUtil.ID), file.getId());
-            record.putValue(columns.column("filename"), file.getFilename());
-            record.putValue(columns.column("length"), NumberUtil.formatSize(file.getLength(), 2));
-            record.putValue(columns.column("chunkSize"), NumberUtil.formatSize(file.getChunkSize(), 2));
-            record.putValue(columns.column("uploadDate"), DateHelper.formatDateTimeSimple(file.getUploadDate()));
-            if (file.getMetadata() == null) {
+            record.putValue(columns.column(MongoUtil.ID), file.get("_id"));
+            record.putValue(columns.column("filename"), file.get("filename"));
+            Number length = (Number) file.get("length");
+            Number chunkSize = (Number) file.get("chunkSize");
+            record.putValue(columns.column("length"), NumberUtil.formatSize(length.doubleValue(), 2));
+            record.putValue(columns.column("chunkSize"), NumberUtil.formatSize(chunkSize.doubleValue(), 2));
+            record.putValue(columns.column("uploadDate"), DateHelper.formatDateTimeSimple(file.getDate("uploadDate")));
+            record.putValue(columns.column("contentType"), file.get("contentType"));
+            record.putValue(columns.column("md5"), file.get("md5"));
+            Object metadata = file.get("metadata");
+            if (metadata == null) {
                 record.putValue(columns.column("metadata"), "");
             } else {
-                record.putValue(columns.column("metadata"), JSONUtil.toJson(file.getMetadata()));
+                record.putValue(columns.column("metadata"), JSONUtil.toJson(metadata));
             }
             return record;
         }
@@ -770,6 +777,10 @@ public class MongoClient implements Closeable {
         columns.add(chunkSizeColumn);
         MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
         columns.add(uploadDateColumn);
+        MongoColumn contentTypeColumn = new MongoColumn("contentType", I18nHelper.contentType());
+        columns.add(contentTypeColumn);
+        MongoColumn md5Column = new MongoColumn("md5", "MD5");
+        columns.add(md5Column);
         MongoColumn metadataColumn = new MongoColumn("metadata", I18nHelper.metadata());
         columns.add(metadataColumn);
         return columns;
