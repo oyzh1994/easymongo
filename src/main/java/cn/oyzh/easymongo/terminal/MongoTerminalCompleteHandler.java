@@ -54,7 +54,7 @@ public class MongoTerminalCompleteHandler extends BaseTerminalCompleteHandler<Mo
             list.add(this.newCommandHandler("db.getCollection(\"\")"));
         } else if (collectionPattern().matcher(line).matches()) {
             long count = StringUtil.count(line, ".");
-            Set<String> set = MongoScriptUtil.collectionfuncions();
+            Set<String> set = MongoScriptUtil.collectionFuncions();
             if (count == 1) {
                 for (String s : set) {
                     list.add(this.newCommandHandler(line + "." + s + "()"));
@@ -70,7 +70,7 @@ public class MongoTerminalCompleteHandler extends BaseTerminalCompleteHandler<Mo
             }
         } else if (line.startsWith("db")) {
             long count = StringUtil.count(line, ".");
-            Set<String> set = MongoScriptUtil.databasefuncions();
+            Set<String> set = MongoScriptUtil.databaseFuncions();
             if (count == 0) {
                 for (String s : set) {
                     list.add(this.newCommandHandler("db." + s + "()"));

@@ -45,8 +45,8 @@ public class MongoQueryUtil {
 
     static {
         DB_KEYWORDS.add("db");
-        DB_FUNCTIONS.addAll(MongoScriptUtil.databasefuncions());
-        DB_FUNCTIONS.addAll(MongoScriptUtil.collectionfuncions());
+        DB_FUNCTIONS.addAll(MongoScriptUtil.databaseFuncions());
+        DB_FUNCTIONS.addAll(MongoScriptUtil.collectionFuncions());
     }
 
     public static Set<String> getKeywords() {

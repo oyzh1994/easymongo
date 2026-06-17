@@ -39,36 +39,36 @@ public class MongoScriptCollection {
     }
 
     public MongoScriptFindCursor find(Object doc) {
-        Document filter;
-        if (doc instanceof Map map) {
-            filter = new Document(map);
-        } else {
-            filter = new Document();
-        }
+        Document filter = MongoScriptUtil.toDocumentOrDefault(doc);
         FindIterable<Document> iter = this.collection.find(filter);
         return new MongoScriptFindCursor(this.dbName, this.collectionName, iter);
     }
 
-    public InsertOneResult insert(Object doc) {
+    public Object insert(Object doc) {
+        if (doc instanceof ScriptObjectMirror mirror && mirror.isArray()) {
+            return this.insertMany(mirror.values());
+        }
+        if (doc instanceof Collection<?> c) {
+            return this.insertMany(c);
+        }
         return this.insertOne(doc);
     }
 
     public InsertOneResult insertOne(Object doc) {
-        if (doc instanceof Map map) {
-            return this.collection.insertOne(new Document(map));
-        }
-        return null;
+        Document document = MongoScriptUtil.toDocument(doc);
+        return document != null ? this.collection.insertOne(document) : null;
     }
 
     public InsertManyResult insertMany(Object doc) {
         if (doc instanceof ScriptObjectMirror mirror) {
             return this.insertMany(mirror.values());
         }
-        if (doc instanceof Collection collection) {
+        if (doc instanceof Collection<?> collection) {
             List<Document> list = new ArrayList<>();
             for (Object o : collection) {
-                if (o instanceof Map map) {
-                    list.add(new Document(map));
+                Document d = MongoScriptUtil.toDocument(o);
+                if (d != null) {
+                    list.add(d);
                 }
             }
             return this.collection.insertMany(list);
@@ -81,10 +81,8 @@ public class MongoScriptCollection {
     }
 
     public DeleteResult deleteOne(Object doc) {
-        if (doc instanceof Map map) {
-            return this.collection.deleteOne(new Document(map));
-        }
-        return null;
+        Document filter = MongoScriptUtil.toDocument(doc);
+        return filter != null ? this.collection.deleteOne(filter) : null;
     }
 
     public DeleteResult deleteMany() {
@@ -92,12 +90,7 @@ public class MongoScriptCollection {
     }
 
     public DeleteResult deleteMany(Object doc) {
-        Document filter;
-        if (doc instanceof Map map) {
-            filter = new Document(map);
-        } else {
-            filter = new Document();
-        }
+        Document filter = MongoScriptUtil.toDocumentOrDefault(doc);
         return this.collection.deleteMany(filter);
     }
 
@@ -106,8 +99,10 @@ public class MongoScriptCollection {
     }
 
     public UpdateResult updateOne(Object filter, Object doc) {
-        if (filter instanceof Map f && doc instanceof Map map) {
-            return this.collection.updateOne(new Document(f), new Document(map));
+        Document filterDoc = MongoScriptUtil.toDocument(filter);
+        Document updateDoc = MongoScriptUtil.toDocument(doc);
+        if (filterDoc != null && updateDoc != null) {
+            return this.collection.updateOne(filterDoc, updateDoc);
         }
         return null;
     }
@@ -123,26 +118,24 @@ public class MongoScriptCollection {
     }
 
     public Document findOne(Object filter) {
-        if (filter instanceof Map map) {
-            return this.collection.find(new Document(map)).first();
-        }
-        return this.collection.find().first();
+        Document f = MongoScriptUtil.toDocument(filter);
+        return f != null ? this.collection.find(f).first() : this.collection.find().first();
     }
 
     // --- findOneAndDelete ---
 
     public Document findOneAndDelete(Object filter) {
-        if (filter instanceof Map map) {
-            return this.collection.findOneAndDelete(new Document(map));
-        }
-        return null;
+        Document f = MongoScriptUtil.toDocument(filter);
+        return f != null ? this.collection.findOneAndDelete(f) : null;
     }
 
     // --- findOneAndReplace ---
 
     public Document findOneAndReplace(Object filter, Object replacement) {
-        if (filter instanceof Map f && replacement instanceof Map r) {
-            return this.collection.findOneAndReplace(new Document(f), new Document(r));
+        Document f = MongoScriptUtil.toDocument(filter);
+        Document r = MongoScriptUtil.toDocument(replacement);
+        if (f != null && r != null) {
+            return this.collection.findOneAndReplace(f, r);
         }
         return null;
     }
@@ -150,8 +143,10 @@ public class MongoScriptCollection {
     // --- findOneAndUpdate ---
 
     public Document findOneAndUpdate(Object filter, Object update) {
-        if (filter instanceof Map f && update instanceof Map u) {
-            return this.collection.findOneAndUpdate(new Document(f), new Document(u));
+        Document f = MongoScriptUtil.toDocument(filter);
+        Document u = MongoScriptUtil.toDocument(update);
+        if (f != null && u != null) {
+            return this.collection.findOneAndUpdate(f, u);
         }
         return null;
     }
@@ -159,8 +154,10 @@ public class MongoScriptCollection {
     // --- updateMany ---
 
     public UpdateResult updateMany(Object filter, Object update) {
-        if (filter instanceof Map f && update instanceof Map u) {
-            return this.collection.updateMany(new Document(f), new Document(u));
+        Document f = MongoScriptUtil.toDocument(filter);
+        Document u = MongoScriptUtil.toDocument(update);
+        if (f != null && u != null) {
+            return this.collection.updateMany(f, u);
         }
         return null;
     }
@@ -168,16 +165,20 @@ public class MongoScriptCollection {
     // --- replaceOne ---
 
     public UpdateResult replaceOne(Object filter, Object replacement) {
-        if (filter instanceof Map f && replacement instanceof Map r) {
-            return this.collection.replaceOne(new Document(f), new Document(r));
+        Document f = MongoScriptUtil.toDocument(filter);
+        Document r = MongoScriptUtil.toDocument(replacement);
+        if (f != null && r != null) {
+            return this.collection.replaceOne(f, r);
         }
         return null;
     }
 
     public UpdateResult replaceOne(Object filter, Object replacement, Object option) {
-        if (filter instanceof Map f && replacement instanceof Map r && option instanceof Map<?, ?> o) {
+        Document f = MongoScriptUtil.toDocument(filter);
+        Document r = MongoScriptUtil.toDocument(replacement);
+        if (f != null && r != null && option instanceof Map<?, ?> o) {
             ReplaceOptions options = JSONUtil.toBean(o, ReplaceOptions.class);
-            return this.collection.replaceOne(new Document(f), new Document(r), options);
+            return this.collection.replaceOne(f, r, options);
         }
         return null;
     }
@@ -189,10 +190,8 @@ public class MongoScriptCollection {
     }
 
     public long countDocuments(Object filter) {
-        if (filter instanceof Map map) {
-            return this.collection.countDocuments(new Document(map));
-        }
-        return this.collection.countDocuments();
+        Document f = MongoScriptUtil.toDocument(filter);
+        return f != null ? this.collection.countDocuments(f) : this.collection.countDocuments();
     }
 
     // --- estimatedDocumentCount ---
@@ -208,8 +207,9 @@ public class MongoScriptCollection {
     }
 
     public MongoScriptCursor distinct(String fieldName, Object filter) {
-        if (filter instanceof Map map) {
-            return new MongoScriptCursor(this.collection.distinct(fieldName, new Document(map), String.class));
+        Document f = MongoScriptUtil.toDocument(filter);
+        if (f != null) {
+            return new MongoScriptCursor(this.collection.distinct(fieldName, f, String.class));
         }
         return new MongoScriptCursor(this.collection.distinct(fieldName, String.class));
     }
@@ -230,7 +230,8 @@ public class MongoScriptCollection {
     }
 
     public String createIndex(Object keys, Object options) {
-        if (!(keys instanceof Map k)) {
+        Document k = MongoScriptUtil.toDocument(keys);
+        if (k == null) {
             return null;
         }
         IndexOptions opts = new IndexOptions();
@@ -251,7 +252,7 @@ public class MongoScriptCollection {
                 opts.expireAfter(Long.parseLong(optMap.get("expireAfterSeconds").toString()), TimeUnit.SECONDS);
             }
         }
-        return this.collection.createIndex(new Document(k), opts);
+        return this.collection.createIndex(k, opts);
     }
 
     public MongoScriptCursor listIndexes() {
@@ -259,8 +260,9 @@ public class MongoScriptCollection {
     }
 
     public void dropIndex(Object keys) {
-        if (keys instanceof Map map) {
-            this.collection.dropIndex(new Document(map));
+        Document k = MongoScriptUtil.toDocument(keys);
+        if (k != null) {
+            this.collection.dropIndex(k);
         }
     }
 
