@@ -210,4 +210,8 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     public Object eval(String script) throws Exception {
         return this.dbItem().eval(script);
     }
+
+    public MongoRecord selectCollectionRecord(Object id) {
+        return this.dbItem().selectCollectionRecord(this.collectionName(), id);
+    }
 }

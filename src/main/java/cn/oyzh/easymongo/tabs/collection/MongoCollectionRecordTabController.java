@@ -35,6 +35,7 @@ import cn.oyzh.fx.plus.window.PopupManager;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
+import com.mongodb.client.result.InsertOneResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -337,10 +338,42 @@ public class MongoCollectionRecordTabController extends RichTabController {
             // 转换为脚本
             String script = MongoDataUtil.toInsertScript(this.getItem().collectionName(), doc);
             // 更新数据
-            this.getItem().eval(script);
+            InsertOneResult result = (InsertOneResult) this.getItem().eval(script);
+            if (result == null || result.getInsertedId() == null) {
+                MessageBox.warn(I18nHelper.addDocumentFail());
+                return;
+            }
             // 刷新记录
-            this.apply.disable();
-            this.reload();
+            if (this.recordTable.isItemEmpty()) {
+                this.apply.disable();
+                this.reload();
+            } else {// 更新记录
+                BsonValue _id = result.getInsertedId();
+                MongoRecord record = this.getItem().selectCollectionRecord(_id);
+                if (record == null) {
+                    MessageBox.warn(I18nHelper.addDocumentFail());
+                    return;
+                }
+                // 获取最后一个段落
+//                MongoRecord r = this.recordTable.getItems().getLast();
+//                // 更新id信息
+//                record.getColumns().add(r._idColumn());
+//                record.set_id(_id);
+//                record.clearStatus();
+                // 更新字段
+                List<MongoRecord> list = new ArrayList<>(this.recordTable.getItems());
+                list.add(record);
+                // 更新字段
+                this.updateColumns(list);
+                // 追加内容
+                this.recordTable.addItem(record);
+                this.recordTable.selectLast();
+                // 纠正记录
+                this.correctRecords();
+                this.apply.disable();
+                // 初始化计数
+                this.initCount(this.pageData.count() + 1);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             MessageBox.exception(ex);

@@ -281,6 +281,10 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         return this.client().insertCollectionRecord(record);
     }
 
+    public MongoRecord selectCollectionRecord(String collectionName,Object id) {
+        return this.client().selectCollectionRecord(this.dbName(),collectionName,id);
+    }
+
     public void dropFunction(MongoFunction value) {
         this.client().dropFunction(this.dbName(), value.getName());
     }

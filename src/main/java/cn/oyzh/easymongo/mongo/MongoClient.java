@@ -391,6 +391,26 @@ public class MongoClient implements Closeable {
     }
 
     /**
+     * 查询集合记录
+     *
+     * @param dbName         数据库
+     * @param collectionName 集合
+     * @param id             对象id
+     * @return 结果
+     */
+    public MongoRecord selectCollectionRecord(String dbName, String collectionName, Object id) {
+        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, collectionName);
+        Bson filters = Filters.eq(MongoUtil.ID, id);
+        FindIterable<Document> iterable = collection.find(filters);
+        Document document = iterable.first();
+        if (document == null) {
+            return null;
+        }
+        return MongoRecordUtil.docToRecord(dbName, collectionName, document);
+
+    }
+
+    /**
      * 查询集合记录数量
      *
      * @param param 参数
