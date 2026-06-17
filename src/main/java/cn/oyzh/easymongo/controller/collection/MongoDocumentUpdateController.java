@@ -33,10 +33,10 @@ public class MongoDocumentUpdateController extends StageController {
     private Editor doc;
 
     /**
-     * 添加db库
+     * 更新文档
      */
     @FXML
-    private void add() {
+    private void update() {
         try {
             // 检查字段是否存在
             String doc = this.doc.getText();

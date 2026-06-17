@@ -35,7 +35,7 @@ public class MongoDocumentAddController extends StageController {
     private Editor doc;
 
     /**
-     * 添加db库
+     * 添加文档
      */
     @FXML
     private void add() {

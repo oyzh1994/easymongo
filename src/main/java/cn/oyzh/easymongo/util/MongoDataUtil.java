@@ -6,7 +6,6 @@ import cn.oyzh.easymongo.mongo.MongoFunction;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.mongo.MongoRecordProperty;
 import org.bson.BsonBinary;
-import org.bson.Document;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
@@ -171,7 +170,7 @@ public class MongoDataUtil {
                 return s;
             }
             StringBuilder sb = new StringBuilder();
-            Document document = (Document) value;
+            Map<String, Object> document = (Map<String, Object>) value;
             if (document != null && !document.isEmpty()) {
                 for (Map.Entry<String, Object> entry : document.entrySet()) {
                     buildRecordData(entry.getKey(), entry.getValue(), sb, deep + 1);

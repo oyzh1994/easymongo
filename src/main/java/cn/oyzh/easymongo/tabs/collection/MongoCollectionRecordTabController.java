@@ -36,6 +36,7 @@ import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -355,11 +356,11 @@ public class MongoCollectionRecordTabController extends RichTabController {
                     return;
                 }
                 // 获取最后一个段落
-//                MongoRecord r = this.recordTable.getItems().getLast();
-//                // 更新id信息
-//                record.getColumns().add(r._idColumn());
-//                record.set_id(_id);
-//                record.clearStatus();
+                //                MongoRecord r = this.recordTable.getItems().getLast();
+                //                // 更新id信息
+                //                record.getColumns().add(r._idColumn());
+                //                record.set_id(_id);
+                //                record.clearStatus();
                 // 更新字段
                 List<MongoRecord> list = new ArrayList<>(this.recordTable.getItems());
                 list.add(record);
@@ -401,11 +402,26 @@ public class MongoCollectionRecordTabController extends RichTabController {
             Object id = record._idValue();
             // 转换为脚本
             String script = MongoDataUtil.toUpdateScript(this.getItem().collectionName(), id, doc);
-            // 更新数据
-            this.getItem().eval(script);
-            // 刷新记录
+            // 查询数据
+            UpdateResult result = (UpdateResult) this.getItem().eval(script);
+            if (result.getMatchedCount() != 1) {
+                MessageBox.warn(I18nHelper.addDocumentFail());
+            }
+            // 查询数据
+            MongoRecord r = this.getItem().selectCollectionRecord(id);
+            if (r == null) {
+                MessageBox.warn(I18nHelper.addDocumentFail());
+                return;
+            }
+            // 复制数据
+            record.copy(r);
+            // 清除状态
+            record.clearStatus();
+            // 更新字段
+            this.updateColumns(this.recordTable.getItems());
+            // 纠正记录
+            this.correctRecords();
             this.apply.disable();
-            this.reload();
         } catch (Exception ex) {
             ex.printStackTrace();
             MessageBox.exception(ex);
