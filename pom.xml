@@ -16,6 +16,7 @@
     <version>0.8.0</version>
 
     <properties>
+        <mongodb.version>4.7.2</mongodb.version>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,7 +47,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
-            <version>5.8.0</version>
+            <version>${mongodb.version}</version>
             <scope>compile</scope>
         </dependency>
 

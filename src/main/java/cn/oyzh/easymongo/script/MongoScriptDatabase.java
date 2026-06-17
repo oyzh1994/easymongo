@@ -2,10 +2,10 @@ package cn.oyzh.easymongo.script;
 
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.ChangeStreamIterable;
-import com.mongodb.client.ListCollectionNamesIterable;
 import com.mongodb.client.ListCollectionsIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.CreateViewOptions;
 import org.bson.Document;
@@ -93,7 +93,7 @@ public class MongoScriptDatabase {
     }
 
     public MongoScriptCursor listCollectionNames() {
-        ListCollectionNamesIterable iter = this.database.listCollectionNames();
+        MongoIterable<String> iter = this.database.listCollectionNames();
         return new MongoScriptCursor(iter);
     }
 

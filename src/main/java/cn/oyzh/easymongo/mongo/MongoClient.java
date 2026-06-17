@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.mongo;
 
 import cn.oyzh.common.date.DateHelper;
+import cn.oyzh.common.exception.ExceptionUtil;
 import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.util.CollectionUtil;
@@ -22,7 +23,6 @@ import com.mongodb.MongoCredential;
 import com.mongodb.MongoNamespace;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.ListCollectionNamesIterable;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoIterable;
@@ -183,7 +183,11 @@ public class MongoClient implements Closeable {
             // 更新连接状态
             this.state.set(MongoConnState.CONNECTING);
             // 检查连接（需迭代才能触发实际网络请求和认证）
-            this.mongoClient.listDatabases().first();
+            if (this.shellConnect.getAuthDatabase() != null) {
+                this.mongoClient.getDatabase(this.shellConnect.getAuthDatabase()).listCollectionNames();
+            } else {
+                this.mongoClient.listDatabases().first();
+            }
             // 更新连接状态
             this.state.set(MongoConnState.CONNECTED);
             // 开始连接时间
@@ -208,15 +212,28 @@ public class MongoClient implements Closeable {
      */
     public List<MongoDatabase> listDatabases() {
         List<MongoDatabase> databases = new ArrayList<>();
-        ListDatabasesIterable<Document> documents = this.mongoClient.listDatabases();
-        for (Document document : documents) {
-            MongoDatabase database = new MongoDatabase();
-            String name = document.getString("name");
-            database.setName(name);
-            Object sizeOnDisk = document.get("sizeOnDisk");
-            if (sizeOnDisk instanceof Number number) {
-                database.setSizeOnDisk(number.doubleValue());
+        try {
+            ListDatabasesIterable<Document> documents = this.mongoClient.listDatabases();
+            for (Document document : documents) {
+                MongoDatabase database = new MongoDatabase();
+                String name = document.getString("name");
+                database.setName(name);
+                Object sizeOnDisk = document.get("sizeOnDisk");
+                if (sizeOnDisk instanceof Number number) {
+                    database.setSizeOnDisk(number.doubleValue());
+                }
+                databases.add(database);
             }
+        } catch (Exception ex) {
+            if (ExceptionUtil.hasMessage(ex, "not authorized") && this.shellConnect.getAuthDatabase() != null) {
+                MongoDatabase database = new MongoDatabase();
+                database.setName(this.shellConnect.getAuthDatabase());
+                databases.add(database);
+            }
+        }
+        if (databases.isEmpty() && this.shellConnect.getAuthDatabase() != null) {
+            MongoDatabase database = new MongoDatabase();
+            database.setName(this.shellConnect.getAuthDatabase());
             databases.add(database);
         }
         return databases;
@@ -228,10 +245,19 @@ public class MongoClient implements Closeable {
      * @return 结果
      */
     public List<String> listDatabaseNames() {
-        MongoIterable<String> iterable = this.mongoClient.listDatabaseNames();
         List<String> list = new ArrayList<>();
-        for (String s : iterable) {
-            list.add(s);
+        try {
+            MongoIterable<String> iterable = this.mongoClient.listDatabaseNames();
+            for (String s : iterable) {
+                list.add(s);
+            }
+        } catch (Exception ex) {
+            if (ExceptionUtil.hasMessage(ex, "not authorized") && this.shellConnect.getAuthDatabase() != null) {
+                list.add(this.shellConnect.getAuthDatabase());
+            }
+        }
+        if (list.isEmpty() && this.shellConnect.getAuthDatabase() != null) {
+            list.add(this.shellConnect.getAuthDatabase());
         }
         return list;
     }
@@ -312,7 +338,7 @@ public class MongoClient implements Closeable {
      */
     public List<String> listCollectionNames(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
-        ListCollectionNamesIterable iterable = database.listCollectionNames();
+        MongoIterable<String> iterable = database.listCollectionNames();
         List<String> list = new ArrayList<>();
         for (String name : iterable) {
             if (MongoRecordUtil.isCollection(name)) {
