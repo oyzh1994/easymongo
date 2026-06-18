@@ -1,6 +1,8 @@
 package cn.oyzh.easymongo.controller.document;
 
+import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.easymongo.mongo.MongoRecord;
+import cn.oyzh.easymongo.script.MongoScriptUtil;
 import cn.oyzh.easymongo.util.MongoUtil;
 import cn.oyzh.fx.editor.incubator.control.JsonEditor;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
@@ -13,6 +15,7 @@ import cn.oyzh.i18n.I18nHelper;
 import javafx.fxml.FXML;
 import javafx.stage.Modality;
 import javafx.stage.WindowEvent;
+import org.bson.Document;
 
 /**
  * 添加db信息业务
@@ -56,16 +59,23 @@ public class MongoBucketDocumentUpdateController extends StageController {
     @FXML
     private void update() {
         try {
-            String filename = this.filename.getTextTrim();
             String metadata = this.metadata.getTextTrim();
-            String contentType = this.contentType.getTextTrim();
+            metadata = metadata.strip();
+            Document metadataDocument;
             if (metadata.isBlank()) {
-                metadata = null;
+                metadataDocument = null;
+            } else if (metadata.startsWith("{") && JSONUtil.isJson(metadata)) {
+                metadataDocument =MongoScriptUtil.toDocument(JSONUtil.parseObject(metadata));
+            } else {
+                MessageBox.warn(I18nHelper.invalidMetadata());
+                return;
             }
+            String contentType = this.contentType.getTextTrim();
+            String filename = this.filename.getTextTrim();
             MongoRecord record = new MongoRecord(this.record.getColumns());
             record.putValue(MongoUtil.ID, this.record._idValue());
             record.putValue("filename", filename);
-            record.putValue("metadata", metadata);
+            record.putValue("metadata", metadataDocument);
             record.putValue("contentType", contentType);
             this.setProp("document", record);
             this.closeWindow();

@@ -173,6 +173,10 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return this.deleteRecord(record._idValue());
     }
 
+    public long updateRecord(MongoRecord record) {
+        return this.client().updateBucketRecord( record);
+    }
+
     public Object eval(String script) throws Exception {
         return this.client().eval(this.dbName(), script);
     }

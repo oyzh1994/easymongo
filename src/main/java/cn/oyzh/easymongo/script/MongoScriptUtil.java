@@ -73,7 +73,7 @@ public class MongoScriptUtil {
      */
     public static Document toDocument(Object obj) {
         if (obj instanceof ScriptObjectMirror mirror) {
-            return mirror.isArray() ? null : toDocument((Map<String, Object>) mirror);
+            return mirror.isArray() ? null : toDocument(mirror);
         }
         if (obj instanceof Map map) {
             return toDocument((Map<String, Object>) map);

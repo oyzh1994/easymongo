@@ -2,6 +2,7 @@ package cn.oyzh.easymongo.tabs.bucket;
 
 import cn.oyzh.common.dto.Paging;
 import cn.oyzh.common.file.FileNameUtil;
+import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoSetting;
@@ -15,7 +16,6 @@ import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
-import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.page.PageBox;
@@ -33,7 +33,6 @@ import cn.oyzh.fx.plus.window.PopupManager;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
-import com.mongodb.client.result.UpdateResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -237,15 +236,12 @@ public class MongoBucketRecordTabController extends RichTabController {
             if (r == null) {
                 return;
             }
-            // 转换为脚本
-            String script = MongoDataUtil.toUpdateScript(r);
-            // 查询数据
-            UpdateResult result = (UpdateResult) this.getItem().eval(script);
-            if (result.getMatchedCount() != 1) {
+            // 修改数据
+            if (this.getItem().updateRecord(r) != 1) {
                 MessageBox.warn(I18nHelper.updateDocumentFail());
             } else {
                 record.putValue("filename", r.getValue("filename"));
-                record.putValue("metadata", r.getValue("metadata"));
+                record.putValue("metadata", JSONUtil.toJson(r.getValue("metadata")));
                 record.putValue("contentType", r.getValue("contentType"));
                 this.recordTable.refresh();
             }

@@ -853,6 +853,36 @@ public class MongoClient implements Closeable {
         return 1;
     }
 
+    /**
+     * 修改存储桶记录
+     *
+     * @param record 记录
+     * @return 结果
+     */
+    public long updateBucketRecord(MongoRecord record) {
+        MongoColumn column = record._idColumn();
+        if (column == null) {
+            throw new IllegalArgumentException("_id");
+        }
+        String dbName = column.getDbName();
+        String bucketName = column.getCollectionName();
+        com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, bucketName);
+        Object _id = record._idValue();
+        Bson filter = Filters.eq(MongoUtil.ID, _id);
+        FindIterable<Document> iterable = collection1.find(filter);
+        Document document = iterable.first();
+        if (document == null) {
+            return 0;
+        }
+        Bson update = Updates.combine(
+                Updates.set("filename", record.getValue("filename")),
+                Updates.set("metadata", record.getValue("metadata")),
+                Updates.set("contentType", record.getValue("contentType"))
+                );
+        UpdateResult result = collection1.updateOne(filter, update);
+        return result.getMatchedCount();
+    }
+
     public List<? extends MongoColumn> selectColumns(MongoSelectRecordParam param) {
         List<MongoRecord> records = this.selectCollectionRecords(param);
         return MongoRecordUtil.columns(records);
