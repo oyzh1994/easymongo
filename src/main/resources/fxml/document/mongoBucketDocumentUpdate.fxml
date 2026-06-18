@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.document.MongoBucketDocumentUpdateController" realWidth="750"
-        realHeight="500">
+        realHeight="450">
     <FXHeaderBar/>
     <FXVBox flexWidth="100%" flexHeight="100% - 30">
         <FXVBox flexWidth="100%" flexHeight="100% - 50">
@@ -27,17 +27,17 @@
                     <Insets left="30" top="5"/>
                 </VBox.margin>
             </ClearableTextField>
-            <InfoLabel realHeight="30" realWidth="100" text="%base.contentType">
-                <VBox.margin>
-                    <Insets left="30" top="10"/>
-                </VBox.margin>
-            </InfoLabel>
-            <ClearableTextField tipText="%base.contentTip1" maxLen="30" require="true" fx:id="contentType"
-                                realHeight="30" flexWidth="100% - 180">
-                <VBox.margin>
-                    <Insets left="30" top="5"/>
-                </VBox.margin>
-            </ClearableTextField>
+            <!-- <InfoLabel realHeight="30" realWidth="100" text="%base.contentType"> -->
+            <!--     <VBox.margin> -->
+            <!--         <Insets left="30" top="10"/> -->
+            <!--     </VBox.margin> -->
+            <!-- </InfoLabel> -->
+            <!-- <ClearableTextField tipText="%base.contentTip1" maxLen="30" require="true" fx:id="contentType" -->
+            <!--                     realHeight="30" flexWidth="100% - 180"> -->
+            <!--     <VBox.margin> -->
+            <!--         <Insets left="30" top="5"/> -->
+            <!--     </VBox.margin> -->
+            <!-- </ClearableTextField> -->
             <InfoLabel text="%base.metadata">
                 <VBox.margin>
                     <Insets left="30" top="10"/>

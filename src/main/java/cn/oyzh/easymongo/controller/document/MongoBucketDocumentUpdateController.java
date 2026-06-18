@@ -36,11 +36,11 @@ public class MongoBucketDocumentUpdateController extends StageController {
     @FXML
     private ClearableTextField filename;
 
-    /**
-     * 内容类型
-     */
-    @FXML
-    private ClearableTextField contentType;
+//    /**
+//     * 内容类型
+//     */
+//    @FXML
+//    private ClearableTextField contentType;
 
     /**
      * 元数据
@@ -70,13 +70,14 @@ public class MongoBucketDocumentUpdateController extends StageController {
                 MessageBox.warn(I18nHelper.invalidMetadata());
                 return;
             }
-            String contentType = this.contentType.getTextTrim();
+//            String contentType = this.contentType.getTextTrim();
             String filename = this.filename.getTextTrim();
             MongoRecord record = new MongoRecord(this.record.getColumns());
             record.putValue(MongoUtil.ID, this.record._idValue());
             record.putValue("filename", filename);
             record.putValue("metadata", metadataDocument);
-            record.putValue("contentType", contentType);
+            record.getProperty("metadata").setOriginal(metadata);
+//            record.putValue("contentType", contentType);
             this.setProp("document", record);
             this.closeWindow();
         } catch (Exception ex) {
@@ -91,7 +92,7 @@ public class MongoBucketDocumentUpdateController extends StageController {
         this.record = this.removeProp("document");
         this.filename.setText((String) this.record.getValue("filename"));
         this.metadata.setText((String) this.record.getValue("metadata"));
-        this.contentType.setText((String) this.record.getValue("contentType"));
+//        this.contentType.setText((String) this.record.getValue("contentType"));
         this.stage.switchOnTab();
         this.stage.hideOnEscape();
     }

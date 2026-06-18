@@ -2,7 +2,6 @@ package cn.oyzh.easymongo.tabs.bucket;
 
 import cn.oyzh.common.dto.Paging;
 import cn.oyzh.common.file.FileNameUtil;
-import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoSetting;
@@ -194,13 +193,13 @@ public class MongoBucketRecordTabController extends RichTabController {
         for (MongoColumn column : columns) {
             MongoRecordColumn recordColumn = new MongoRecordColumn(column, 0);
             if (recordColumn.getName().equals("uploadDate")) {
-                recordColumn.setPrefWidth(150);
+                recordColumn.setPrefWidth(170);
             } else if (recordColumn.getName().equals("filename")) {
-                recordColumn.setPrefWidth(250);
+                recordColumn.setPrefWidth(220);
             } else if (recordColumn.getName().equals("metadata")) {
                 recordColumn.setPrefWidth(150);
-            } else if (recordColumn.getName().equals("md5")) {
-                recordColumn.setPrefWidth(240);
+                //            } else if (recordColumn.getName().equals("md5")) {
+                //                recordColumn.setPrefWidth(240);
             } else {
                 recordColumn.setPrefWidth(MongoRecordUtil.suitableColumnWidth(column));
             }
@@ -241,8 +240,8 @@ public class MongoBucketRecordTabController extends RichTabController {
                 MessageBox.warn(I18nHelper.updateDocumentFail());
             } else {
                 record.putValue("filename", r.getValue("filename"));
-                record.putValue("metadata", JSONUtil.toJson(r.getValue("metadata")));
-                record.putValue("contentType", r.getValue("contentType"));
+                record.putValue("metadata", r.getProperty("metadata").getOriginal());
+                //                record.putValue("contentType", r.getValue("contentType"));
                 this.recordTable.refresh();
             }
         } catch (Exception ex) {

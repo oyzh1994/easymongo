@@ -1,6 +1,5 @@
 package cn.oyzh.easymongo.mongo;
 
-import cn.oyzh.common.date.DateHelper;
 import cn.oyzh.common.exception.ExceptionUtil;
 import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.log.JulLog;
@@ -28,6 +27,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.GridFSFindIterable;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
@@ -658,33 +659,21 @@ public class MongoClient implements Closeable {
      * @param file    文件
      * @return 结果
      */
-    private MongoRecord toBucketRecord(MongoColumns columns, Document file) {
+    private MongoRecord toBucketRecord(MongoColumns columns, GridFSFile file) {
         MongoRecord record = new MongoRecord(columns, true);
-        record.putValue(columns.column(MongoUtil.ID), file.get("_id"));
-        record.putValue(columns.column("filename"), file.get("filename"));
-        Object length = file.get("length");
-        Object chunkSize = file.get("chunkSize");
-        Object uploadDate = file.get("uploadDate");
-        if (length instanceof Number number) {
-            length = NumberUtil.formatSize(number.doubleValue(), 2);
-        }
-        if (chunkSize instanceof Number number) {
-            chunkSize = NumberUtil.formatSize(number.doubleValue(), 2);
-        }
-        if (uploadDate instanceof Date date) {
-            uploadDate = DateHelper.formatDateTimeSimple(date);
-        }
-        record.putValue(columns.column("length"), length);
-        record.putValue(columns.column("chunkSize"), chunkSize);
-        record.putValue(columns.column("uploadDate"), uploadDate);
-        record.putValue(columns.column("contentType"), file.get("contentType"));
-        record.putValue(columns.column("md5"), file.get("md5"));
-        Object metadata = file.get("metadata");
-        if (metadata == null) {
-            record.putValue(columns.column("metadata"), "");
-        } else {
-            record.putValue(columns.column("metadata"), JSONUtil.toJson(metadata));
-        }
+        BsonValue id = file.getId();
+        long length = file.getLength();
+        int chunkSize = file.getChunkSize();
+        String filename = file.getFilename();
+        Document metadata = file.getMetadata();
+        Date uploadDate = file.getUploadDate();
+        record.putValue(columns.column(MongoUtil.ID), id);
+        record.putValue(columns.column("filename"), filename);
+        record.putValue(columns.column("length"), NumberUtil.formatSize(length, 2));
+        record.putValue(columns.column("chunkSize"), NumberUtil.formatSize(chunkSize, 2));
+        record.putValue(columns.column("uploadDate"), MongoUtil.DATE_FORMAT.format(uploadDate));
+        record.putValue(columns.column("metadata"), metadata == null ? "" : JSONUtil.toJson(metadata));
+        record.getProperty("metadata").setOriginal(metadata);
         return record;
     }
 
@@ -697,21 +686,18 @@ public class MongoClient implements Closeable {
     public List<MongoRecord> selectBucketRecords(MongoSelectRecordParam param) {
         String dbName = param.getDbName();
         String bucketName = param.getCollectionName();
-        if (!bucketName.endsWith(".files")) {
-            bucketName += ".files";
-        }
-        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, bucketName);
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
         int skip = Math.toIntExact(param.getStart());
         int limit = Math.toIntExact(param.getLimit());
         Bson filters = MongoConditionUtil.buildCondition(param.getFilters());
-        FindIterable<Document> iterable = collection.find(filters).limit(limit).skip(skip);
+        GridFSFindIterable iterable = bucket.find(filters).limit(limit).skip(skip);
         List<MongoRecord> records = new ArrayList<>();
         MongoColumns columns = this.bucketColumns();
         for (MongoColumn column : columns) {
             column.setDbName(dbName);
             column.setCollectionName(bucketName);
         }
-        for (Document file : iterable) {
+        for (GridFSFile file : iterable) {
             MongoRecord record = this.toBucketRecord(columns, file);
             records.add(record);
         }
@@ -730,18 +716,15 @@ public class MongoClient implements Closeable {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
-        if (!bucketName.endsWith(".files")) {
-            bucketName += ".files";
-        }
-        com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, bucketName);
+        GridFSBucket bucket = this.bucket(dbName, bucketName);
         Bson filters = Filters.eq(MongoUtil.ID, _id);
-        FindIterable<Document> iterable = collection.find(filters).limit(1);
+        GridFSFindIterable iterable = bucket.find(filters).limit(1);
         MongoColumns columns = this.bucketColumns();
         for (MongoColumn column : columns) {
             column.setDbName(dbName);
             column.setCollectionName(bucketName);
         }
-        Document file = iterable.first();
+        GridFSFile file = iterable.first();
         if (file != null) {
             return this.toBucketRecord(columns, file);
         }
@@ -779,10 +762,10 @@ public class MongoClient implements Closeable {
         columns.add(chunkSizeColumn);
         MongoColumn uploadDateColumn = new MongoColumn("uploadDate", I18nHelper.uploadDate());
         columns.add(uploadDateColumn);
-        MongoColumn contentTypeColumn = new MongoColumn("contentType", I18nHelper.contentType());
-        columns.add(contentTypeColumn);
-        MongoColumn md5Column = new MongoColumn("md5", "MD5");
-        columns.add(md5Column);
+        //        MongoColumn contentTypeColumn = new MongoColumn("contentType", I18nHelper.contentType());
+        //        columns.add(contentTypeColumn);
+        //        MongoColumn md5Column = new MongoColumn("md5", "MD5");
+        //        columns.add(md5Column);
         MongoColumn metadataColumn = new MongoColumn("metadata", I18nHelper.metadata());
         columns.add(metadataColumn);
         return columns;
@@ -866,7 +849,7 @@ public class MongoClient implements Closeable {
         }
         String dbName = column.getDbName();
         String bucketName = column.getCollectionName();
-        com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, bucketName);
+        com.mongodb.client.MongoCollection<Document> collection1 = this.collection(dbName, bucketName + ".files");
         Object _id = record._idValue();
         Bson filter = Filters.eq(MongoUtil.ID, _id);
         FindIterable<Document> iterable = collection1.find(filter);
@@ -876,9 +859,9 @@ public class MongoClient implements Closeable {
         }
         Bson update = Updates.combine(
                 Updates.set("filename", record.getValue("filename")),
-                Updates.set("metadata", record.getValue("metadata")),
-                Updates.set("contentType", record.getValue("contentType"))
-                );
+                Updates.set("metadata", record.getValue("metadata"))
+//                Updates.set("contentType", record.getValue("contentType"))
+        );
         UpdateResult result = collection1.updateOne(filter, update);
         return result.getMatchedCount();
     }
