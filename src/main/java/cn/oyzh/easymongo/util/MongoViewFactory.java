@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.util;
 
 import cn.oyzh.easymongo.controller.document.MongoBucketDocumentUpdateController;
+import cn.oyzh.easymongo.controller.document.MongoBucketDocumentViewController;
 import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentAddController;
 import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentUpdateController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataDumpController;
@@ -187,6 +188,26 @@ public class MongoViewFactory {
             adapter.setProp("dbName", dbName);
             adapter.setProp("dbClient", client);
             adapter.display();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+    }
+
+    /**
+     * 文件查看
+     *
+     * @param file   文件
+     * @param client 文件客户端
+     * @param type   类型
+     */
+    public static void fileView(MongoRecord file, MongoClient client, String type) {
+        try {
+            StageAdapter adapter = StageManager.parseStage(MongoBucketDocumentViewController.class);
+            adapter.setProp("file", file);
+            adapter.setProp("type", type);
+            adapter.setProp("client", client);
+            adapter.showAndWait();
         } catch (Exception ex) {
             ex.printStackTrace();
             MessageBox.exception(ex);

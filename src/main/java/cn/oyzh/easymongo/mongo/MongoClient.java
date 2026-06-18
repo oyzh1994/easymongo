@@ -4,6 +4,7 @@ import cn.oyzh.common.exception.ExceptionUtil;
 import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.util.CollectionUtil;
+import cn.oyzh.common.util.IOUtil;
 import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.exception.MongoException;
@@ -777,6 +778,7 @@ public class MongoClient implements Closeable {
      * @param dbName     数据库名称
      * @param bucketName 桶名称
      * @param file       文件
+     * @return 结果
      */
     public ObjectId uploadBucketRecord(String dbName, String bucketName, File file) throws Exception {
         if (file == null) {
@@ -792,6 +794,31 @@ public class MongoClient implements Closeable {
     }
 
     /**
+     * 重新上传存储桶记录
+     *
+     * @param dbName     数据库名称
+     * @param bucketName 桶名称
+     * @param id         文件id
+     * @param filename   文件名
+     * @param file       文件
+     */
+    public void reuploadBucketRecord(String dbName, String bucketName, Object id, String filename, File file) throws Exception {
+        if (file == null) {
+            throw new IllegalArgumentException("file");
+        }
+        // 删除旧文件
+        this.deleteBucketRecord(dbName, bucketName, id);
+        // 上传记录
+        if (id instanceof BsonValue bsonValue) {
+            GridFSBucket bucket = this.bucket(dbName, bucketName);
+            FileInputStream fis = new FileInputStream(file);
+            try (fis) {
+                bucket.uploadFromStream(bsonValue, filename, fis);
+            }
+        }
+    }
+
+    /**
      * 下载存储桶记录
      *
      * @param dbName     数据库名称
@@ -799,7 +826,7 @@ public class MongoClient implements Closeable {
      * @param _id        数据id
      * @param file       文件
      */
-    public void downloadBucketRecord(String dbName, String bucketName, Object _id, File file) throws FileNotFoundException {
+    public void downloadBucketRecord(String dbName, String bucketName, Object _id, String file) throws FileNotFoundException {
         if (_id == null) {
             throw new IllegalArgumentException("_id");
         }
@@ -813,6 +840,7 @@ public class MongoClient implements Closeable {
         } else if (_id instanceof ObjectId objectId) {
             bucket.downloadToStream(objectId, fos);
         }
+        IOUtil.close(fos);
     }
 
     /**
@@ -860,7 +888,7 @@ public class MongoClient implements Closeable {
         Bson update = Updates.combine(
                 Updates.set("filename", record.getValue("filename")),
                 Updates.set("metadata", record.getValue("metadata"))
-//                Updates.set("contentType", record.getValue("contentType"))
+                //                Updates.set("contentType", record.getValue("contentType"))
         );
         UpdateResult result = collection1.updateOne(filter, update);
         return result.getMatchedCount();

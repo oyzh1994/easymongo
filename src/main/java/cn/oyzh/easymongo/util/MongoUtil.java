@@ -107,7 +107,7 @@ public class MongoUtil {
      * @return 类型
      */
     public static boolean isPrimaryType(Object val) {
-        return StringUtil.equalsAnyIgnoreCase(getType(val), "int","long", "double", "list", "object", "boolean");
+        return StringUtil.equalsAnyIgnoreCase(getType(val), "int", "long", "double", "list", "object", "boolean");
     }
 
     /**

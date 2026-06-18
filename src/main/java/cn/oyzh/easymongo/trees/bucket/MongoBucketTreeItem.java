@@ -161,7 +161,7 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return this.client().selectBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 
-    public void downloadRecord(Object _id, File file) throws Exception {
+    public void downloadRecord(Object _id, String file) throws Exception {
         this.client().downloadBucketRecord(this.dbName(), this.bucketName(), _id, file);
     }
 

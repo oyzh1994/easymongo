@@ -17,6 +17,7 @@ import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
 import cn.oyzh.easymongo.util.MongoViewFactory;
+import cn.oyzh.easymongo.util.ShellFileUtil;
 import cn.oyzh.fx.gui.page.PageBox;
 import cn.oyzh.fx.gui.page.PageEvent;
 import cn.oyzh.fx.gui.tabs.RichTabController;
@@ -251,6 +252,24 @@ public class MongoBucketRecordTabController extends RichTabController {
     }
 
     /**
+     * 查看文档
+     *
+     */
+    @FXML
+    public void viewDocument() {
+        MongoRecord record = this.recordTable.getSelectedItem();
+        if (record == null) {
+            return;
+        }
+        String filename = (String) record.getValue("filename");
+        String extName = FileNameUtil.extName(filename);
+        String type = ShellFileUtil.fileViewable(extName);
+        MongoViewFactory.fileView(record, this.getItem().client(), type);
+        this.recordTable.refresh();
+    }
+
+
+    /**
      * 刷新记录
      */
     @FXML
@@ -462,7 +481,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         StageManager.showMask(() -> {
             try {
                 Object _id = record._idValue();
-                this.getItem().downloadRecord(_id, file);
+                this.getItem().downloadRecord(_id, file.getPath());
             } catch (Exception ex) {
                 MessageBox.exception(ex);
             }

@@ -139,6 +139,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
         <!-- &lt;!&ndash; Source: https://mvnrepository.com/artifact/org.graalvm.js/js &ndash;&gt; -->
         <!-- <dependency> -->
         <!--     <groupId>org.graalvm.js</groupId> -->
