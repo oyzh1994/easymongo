@@ -15,7 +15,9 @@ import cn.oyzh.easymongo.popups.MongoPageSettingPopupController;
 import cn.oyzh.easymongo.popups.MongoRecordFilterPopupController;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
+import cn.oyzh.easymongo.util.MongoDataUtil;
 import cn.oyzh.easymongo.util.MongoRecordUtil;
+import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.page.PageBox;
 import cn.oyzh.fx.gui.page.PageEvent;
 import cn.oyzh.fx.gui.tabs.RichTabController;
@@ -25,17 +27,16 @@ import cn.oyzh.fx.plus.chooser.FileExtensionFilter;
 import cn.oyzh.fx.plus.controls.box.FXVBox;
 import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 import cn.oyzh.fx.plus.controls.table.FXTableColumn;
-import cn.oyzh.fx.plus.controls.table.IconTableCell;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.PopupAdapter;
 import cn.oyzh.fx.plus.window.PopupManager;
+import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
+import com.mongodb.client.result.UpdateResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import org.bson.BsonObjectId;
-import org.bson.BsonValue;
 import org.bson.types.ObjectId;
 
 import java.io.File;
@@ -197,7 +198,6 @@ public class MongoBucketRecordTabController extends RichTabController {
                 recordColumn.setPrefWidth(150);
             } else if (recordColumn.getName().equals("filename")) {
                 recordColumn.setPrefWidth(250);
-//                recordColumn.setCellFactory(col -> new IconTableCell<>((record, object) -> new FileSVGGlyph()));
             } else if (recordColumn.getName().equals("metadata")) {
                 recordColumn.setPrefWidth(150);
             } else if (recordColumn.getName().equals("md5")) {
@@ -217,6 +217,42 @@ public class MongoBucketRecordTabController extends RichTabController {
      */
     private void initRecords(List<MongoRecord> records) {
         this.recordTable.setItem(records);
+    }
+
+    /**
+     * 编辑文档
+     */
+    @FXML
+    private void editDocument() {
+        try {
+            MongoRecord record = this.recordTable.getSelectedItem();
+            if (record == null) {
+                return;
+            }
+            StageAdapter adapter = MongoViewFactory.bucketDocumentUpdate(record);
+            if (adapter == null) {
+                return;
+            }
+            MongoRecord r = adapter.getProp("document");
+            if (r == null) {
+                return;
+            }
+            // 转换为脚本
+            String script = MongoDataUtil.toUpdateScript(r);
+            // 查询数据
+            UpdateResult result = (UpdateResult) this.getItem().eval(script);
+            if (result.getMatchedCount() != 1) {
+                MessageBox.warn(I18nHelper.updateDocumentFail());
+            } else {
+                record.putValue("filename", r.getValue("filename"));
+                record.putValue("metadata", r.getValue("metadata"));
+                record.putValue("contentType", r.getValue("contentType"));
+                this.recordTable.refresh();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
     }
 
     /**
@@ -393,7 +429,7 @@ public class MongoBucketRecordTabController extends RichTabController {
                     MessageBox.warn(I18nHelper.uploadFileFailed());
                     return;
                 }
-                MongoRecord record = this.getItem().selectRecord(new BsonObjectId(_id));
+                MongoRecord record = this.getItem().selectRecord(_id);
                 if (record == null) {
                     MessageBox.warn(I18nHelper.uploadFileFailed());
                     return;
@@ -431,7 +467,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         StageManager.showMask(() -> {
             try {
                 Object _id = record._idValue();
-                this.getItem().downloadRecord((BsonValue) _id, file);
+                this.getItem().downloadRecord(_id, file);
             } catch (Exception ex) {
                 MessageBox.exception(ex);
             }

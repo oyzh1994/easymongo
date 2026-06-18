@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.controller.collection;
+package cn.oyzh.easymongo.controller.document;
 
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.easymongo.util.MongoDataUtil;
@@ -22,9 +22,9 @@ import javafx.stage.WindowEvent;
 @StageAttribute(
         modality = Modality.WINDOW_MODAL,
         stageStyle = FXStageStyle.EXTENDED,
-        value = FXConst.FXML_PATH + "record/mongoDocumentUpdate.fxml"
+        value = FXConst.FXML_PATH + "document/mongoCollectionDocumentUpdate.fxml"
 )
-public class MongoDocumentUpdateController extends StageController {
+public class MongoCollectionDocumentUpdateController extends StageController {
 
     /**
      * 文档
@@ -59,16 +59,8 @@ public class MongoDocumentUpdateController extends StageController {
     @Override
     public void onWindowShown(WindowEvent event) {
         super.onWindowShown(event);
-        MongoRecord record = this.getProp("record");
-        //        JSONObject object = new JSONObject();
-        //        for (MongoColumn column : record.getColumns()) {
-        //            if (column.is_id()) {
-        //                continue;
-        //            }
-        //            object.put(column.getName(), record.getValue(column.getName()));
-        //        }
-        //        String json = JSONUtil.toPretty(object);
-        String text = MongoDataUtil.getRecordScript(record);
+        MongoRecord record = this.getProp("document");
+        String text = MongoDataUtil.getRecordScript(record, true);
         this.doc.setText(text);
         this.stage.switchOnTab();
         this.stage.hideOnEscape();

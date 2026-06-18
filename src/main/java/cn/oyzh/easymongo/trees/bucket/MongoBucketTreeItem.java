@@ -17,7 +17,6 @@ import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
-import org.bson.BsonValue;
 import org.bson.types.ObjectId;
 
 import java.io.File;
@@ -158,21 +157,23 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
         return this.client().uploadBucketRecord(this.dbName(), this.bucketName(), file);
     }
 
-    public MongoRecord selectRecord(BsonValue _id) {
+    public MongoRecord selectRecord(Object _id) {
         return this.client().selectBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 
-    public void downloadRecord(BsonValue _id, File file) throws Exception {
+    public void downloadRecord(Object _id, File file) throws Exception {
         this.client().downloadBucketRecord(this.dbName(), this.bucketName(), _id, file);
     }
 
-    public long deleteRecord(BsonValue _id) {
-       return this.client().deleteBucketRecord(this.dbName(), this.bucketName(), _id);
+    public long deleteRecord(Object _id) {
+        return this.client().deleteBucketRecord(this.dbName(), this.bucketName(), _id);
     }
 
     public long deleteRecord(MongoRecord record) {
-        return this.deleteRecord((BsonValue) record._idValue());
+        return this.deleteRecord(record._idValue());
     }
 
-
+    public Object eval(String script) throws Exception {
+        return this.client().eval(this.dbName(), script);
+    }
 }

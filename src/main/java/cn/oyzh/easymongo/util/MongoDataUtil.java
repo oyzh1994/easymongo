@@ -58,14 +58,18 @@ public class MongoDataUtil {
      * 获取记录脚本
      *
      * @param record 记录
+     * @param skipId 是否跳过id
      * @return 脚本
      */
-    public static String getRecordScript(MongoRecord record) {
+    public static String getRecordScript(MongoRecord record, boolean skipId) {
         StringBuilder builder = new StringBuilder();
         for (MongoColumn column : record.getColumns()) {
             String colName = column.getName();
             MongoRecordProperty property = record.getProperty(colName);
             if (property == null) {
+                continue;
+            }
+            if (skipId && column.is_id()) {
                 continue;
             }
             Object value = column.is_id() ? property.getOriginal() : property.get();
@@ -181,9 +185,9 @@ public class MongoDataUtil {
         }
 
         if (value != null) {
-            return "\"" + value + "\"";
+            return "'" + value + "'";
         }
-        return "\"\"";
+        return null;
     }
 
     /**
@@ -226,7 +230,7 @@ public class MongoDataUtil {
      */
     public static String toInsertScript(MongoRecord record) {
         MongoColumn column = record.getColumns().getFirst();
-        String script = getRecordScript(record);
+        String script = getRecordScript(record, false);
         return toInsertScript(column.getCollectionName(), script);
     }
 
@@ -267,7 +271,7 @@ public class MongoDataUtil {
     public static String toUpdateScript(MongoRecord record) {
         MongoColumn column = record._idColumn();
         Object id = record._idValue();
-        String script = getRecordScript(record);
+        String script = getRecordScript(record, true);
         return toUpdateScript(column.getCollectionName(), id, script);
     }
 

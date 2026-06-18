@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.controller.collection;
+package cn.oyzh.easymongo.controller.document;
 
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
@@ -24,9 +24,9 @@ import javafx.stage.WindowEvent;
 @StageAttribute(
         modality = Modality.WINDOW_MODAL,
         stageStyle = FXStageStyle.EXTENDED,
-        value = FXConst.FXML_PATH + "record/mongoDocumentAdd.fxml"
+        value = FXConst.FXML_PATH + "document/mongoCollectionDocumentAdd.fxml"
 )
-public class MongoDocumentAddController extends StageController {
+public class MongoCollectionDocumentAddController extends StageController {
 
     /**
      * 文档
@@ -42,12 +42,8 @@ public class MongoDocumentAddController extends StageController {
         try {
             // 检查字段是否存在
             String doc = this.doc.getText();
-//            if (JSONUtil.isJson(doc)) {
-                this.setProp("doc", doc);
-                this.closeWindow();
-//            } else {
-//                MessageBox.warn(I18nHelper.documentInvalid());
-//            }
+            this.setProp("doc", doc);
+            this.closeWindow();
         } catch (Exception ex) {
             MessageBox.exception(ex);
         }
@@ -77,7 +73,7 @@ public class MongoDocumentAddController extends StageController {
             for (MongoColumn column : columns) {
                 record.putValue(column.getName(), column.defaultValue());
             }
-            this.doc.setText(MongoDataUtil.getRecordScript(record));
+            this.doc.setText(MongoDataUtil.getRecordScript(record, false));
         }
         this.stage.switchOnTab();
         this.stage.hideOnEscape();

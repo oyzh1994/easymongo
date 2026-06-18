@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController" realWidth="750"
+        fx:controller="cn.oyzh.easymongo.controller.document.MongoCollectionDocumentAddController" realWidth="750"
         realHeight="450">
     <FXHeaderBar/>
     <FXVBox flexWidth="100%" flexHeight="100% - 30">
@@ -19,7 +19,7 @@
             </VBox.margin>
         </Editor>
         <FXHBox flexWidth="100%">
-            <SubmitButton onAction="#update" text="%base.update">
+            <SubmitButton onAction="#add" text="%base.add">
                 <HBox.margin>
                     <Insets left="30" top="15"/>
                 </HBox.margin>

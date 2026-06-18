@@ -1,7 +1,8 @@
 package cn.oyzh.easymongo.util;
 
-import cn.oyzh.easymongo.controller.collection.MongoDocumentAddController;
-import cn.oyzh.easymongo.controller.collection.MongoDocumentUpdateController;
+import cn.oyzh.easymongo.controller.document.MongoBucketDocumentUpdateController;
+import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentAddController;
+import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentUpdateController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataDumpController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataExportController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataImportController;
@@ -32,7 +33,7 @@ public class MongoViewFactory {
      */
     public static StageAdapter documentAdd(MongoColumns columns) {
         try {
-            StageAdapter adapter = StageManager.parseStage(MongoDocumentAddController.class, StageManager.getFrontWindow());
+            StageAdapter adapter = StageManager.parseStage(MongoCollectionDocumentAddController.class, StageManager.getFrontWindow());
             adapter.setProp("columns", columns);
             adapter.showAndWait();
             return adapter;
@@ -51,8 +52,27 @@ public class MongoViewFactory {
      */
     public static StageAdapter documentUpdate(MongoRecord record) {
         try {
-            StageAdapter adapter = StageManager.parseStage(MongoDocumentUpdateController.class, StageManager.getFrontWindow());
-            adapter.setProp("record", record);
+            StageAdapter adapter = StageManager.parseStage(MongoCollectionDocumentUpdateController.class, StageManager.getFrontWindow());
+            adapter.setProp("document", record);
+            adapter.showAndWait();
+            return adapter;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageBox.exception(ex);
+        }
+        return null;
+    }
+
+    /**
+     * 编辑存储桶文档
+     *
+     * @param record 记录
+     * @return 页面
+     */
+    public static StageAdapter bucketDocumentUpdate(MongoRecord record) {
+        try {
+            StageAdapter adapter = StageManager.parseStage(MongoBucketDocumentUpdateController.class, StageManager.getFrontWindow());
+            adapter.setProp("document", record);
             adapter.showAndWait();
             return adapter;
         } catch (Exception ex) {
