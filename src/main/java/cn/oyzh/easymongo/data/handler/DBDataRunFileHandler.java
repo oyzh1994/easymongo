@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author oyzh
  * @since 2024/08/29
  */
-public abstract class DBDataRunSqlFileHandler extends DBDataHandler {
+public abstract class DBDataRunFileHandler extends DBDataHandler {
 
     /**
      * 库名称
@@ -55,7 +55,7 @@ public abstract class DBDataRunSqlFileHandler extends DBDataHandler {
 
     protected MongoScriptEngine engine;
 
-    public DBDataRunSqlFileHandler(MongoClient dbClient, String dbName) {
+    public DBDataRunFileHandler(MongoClient dbClient, String dbName) {
         this.dbClient = dbClient;
         this.dbName = dbName;
         this.engine = dbClient.shellEngine();
@@ -68,15 +68,15 @@ public abstract class DBDataRunSqlFileHandler extends DBDataHandler {
      * @param sqlFile sql文件
      * @return 当前对象
      */
-    public DBDataRunSqlFileHandler sqlFile(File sqlFile) {
+    public DBDataRunFileHandler sqlFile(File sqlFile) {
         this.sqlFile = sqlFile;
         return this;
     }
 
     /**
-     * 运行sql文件
+     * 运行文件
      */
-    public abstract void runSqlFile() throws Exception;
+    public abstract void runFile() throws Exception;
 
     /**
      * 插入集合
@@ -163,8 +163,8 @@ public abstract class DBDataRunSqlFileHandler extends DBDataHandler {
      * @param dbName   数据库
      * @return DBDataDumpHandler
      */
-    public static DBDataRunSqlFileHandler newHandler(MongoClient dbClient, String dbName) {
-        return new ShellMysqlDataRunSqlFileHandler(dbClient, dbName);
+    public static DBDataRunFileHandler newHandler(MongoClient dbClient, String dbName) {
+        return new ShellMongoDataRunFileHandler(dbClient, dbName);
     }
 
     public String getDbName() {
@@ -195,7 +195,7 @@ public abstract class DBDataRunSqlFileHandler extends DBDataHandler {
         return dbInfo;
     }
 
-    public DBDataRunSqlFileHandler setDbInfo(MongoConnect dbInfo) {
+    public DBDataRunFileHandler setDbInfo(MongoConnect dbInfo) {
         this.dbInfo = dbInfo;
         return this;
     }

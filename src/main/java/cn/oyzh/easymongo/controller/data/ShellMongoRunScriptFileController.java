@@ -3,7 +3,8 @@ package cn.oyzh.easymongo.controller.data;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.handler.DBDataRunSqlFileHandler;
+import cn.oyzh.easymongo.data.handler.DBDataRunFileHandler;
+import cn.oyzh.easymongo.data.handler.ShellMongoDataRunFileHandler;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -59,7 +60,7 @@ public class ShellMongoRunScriptFileController extends StageController {
      * 结束运行sql按钮
      */
     @FXML
-    private FXButton stopSqlFileBtn;
+    private FXButton stopScriptFileBtn;
 
     /**
      * 执行状态
@@ -110,7 +111,7 @@ public class ShellMongoRunScriptFileController extends StageController {
     /**
      * sql处理器
      */
-    private DBDataRunSqlFileHandler sqlFileHandler;
+    private DBDataRunFileHandler scriptFileHandler;
 
     /**
      * 检查sql文件
@@ -127,10 +128,10 @@ public class ShellMongoRunScriptFileController extends StageController {
     }
 
     /**
-     * 执行sql
+     * 运行脚本文件
      */
     @FXML
-    private void runSqlFile() {
+    private void runScriptFile() {
         // 检查sql文件
         if (!this.checkSqlFile()) {
             return;
@@ -147,9 +148,9 @@ public class ShellMongoRunScriptFileController extends StageController {
         // 开始处理
         this.execMsg.clear();
         // 生成sql处理器
-        if (this.sqlFileHandler == null) {
-            this.sqlFileHandler = DBDataRunSqlFileHandler.newHandler(this.dbClient, database);
-            this.sqlFileHandler.setDbInfo(this.dbInfo).setMessageHandler(str -> this.execMsg.appendLine(str)).setProcessedHandler(count -> {
+        if (this.scriptFileHandler == null) {
+            this.scriptFileHandler = new ShellMongoDataRunFileHandler(this.dbClient, database);
+            this.scriptFileHandler.setDbInfo(this.dbInfo).setMessageHandler(str -> this.execMsg.appendLine(str)).setProcessedHandler(count -> {
                 if (count > 0) {
                     this.counter.incrSuccess(count);
                 } else {
@@ -158,20 +159,20 @@ public class ShellMongoRunScriptFileController extends StageController {
                 this.updateStatus(I18nHelper.execInProgress());
             });
         } else {
-            this.sqlFileHandler.interrupt(false);
+            this.scriptFileHandler.interrupt(false);
         }
         // 设置参数
-        this.sqlFileHandler.sqlFile(this.file.getFile()).setContinueWithErrors(this.continueWithErrors.isSelected());
+        this.scriptFileHandler.sqlFile(this.file.getFile()).setContinueWithErrors(this.continueWithErrors.isSelected());
         NodeGroupUtil.disable(this.stage, "exec");
         this.stage.appendTitle("===" + I18nHelper.execProcessing() + "===");
         // 执行sql
         this.execTask = ThreadUtil.start(() -> {
             try {
-                this.stopSqlFileBtn.enable();
+                this.stopScriptFileBtn.enable();
                 // 更新状态
                 this.updateStatus(I18nHelper.execStarting());
                 // 执行sql
-                this.sqlFileHandler.runSqlFile();
+                this.scriptFileHandler.runFile();
                 // 更新状态
                 this.updateStatus(I18nHelper.execFinished());
             } catch (Exception e) {
@@ -186,7 +187,7 @@ public class ShellMongoRunScriptFileController extends StageController {
             } finally {
                 // 结束处理
                 NodeGroupUtil.enable(this.stage, "exec");
-                this.stopSqlFileBtn.disable();
+                this.stopScriptFileBtn.disable();
                 this.stage.restoreTitle();
                 SystemUtil.gcLater();
             }
@@ -194,14 +195,14 @@ public class ShellMongoRunScriptFileController extends StageController {
     }
 
     /**
-     * 结束sql
+     * 结束脚本文件
      */
     @FXML
-    private void stopSqlFile() {
+    private void stopScriptFile() {
         ThreadUtil.interrupt(this.execTask);
         this.execTask = null;
-        if (this.sqlFileHandler != null) {
-            this.sqlFileHandler.interrupt();
+        if (this.scriptFileHandler != null) {
+            this.scriptFileHandler.interrupt();
         }
     }
 
@@ -219,7 +220,7 @@ public class ShellMongoRunScriptFileController extends StageController {
     @Override
     public void onWindowHidden(WindowEvent event) {
         super.onWindowHidden(event);
-        this.stopSqlFile();
+        this.stopScriptFile();
     }
 
     /**

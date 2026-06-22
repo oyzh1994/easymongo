@@ -8,9 +8,9 @@ import cn.oyzh.easymongo.mongo.MongoClient;
  * @author oyzh
  * @since 2025-11-26
  */
-public class ShellMysqlDataExportHandler extends DBDataExportHandler {
+public class ShellMongoDataImportHandler extends DBDataImportHandler {
 
-    public ShellMysqlDataExportHandler(MongoClient dbClient, String dbName) {
+    public ShellMongoDataImportHandler(MongoClient dbClient, String dbName) {
         super(dbClient, dbName);
     }
 }

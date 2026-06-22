@@ -6,7 +6,7 @@ import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.data.ui.ShellMongoDataImportFile;
-import cn.oyzh.easymongo.data.handler.ShellMysqlDataImportHandler;
+import cn.oyzh.easymongo.data.handler.ShellMongoDataImportHandler;
 import cn.oyzh.easymongo.data.ui.DBDataDateTextFiled;
 import cn.oyzh.easymongo.data.ui.DBDataFieldSeparatorComboBox;
 import cn.oyzh.easymongo.data.ui.DBDataRecordLabelComboBox;
@@ -200,7 +200,7 @@ public class ShellMongoDataImportController extends StageController {
     /**
      * 导入处理器
      */
-    private ShellMysqlDataImportHandler importHandler;
+    private ShellMongoDataImportHandler importHandler;
 
     /**
      * 数据库
@@ -225,7 +225,7 @@ public class ShellMongoDataImportController extends StageController {
         this.importMsg.clear();
         // 生成导入处理器
         if (this.importHandler == null) {
-            this.importHandler = new ShellMysqlDataImportHandler(this.dbClient, this.dbName);
+            this.importHandler = new ShellMongoDataImportHandler(this.dbClient, this.dbName);
             this.importHandler.setMessageHandler(str -> this.importMsg.appendLine(str))
                     .setProcessedHandler(count -> {
                         if (count > 0) {

@@ -127,7 +127,7 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
      * @return DBDataTransportHandler
      */
     public static DBDataTransportHandler newHandler( ) {
-         return new ShellMysqlDataTransportHandler();
+         return new ShellMongoDataTransportHandler();
     }
 
     public MongoClient getSourceClient() {

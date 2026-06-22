@@ -45,7 +45,7 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
 
     /**
      * 1. 库
-     * 2. 表
+     * 2. 集合
      */
     protected Byte dumpType;
 
@@ -142,7 +142,7 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
      * @return DBDataDumpHandler
      */
     public static DBDataDumpHandler newHandler(MongoClient dbClient, String dbName) {
-        return new ShellMysqlDataDumpHandler(dbClient, dbName);
+        return new ShellMongoDataDumpHandler(dbClient, dbName);
     }
 
     public Byte getDataType() {

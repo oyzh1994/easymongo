@@ -15,9 +15,9 @@ import java.util.List;
  * @author oyzh
  * @since 2024/09/10
  */
-public class ShellMysqlDataDumpHandler extends DBDataDumpHandler {
+public class ShellMongoDataDumpHandler extends DBDataDumpHandler {
 
-    public ShellMysqlDataDumpHandler(MongoClient dbClient, String dbName) {
+    public ShellMongoDataDumpHandler(MongoClient dbClient, String dbName) {
         super(dbClient, dbName);
     }
 

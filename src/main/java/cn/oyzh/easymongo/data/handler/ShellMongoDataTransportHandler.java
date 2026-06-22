@@ -11,7 +11,7 @@ import java.util.List;
  * @author oyzh
  * @since 2024/09/06
  */
-public class ShellMysqlDataTransportHandler extends DBDataTransportHandler {
+public class ShellMongoDataTransportHandler extends DBDataTransportHandler {
 
     @Override
     public void doTransport() throws Exception {

@@ -11,15 +11,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author oyzh
  * @since 2024/09/10
  */
-public class ShellMysqlDataRunSqlFileHandler extends DBDataRunSqlFileHandler {
+public class ShellMongoDataRunFileHandler extends DBDataRunFileHandler {
 
-    public ShellMysqlDataRunSqlFileHandler(MongoClient dbClient, String dbName) {
+    public ShellMongoDataRunFileHandler(MongoClient dbClient, String dbName) {
         super(dbClient, dbName);
     }
 
     @Override
-    public void runSqlFile() throws Exception {
-        this.message("Run Sql File Starting");
+    public void runFile() throws Exception {
+        this.message("Run Script File Starting");
         // 文件读取
         try (BufferedReader reader = FileUtil.getReader(this.sqlFile, StandardCharsets.UTF_8)) {
             // 暂存数据拼接对象
@@ -85,7 +85,7 @@ public class ShellMysqlDataRunSqlFileHandler extends DBDataRunSqlFileHandler {
         } catch (Exception ex) {
             this.exception(ex);
         } finally {
-            this.message("Run Sql File Finished");
+            this.message("Run Script File Finished");
         }
     }
 

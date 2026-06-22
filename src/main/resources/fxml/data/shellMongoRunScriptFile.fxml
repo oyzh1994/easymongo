@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox?>
+<?import cn.oyzh.fx.gui.button.RunScriptFileButton?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoRunScriptFileController" realWidth="700" realHeight="680">
     <FXHeaderBar/>
@@ -75,12 +76,12 @@
         </VBox.margin>
     </FXLabel>
     <FXHBox flexWidth="100%">
-        <RunSqlFileButton onAction="#runSqlFile" groupId="exec" realHeight="30">
+        <RunScriptFileButton onAction="#runScriptFile" groupId="exec" realHeight="30">
             <HBox.margin>
                 <Insets left="30" top="15"/>
             </HBox.margin>
-        </RunSqlFileButton>
-        <StopButton disable="true" fx:id="stopSqlFileBtn" onAction="#stopSqlFile" realHeight="30" iconSizePercent="0.9">
+        </RunScriptFileButton>
+        <StopButton disable="true" fx:id="stopScriptFileBtn" onAction="#stopScriptFile" realHeight="30" iconSizePercent="0.9">
             <HBox.margin>
                 <Insets left="15" top="15"/>
             </HBox.margin>

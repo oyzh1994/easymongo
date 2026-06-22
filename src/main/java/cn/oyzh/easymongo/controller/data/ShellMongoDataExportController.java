@@ -5,7 +5,7 @@ import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.data.ui.ShellMongoDataExportCollection;
-import cn.oyzh.easymongo.data.handler.ShellMysqlDataExportHandler;
+import cn.oyzh.easymongo.data.handler.ShellMongoDataExportHandler;
 import cn.oyzh.easymongo.data.ui.DBDataDateTextFiled;
 import cn.oyzh.easymongo.data.ui.DBDataFieldSeparatorComboBox;
 import cn.oyzh.easymongo.data.ui.DBDataRecordSeparatorComboBox;
@@ -199,7 +199,7 @@ public class ShellMongoDataExportController extends StageController {
     /**
      * 导出处理器
      */
-    private ShellMysqlDataExportHandler exportHandler;
+    private ShellMongoDataExportHandler exportHandler;
 
     /**
      * 数据库
@@ -234,7 +234,7 @@ public class ShellMongoDataExportController extends StageController {
         this.exportMsg.clear();
         // 生成导出处理器
         if (this.exportHandler == null) {
-            this.exportHandler = new ShellMysqlDataExportHandler(this.dbClient, this.dbName);
+            this.exportHandler = new ShellMongoDataExportHandler(this.dbClient, this.dbName);
             this.exportHandler.setMessageHandler(str -> this.exportMsg.appendLine(str))
                     .setProcessedHandler(count -> {
                         if (count > 0) {
