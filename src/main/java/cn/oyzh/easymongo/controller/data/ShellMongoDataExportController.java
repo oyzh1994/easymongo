@@ -32,6 +32,7 @@ import cn.oyzh.fx.plus.util.Counter;
 import cn.oyzh.fx.plus.util.FXUtil;
 import cn.oyzh.fx.plus.window.FXStageStyle;
 import cn.oyzh.fx.plus.window.StageAttribute;
+import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
@@ -209,7 +210,7 @@ public class ShellMongoDataExportController extends StageController {
     /**
      * 表
      */
-    private String collectionName;
+    private String tableName;
 
     /**
      * 0: 正常导出
@@ -325,25 +326,27 @@ public class ShellMongoDataExportController extends StageController {
         this.dateFormat.textProperty().addListener((observable, oldValue, newValue) -> this.flushDatePreview());
         this.database.selectedItemChanged((observable, oldValue, newValue) -> {
             this.dbName = newValue;
-            this.initTables();
+            StageManager.showMask(this::initTables);
         });
     }
 
+    /**
+     * 刷新日期预览
+     */
     private void flushDatePreview() {
         try {
             String format = this.dateFormat.getTextTrim();
-            this.datePreview.setText(I18nHelper.currentTime() + " " + DateUtil.format(new Date(), format));
+            this.datePreview.text(I18nHelper.currentTime() + " " + DateUtil.format(new Date(), format));
         } catch (Exception ex) {
-            this.datePreview.setText(I18nHelper.invalidFormat());
+            this.datePreview.text(I18nHelper.invalidFormat());
         }
     }
 
     @Override
     public void onWindowShown(WindowEvent event) {
-        super.onWindowShown(event);
         this.dbClient = this.getProp("dbClient");
         this.dbName = this.getProp("dbName");
-        this.collectionName = this.getProp("collectionName");
+        this.tableName = this.getProp("collectionName");
         if (this.hasProp("exportMode")) {
             this.exportMode = this.getProp("exportMode");
         }
@@ -351,13 +354,15 @@ public class ShellMongoDataExportController extends StageController {
             this.exportTable = this.getProp("exportTable");
         }
         if (StringUtil.isNotBlank(this.dbName)) {
-            this.database.init(this.dbClient, this.dbName);
+            this.database.setItem(this.dbName);
+            this.database.selectFirst();
             this.database.disable();
         } else {
             this.database.init(this.dbClient);
             this.database.enable();
         }
         this.stage.hideOnEscape();
+        super.onWindowShown(event);
     }
 
     @Override
@@ -399,11 +404,15 @@ public class ShellMongoDataExportController extends StageController {
             for (MongoCollection collection : collections) {
                 ShellMongoDataExportCollection exportCollection = new ShellMongoDataExportCollection();
                 exportCollection.setName(collection.getName());
-                exportCollection.setSelected(StringUtil.equals(collection.getName(), this.collectionName));
+                exportCollection.setSelected(StringUtil.equals(collection.getName(), this.tableName));
                 this.exportTableView.addItem(exportCollection);
             }
         } else {// 查询导出
             this.exportTableView.addItem(this.exportTable);
+        }
+        RadioButton button = this.fileType.selectedToggle();
+        for (ShellMongoDataExportCollection exportTable : this.exportTableView.getItems()) {
+            exportTable.setExtension(FXChooser.extensionFilter(button.getUserData().toString()));
         }
     }
 
@@ -414,9 +423,8 @@ public class ShellMongoDataExportController extends StageController {
             MessageBox.warn(I18nHelper.pleaseSelectType());
             return;
         }
-        this.initTables();
-        for (ShellMongoDataExportCollection exportTable : this.exportTableView.getItems()) {
-            exportTable.setExtension(FXChooser.extensionFilter(button.getUserData().toString()));
+        if (this.exportTableView.isItemEmpty()) {
+            StageManager.showMask(this::initTables);
         }
         this.step1.disappear();
         this.step3.disappear();
@@ -448,7 +456,15 @@ public class ShellMongoDataExportController extends StageController {
         // 文件类型
         String type = this.fileType.selectedUserData();
         // 显示对应组件
-       if ("txt".equalsIgnoreCase(type)) {
+        if ("sql".equalsIgnoreCase(type)) {
+            NodeGroupUtil.display(this.getStage(), "includeFields");
+            NodeGroupUtil.disappear(this.getStage(), "txtIdentifier");
+            NodeGroupUtil.disappear(this.getStage(), "fieldSeparator");
+            NodeGroupUtil.disappear(this.getStage(), "recordSeparator");
+            NodeGroupUtil.disappear(this.getStage(), "dateFormat");
+            NodeGroupUtil.disappear(this.getStage(), "fieldToAttr");
+            NodeGroupUtil.disappear(this.getStage(), "earlyVersion");
+        } else if ("txt".equalsIgnoreCase(type)) {
             NodeGroupUtil.display(this.getStage(), "txtIdentifier");
             NodeGroupUtil.display(this.getStage(), "fieldSeparator");
             NodeGroupUtil.display(this.getStage(), "recordSeparator");

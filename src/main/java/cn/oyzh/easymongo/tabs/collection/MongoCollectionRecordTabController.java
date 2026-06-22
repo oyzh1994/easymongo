@@ -706,4 +706,20 @@ public class MongoCollectionRecordTabController extends RichTabController {
     public void setFilters(List<MongoRecordFilter> filters) {
         this.filters = filters;
     }
+
+    /**
+     * 导入数据
+     */
+    @FXML
+    private void importData() {
+        MongoViewFactory.importData(this.getItem().client(), this.getItem().dbName());
+    }
+
+    /**
+     * 导出数据
+     */
+    @FXML
+    private void exportData() {
+        MongoViewFactory.exportData(this.getItem().client(), this.getItem().dbName(), this.getItem().collectionName());
+    }
 }

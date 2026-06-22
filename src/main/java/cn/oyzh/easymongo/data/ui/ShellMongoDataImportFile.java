@@ -6,6 +6,7 @@ import cn.oyzh.easymongo.fx.ShellMongoCollectionComboBox;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.fx.gui.text.field.ChooseFileTextField;
 import cn.oyzh.fx.plus.tableview.TableViewUtil;
+import cn.oyzh.fx.plus.window.StageManager;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -65,7 +66,9 @@ public class ShellMongoDataImportFile {
         ShellMongoCollectionComboBox comboBox = new ShellMongoCollectionComboBox();
         String dbName = CacheHelper.get("dbName");
         MongoClient dbClient = CacheHelper.get("dbClient");
-        comboBox.init(dbName, this.getTableName(), dbClient);
+        StageManager.showMask(() -> {
+            comboBox.init(dbName, this.getTableName(), dbClient);
+        });
         comboBox.selectedItemChanged((observable, oldValue, newValue) -> {
             this.setTargetTableName(newValue);
         });

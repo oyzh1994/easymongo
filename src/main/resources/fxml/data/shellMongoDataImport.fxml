@@ -105,7 +105,7 @@
                 <columns>
                     <FXTableColumn flexWidth="70% -15" valueName="filePathControl" text="%base.filePath"
                                    resizable="true"/>
-                    <FXTableColumn flexWidth="30%" valueName="targetTableControl" text="%base.tableName"
+                    <FXTableColumn flexWidth="30%" valueName="targetTableControl" text="%base.collectionName"
                                    resizable="true"/>
                 </columns>
                 <VBox.margin>
