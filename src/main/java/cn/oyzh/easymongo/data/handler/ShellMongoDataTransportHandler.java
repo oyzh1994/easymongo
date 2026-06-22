@@ -39,16 +39,16 @@ public class ShellMongoDataTransportHandler extends DBDataTransportHandler {
         this.checkInterrupt();
         // 删除表
         this.targetClient.dropCollection(this.targetDatabase, tableName);
-        this.message("Drop Table " + tableName);
+        this.message("Drop Collection " + tableName);
         this.processedIncr();
 
         // 创建表
         this.targetClient.clearCollection(this.targetDatabase, tableName);
-        this.message("Create Table " + tableName);
+        this.message("Create Collection " + tableName);
         this.processedIncr();
 
         // 传输表
-        this.message("Transport Table " + tableName + " Starting");
+        this.message("Transport Collection " + tableName + " Starting");
         long start = 0;
         while (true) {
             this.checkInterrupt();
@@ -65,7 +65,7 @@ public class ShellMongoDataTransportHandler extends DBDataTransportHandler {
             this.addInsertSql(records);
             start += this.selectLimit;
         }
-        this.message("Transport Table " + tableName + " Finished");
+        this.message("Transport Collection " + tableName + " Finished");
     }
 }
 
