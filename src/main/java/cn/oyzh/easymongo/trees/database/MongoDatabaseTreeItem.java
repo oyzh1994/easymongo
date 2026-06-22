@@ -74,17 +74,17 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
         if (!this.isChildEmpty()) {
-            FXMenuItem closeDB = MenuItemHelper.closeDatabase("10", this::closeDB);
+            FXMenuItem closeDB = MenuItemHelper.closeDatabase(this::closeDB);
             items.add(closeDB);
         }
-        //        FXMenuItem editDB = MenuItemHelper.editDatabase("11", this::editDB);
+        //        FXMenuItem editDB = MenuItemHelper.editDatabase( this::editDB);
         //        items.add(editDB);
-        FXMenuItem dropDB = MenuItemHelper.deleteDatabase("12", this::delete);
+        FXMenuItem dropDB = MenuItemHelper.deleteDatabase(this::delete);
         items.add(dropDB);
-        FXMenuItem dumpData = MenuItemHelper.dumpData("12", this::dump);
+        FXMenuItem dumpData = MenuItemHelper.dumpData(this::dump);
         items.add(dumpData);
-        FXMenuItem runSqlFile = MenuItemHelper.runSqlFile("12", this::runScriptFile);
-        items.add(runSqlFile);
+        FXMenuItem runScriptFile = MenuItemHelper.runScriptFile(this::runScriptFile);
+        items.add(runScriptFile);
         return items;
     }
 
@@ -281,8 +281,8 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
         return this.client().insertCollectionRecord(record);
     }
 
-    public MongoRecord selectCollectionRecord(String collectionName,Object id) {
-        return this.client().selectCollectionRecord(this.dbName(),collectionName,id);
+    public MongoRecord selectCollectionRecord(String collectionName, Object id) {
+        return this.client().selectCollectionRecord(this.dbName(), collectionName, id);
     }
 
     public void dropFunction(MongoFunction value) {

@@ -71,9 +71,9 @@ public class MongoGroupTreeItem extends MongoTreeItem<MongoGroupTreeItemValue> i
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem addConnect = MenuItemHelper.addConnect("12", this::addConnect);
-        FXMenuItem renameGroup = MenuItemHelper.renameGroup("12", this::rename);
-        FXMenuItem delGroup = MenuItemHelper.deleteGroup("12", this::delete);
+        FXMenuItem addConnect = MenuItemHelper.addConnect( this::addConnect);
+        FXMenuItem renameGroup = MenuItemHelper.renameGroup( this::rename);
+        FXMenuItem delGroup = MenuItemHelper.deleteGroup( this::delete);
         items.add(addConnect);
         items.add(renameGroup);
         items.add(delGroup);

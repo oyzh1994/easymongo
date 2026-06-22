@@ -49,10 +49,10 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem reload = MenuItemHelper.reloadData("12", this::reloadChild);
-        FXMenuItem add = MenuItemHelper.addCollection("12", this::addCollection);
-        FXMenuItem exportData = MenuItemHelper.exportData("12", this::exportData);
-        FXMenuItem importData = MenuItemHelper.importData("12", this::importData);
+        FXMenuItem reload = MenuItemHelper.reloadData( this::reloadChild);
+        FXMenuItem add = MenuItemHelper.addCollection( this::addCollection);
+        FXMenuItem exportData = MenuItemHelper.exportData( this::exportData);
+        FXMenuItem importData = MenuItemHelper.importData( this::importData);
         items.add(add);
         items.add(reload);
         items.add(exportData);

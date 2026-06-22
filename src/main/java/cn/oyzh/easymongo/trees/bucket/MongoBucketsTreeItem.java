@@ -49,8 +49,8 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem reload = MenuItemHelper.reloadData("12", this::reloadChild);
-        FXMenuItem add = MenuItemHelper.addBucket("12", this::addBucket);
+        FXMenuItem reload = MenuItemHelper.reloadData( this::reloadChild);
+        FXMenuItem add = MenuItemHelper.addBucket( this::addBucket);
         items.add(add);
         items.add(reload);
         return items;

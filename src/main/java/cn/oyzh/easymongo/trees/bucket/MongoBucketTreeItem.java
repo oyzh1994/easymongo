@@ -71,11 +71,11 @@ public class MongoBucketTreeItem extends MongoTreeItem<MongoBucketTreeItemValue>
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem openBucket = MenuItemHelper.openBucket("12", this::onPrimaryDoubleClick);
+        FXMenuItem openBucket = MenuItemHelper.openBucket( this::onPrimaryDoubleClick);
         items.add(openBucket);
-        FXMenuItem clearBucket = MenuItemHelper.clearBucket("12", this::clearBucket);
+        FXMenuItem clearBucket = MenuItemHelper.clearBucket( this::clearBucket);
         items.add(clearBucket);
-        FXMenuItem deleteBucket = MenuItemHelper.deleteBucket("12", this::delete);
+        FXMenuItem deleteBucket = MenuItemHelper.deleteBucket( this::delete);
         items.add(deleteBucket);
         return items;
     }

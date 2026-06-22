@@ -73,14 +73,14 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
         if (this.isConnecting()) {
-            FXMenuItem cancelConnect = MenuItemHelper.cancelConnect("12", this::cancelConnect);
+            FXMenuItem cancelConnect = MenuItemHelper.cancelConnect( this::cancelConnect);
             items.add(cancelConnect);
         } else if (this.isConnected()) {
-            FXMenuItem closeConnect = MenuItemHelper.closeConnect("10", this::closeConnect);
-            FXMenuItem editConnect = MenuItemHelper.editConnect("11", this::editConnect);
-            FXMenuItem repeatConnect = MenuItemHelper.repeatConnect("12", this::repeatConnect);
-            FXMenuItem addDatabase = MenuItemHelper.addDatabase("12", this::addDatabase);
-            FXMenuItem reload = MenuItemHelper.reloadDatabase("12", this::reloadChild);
+            FXMenuItem closeConnect = MenuItemHelper.closeConnect( this::closeConnect);
+            FXMenuItem editConnect = MenuItemHelper.editConnect( this::editConnect);
+            FXMenuItem repeatConnect = MenuItemHelper.repeatConnect( this::repeatConnect);
+            FXMenuItem addDatabase = MenuItemHelper.addDatabase( this::addDatabase);
+            FXMenuItem reload = MenuItemHelper.reloadDatabase( this::reloadChild);
 
             items.add(closeConnect);
             items.add(editConnect);
@@ -88,11 +88,11 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
             items.add(addDatabase);
             items.add(reload);
         } else {
-            FXMenuItem connect = MenuItemHelper.startConnect("12", this::connect);
-            FXMenuItem editConnect = MenuItemHelper.editConnect("12", this::editConnect);
-            FXMenuItem renameConnect = MenuItemHelper.renameConnect("12", this::rename);
-            FXMenuItem deleteConnect = MenuItemHelper.deleteConnect("12", this::delete);
-            FXMenuItem repeatConnect = MenuItemHelper.repeatConnect("12", this::repeatConnect);
+            FXMenuItem connect = MenuItemHelper.startConnect( this::connect);
+            FXMenuItem editConnect = MenuItemHelper.editConnect( this::editConnect);
+            FXMenuItem renameConnect = MenuItemHelper.renameConnect( this::rename);
+            FXMenuItem deleteConnect = MenuItemHelper.deleteConnect( this::delete);
+            FXMenuItem repeatConnect = MenuItemHelper.repeatConnect( this::repeatConnect);
             items.add(connect);
             items.add(editConnect);
             items.add(renameConnect);

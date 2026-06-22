@@ -73,18 +73,18 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem openCollection = MenuItemHelper.openCollection("12", this::onPrimaryDoubleClick);
+        FXMenuItem openCollection = MenuItemHelper.openCollection( this::onPrimaryDoubleClick);
         items.add(openCollection);
-        FXMenuItem renameCollection = MenuItemHelper.renameCollection("12", this::rename);
+        FXMenuItem renameCollection = MenuItemHelper.renameCollection( this::rename);
         items.add(renameCollection);
-        FXMenuItem clearCollection = MenuItemHelper.clearCollection("12", this::clearCollection);
+        FXMenuItem clearCollection = MenuItemHelper.clearCollection( this::clearCollection);
         items.add(clearCollection);
-        FXMenuItem deleteCollection = MenuItemHelper.deleteCollection("12", this::delete);
+        FXMenuItem deleteCollection = MenuItemHelper.deleteCollection( this::delete);
         items.add(deleteCollection);
         items.add(MenuItemHelper.separator());
-        FXMenuItem dumpTable = MenuItemHelper.dumpData("12", this::dump);
+        FXMenuItem dumpTable = MenuItemHelper.dumpData( this::dump);
         items.add(dumpTable);
-        FXMenuItem exportTable = MenuItemHelper.exportData("12", this::export);
+        FXMenuItem exportTable = MenuItemHelper.exportData( this::export);
         items.add(exportTable);
         return items;
     }
