@@ -18,6 +18,7 @@
 <?import cn.oyzh.easymongo.fx.MongoConnectComboBox?>
 <?import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox?>
 <?import cn.oyzh.easymongo.data.ui.ShellMongoDataTransportTableListView?>
+<?import cn.oyzh.easymongo.data.ui.ShellMongoDataTransportFunctionListView?>
 <FXVBox xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="cn.oyzh.easymongo.controller.data.ShellMongoDataTransportController" realWidth="800"
         realHeight="600">
@@ -231,6 +232,11 @@
                 <FXTitledPane text="%base.table" groupId="config" fx:id="tablePane">
                     <ShellMongoDataTransportTableListView fx:id="tableList" flexHeight="100%" flexWidth="100% - 10">
                     </ShellMongoDataTransportTableListView>
+                </FXTitledPane>
+                <FXTitledPane text="%base.function" groupId="config" fx:id="functionPane">
+                    <ShellMongoDataTransportFunctionListView fx:id="functionList" flexHeight="100%"
+                                                             flexWidth="100% - 10">
+                    </ShellMongoDataTransportFunctionListView>
                 </FXTitledPane>
             </panes>
         </FXAccordion>

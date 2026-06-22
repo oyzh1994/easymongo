@@ -5,7 +5,7 @@ import cn.oyzh.common.date.DateUtil;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.ui.ShellMongoDataImportFile;
+import cn.oyzh.easymongo.data.dto.ShellMongoDataImportFile;
 import cn.oyzh.easymongo.data.handler.ShellMongoDataImportHandler;
 import cn.oyzh.easymongo.data.ui.DBDataDateTextFiled;
 import cn.oyzh.easymongo.data.ui.DBDataFieldSeparatorComboBox;

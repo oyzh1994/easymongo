@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.data.ui;
 
+import cn.oyzh.easymongo.data.dto.ShellMongoDataExportCollection;
 import cn.oyzh.fx.plus.controls.combo.FXComboBox;
 import cn.oyzh.fx.plus.converter.SimpleStringConverter;
 

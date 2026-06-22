@@ -2,11 +2,7 @@ package cn.oyzh.easymongo.data.handler;
 
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.CollectionUtil;
-import cn.oyzh.easymongo.data.ui.ShellMongoDataTransportCollection;
-import cn.oyzh.easymongo.mongo.MongoClient;
-import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoRecord;
-import org.bson.BsonValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +12,6 @@ import java.util.List;
  * @since 2024/09/06
  */
 public abstract class DBDataTransportHandler extends DBDataHandler {
-
-    /**
-     * 来源客户端
-     */
-    protected MongoClient sourceClient;
-
-    /**
-     * 目标客户端
-     */
-    protected MongoClient targetClient;
 
     /**
      * 来源库
@@ -46,11 +32,6 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
      * 批量限制
      */
     protected int batchLimit = 50;
-
-    /**
-     * 表
-     */
-    protected List<ShellMongoDataTransportCollection> tables;
 
     /**
      * 执行传输
@@ -104,47 +85,9 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
     /**
      * 执行批量插入
      *
-     * @param sqlList  sql列表
+     * @param recordList 记录列表
      */
-    protected void doBatchInsert(List<MongoRecord> sqlList ) {
-        try {
-            for (MongoRecord record : sqlList) {
-                for (MongoColumn column : record.getColumns()) {
-                    column.setDbName(this.getTargetDatabase());
-                }
-            }
-            List<BsonValue> result = this.targetClient.insertCollectionRecord(sqlList);
-            this.processedIncr(result.size());
-        } catch (Exception ex) {
-            this.processedDecr(sqlList.size());
-            throw ex;
-        }
-    }
-
-    /**
-     * 创建新的处理器
-     *
-     * @return DBDataTransportHandler
-     */
-    public static DBDataTransportHandler newHandler( ) {
-         return new ShellMongoDataTransportHandler();
-    }
-
-    public MongoClient getSourceClient() {
-        return sourceClient;
-    }
-
-    public void setSourceClient(MongoClient sourceClient) {
-        this.sourceClient = sourceClient;
-    }
-
-    public MongoClient getTargetClient() {
-        return targetClient;
-    }
-
-    public void setTargetClient(MongoClient targetClient) {
-        this.targetClient = targetClient;
-    }
+    protected abstract void doBatchInsert(List<MongoRecord> recordList);
 
     public String getSourceDatabase() {
         return sourceDatabase;
@@ -176,14 +119,6 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
 
     public void setBatchLimit(int batchLimit) {
         this.batchLimit = batchLimit;
-    }
-
-    public List<ShellMongoDataTransportCollection> getTables() {
-        return tables;
-    }
-
-    public void setTables(List<ShellMongoDataTransportCollection> tables) {
-        this.tables = tables;
     }
 }
 

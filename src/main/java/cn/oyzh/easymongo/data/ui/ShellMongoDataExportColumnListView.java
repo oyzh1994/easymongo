@@ -1,6 +1,7 @@
 package cn.oyzh.easymongo.data.ui;
 
 import cn.oyzh.common.util.CollectionUtil;
+import cn.oyzh.easymongo.data.dto.ShellMongoDataExportColumn;
 import cn.oyzh.fx.plus.controls.button.FXCheckBox;
 import cn.oyzh.fx.plus.controls.list.FXListView;
 import cn.oyzh.fx.plus.util.ListViewUtil;

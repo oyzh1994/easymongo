@@ -3,8 +3,9 @@ package cn.oyzh.easymongo.controller.data;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.common.util.StringUtil;
+import cn.oyzh.easymongo.data.handler.ShellMongoDataTransportHandler;
+import cn.oyzh.easymongo.data.ui.ShellMongoDataTransportFunctionListView;
 import cn.oyzh.easymongo.data.ui.ShellMongoDataTransportTableListView;
-import cn.oyzh.easymongo.data.handler.DBDataTransportHandler;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.fx.MongoConnectComboBox;
 import cn.oyzh.easymongo.fx.ShellMongoDatabaseComboBox;
@@ -192,28 +193,16 @@ public class ShellMongoDataTransportController extends StageController {
     private FXTitledPane functionPane;
 
     /**
-     * 过程组件
-     */
-    @FXML
-    private FXTitledPane procedurePane;
-
-    /**
-     * 触发器组件
-     */
-    @FXML
-    private FXTitledPane triggerPane;
-
-    /**
-     * 事件组件
-     */
-    @FXML
-    private FXTitledPane eventPane;
-
-    /**
      * 表列表
      */
     @FXML
     private ShellMongoDataTransportTableListView tableList;
+
+    /**
+     * 函数列表
+     */
+    @FXML
+    private ShellMongoDataTransportFunctionListView functionList;
 
     /**
      * 传输操作任务
@@ -228,7 +217,7 @@ public class ShellMongoDataTransportController extends StageController {
     /**
      * 传输处理器
      */
-    private DBDataTransportHandler transportHandler;
+    private ShellMongoDataTransportHandler transportHandler;
 
     /**
      * 执行传输
@@ -242,7 +231,7 @@ public class ShellMongoDataTransportController extends StageController {
         this.transportStatus.clear();
         // 生成传输处理器
         if (this.transportHandler == null) {
-            this.transportHandler = DBDataTransportHandler.newHandler();
+            this.transportHandler = new ShellMongoDataTransportHandler();
             this.transportHandler.setMessageHandler(str -> this.transportMsg.appendLine(str))
                     .setProcessedHandler(count -> {
                         if (count > 0) {
@@ -265,6 +254,8 @@ public class ShellMongoDataTransportController extends StageController {
         this.transportHandler.setTargetDatabase(this.targetDatabase.getSelectedItem());
         // 表
         this.transportHandler.setTables(this.tableList.getSelectedTables());
+        // 函数
+        this.transportHandler.setFunctions(this.functionList.getSelectedFunctions());
         // 开始处理
         NodeGroupUtil.disable(this.stage, "exec");
         this.stage.appendTitle("===" + I18nHelper.transportInProgress() + "===");
@@ -336,6 +327,7 @@ public class ShellMongoDataTransportController extends StageController {
         });
 
         this.tableList.setSelectedChanged(() -> this.flushPaneText("table"));
+        this.functionList.setSelectedChanged(() -> this.flushPaneText("function"));
     }
 
     /**
@@ -470,6 +462,9 @@ public class ShellMongoDataTransportController extends StageController {
         if (this.tableList.isItemEmpty()) {
             this.tableList.of(this.sourceClient.listCollections(this.sourceDatabase.getSelectedItem()));
         }
+        if (this.functionList.isItemEmpty()) {
+            this.functionList.of(this.sourceClient.listFunctions(this.sourceDatabase.getSelectedItem()));
+        }
         this.step1.disappear();
         this.step3.disappear();
         this.step2.display();
@@ -486,6 +481,7 @@ public class ShellMongoDataTransportController extends StageController {
      */
     private void clearList() {
         this.tableList.clearItems();
+        this.functionList.clearItems();
     }
 
     /**
@@ -497,6 +493,9 @@ public class ShellMongoDataTransportController extends StageController {
          if (StringUtil.equalsIgnoreCase(name, "table")) {
             String tableTipText = "(" + this.tableList.getSelectedSize() + "/" + this.tableList.getItemSize() + ")";
             this.tablePane.setAppendText(tableTipText);
+        } else if (StringUtil.equalsIgnoreCase(name, "function")) {
+            String functionTipText = "(" + this.functionList.getSelectedSize() + "/" + this.functionList.getItemSize() + ")";
+            this.functionPane.setAppendText(functionTipText);
         }
     }
 }

@@ -11,7 +11,7 @@ import cn.oyzh.easymongo.data.MongoJsonTypeFileWriter;
 import cn.oyzh.easymongo.data.MongoTxtTypeFileWriter;
 import cn.oyzh.easymongo.data.MongoTypeFileWriter;
 import cn.oyzh.easymongo.data.MongoXmlTypeFileWriter;
-import cn.oyzh.easymongo.data.ui.ShellMongoDataExportCollection;
+import cn.oyzh.easymongo.data.dto.ShellMongoDataExportCollection;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
