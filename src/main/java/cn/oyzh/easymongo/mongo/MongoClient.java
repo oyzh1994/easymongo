@@ -185,7 +185,7 @@ public class MongoClient implements Closeable {
             this.state.set(MongoConnState.CONNECTING);
             // 检查连接（需迭代才能触发实际网络请求和认证）
             if (this.shellConnect.getAuthDatabase() != null) {
-                this.mongoClient.getDatabase(this.shellConnect.getAuthDatabase()).listCollectionNames();
+                this.mongoClient.getDatabase(this.shellConnect.getAuthDatabase()).listCollections().first();
             } else {
                 this.mongoClient.listDatabases().first();
             }
