@@ -38,10 +38,10 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
      */
     protected FastFileWriter fileWriter;
 
-    /**
-     * db客户端
-     */
-    protected MongoClient dbClient;
+//    /**
+//     * db客户端
+//     */
+//    protected MongoClient dbClient;
 
     /**
      * 1. 库
@@ -64,8 +64,7 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
      */
     protected int queryLimit = 500;
 
-    public DBDataDumpHandler(MongoClient dbClient, String dbName) {
-        this.dbClient = dbClient;
+    public DBDataDumpHandler( String dbName) {
         this.dbName = dbName;
     }
 
@@ -94,34 +93,7 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
     /**
      * 写入头部
      */
-    protected void writeHeader() throws IOException {
-        String version = this.dbClient.selectVersion();
-        String clientCharacter = "utf-8";
-        String header = "/*\n";
-        header += " " + Project.load().getName() + " Data Transfer";
-        header += "\n\n";
-        header += " Source Server : " + this.dbInfo.getName();
-        header += "\n";
-        header += " Source Server Type : Mongdb" ;
-        header += "\n";
-        header += " Source Server Version : " + version;
-        header += "\n";
-        header += " Source Host : " + this.dbInfo.getHost();
-        header += "\n";
-        header += " Source Schema : " + this.dbName;
-        header += "\n\n";
-        header += " Target Server Type : Mongodb" ;
-        header += "\n";
-        header += " Target Server Version : " + version;
-        header += "\n";
-        header += " File Encoding : " + clientCharacter;
-        header += "\n\n";
-        header += " Date : " + DateHelper.formatDateTimeSimple();
-        header += "\n";
-        header += "*/";
-
-        this.fileWriter.writeLines(List.of(header));
-    }
+    protected abstract void writeHeader() throws IOException;
 
     /**
      * 写入尾部
@@ -175,14 +147,6 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
 
     public void setFileWriter(FastFileWriter fileWriter) {
         this.fileWriter = fileWriter;
-    }
-
-    public MongoClient getDbClient() {
-        return dbClient;
-    }
-
-    public void setDbClient(MongoClient dbClient) {
-        this.dbClient = dbClient;
     }
 
     public Byte getDumpType() {

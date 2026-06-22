@@ -85,7 +85,7 @@ public class MongoDataUtil {
      * @param deep  当前深度
      * @return 结果
      */
-    private static Object buildRecordValue(Object value, int deep) {
+    public static Object buildRecordValue(Object value, int deep) {
         String type = MongoUtil.getType(value);
         return buildRecordValue(value, type, deep);
     }
@@ -98,7 +98,7 @@ public class MongoDataUtil {
      * @param deep  当前深度
      * @return 结果
      */
-    private static Object buildRecordValue(Object value, String type, int deep) {
+    public static Object buildRecordValue(Object value, String type, int deep) {
         if ("int".equalsIgnoreCase(type)) {
             if (value == null) {
                 return "Int32()";
@@ -122,7 +122,7 @@ public class MongoDataUtil {
                 return "ObjectId()";
             }
             ObjectId id = (ObjectId) value;
-            return "ObjectId(\"" + id.toHexString() + "\")";
+            return "ObjectId('" + id.toHexString() + "')";
         }
 
         if ("date".equalsIgnoreCase(type)) {
@@ -130,10 +130,10 @@ public class MongoDataUtil {
                 return "ISODate()";
             }
             if (value instanceof String s) {
-                return "ISODate(\"" + s + "\")";
+                return "ISODate('" + s + "')";
             }
             Date date = (Date) value;
-            return "ISODate(\"" + MongoUtil.DATE_FORMAT.format(date) + "\")";
+            return "ISODate('" + MongoUtil.DATE_FORMAT.format(date) + "')";
         }
 
         if ("binary".equalsIgnoreCase(type)) {
@@ -150,7 +150,7 @@ public class MongoDataUtil {
             } else {
                 bytes = new byte[]{};
             }
-            return "Binary.createFromBase64(\"" + Base64Util.encodeToString(bytes) + "\", 0)";
+            return "Binary.createFromBase64('" + Base64Util.encodeToString(bytes) + "', 0)";
         }
 
         if ("list".equalsIgnoreCase(type)) {
@@ -243,7 +243,7 @@ public class MongoDataUtil {
      */
     public static String toInsertScript(String collectionName, String doc) {
         String sql = """
-                db.getCollection("$collection").insert($doc);
+                db.getCollection('$collection').insert($doc);
                 """;
         return sql.replace("$collection", collectionName).replace("$doc", doc);
     }
@@ -285,7 +285,7 @@ public class MongoDataUtil {
      */
     public static String toUpdateScript(String collectionName, Object id, String doc) {
         String sql = """
-                db.getCollection("$collection").update({_id: $id},{$set: $doc});
+                db.getCollection('$collection').update({_id: '$id'},{$set: $doc});
                 """;
         Object idVal = buildRecordValue(id, 0);
         return sql.replace("$collection", collectionName).replace("$id", idVal.toString()).replace("$doc", doc);
@@ -299,18 +299,16 @@ public class MongoDataUtil {
      */
     public static String toReplaceScript(MongoFunction function) {
         String script = """
-                db.getCollection("$collectionName").replaceOne(
-                    { _id: "$name" },
-                    { _id: "$name", value: Code("$code") },
+                db.getCollection('$collectionName').replaceOne(
+                    { _id: '$id' },
+                    { _id: '$name', value: Code('$code') },
                     { upsert: true }
                 );
                 """;
         script = script.replace("$collectionName", MongoUtil.SYSTEM_JS);
-        script = script.replace("$name", function.getName());
+        script = script.replace("$id", function.getName());
         script = script.replace("$name", function.getName());
         script = script.replace("$code", function.getCode());
         return script;
     }
-
-
 }
