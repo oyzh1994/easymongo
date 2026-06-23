@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.data.file;
 
 import java.io.Closeable;
 import java.io.File;

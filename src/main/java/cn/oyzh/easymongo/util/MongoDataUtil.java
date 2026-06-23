@@ -121,6 +121,9 @@ public class MongoDataUtil {
             if (value == null) {
                 return "ObjectId()";
             }
+            if (value instanceof String s) {
+                return "ObjectId('" + s + "')";
+            }
             ObjectId id = (ObjectId) value;
             return "ObjectId('" + id.toHexString() + "')";
         }

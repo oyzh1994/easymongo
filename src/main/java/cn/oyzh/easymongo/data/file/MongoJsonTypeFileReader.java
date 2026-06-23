@@ -1,6 +1,7 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.data.file;
 
 import cn.oyzh.common.file.FileUtil;
+import cn.oyzh.easymongo.data.config.MongoDataImportConfig;
 import com.alibaba.fastjson.JSONReader;
 
 import java.io.File;

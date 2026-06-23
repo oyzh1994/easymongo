@@ -1,8 +1,11 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.data.file;
 
 import cn.oyzh.common.file.LineFileWriter;
+import cn.oyzh.easymongo.data.config.MongoDataExportConfig;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
+import cn.oyzh.easymongo.mongo.MongoRecord;
+import cn.oyzh.easymongo.util.MongoDataUtil;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +15,7 @@ import java.util.Map;
  * @author oyzh
  * @since 2024-09-04
  */
-public class MongoTxtTypeFileWriter extends MongoTypeFileWriter {
+public class MongoJsTypeFileWriter extends MongoTypeFileWriter {
 
     /**
      * 字段列表
@@ -25,35 +28,24 @@ public class MongoTxtTypeFileWriter extends MongoTypeFileWriter {
     private MongoDataExportConfig config;
 
     /**
-     * 文件写入器
+     * 文件读取器
      */
     private LineFileWriter writer;
 
-    public MongoTxtTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
+    public MongoJsTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
         this.columns = columns;
         this.config = config;
         this.writer = LineFileWriter.create(filePath, config.getCharset());
     }
 
     @Override
-    public void writeHeader() throws Exception {
-        this.writer.write(this.formatLine(this.columns.columnNames(), this.config.getFieldSeparator(), this.config.getTxtIdentifier(),
-                this.config.getRecordSeparator()));
-    }
-
-    @Override
     public void writeObject(Map<String, Object> object) throws Exception {
-        Object[] values = new Object[this.columns.size()];
+        MongoRecord record = new MongoRecord(this.columns);
         for (Map.Entry<String, Object> entry : object.entrySet()) {
-            int index = this.columns.index(entry.getKey());
-            MongoColumn column = this.columns.column(entry.getKey());
-            Object val = this.parameterized(column, entry.getValue(), this.config);
-            values[index] = val;
+            record.putValue(entry.getKey(), entry.getValue());
         }
-        this.writer.write(this.formatLine(values,
-                this.config.getFieldSeparator(),
-                this.config.getTxtIdentifier(),
-                this.config.getRecordSeparator()));
+        String script = MongoDataUtil.toInsertScript(record);
+        this.writer.writeLine(script);
     }
 
     @Override
@@ -64,5 +56,13 @@ public class MongoTxtTypeFileWriter extends MongoTypeFileWriter {
             this.config = null;
             this.columns = null;
         }
+    }
+
+    @Override
+    public Object parameterized(MongoColumn column, Object value, MongoDataExportConfig config) {
+        if (value == null) {
+            return null;
+        }
+        return super.parameterized(column, value, config);
     }
 }

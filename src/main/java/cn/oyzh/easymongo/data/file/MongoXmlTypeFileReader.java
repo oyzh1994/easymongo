@@ -1,5 +1,8 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.data.file;
 
+
+import cn.oyzh.easymongo.data.MongoDataImportHelper;
+import cn.oyzh.easymongo.data.config.MongoDataImportConfig;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;

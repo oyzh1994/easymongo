@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.data.config;
 
 
 import java.nio.charset.StandardCharsets;

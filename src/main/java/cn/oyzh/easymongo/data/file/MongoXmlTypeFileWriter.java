@@ -1,7 +1,8 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.data.file;
 
 import cn.oyzh.common.file.LineFileWriter;
 import cn.oyzh.common.util.IOUtil;
+import cn.oyzh.easymongo.data.config.MongoDataExportConfig;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 

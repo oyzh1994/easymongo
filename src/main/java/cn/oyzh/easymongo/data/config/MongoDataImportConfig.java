@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.data;
+package cn.oyzh.easymongo.data.config;
 
 
 import cn.oyzh.common.util.StringUtil;

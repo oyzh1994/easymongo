@@ -3,15 +3,16 @@ package cn.oyzh.easymongo.data.handler;
 import cn.oyzh.common.log.JulLog;
 import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.easymongo.data.MongoCsvTypeFileWriter;
-import cn.oyzh.easymongo.data.MongoDataExportConfig;
-import cn.oyzh.easymongo.data.MongoExcelTypeFileWriter;
-import cn.oyzh.easymongo.data.MongoHtmlTypeFileWriter;
-import cn.oyzh.easymongo.data.MongoJsonTypeFileWriter;
-import cn.oyzh.easymongo.data.MongoTxtTypeFileWriter;
-import cn.oyzh.easymongo.data.MongoTypeFileWriter;
-import cn.oyzh.easymongo.data.MongoXmlTypeFileWriter;
+import cn.oyzh.easymongo.data.config.MongoDataExportConfig;
 import cn.oyzh.easymongo.data.dto.ShellMongoDataExportCollection;
+import cn.oyzh.easymongo.data.file.MongoCsvTypeFileWriter;
+import cn.oyzh.easymongo.data.file.MongoExcelTypeFileWriter;
+import cn.oyzh.easymongo.data.file.MongoHtmlTypeFileWriter;
+import cn.oyzh.easymongo.data.file.MongoJsTypeFileWriter;
+import cn.oyzh.easymongo.data.file.MongoJsonTypeFileWriter;
+import cn.oyzh.easymongo.data.file.MongoTxtTypeFileWriter;
+import cn.oyzh.easymongo.data.file.MongoTypeFileWriter;
+import cn.oyzh.easymongo.data.file.MongoXmlTypeFileWriter;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
 import cn.oyzh.easymongo.mongo.MongoRecord;
@@ -148,6 +149,15 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     }
 
     /**
+     * 是否js类型
+     *
+     * @return 结果
+     */
+    public boolean isJsType() {
+        return "js".equalsIgnoreCase(this.fileType);
+    }
+
+    /**
      * 执行导出
      *
      * @throws Exception 异常
@@ -183,6 +193,9 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         if (this.isTxtType()) {
             return new MongoTxtTypeFileWriter(filePath, this.config, columns);
         }
+        if (this.isJsType()) {
+            return new MongoJsTypeFileWriter(filePath, this.config, columns);
+        }
         return null;
     }
 
@@ -199,7 +212,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         long start = 0;
         MongoColumns columns = new MongoColumns(table.selectedColumns());
         try (MongoTypeFileWriter writer = this.initWriter(table.getFilePath(), columns)) {
-            this.writeHeader(writer, table, columns);
+            this.writeHeader(writer);
             if (!columns.isEmpty()) {
                 boolean stop = false;
                 while (!stop) {
@@ -227,7 +240,7 @@ public abstract class DBDataExportHandler extends DBDataHandler {
                     }
                     // 写入记录
                     long start2 = System.currentTimeMillis();
-                    this.writeRecord(writer, table, columns, records);
+                    this.writeRecord(writer, records);
                     long end2 = System.currentTimeMillis();
                     JulLog.info("写入耗时: {}ms", (end2 - start2));
                     start += this.queryLimit;
@@ -243,23 +256,19 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     /**
      * 写入头
      *
-     * @param table   导出表
-     * @param columns 字段列表
      * @throws IOException 异常
      */
-    private void writeHeader(MongoTypeFileWriter writer, ShellMongoDataExportCollection table, MongoColumns columns) throws Exception {
+    private void writeHeader(MongoTypeFileWriter writer) throws Exception {
         writer.writeHeader();
     }
 
     /**
      * 写入记录
      *
-     * @param table   导出表
-     * @param columns 字段列表
      * @param records 记录列表
      * @throws IOException 异常
      */
-    private void writeRecord(MongoTypeFileWriter writer, ShellMongoDataExportCollection table, MongoColumns columns, List<MongoRecord> records) throws Exception {
+    private void writeRecord(MongoTypeFileWriter writer, List<MongoRecord> records) throws Exception {
         List<Map<String, Object>> objects = new ArrayList<>();
         for (MongoRecord object : records) {
             objects.add(object.toMap());

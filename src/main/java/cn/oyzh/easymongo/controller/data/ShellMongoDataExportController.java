@@ -512,6 +512,14 @@ public class ShellMongoDataExportController extends StageController {
             NodeGroupUtil.disappear(this.getStage(), "fieldSeparator");
             NodeGroupUtil.disappear(this.getStage(), "includeFields");
             NodeGroupUtil.disappear(this.getStage(), "earlyVersion");
+        } else if (StringUtil.equalsIgnoreCase(type, "js")) {
+            NodeGroupUtil.disappear(this.getStage(), "dateFormat");
+            NodeGroupUtil.disappear(this.getStage(), "fieldToAttr");
+            NodeGroupUtil.disappear(this.getStage(), "txtIdentifier");
+            NodeGroupUtil.disappear(this.getStage(), "recordSeparator");
+            NodeGroupUtil.disappear(this.getStage(), "fieldSeparator");
+            NodeGroupUtil.disappear(this.getStage(), "includeFields");
+            NodeGroupUtil.disappear(this.getStage(), "earlyVersion");
         }
         this.step5.disappear();
         this.flushDatePreview();
