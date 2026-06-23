@@ -2,16 +2,15 @@ package cn.oyzh.easymongo.event.database;
 
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.Event;
-import cn.oyzh.event.EventFormatter;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
  * @since 2024/01/30
  */
-public class MongoDatabaseDroppedEvent extends Event<MongoDatabaseTreeItem> implements EventFormatter {
+public class MongoDatabaseDroppedEvent extends Event<MongoDatabaseTreeItem> {
 
-    @Override
     public String eventFormat() {
-        return String.format("[%s] 数据库已删除", this.data().dbName());
+        return String.format("[%s:%s] deleted", I18nHelper.database(), this.data().dbName());
     }
 }

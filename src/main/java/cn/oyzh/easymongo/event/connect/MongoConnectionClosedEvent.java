@@ -1,9 +1,10 @@
 package cn.oyzh.easymongo.event.connect;
 
-import cn.oyzh.event.Event;
-import cn.oyzh.event.EventFormatter;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
+import cn.oyzh.event.Event;
+import cn.oyzh.event.EventFormatter;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
@@ -13,7 +14,7 @@ public class MongoConnectionClosedEvent extends Event<MongoClient> implements Ev
 
     @Override
     public String eventFormat() {
-        return String.format("[%s] 客户端已断开", this.data().connectName());
+        return String.format("[%s:%s] closed", I18nHelper.connect(), this.data().connectName());
     }
 
     public MongoConnect shellConnect() {

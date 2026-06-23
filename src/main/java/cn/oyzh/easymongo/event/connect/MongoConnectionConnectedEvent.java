@@ -4,6 +4,7 @@ import cn.oyzh.event.Event;
 import cn.oyzh.event.EventFormatter;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
@@ -13,7 +14,7 @@ public class MongoConnectionConnectedEvent extends Event<MongoClient> implements
 
     @Override
     public String eventFormat() {
-        return String.format("[%s] 客户端已连接", this.data().connectName());
+        return String.format("[%s:%s] connected", I18nHelper.connect(), this.data().connectName());
     }
 
     public MongoConnect shellConnect() {

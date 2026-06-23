@@ -1,9 +1,10 @@
 package cn.oyzh.easymongo.event.database;
 
-import cn.oyzh.event.Event;
-import cn.oyzh.event.EventFormatter;
 import cn.oyzh.easymongo.mongo.MongoDatabase;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
+import cn.oyzh.event.Event;
+import cn.oyzh.event.EventFormatter;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
@@ -15,7 +16,7 @@ public class MongoDatabaseUpdatedEvent extends Event<MongoDatabase> implements E
 
     @Override
     public String eventFormat() {
-        return String.format("[%s] 数据库已修改", this.data().getName());
+        return String.format("[%s:%s] updated", I18nHelper.database(), this.data().getName());
     }
 
     public MongoConnectTreeItem getConnectItem() {

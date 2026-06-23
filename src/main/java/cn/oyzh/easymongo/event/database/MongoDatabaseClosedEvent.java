@@ -3,6 +3,7 @@ package cn.oyzh.easymongo.event.database;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.Event;
 import cn.oyzh.event.EventFormatter;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
@@ -12,6 +13,6 @@ public class MongoDatabaseClosedEvent extends Event<MongoDatabaseTreeItem> imple
 
     @Override
     public String eventFormat() {
-        return String.format("[%s] 数据库已关闭", this.data().value());
+        return String.format("[%s:%s] closed", I18nHelper.database(), this.data().value());
     }
 }

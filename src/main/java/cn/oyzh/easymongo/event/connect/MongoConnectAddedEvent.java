@@ -1,8 +1,9 @@
 package cn.oyzh.easymongo.event.connect;
 
+import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.event.Event;
 import cn.oyzh.event.EventFormatter;
-import cn.oyzh.easymongo.domain.MongoConnect;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
@@ -12,6 +13,6 @@ public class MongoConnectAddedEvent extends Event<MongoConnect> implements Event
 
     @Override
     public String eventFormat() {
-        return String.format("连接[%s] 已新增", this.data().getName());
+        return String.format("[%s:%s] added", I18nHelper.connect(), this.data().getName());
     }
 }
