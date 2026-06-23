@@ -11,9 +11,13 @@ import cn.oyzh.easymongo.domain.MongoSetting;
 import cn.oyzh.easymongo.exception.MongoExceptionParser;
 import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.store.MongoStoreUtil;
+import cn.oyzh.easymongo.tabs.message.ShellMessageTabController;
 import cn.oyzh.easymongo.terminal.MongoTerminalManager;
 import cn.oyzh.easymongo.terminal.MongoTerminalPane;
 import cn.oyzh.event.EventFactory;
+import cn.oyzh.event.EventFormatter;
+import cn.oyzh.event.EventListener;
+import cn.oyzh.event.EventSubscribe;
 import cn.oyzh.fx.gui.tray.DesktopTrayItem;
 import cn.oyzh.fx.gui.tray.QuitTrayItem;
 import cn.oyzh.fx.gui.tray.SettingTrayItem;
@@ -42,7 +46,7 @@ import java.awt.event.MouseEvent;
  * @author oyzh
  * @since 2023/12/22
  */
-public class EasyMongoApp extends FXApplication {
+public class EasyMongoApp extends FXApplication implements EventListener {
 
     /**
      * 项目信息
@@ -103,6 +107,8 @@ public class EasyMongoApp extends FXApplication {
             OpacityManager.apply(setting.opacityConfig());
             // 注册异常处理器
             MessageBox.registerExceptionParser(MongoExceptionParser.INSTANCE);
+            // 注册事件处理
+            EventListener.super.register();
             // 调用父类
             super.init();
         } catch (Exception ex) {
@@ -126,6 +132,13 @@ public class EasyMongoApp extends FXApplication {
     }
 
     @Override
+    public void stop() {
+        // 取消注册事件处理
+        EventListener.super.unregister();
+        super.stop();
+    }
+
+    @Override
     protected void showMainView() {
         try {
             // 显示主页面
@@ -136,72 +149,13 @@ public class EasyMongoApp extends FXApplication {
         }
     }
 
-    @Override
-    protected void initSystemTray() {
-        try {
-            if (!TrayManager.supported()) {
-                JulLog.warn("tray is not supported.");
-                return;
-            }
-            if (TrayManager.exist()) {
-                return;
-            }
-            // 初始化
-            TrayManager.init(MongoConst.TRAY_ICON_PATH);
-            // 设置标题
-            TrayManager.setTitle(PROJECT.getName() + " v" + PROJECT.getVersion());
-            // 打开主页
-            TrayManager.addMenuItem(new DesktopTrayItem( this::showMain));
-            // 打开设置
-            TrayManager.addMenuItem(new SettingTrayItem( this::showSetting));
-            // 退出程序
-            TrayManager.addMenuItem(new QuitTrayItem( () -> {
-                JulLog.warn("exit app by tray.");
-                StageManager.exit();
-            }));
-            // 鼠标事件
-            TrayManager.onMouseClicked(e -> {
-                // 单击鼠标主键，显示主页
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    this.showMain();
-                }
-            });
-            // 显示托盘
-            TrayManager.show();
-        } catch (Exception ex) {
-            JulLog.warn("不支持系统托盘!", ex);
-        }
-    }
-
     /**
-     * 显示主页
+     * 事件消息
+     *
+     * @param formatter 事件
      */
-    private void showMain() {
-        FXUtil.runLater(() -> {
-            StageAdapter wrapper = StageManager.getStage(MainController.class);
-            if (wrapper != null) {
-                JulLog.info("front main.");
-                wrapper.toFront();
-            } else {
-                JulLog.info("show main.");
-                StageManager.showStage(MainController.class);
-            }
-        });
-    }
-
-    /**
-     * 显示设置
-     */
-    private void showSetting() {
-        FXUtil.runLater(() -> {
-            StageAdapter wrapper = StageManager.getStage(SettingController.class);
-            if (wrapper != null) {
-                JulLog.info("front setting.");
-                wrapper.toFront();
-            } else {
-                JulLog.info("show setting.");
-                StageManager.showStage(SettingController.class, StageManager.getPrimaryStage());
-            }
-        });
+    @EventSubscribe
+    private void onEventMsg(EventFormatter formatter) {
+        ShellMessageTabController.EVENT_MESSAGES.add(formatter);
     }
 }

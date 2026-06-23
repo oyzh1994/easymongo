@@ -15,11 +15,13 @@ import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryRenamedEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalCloseEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
+import cn.oyzh.easymongo.event.window.ShellShowMessageEvent;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.tabs.bucket.MongoBucketRecordTab;
 import cn.oyzh.easymongo.tabs.collection.MongoCollectionRecordTab;
 import cn.oyzh.easymongo.tabs.function.ShellMongoFunctionDesignTab;
 import cn.oyzh.easymongo.tabs.home.MongoHomeTab;
+import cn.oyzh.easymongo.tabs.message.ShellMessageTab;
 import cn.oyzh.easymongo.tabs.query.MongoQueryMainTab;
 import cn.oyzh.easymongo.tabs.terminal.MongoTerminalTab;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
@@ -394,6 +396,39 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取消息tab
+     *
+     * @return 结果
+     */
+    private ShellMessageTab getMessageTab() {
+        for (Tab tab : this.getTabs()) {
+            if (tab instanceof ShellMessageTab tab1) {
+                return tab1;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 显示消息事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    public void showMessage(ShellShowMessageEvent event) {
+        ShellMessageTab tab = this.getMessageTab();
+        if (tab == null) {
+            tab = new ShellMessageTab();
+            super.addTab(tab);
+        } else {
+            tab.flushGraphic();
+        }
+        if (!tab.isSelected()) {
+            this.select(tab);
         }
     }
 }

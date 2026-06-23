@@ -86,6 +86,15 @@ public class HeaderController extends SubStageController {
     }
 
     /**
+     * 消息
+     */
+    @FXML
+    private void message() {
+        // ShellEventUtil.layout2();
+        MongoEventUtil.showMessage();
+    }
+
+    /**
      * 工具箱
      */
     @FXML

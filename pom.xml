@@ -87,6 +87,11 @@
             <artifactId>fx-editor</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.oyzh1994</groupId>
+            <artifactId>fx-rich</artifactId>
+        </dependency>
+
         <!-- &lt;!&ndash; Calcite 核心 &ndash;&gt; -->
         <!-- <dependency> -->
         <!--     <groupId>org.apache.calcite</groupId> -->

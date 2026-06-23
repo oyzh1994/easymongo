@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import cn.oyzh.fx.gui.svg.glyph.AboutSVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.layout.Layout1SVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.layout.Layout2SVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.QuitSVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.SettingSVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.ToolsSVGGlyph?>
-<?import cn.oyzh.fx.gui.svg.glyph.TransportSVGGlyph?>
+<?import cn.oyzh.fx.gui.svg.label.AboutSVGLabel?>
+<?import cn.oyzh.fx.gui.svg.label.QuitSVGLabel?>
+<?import cn.oyzh.fx.gui.svg.label.SettingSVGLabel?>
+<?import cn.oyzh.fx.gui.svg.label.ToolsSVGLabel?>
+<?import cn.oyzh.fx.gui.svg.label.TransportSVGLabel?>
+<?import cn.oyzh.fx.gui.svg.pane.LayoutSVGPane?>
 <?import cn.oyzh.fx.plus.controls.box.FXHBox?>
 <?import cn.oyzh.fx.plus.controls.FXHeaderBar?>
-<?import cn.oyzh.fx.plus.controls.pane.FXPane?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.VBox?>
-<?import cn.oyzh.fx.gui.svg.pane.LayoutSVGPane?>
-<?import cn.oyzh.fx.gui.svg.label.TransportSVGLabel?>
-<?import cn.oyzh.fx.gui.svg.label.ToolsSVGLabel?>
-<?import cn.oyzh.fx.gui.svg.label.SettingSVGLabel?>
-<?import cn.oyzh.fx.gui.svg.label.QuitSVGLabel?>
-<?import cn.oyzh.fx.gui.svg.label.AboutSVGLabel?>
+<?import javafx.scene.layout.HBox?>
+<?import cn.oyzh.fx.gui.svg.label.MessageSVGLabel?>
 <FXHeaderBar xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.oyzh.easymongo.controller.HeaderController"
              prefHeight="30">
     <content>
@@ -31,6 +24,11 @@
                     <Insets left="10" top="7"/>
                 </FXHBox.margin>
             </TransportSVGLabel>
+            <MessageSVGLabel tipText="%base.message" onMousePrimaryClicked="#message" >
+                <HBox.margin>
+                    <Insets left="10" top="7"/>
+                </HBox.margin>
+            </MessageSVGLabel>
             <ToolsSVGLabel onMousePrimaryClicked="#tool">
                 <FXHBox.margin>
                     <Insets left="10" top="7"/>

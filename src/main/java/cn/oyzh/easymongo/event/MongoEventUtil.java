@@ -28,6 +28,7 @@ import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryRenamedEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
 import cn.oyzh.easymongo.event.tree.MongoTreeItemChangedEvent;
+import cn.oyzh.easymongo.event.window.ShellShowMessageEvent;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoDatabase;
 import cn.oyzh.easymongo.mongo.MongoFunction;
@@ -256,5 +257,12 @@ public class MongoEventUtil {
         MongoConnectionConnectedEvent event = new MongoConnectionConnectedEvent();
         event.data(client);
         EventUtil.post(event);
+    }
+
+    /**
+     * 显示消息页面
+     */
+    public static void showMessage() {
+        EventUtil.post(new ShellShowMessageEvent());
     }
 }
