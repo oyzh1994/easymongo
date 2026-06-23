@@ -1,46 +1,46 @@
 package cn.oyzh.easymongo.event;
 
+import cn.oyzh.easymongo.domain.MongoConnect;
+import cn.oyzh.easymongo.domain.MongoQuery;
+import cn.oyzh.easymongo.event.bucket.MongoBucketDroppedEvent;
+import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionDroppedEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionRenamedEvent;
-import cn.oyzh.easymongo.event.connect.MongoConnectionClosedEvent;
-import cn.oyzh.easymongo.event.connect.MongoConnectionConnectedEvent;
-import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
-import cn.oyzh.easymongo.event.bucket.MongoBucketDroppedEvent;
-import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
-import cn.oyzh.easymongo.event.function.ShellMongoFunctionDesignEvent;
-import cn.oyzh.easymongo.event.function.ShellMongoFunctionDroppedEvent;
-import cn.oyzh.easymongo.event.function.ShellMongoFunctionRenamedEvent;
-import cn.oyzh.easymongo.event.query.MongoQueryDeletedEvent;
-import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
-import cn.oyzh.easymongo.mongo.MongoClient;
-import cn.oyzh.easymongo.mongo.MongoFunction;
-import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
-import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
-import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
-import cn.oyzh.easymongo.trees.function.ShellMongoFunctionTreeItem;
-import cn.oyzh.event.EventUtil;
-import cn.oyzh.fx.gui.event.Layout1Event;
-import cn.oyzh.fx.gui.event.Layout2Event;
-import cn.oyzh.fx.plus.changelog.ChangelogEvent;
-import cn.oyzh.easymongo.domain.MongoConnect;
-import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.connect.MongoAddConnectEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectAddedEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectDeletedEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectUpdatedEvent;
+import cn.oyzh.easymongo.event.connection.MongoConnectionClosedEvent;
+import cn.oyzh.easymongo.event.connection.MongoConnectionConnectedEvent;
+import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseClosedEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseDroppedEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseUpdatedEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionDesignEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionDroppedEvent;
+import cn.oyzh.easymongo.event.function.ShellMongoFunctionRenamedEvent;
 import cn.oyzh.easymongo.event.group.MongoAddGroupEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryAddEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryAddedEvent;
+import cn.oyzh.easymongo.event.query.MongoQueryDeletedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryRenamedEvent;
+import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
 import cn.oyzh.easymongo.event.tree.MongoTreeItemChangedEvent;
+import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoDatabase;
+import cn.oyzh.easymongo.mongo.MongoFunction;
+import cn.oyzh.easymongo.trees.bucket.MongoBucketTreeItem;
+import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
+import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.easymongo.trees.function.ShellMongoFunctionTreeItem;
 import cn.oyzh.easymongo.trees.query.MongoQueryTreeItem;
+import cn.oyzh.event.EventUtil;
+import cn.oyzh.fx.gui.event.Layout1Event;
+import cn.oyzh.fx.gui.event.Layout2Event;
+import cn.oyzh.fx.plus.changelog.ChangelogEvent;
 import javafx.scene.control.TreeItem;
 
 /**
@@ -117,9 +117,11 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
-    public static void queryRenamed(MongoQuery query, MongoDatabaseTreeItem item) {
+    public static void queryRenamed(String queryId, String queryName, String newQueryName, MongoDatabaseTreeItem item) {
         MongoQueryRenamedEvent event = new MongoQueryRenamedEvent();
-        event.data(query);
+        event.data(queryId);
+        event.setQueryName(queryName);
+        event.setNewQueryName(newQueryName);
         event.setDbItem(item);
         EventUtil.post(event);
     }
@@ -206,7 +208,7 @@ public class MongoEventUtil {
      *
      * @param client zk客户端
      */
-    public static void terminalOpen(MongoClient client,String dbName) {
+    public static void terminalOpen(MongoClient client, String dbName) {
         MongoTerminalOpenEvent event = new MongoTerminalOpenEvent();
         event.data(client);
         event.setDbName(dbName);

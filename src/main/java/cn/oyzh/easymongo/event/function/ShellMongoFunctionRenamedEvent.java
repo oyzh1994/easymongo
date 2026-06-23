@@ -2,12 +2,14 @@ package cn.oyzh.easymongo.event.function;
 
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.Event;
+import cn.oyzh.event.EventFormatter;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
  * @since 2024/01/23
  */
-public class ShellMongoFunctionRenamedEvent extends Event<String> {
+public class ShellMongoFunctionRenamedEvent extends Event<String> implements EventFormatter {
 
     private MongoDatabaseTreeItem dbItem;
 
@@ -35,5 +37,10 @@ public class ShellMongoFunctionRenamedEvent extends Event<String> {
 
     public void setDbItem(MongoDatabaseTreeItem dbItem) {
         this.dbItem = dbItem;
+    }
+
+    @Override
+    public String eventFormat() {
+        return String.format("[%s:%s] renamed, new name:%s", I18nHelper.function(), this.functionName(), this.getNewFunctionName());
     }
 }

@@ -1,4 +1,4 @@
-package cn.oyzh.easymongo.event.connect;
+package cn.oyzh.easymongo.event.connection;
 
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;

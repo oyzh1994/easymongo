@@ -1,11 +1,6 @@
 package cn.oyzh.easymongo.trees.query;
 
 import cn.oyzh.common.util.StringUtil;
-import cn.oyzh.fx.gui.menu.MenuItemHelper;
-import cn.oyzh.fx.gui.tree.view.RichTreeView;
-import cn.oyzh.fx.plus.information.MessageBox;
-import cn.oyzh.fx.plus.menu.FXMenuItem;
-import cn.oyzh.i18n.I18nHelper;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.MongoEventUtil;
@@ -13,6 +8,11 @@ import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.store.MongoQueryStore;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.fx.gui.menu.MenuItemHelper;
+import cn.oyzh.fx.gui.tree.view.RichTreeView;
+import cn.oyzh.fx.plus.information.MessageBox;
+import cn.oyzh.fx.plus.menu.FXMenuItem;
+import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.control.MenuItem;
 
 import java.util.ArrayList;
@@ -69,11 +69,11 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
     @Override
     public List<MenuItem> getMenuItems() {
         List<MenuItem> items = new ArrayList<>();
-        FXMenuItem openQuery = MenuItemHelper.openQuery( this::onPrimaryDoubleClick);
+        FXMenuItem openQuery = MenuItemHelper.openQuery(this::onPrimaryDoubleClick);
         items.add(openQuery);
-        FXMenuItem renameQuery = MenuItemHelper.renameQuery( this::rename);
+        FXMenuItem renameQuery = MenuItemHelper.renameQuery(this::rename);
         items.add(renameQuery);
-        FXMenuItem deleteQuery = MenuItemHelper.deleteTable( this::delete);
+        FXMenuItem deleteQuery = MenuItemHelper.deleteTable(this::delete);
         items.add(deleteQuery);
         return items;
     }
@@ -106,7 +106,7 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
         this.value.setName(name);
         // 修改名称
         if (MongoQueryStore.INSTANCE.update(this.value)) {
-            MongoEventUtil.queryRenamed(this.value, this.dbItem());
+            MongoEventUtil.queryRenamed(this.value.getUid(), oldName, name, this.dbItem());
             this.refresh();
         } else {
             this.value.setName(oldName);

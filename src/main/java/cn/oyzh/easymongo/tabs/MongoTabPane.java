@@ -5,13 +5,14 @@ import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionRenamedEvent;
-import cn.oyzh.easymongo.event.connect.MongoConnectionClosedEvent;
+import cn.oyzh.easymongo.event.connection.MongoConnectionClosedEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseClosedEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionDesignEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionDroppedEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionRenamedEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryAddEvent;
 import cn.oyzh.easymongo.event.query.MongoQueryOpenEvent;
+import cn.oyzh.easymongo.event.query.MongoQueryRenamedEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalCloseEvent;
 import cn.oyzh.easymongo.event.terminal.MongoTerminalOpenEvent;
 import cn.oyzh.easymongo.mongo.MongoClient;
@@ -378,4 +379,22 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     private void onConnectionClosed(MongoConnectionClosedEvent event) {
         this.removeTab(this.getMongoTabs());
     }
+
+    /**
+     * 查询重命名事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onQueryRenamed(MongoQueryRenamedEvent event) {
+        try {
+            MongoQueryMainTab tab = this.getMongoQueryMainTab(event.data());
+            if (tab != null) {
+                tab.closeTab();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
+

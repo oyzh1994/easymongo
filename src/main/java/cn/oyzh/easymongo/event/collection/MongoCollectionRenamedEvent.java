@@ -1,14 +1,15 @@
 package cn.oyzh.easymongo.event.collection;
 
-import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.event.Event;
+import cn.oyzh.event.EventFormatter;
+import cn.oyzh.i18n.I18nHelper;
 
 /**
  * @author oyzh
  * @since 2023/12/22
  */
-public class MongoCollectionRenamedEvent extends Event<String> {
+public class MongoCollectionRenamedEvent extends Event<String> implements EventFormatter {
 
     private MongoDatabaseTreeItem dbItem;
 
@@ -37,4 +38,10 @@ public class MongoCollectionRenamedEvent extends Event<String> {
     public void setDbItem(MongoDatabaseTreeItem dbItem) {
         this.dbItem = dbItem;
     }
+
+    @Override
+    public String eventFormat() {
+        return String.format("[%s:%s] renamed, new name:%s", I18nHelper.collection(), this.tableName(), this.getNewCollectionName());
+    }
+
 }

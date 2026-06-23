@@ -10,7 +10,6 @@ import cn.oyzh.event.Event;
  */
 public class MongoTerminalCloseEvent extends Event<MongoClient> {
 
-
     private String dbName;
 
     public String getDbName() {
