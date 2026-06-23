@@ -7,6 +7,7 @@ import cn.oyzh.common.util.CollectionUtil;
 import cn.oyzh.common.util.IOUtil;
 import cn.oyzh.common.util.NumberUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
+import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.exception.MongoException;
 import cn.oyzh.easymongo.mongo.condition.MongoConditionUtil;
 import cn.oyzh.easymongo.query.MongoExecuteResult;
@@ -76,6 +77,14 @@ public class MongoClient implements Closeable {
 
     public MongoClient(MongoConnect value) {
         this.shellConnect = value;
+        this.stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                switch (newValue) {
+                    case CLOSED -> MongoEventUtil.connectionClosed(this);
+                    case CONNECTED -> MongoEventUtil.connectionConnected(this);
+                }
+            }
+        });
     }
 
     public String connectName() {

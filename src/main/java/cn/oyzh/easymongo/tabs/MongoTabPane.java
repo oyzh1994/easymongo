@@ -5,6 +5,7 @@ import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionRenamedEvent;
+import cn.oyzh.easymongo.event.connect.MongoConnectionClosedEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseClosedEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionDesignEvent;
 import cn.oyzh.easymongo.event.function.ShellMongoFunctionDroppedEvent;
@@ -353,4 +354,28 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         this.removeTab(this.getBaseTabs(event.data()));
     }
 
+    /**
+     * 获取tab列表
+     *
+     * @return tab列表
+     */
+    public List<MongoTab> getMongoTabs() {
+        List<MongoTab> list = new ArrayList<>();
+        for (Tab tab : this.getTabs()) {
+            if (tab instanceof MongoTab tab1) {
+                list.add(tab1);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 连接关闭事件
+     *
+     * @param event 事件
+     */
+    @EventSubscribe
+    private void onConnectionClosed(MongoConnectionClosedEvent event) {
+        this.removeTab(this.getMongoTabs());
+    }
 }

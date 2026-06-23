@@ -7,7 +7,7 @@ import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.event.FXEventListener;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.easymongo.controller.connect.MongoConnectAddController;
-import cn.oyzh.easymongo.event.connect.DBAddConnectEvent;
+import cn.oyzh.easymongo.event.connect.MongoAddConnectEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectAddedEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectUpdatedEvent;
 import cn.oyzh.easymongo.event.group.MongoAddGroupEvent;
@@ -95,7 +95,7 @@ public class MongoTreeView extends RichTreeView implements FXEventListener {
      * @param event 事件
      */
     @EventSubscribe
-    private void addConnect(DBAddConnectEvent event) {
+    private void addConnect(MongoAddConnectEvent event) {
         StageManager.showStage(MongoConnectAddController.class, this.window());
     }
 

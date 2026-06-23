@@ -3,6 +3,8 @@ package cn.oyzh.easymongo.event;
 import cn.oyzh.easymongo.event.collection.MongoCollectionDroppedEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionOpenEvent;
 import cn.oyzh.easymongo.event.collection.MongoCollectionRenamedEvent;
+import cn.oyzh.easymongo.event.connect.MongoConnectionClosedEvent;
+import cn.oyzh.easymongo.event.connect.MongoConnectionConnectedEvent;
 import cn.oyzh.easymongo.event.database.MongoDatabaseAddedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketDroppedEvent;
 import cn.oyzh.easymongo.event.bucket.MongoBucketOpenEvent;
@@ -23,7 +25,7 @@ import cn.oyzh.fx.gui.event.Layout2Event;
 import cn.oyzh.fx.plus.changelog.ChangelogEvent;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.domain.MongoQuery;
-import cn.oyzh.easymongo.event.connect.DBAddConnectEvent;
+import cn.oyzh.easymongo.event.connect.MongoAddConnectEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectAddedEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectDeletedEvent;
 import cn.oyzh.easymongo.event.connect.MongoConnectUpdatedEvent;
@@ -134,7 +136,7 @@ public class MongoEventUtil {
     }
 
     public static void addConnect() {
-        EventUtil.post(new DBAddConnectEvent());
+        EventUtil.post(new MongoAddConnectEvent());
     }
 
     public static void addGroup() {
@@ -229,6 +231,28 @@ public class MongoEventUtil {
         event.setDbItem(dbItem);
         event.data(functionName);
         event.setNewFunctionName(newFunctionName);
+        EventUtil.post(event);
+    }
+
+    /**
+     * 连接关闭事件
+     *
+     * @param client redis客户端
+     */
+    public static void connectionClosed(MongoClient client) {
+        MongoConnectionClosedEvent event = new MongoConnectionClosedEvent();
+        event.data(client);
+        EventUtil.post(event);
+    }
+
+    /**
+     * 连接成功事件
+     *
+     * @param client redis客户端
+     */
+    public static void connectionConnected(MongoClient client) {
+        MongoConnectionConnectedEvent event = new MongoConnectionConnectedEvent();
+        event.data(client);
         EventUtil.post(event);
     }
 }

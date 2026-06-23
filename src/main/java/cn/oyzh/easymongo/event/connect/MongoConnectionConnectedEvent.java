@@ -9,7 +9,7 @@ import cn.oyzh.easymongo.mongo.MongoClient;
  * @author oyzh
  * @since 2023/11/28
  */
-public class DBConnectionConnectedEvent extends Event<MongoClient> implements  EventFormatter {
+public class MongoConnectionConnectedEvent extends Event<MongoClient> implements  EventFormatter {
 
     @Override
     public String eventFormat() {
