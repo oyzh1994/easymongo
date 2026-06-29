@@ -9,7 +9,7 @@ import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
  * @author oyzh
  * @since 2023/06/30
  */
-public class MongoTreeItemFilter implements RichTreeItemFilter {
+public class MongoTreeItemFilter extends RichTreeItemFilter {
 
     /**
      * 仅看收藏键
