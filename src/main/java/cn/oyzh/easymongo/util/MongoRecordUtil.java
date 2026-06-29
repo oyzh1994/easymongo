@@ -244,7 +244,7 @@ public class MongoRecordUtil {
      * @return 结果
      */
     public static boolean isBucket(String name) {
-        return StringUtil.endWith(name, ".files");
+        return StringUtil.endsWith(name, ".files");
     }
 
     /**
