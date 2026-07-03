@@ -6,12 +6,9 @@ import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoBucket;
 import cn.oyzh.easymongo.mongo.MongoClient;
-import cn.oyzh.easymongo.mongo.MongoCollection;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
-import cn.oyzh.easymongo.trees.collection.MongoCollectionTreeItem;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
-import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
@@ -157,16 +154,16 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
         }
     }
 
-    @Override
-    public synchronized void doFilter(RichTreeItemFilter itemFilter) {
-        super.doFilter(itemFilter);
-        this.refresh();
-    }
+    //@Override
+    //public synchronized void doFilter(RichTreeItemFilter itemFilter) {
+    //    super.doFilter(itemFilter);
+    //    this.refresh();
+    //}
 
-    public void addTable(MongoCollection table) {
-        this.addChild(new MongoCollectionTreeItem(table, this.getTreeView()));
-        this.sortChild(this.isSortAsc());
-    }
+    //public void addTable(MongoCollection table) {
+    //    this.addChild(new MongoCollectionTreeItem(table, this.getTreeView()));
+    //    this.sortChild(this.isSortAsc());
+    //}
 
     public long bucketsSize() {
        return this.parent().listBucketNames().size();

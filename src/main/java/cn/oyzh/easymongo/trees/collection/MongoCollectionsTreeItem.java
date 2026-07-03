@@ -7,11 +7,9 @@ import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoCollection;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
-import cn.oyzh.easymongo.trees.MongoTreeView;
 import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
 import cn.oyzh.easymongo.util.MongoViewFactory;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
-import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
 import cn.oyzh.fx.gui.tree.view.RichTreeView;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.menu.FXMenuItem;
@@ -178,16 +176,16 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
         }
     }
 
-    @Override
-    public synchronized void doFilter(RichTreeItemFilter itemFilter) {
-        super.doFilter(itemFilter);
-        this.refresh();
-    }
-
-    public void addTable(MongoCollection table) {
-        this.addChild(new MongoCollectionTreeItem(table, this.getTreeView()));
-        this.sortChild(this.isSortAsc());
-    }
+    //@Override
+    //public synchronized void doFilter(RichTreeItemFilter itemFilter) {
+    //    super.doFilter(itemFilter);
+    //    this.refresh();
+    //}
+    //
+    //public void addTable(MongoCollection table) {
+    //    this.addChild(new MongoCollectionTreeItem(table, this.getTreeView()));
+    //    this.sortChild(this.isSortAsc());
+    //}
 
     public long collectionsSize() {
         return this.parent().listCollectionNames().size();

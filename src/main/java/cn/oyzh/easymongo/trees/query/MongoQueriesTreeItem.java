@@ -2,18 +2,17 @@ package cn.oyzh.easymongo.trees.query;
 
 import cn.oyzh.common.thread.Task;
 import cn.oyzh.common.thread.TaskBuilder;
-import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
-import cn.oyzh.fx.gui.menu.MenuItemHelper;
-import cn.oyzh.fx.gui.tree.view.RichTreeItemFilter;
-import cn.oyzh.fx.gui.tree.view.RichTreeView;
-import cn.oyzh.fx.plus.information.MessageBox;
-import cn.oyzh.fx.plus.menu.FXMenuItem;
 import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.domain.MongoQuery;
 import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.store.MongoQueryStore;
 import cn.oyzh.easymongo.trees.MongoTreeItem;
+import cn.oyzh.easymongo.trees.database.MongoDatabaseTreeItem;
+import cn.oyzh.fx.gui.menu.MenuItemHelper;
+import cn.oyzh.fx.gui.tree.view.RichTreeView;
+import cn.oyzh.fx.plus.information.MessageBox;
+import cn.oyzh.fx.plus.menu.FXMenuItem;
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
@@ -119,11 +118,11 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
         }
     }
 
-    @Override
-    public synchronized void doFilter(RichTreeItemFilter itemFilter) {
-        super.doFilter(itemFilter);
-        this.refresh();
-    }
+    //@Override
+    //public synchronized void doFilter(RichTreeItemFilter itemFilter) {
+    //    super.doFilter(itemFilter);
+    //    this.refresh();
+    //}
 
     public long querySize() {
         List<MongoQuery> dbQueries = MongoQueryStore.INSTANCE.list(this.info().getId(), this.dbName());

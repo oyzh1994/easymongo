@@ -152,11 +152,11 @@ public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctio
         }
     }
 
-    @Override
-    public synchronized void doFilter(RichTreeItemFilter itemFilter) {
-        super.doFilter(itemFilter);
-        this.refresh();
-    }
+    //@Override
+    //public synchronized void doFilter(RichTreeItemFilter itemFilter) {
+    //    super.doFilter(itemFilter);
+    //    this.refresh();
+    //}
 
     public long functionSize() {
        return this.client().functionSize(this.dbName());
