@@ -3,10 +3,9 @@ package cn.oyzh.easymongo.fx;
 import cn.oyzh.easymongo.mongo.MongoColumn;
 import cn.oyzh.easymongo.mongo.MongoRecord;
 import cn.oyzh.fx.gui.menu.MenuItemHelper;
-import cn.oyzh.fx.plus.controls.box.FXHBox;
 import cn.oyzh.fx.plus.controls.box.FXVBox;
 import cn.oyzh.fx.plus.controls.label.FXLabel;
-import cn.oyzh.fx.plus.controls.table.FakerResizeTableColumn;
+import cn.oyzh.fx.plus.controls.table.FXTableColumn;
 import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.font.FontUtil;
 import cn.oyzh.fx.plus.menu.ContextMenuAdapter;
@@ -26,7 +25,7 @@ import java.util.List;
  * @author oyzh
  * @since 2024/7/17
  */
-public class MongoRecordColumn extends FakerResizeTableColumn<MongoRecord, Object> implements MenuItemAdapter, ContextMenuAdapter {
+public class MongoRecordColumn extends FXTableColumn<MongoRecord, Object> implements MenuItemAdapter, ContextMenuAdapter {
 
     private final MongoColumn column;
 
@@ -40,17 +39,17 @@ public class MongoRecordColumn extends FakerResizeTableColumn<MongoRecord, Objec
         this.setCellValueFactory(p -> p.getValue().getProperty(column.getName()));
         if (mode == 0) {
             this.text(column.displayName());
-        } else if (mode == 1) {
+        } else  {
             FXVBox vBox = this.initContent();
             this.setGraphic(vBox);
             this.text(column.displayName());
             super.showGraphicOnlyLater();
-        } else {
-            FXVBox vBox = this.initContent();
-            FXHBox hBox = super.initGraphic(vBox);
-            this.setGraphic(hBox);
-            this.text(column.displayName());
-            super.showGraphicOnlyLater();
+//        } else {
+//            FXVBox vBox = this.initContent();
+//            FXHBox hBox = super.initGraphic(vBox);
+//            this.setGraphic(hBox);
+//            this.text(column.displayName());
+//            super.showGraphicOnlyLater();
         }
     }
 
@@ -114,8 +113,8 @@ public class MongoRecordColumn extends FakerResizeTableColumn<MongoRecord, Objec
         return this.column.getType();
     }
 
-    @Override
-    protected boolean autoInitGraphic() {
-        return false;
-    }
+//    @Override
+//    protected boolean autoInitGraphic() {
+//        return false;
+//    }
 }
