@@ -64,8 +64,8 @@ public class ShellMongoDataImportFile {
 
     public ShellMongoCollectionComboBox getTargetTableControl() {
         ShellMongoCollectionComboBox comboBox = new ShellMongoCollectionComboBox();
-        String dbName = CacheHelper.get("dbName");
-        MongoClient dbClient = CacheHelper.get("dbClient");
+        String dbName = CacheHelper.get("mysql:dbName");
+        MongoClient dbClient = CacheHelper.get("mysql:dbClient");
         StageManager.showMask(() -> {
             comboBox.init(dbName, this.getTableName(), dbClient);
         });
