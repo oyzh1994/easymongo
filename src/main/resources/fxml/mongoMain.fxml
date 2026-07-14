@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import cn.oyzh.fx.plus.controls.pane.FXPane?>
-<?import cn.oyzh.easymongo.tabs.MongoTabPane?>
 <?import cn.oyzh.easymongo.tabs.home.MongoHomeTab?>
-<FXPane xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="cn.oyzh.easymongo.controller.MongoMainController" flexWidth="100%" flexHeight="100% - 30">
+<?import cn.oyzh.easymongo.tabs.MongoTabPane?>
+<?import cn.oyzh.fx.plus.controls.pane.FXSplitPane?>
+<FXSplitPane xmlns:fx="http://javafx.com/fxml/1"
+             fx:controller="cn.oyzh.easymongo.controller.MongoMainController" flexWidth="100%" flexHeight="100% - 30"
+             dividerPositions="0.25" fx:id="root">
     <fx:include fx:id="connect" source="main/connect.fxml"/>
-    <MongoTabPane fx:id="tabPane" layoutX="300" flexWidth="100% - 300" tabClosingPolicy="ALL_TABS"
+    <MongoTabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS"
                   flexHeight="100%">
         <MongoHomeTab/>
     </MongoTabPane>
-</FXPane>
+</FXSplitPane>

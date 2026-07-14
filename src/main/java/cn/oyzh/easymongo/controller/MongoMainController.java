@@ -11,7 +11,7 @@ import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.event.tree.MongoTreeItemChangedEvent;
 import cn.oyzh.easymongo.tabs.MongoTabPane;
 import cn.oyzh.easymongo.trees.connect.MongoConnectTreeItem;
-import cn.oyzh.fx.plus.node.NodeWidthResizer;
+import cn.oyzh.fx.plus.controls.pane.FXSplitPane;
 import javafx.fxml.FXML;
 
 import java.util.List;
@@ -35,6 +35,12 @@ public class MongoMainController extends ParentStageController {
     //      */
     //     @FXML
     //     private FXTabPane tabPaneLeft;
+
+    /**
+     * 根节点
+     */
+    @FXML
+    private FXSplitPane root;
 
     /**
      * 左侧组件
@@ -89,20 +95,20 @@ public class MongoMainController extends ParentStageController {
     //     this.savePageResize();
     // }
 
-    /**
-     * 左侧组件重新布局
-     *
-     * @param newWidth 新宽度
-     */
-    private void resizeLeft(Float newWidth) {
-        if (newWidth != null && !Double.isNaN(newWidth)) {
-            // 设置组件宽
-            this.connect.setRealWidth(newWidth);
-            this.tabPane.setLayoutX(newWidth);
-            this.tabPane.setFlexWidth("100% - " + newWidth);
-            //this.tabPaneLeft.parentAutosize();
-        }
-    }
+//    /**
+//     * 左侧组件重新布局
+//     *
+//     * @param newWidth 新宽度
+//     */
+//    private void resizeLeft(Float newWidth) {
+//        if (newWidth != null && !Double.isNaN(newWidth)) {
+//            // 设置组件宽
+//            this.connect.setRealWidth(newWidth);
+//            this.tabPane.setLayoutX(newWidth);
+//            this.tabPane.setFlexWidth("100% - " + newWidth);
+//            //this.tabPaneLeft.parentAutosize();
+//        }
+//    }
 
     // @Override
     // public void onSystemExit() {
@@ -120,12 +126,12 @@ public class MongoMainController extends ParentStageController {
     //     }
     // }
     //
-    @Override
-    protected void bindListeners() {
-        super.bindListeners();
-        // 大小调整增强
-        NodeWidthResizer.of(this.connect, this::resizeLeft, 240, 650);
-    }
+//    @Override
+//    protected void bindListeners() {
+//        super.bindListeners();
+//        // 大小调整增强
+//        NodeWidthResizer.of(this.connect, this::resizeLeft, 240, 650);
+//    }
 
     /**
      * 树节点变化事件
@@ -147,10 +153,17 @@ public class MongoMainController extends ParentStageController {
     @EventSubscribe
     private void layout2(Layout2Event event) {
         this.connect.display();
-        double w = this.connect.getRealWidth();
-        this.tabPane.setLayoutX(w);
-        this.tabPane.setFlexWidth("100% - " + w);
-        this.connect.parentAutosize();
+        //        double w = this.tabPaneLeft.getRealWidth();
+        //        this.tabPane.setLayoutX(w);
+        //        this.tabPane.setFlexWidth("100% - " + w);
+        //        this.tabPaneLeft.parentAutosize();
+        this.root.setShowDivider(true);
+        Double positions_0 = this.root.getPosition0();
+        if (positions_0 == null) {
+            this.root.setDividerPositions(0.25, 0.75);
+        } else {
+            this.root.setDividerPositions(positions_0, 1 - positions_0);
+        }
     }
 
     /**
@@ -159,9 +172,12 @@ public class MongoMainController extends ParentStageController {
     @EventSubscribe
     private void layout1(Layout1Event event) {
         this.connect.disappear();
-        this.tabPane.setLayoutX(0);
-        this.tabPane.setFlexWidth("100%");
-        this.connect.parentAutosize();
+        //        this.tabPane.setLayoutX(0);
+        //        this.tabPane.setFlexWidth("100%");
+        //        this.tabPaneLeft.parentAutosize();
+        this.root.recordPosition0();
+        this.root.setShowDivider(false);
+        this.root.setDividerPositions(0, 1);
     }
 
     @Override
