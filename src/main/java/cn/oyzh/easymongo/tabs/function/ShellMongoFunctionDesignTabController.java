@@ -105,8 +105,8 @@ public class ShellMongoFunctionDesignTabController extends RichTabController {
         // 初始化信息
         FXUtil.runWait(this::initInfo);
 
-        // 监听组件
-        CacheHelper.set("mysql:dbClient", this.dbItem.client());
+        //// 监听组件
+        //CacheHelper.set("mysql:dbClient", this.dbItem.client());
     }
 
     /**

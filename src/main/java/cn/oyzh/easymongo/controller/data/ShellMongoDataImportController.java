@@ -1,6 +1,5 @@
 package cn.oyzh.easymongo.controller.data;
 
-import cn.oyzh.common.cache.CacheHelper;
 import cn.oyzh.common.date.DateUtil;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
@@ -34,6 +33,7 @@ import cn.oyzh.fx.plus.util.FXUtil;
 import cn.oyzh.fx.plus.window.FXStageStyle;
 import cn.oyzh.fx.plus.window.StageAttribute;
 import cn.oyzh.i18n.I18nHelper;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.stage.Modality;
@@ -320,8 +320,23 @@ public class ShellMongoDataImportController extends StageController {
         this.database.selectedItemChanged((observable, oldValue, newValue) -> {
             this.dbName = newValue;
             this.importFileTableView.clearItems();
-            CacheHelper.set("mysql:dbName", this.dbName);
+            this.initFileTable();
+            //CacheHelper.set("mysql:dbName", this.dbName);
         });
+        // 初始化文件列表
+        this.importFileTableView.itemList().addListener((ListChangeListener<ShellMongoDataImportFile>) c -> {
+            while (c.next() && (c.wasAdded() || c.wasReplaced())) {
+                this.initFileTable();
+            }
+        });
+        this.initFileTable();
+    }
+
+    private void initFileTable() {
+        for (ShellMongoDataImportFile index : this.importFileTableView.itemList()) {
+            index.setDbName(this.dbName);
+            index.setDbClient(this.dbClient);
+        }
     }
 
     @Override
@@ -336,8 +351,8 @@ public class ShellMongoDataImportController extends StageController {
             this.database.init(this.dbClient);
             this.database.enable();
         }
-        CacheHelper.set("mysql:dbName", this.dbName);
-        CacheHelper.set("mysql:dbClient", this.dbClient);
+        //CacheHelper.set("mysql:dbName", this.dbName);
+        //CacheHelper.set("mysql:dbClient", this.dbClient);
         this.stage.hideOnEscape();
         super.onWindowShown(event);
     }
