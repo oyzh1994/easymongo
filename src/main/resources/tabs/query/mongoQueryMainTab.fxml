@@ -30,7 +30,7 @@
         <!--     </HBox.margin> -->
         <!-- </ExplainSVGGlyph> -->
     </FXHBox>
-    <FXSplitPane showDivider="false" fx:id="splitPane" flexWidth="100%" flexHeight="100% - 35" dividerPositions="1">
+    <FXSplitPane showDivider="false" orientation="VERTICAL" fx:id="splitPane" flexWidth="100%" flexHeight="100% - 35" dividerPositions="1">
         <MongoQueryEditor fontSize="12" fx:id="queryArea" flexWidth="100%"
                           onKeyPressed="#queryKeyPressed"/>
         <FXTabPane fx:id="resultTabPane" flexWidth="100%" visible="false" managed="false">
