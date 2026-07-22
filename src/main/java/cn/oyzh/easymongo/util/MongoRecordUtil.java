@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.util;
 
+import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.util.StringUtil;
 import cn.oyzh.common.util.TextUtil;
 import cn.oyzh.easymongo.fx.CodeTextFiled;
@@ -210,7 +211,7 @@ public class MongoRecordUtil {
      * @return 结果
      */
     public static MongoRecord docToRecord(String doc, String dbName, String collectionName) {
-        JSONObject object = JSONObject.parseObject(doc);
+        JSONObject object = JSONUtil.parseObject(doc);
         MongoColumns columns = new MongoColumns();
         for (String col : object.keySet()) {
             MongoColumn column = new MongoColumn(col);

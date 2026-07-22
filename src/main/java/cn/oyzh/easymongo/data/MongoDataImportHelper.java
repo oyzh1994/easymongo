@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.data;
 
+import cn.oyzh.common.json.JSONUtil;
 import cn.oyzh.common.util.RegexUtil;
 import com.alibaba.fastjson2.JSONArray;
 
@@ -27,7 +28,7 @@ public class MongoDataImportHelper {
         }
         // json array
         if (value.startsWith("[") && value.endsWith("]")) {
-            return JSONArray.parseArray(value);
+            return JSONUtil.parseArray(value);
         }
         return value;
     }
