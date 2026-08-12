@@ -410,7 +410,7 @@ public class SettingController extends StageController {
         fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.general(), "font_general_box"));
         fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.editor(), "font_editor_box"));
         fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.terminal(), "font_terminal_box"));
-        fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.query(), "font_query_box"));
+//        fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.query(), "font_query_box"));
         treeView.addItem(SettingLeftTreeItemValue.of(I18nHelper.theme(), "theme_box"));
         treeView.addItem(SettingLeftTreeItemValue.of(I18nHelper.locale(), "locale_box"));
         treeView.selectItem("mysql_box");
