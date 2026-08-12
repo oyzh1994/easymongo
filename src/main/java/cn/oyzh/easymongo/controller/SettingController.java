@@ -284,9 +284,9 @@ public class SettingController extends StageController {
         this.terminalFontSize.selectSize(this.setting.getTerminalFontSize());
         this.terminalFontFamily.select(this.setting.getTerminalFontFamily());
         this.terminalFontWeight.selectWeight(this.setting.getTerminalFontWeight());
-        this.queryFontSize.selectSize(this.setting.getQueryFontSize());
-        this.queryFontFamily.select(this.setting.getQueryFontFamily());
-        this.queryFontWeight.selectWeight(this.setting.getQueryFontWeight());
+//        this.queryFontSize.selectSize(this.setting.getQueryFontSize());
+//        this.queryFontFamily.select(this.setting.getQueryFontFamily());
+//        this.queryFontWeight.selectWeight(this.setting.getQueryFontWeight());
         // 区域相关处理
         this.locale.select(this.setting.getLocale());
         // 透明度相关处理
@@ -331,9 +331,9 @@ public class SettingController extends StageController {
             this.setting.setTerminalFontSize(terminalFontSize);
             this.setting.setTerminalFontFamily(terminalFontFamily);
             this.setting.setTerminalFontWeight(terminalFontWeight);
-            this.setting.setQueryFontSize(queryFontSize);
-            this.setting.setQueryFontFamily(queryFontFamily);
-            this.setting.setQueryFontWeight(queryFontWeight);
+//            this.setting.setQueryFontSize(queryFontSize);
+//            this.setting.setQueryFontFamily(queryFontFamily);
+//            this.setting.setQueryFontWeight(queryFontWeight);
             // 主题相关
             this.setting.setTheme(this.theme.name());
             this.setting.setBgColor(this.bgColor.getColor());
@@ -525,18 +525,18 @@ public class SettingController extends StageController {
         this.terminalFontWeight.selectWeight(AppSetting.defaultTerminalFontWeight());
     }
 
-    @FXML
-    private void resetQueryFontFamily() {
-        this.queryFontFamily.select(AppSetting.defaultQueryFontFamily());
-    }
-
-    @FXML
-    private void resetQueryFontSize() {
-        this.queryFontSize.selectSize(AppSetting.defaultQueryFontSize());
-    }
-
-    @FXML
-    private void resetQueryFontWeight() {
-        this.queryFontWeight.selectWeight(AppSetting.defaultQueryFontWeight());
-    }
+//    @FXML
+//    private void resetQueryFontFamily() {
+//        this.queryFontFamily.select(AppSetting.defaultQueryFontFamily());
+//    }
+//
+//    @FXML
+//    private void resetQueryFontSize() {
+//        this.queryFontSize.selectSize(AppSetting.defaultQueryFontSize());
+//    }
+//
+//    @FXML
+//    private void resetQueryFontWeight() {
+//        this.queryFontWeight.selectWeight(AppSetting.defaultQueryFontWeight());
+//    }
 }
