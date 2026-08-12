@@ -200,23 +200,23 @@ public class SettingController extends StageController {
     @FXML
     private FontFamilyComboBox terminalFontFamily;
 
-    /**
-     * 查询字体大小
-     */
-    @FXML
-    private FontSizeComboBox queryFontSize;
-
-    /**
-     * 查询字体粗细
-     */
-    @FXML
-    private FontWeightComboBox queryFontWeight;
-
-    /**
-     * 查询字体名称
-     */
-    @FXML
-    private FontFamilyComboBox queryFontFamily;
+//    /**
+//     * 查询字体大小
+//     */
+//    @FXML
+//    private FontSizeComboBox queryFontSize;
+//
+//    /**
+//     * 查询字体粗细
+//     */
+//    @FXML
+//    private FontWeightComboBox queryFontWeight;
+//
+//    /**
+//     * 查询字体名称
+//     */
+//    @FXML
+//    private FontFamilyComboBox queryFontFamily;
 
     /**
      * 区域
@@ -314,9 +314,9 @@ public class SettingController extends StageController {
             Byte terminalFontSize = this.terminalFontSize.byteValue();
             short terminalFontWeight = this.terminalFontWeight.getWeight();
             String terminalFontFamily = this.terminalFontFamily.getValue();
-            Byte queryFontSize = this.queryFontSize.byteValue();
-            short queryFontWeight = this.queryFontWeight.getWeight();
-            String queryFontFamily = this.queryFontFamily.getValue();
+//            Byte queryFontSize = this.queryFontSize.byteValue();
+//            short queryFontWeight = this.queryFontWeight.getWeight();
+//            String queryFontFamily = this.queryFontFamily.getValue();
 
             // 提示文字
             String tips = this.checkConfigForRestart(locale);
