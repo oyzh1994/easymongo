@@ -33,12 +33,8 @@ public class MongoTerminalPane extends TerminalPane {
 
     @Override
     protected Font getEditorFont() {
-        if (super.getEditorFont() == null) {
-            MongoSetting setting = MongoSettingStore.SETTING;
-            Font font = FontManager.toFont(setting.terminalFontConfig());
-            super.setEditorFont(font);
-        }
-        return super.getEditorFont();
+        MongoSetting setting = MongoSettingStore.SETTING;
+        return FontManager.toFont(setting.terminalFontConfig());
     }
 
     /**

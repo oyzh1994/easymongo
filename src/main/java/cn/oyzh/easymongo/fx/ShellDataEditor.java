@@ -14,11 +14,7 @@ public class ShellDataEditor extends Editor {
 
     @Override
     protected Font getEditorFont() {
-        if (super.getEditorFont() == null) {
-            MongoSetting setting = MongoSettingStore.SETTING;
-            Font font = FontManager.toFont(setting.editorFontConfig());
-            super.setEditorFont(font);
-        }
-        return super.getEditorFont();
+        MongoSetting setting = MongoSettingStore.SETTING;
+        return FontManager.toFont(setting.editorFontConfig());
     }
 }
