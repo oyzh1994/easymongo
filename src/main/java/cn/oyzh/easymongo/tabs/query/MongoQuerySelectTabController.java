@@ -1,5 +1,6 @@
 package cn.oyzh.easymongo.tabs.query;
 
+import cn.oyzh.common.util.TextUtil;
 import cn.oyzh.easymongo.fx.DBStatusColumn;
 import cn.oyzh.easymongo.fx.MongoRecordColumn;
 import cn.oyzh.easymongo.fx.MongoRecordTableView;
@@ -160,7 +161,7 @@ public class MongoQuerySelectTabController extends RichTabController {
             // 纠正记录
             this.correctRecords();
             // 初始化脚本信息
-            this.script.text(this.result.getScript());
+            this.script.text(TextUtil.toSingleLine(this.result.getScript()));
             this.used.text(I18nHelper.time() + ": " + this.result.getUsedMs() + "ms");
             // 初始化计数
             this.initCount(this.result.getCount());
