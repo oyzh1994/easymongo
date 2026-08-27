@@ -6,8 +6,8 @@
              fx:controller="cn.oyzh.easymongo.controller.MongoMainController" flexWidth="100%" flexHeight="100% - 30"
              dividerPositions="0.25" fx:id="root">
     <fx:include fx:id="connect" source="main/connect.fxml"/>
-    <MongoTabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS"
-                  flexHeight="100%">
+    <MongoTabPane fx:id="tabPane" flexHeight="100%"
+                  tabClosingPolicy="ALL_TABS" tabDragPolicy="REORDER">
         <MongoHomeTab/>
     </MongoTabPane>
 </FXSplitPane>

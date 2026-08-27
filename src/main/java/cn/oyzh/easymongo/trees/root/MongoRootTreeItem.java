@@ -82,7 +82,7 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
         FXMenuItem addConnect = MenuItemHelper.addConnect( this::addConnect);
         FXMenuItem exportConnect = MenuItemHelper.exportConnect( this::exportConnect);
         FXMenuItem importConnect = MenuItemHelper.importConnect( this::importConnect);
-        FXMenuItem addGroup = MenuItemHelper.addGroup( this::addGroup);
+        FXMenuItem addGroup = MenuItemHelper.addFolder1( this::addGroup);
 
         exportConnect.setDisable(this.isChildEmpty());
 
