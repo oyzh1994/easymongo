@@ -14,6 +14,7 @@ import cn.oyzh.easymongo.util.MongoI18nHelper;
 import cn.oyzh.easymongo.util.ShellMongoConnectUtil;
 import cn.oyzh.fx.plus.font.FontManager;
 import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
+import cn.oyzh.fx.plus.util.FXUtil;
 import cn.oyzh.fx.terminal.TerminalPane;
 import cn.oyzh.fx.terminal.command.TerminalCommand;
 import cn.oyzh.fx.terminal.command.TerminalCommandHandler;
@@ -94,15 +95,17 @@ public class MongoTerminalPane extends TerminalPane {
     public void init(MongoClient client, String dbName) {
         this.client = client;
         this.dbName = dbName;
-        this.disableInput();
-        this.outputLine(MongoI18nHelper.welcome());
-        this.outputLine("Powered By oyzh(2026-2026).");
-        this.flushPrompt();
-        if (this.isTemporary()) {
-            this.initByTemporary();
-        } else {
-            this.initByPermanent();
-        }
+        FXUtil.runLater(() -> {
+            this.disableInput();
+            this.outputLine(MongoI18nHelper.welcome());
+            this.outputLine("Powered By oyzh(2026-2026).");
+            this.flushPrompt();
+            if (this.isTemporary()) {
+                this.initByTemporary();
+            } else {
+                this.initByPermanent();
+            }
+        });
     }
 
     public String getDbName() {
@@ -211,15 +214,15 @@ public class MongoTerminalPane extends TerminalPane {
         });
     }
 
-    /**
-     * 刷新光标并移动到尾部
-     */
-    private void flushAndMoveCaretEnd() {
-        ExecutorUtil.start(() -> {
-            this.flushCaret();
-            this.moveCaretEnd();
-        }, 50);
-    }
+    // /**
+    //  * 刷新光标并移动到尾部
+    //  */
+    // private void flushAndMoveCaretEnd() {
+    //     ExecutorUtil.start(() -> {
+    //         this.flushCaret();
+    //         this.moveCaretEnd();
+    //     }, 50);
+    // }
 
     /**
      * 初始化连接状态监听器
