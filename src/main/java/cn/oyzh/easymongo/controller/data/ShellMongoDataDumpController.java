@@ -4,8 +4,8 @@ import cn.oyzh.common.file.FileUtil;
 import cn.oyzh.common.system.SystemUtil;
 import cn.oyzh.common.thread.ThreadUtil;
 import cn.oyzh.easymongo.data.handler.DBDataDumpHandler;
-import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.data.ui.DBDataDumpTypeComboBox;
+import cn.oyzh.easymongo.domain.MongoConnect;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.fx.gui.text.area.MsgTextArea;
 import cn.oyzh.fx.gui.text.field.ReadOnlyTextField;
@@ -21,7 +21,6 @@ import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.node.NodeGroupUtil;
 import cn.oyzh.fx.plus.util.Counter;
-import cn.oyzh.fx.plus.util.FXUtil;
 import cn.oyzh.fx.plus.window.FXStageStyle;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageAttribute;
@@ -270,7 +269,7 @@ public class ShellMongoDataDumpController extends StageController {
         if (extraMsg != null) {
             this.counter.setExtraMsg(extraMsg);
         }
-        FXUtil.runLater(() -> this.dumpStatus.setText(this.counter.unknownFormat()));
+        this.dumpStatus.text(this.counter.unknownFormat());
     }
 
     @Override
