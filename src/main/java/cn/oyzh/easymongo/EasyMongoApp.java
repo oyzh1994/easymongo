@@ -55,8 +55,8 @@ public class EasyMongoApp extends FXApplication implements EventListener {
 
     public static void main(String[] args) {
         try {
-            // 开启fx的预览功能
-            FXUtil.enablePreview();
+//            // 开启fx的预览功能
+//            FXUtil.enablePreview();
             // 设置默认异常捕捉器
             Thread.setDefaultUncaughtExceptionHandler((t, ex) -> {
                 if (!ExceptionUtil.hasMessage(ex, "isImageAutoSize")) {
