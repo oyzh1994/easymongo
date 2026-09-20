@@ -258,9 +258,9 @@ public class SettingController extends StageController {
             }
         }
         // 记住页面大小处理
-        if (this.setting.getRememberPageSize() != null) {
+//        if (this.setting.getRememberPageSize() != null) {
             this.pageSize.setSelected(this.setting.isRememberPageSize());
-        }
+//        }
         // 记住页面拉伸处理
         if (this.setting.getRememberPageResize() != null) {
             this.pageResize.setSelected(this.setting.isRememberPageResize());
@@ -290,9 +290,9 @@ public class SettingController extends StageController {
         // 区域相关处理
         this.locale.select(this.setting.getLocale());
         // 透明度相关处理
-        if (this.setting.getOpacity() != null) {
+//        if (this.setting.getOpacity() != null) {
             this.opacity.setValue(this.setting.getOpacity());
-        }
+//        }
         if (this.setting.getTitleBarOpacity() != null) {
             this.titleBarOpacity.setValue(this.setting.getTitleBarOpacity());
         }
