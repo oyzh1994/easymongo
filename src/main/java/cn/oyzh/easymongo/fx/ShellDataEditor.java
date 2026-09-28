@@ -13,7 +13,7 @@ import javafx.scene.text.Font;
 public class ShellDataEditor extends Editor {
 
     @Override
-    protected Font getEditorFont() {
+    public Font getEditorFont() {
         MongoSetting setting = MongoSettingStore.SETTING;
         return FontManager.toFont(setting.editorFontConfig());
     }
