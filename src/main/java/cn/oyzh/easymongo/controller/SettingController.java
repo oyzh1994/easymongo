@@ -200,23 +200,23 @@ public class SettingController extends StageController {
     @FXML
     private FontFamilyComboBox terminalFontFamily;
 
-    /**
-     * 查询字体大小
-     */
-    @FXML
-    private FontSizeComboBox queryFontSize;
-
-    /**
-     * 查询字体粗细
-     */
-    @FXML
-    private FontWeightComboBox queryFontWeight;
-
-    /**
-     * 查询字体名称
-     */
-    @FXML
-    private FontFamilyComboBox queryFontFamily;
+//    /**
+//     * 查询字体大小
+//     */
+//    @FXML
+//    private FontSizeComboBox queryFontSize;
+//
+//    /**
+//     * 查询字体粗细
+//     */
+//    @FXML
+//    private FontWeightComboBox queryFontWeight;
+//
+//    /**
+//     * 查询字体名称
+//     */
+//    @FXML
+//    private FontFamilyComboBox queryFontFamily;
 
     /**
      * 区域
@@ -258,9 +258,9 @@ public class SettingController extends StageController {
             }
         }
         // 记住页面大小处理
-        if (this.setting.getRememberPageSize() != null) {
+//        if (this.setting.getRememberPageSize() != null) {
             this.pageSize.setSelected(this.setting.isRememberPageSize());
-        }
+//        }
         // 记住页面拉伸处理
         if (this.setting.getRememberPageResize() != null) {
             this.pageResize.setSelected(this.setting.isRememberPageResize());
@@ -284,15 +284,15 @@ public class SettingController extends StageController {
         this.terminalFontSize.selectSize(this.setting.getTerminalFontSize());
         this.terminalFontFamily.select(this.setting.getTerminalFontFamily());
         this.terminalFontWeight.selectWeight(this.setting.getTerminalFontWeight());
-        this.queryFontSize.selectSize(this.setting.getQueryFontSize());
-        this.queryFontFamily.select(this.setting.getQueryFontFamily());
-        this.queryFontWeight.selectWeight(this.setting.getQueryFontWeight());
+//        this.queryFontSize.selectSize(this.setting.getQueryFontSize());
+//        this.queryFontFamily.select(this.setting.getQueryFontFamily());
+//        this.queryFontWeight.selectWeight(this.setting.getQueryFontWeight());
         // 区域相关处理
         this.locale.select(this.setting.getLocale());
         // 透明度相关处理
-        if (this.setting.getOpacity() != null) {
+//        if (this.setting.getOpacity() != null) {
             this.opacity.setValue(this.setting.getOpacity());
-        }
+//        }
         if (this.setting.getTitleBarOpacity() != null) {
             this.titleBarOpacity.setValue(this.setting.getTitleBarOpacity());
         }
@@ -314,9 +314,9 @@ public class SettingController extends StageController {
             Byte terminalFontSize = this.terminalFontSize.byteValue();
             short terminalFontWeight = this.terminalFontWeight.getWeight();
             String terminalFontFamily = this.terminalFontFamily.getValue();
-            Byte queryFontSize = this.queryFontSize.byteValue();
-            short queryFontWeight = this.queryFontWeight.getWeight();
-            String queryFontFamily = this.queryFontFamily.getValue();
+//            Byte queryFontSize = this.queryFontSize.byteValue();
+//            short queryFontWeight = this.queryFontWeight.getWeight();
+//            String queryFontFamily = this.queryFontFamily.getValue();
 
             // 提示文字
             String tips = this.checkConfigForRestart(locale);
@@ -331,9 +331,9 @@ public class SettingController extends StageController {
             this.setting.setTerminalFontSize(terminalFontSize);
             this.setting.setTerminalFontFamily(terminalFontFamily);
             this.setting.setTerminalFontWeight(terminalFontWeight);
-            this.setting.setQueryFontSize(queryFontSize);
-            this.setting.setQueryFontFamily(queryFontFamily);
-            this.setting.setQueryFontWeight(queryFontWeight);
+//            this.setting.setQueryFontSize(queryFontSize);
+//            this.setting.setQueryFontFamily(queryFontFamily);
+//            this.setting.setQueryFontWeight(queryFontWeight);
             // 主题相关
             this.setting.setTheme(this.theme.name());
             this.setting.setBgColor(this.bgColor.getColor());
@@ -410,7 +410,7 @@ public class SettingController extends StageController {
         fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.general(), "font_general_box"));
         fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.editor(), "font_editor_box"));
         fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.terminal(), "font_terminal_box"));
-        fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.query(), "font_query_box"));
+//        fontItem.addItem(SettingLeftTreeItemValue.of(I18nHelper.query(), "font_query_box"));
         treeView.addItem(SettingLeftTreeItemValue.of(I18nHelper.theme(), "theme_box"));
         treeView.addItem(SettingLeftTreeItemValue.of(I18nHelper.locale(), "locale_box"));
         treeView.selectItem("mysql_box");
@@ -525,18 +525,18 @@ public class SettingController extends StageController {
         this.terminalFontWeight.selectWeight(AppSetting.defaultTerminalFontWeight());
     }
 
-    @FXML
-    private void resetQueryFontFamily() {
-        this.queryFontFamily.select(AppSetting.defaultQueryFontFamily());
-    }
-
-    @FXML
-    private void resetQueryFontSize() {
-        this.queryFontSize.selectSize(AppSetting.defaultQueryFontSize());
-    }
-
-    @FXML
-    private void resetQueryFontWeight() {
-        this.queryFontWeight.selectWeight(AppSetting.defaultQueryFontWeight());
-    }
+//    @FXML
+//    private void resetQueryFontFamily() {
+//        this.queryFontFamily.select(AppSetting.defaultQueryFontFamily());
+//    }
+//
+//    @FXML
+//    private void resetQueryFontSize() {
+//        this.queryFontSize.selectSize(AppSetting.defaultQueryFontSize());
+//    }
+//
+//    @FXML
+//    private void resetQueryFontWeight() {
+//        this.queryFontWeight.selectWeight(AppSetting.defaultQueryFontWeight());
+//    }
 }

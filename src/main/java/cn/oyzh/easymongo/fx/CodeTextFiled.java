@@ -34,7 +34,7 @@ public class CodeTextFiled extends JsonTextFiled {
 
     @Override
     public void formatValue() {
-        this.setText(format(super.getValue()));
+        this.setText(format(super.value()));
     }
 
     public static String format(Object val) {
