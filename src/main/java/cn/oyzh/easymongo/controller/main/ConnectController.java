@@ -13,7 +13,7 @@ import javafx.stage.WindowEvent;
 
 
 /**
- * redis连接业务
+ * mongo连接业务
  *
  * @author oyzh
  * @since 2024/04/23
@@ -21,7 +21,7 @@ import javafx.stage.WindowEvent;
 public class ConnectController extends SubStageController {
 
     /**
-     * 左侧redis树
+     * 左侧mongo树
      */
     @FXML
     private MongoTreeView tree;
@@ -66,7 +66,7 @@ public class ConnectController extends SubStageController {
     @Override
     protected void bindListeners() {
         super.bindListeners();
-        // redis树变化事件
+        // mongo树变化事件
         this.tree.selectItemChanged(MongoEventUtil::treeItemChanged);
         // 文件拖拽初始化
         this.stage.initDragFile(this.tree.getDragContent(), this.tree.root()::dragFile);
@@ -74,6 +74,9 @@ public class ConnectController extends SubStageController {
         KeyListener.listenReleased(this.tree, KeyCode.F5, keyEvent -> this.tree.reload());
     }
 
+    /**
+     * 排序树节点
+     */
     @FXML
     private void sortTree() {
         if (this.sortPane.isAsc()) {
@@ -85,11 +88,17 @@ public class ConnectController extends SubStageController {
         }
     }
 
+    /**
+     * 导入连接
+     */
     @FXML
     private void importConnect() {
         this.tree.root().importConnect();
     }
 
+    /**
+     * 导出连接
+     */
     @FXML
     private void exportConnect() {
         this.tree.root().exportConnect();

@@ -10,15 +10,21 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 不介于列表条件
+ * 不介于条件
  *
  * @author oyzh
  * @since 2024/6/28
  */
 public class MongoNotBetweenCondition extends MongoBetweenCondition {
 
+    /**
+     * 不介于条件实例
+     */
     public final static MongoNotBetweenCondition INSTANCE = new MongoNotBetweenCondition();
 
+    /**
+     * 构造不介于条件
+     */
     public MongoNotBetweenCondition() {
         super(I18nHelper.notBetween(), "NOT BETWEEN");
     }

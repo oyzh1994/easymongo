@@ -171,6 +171,12 @@ public class MongoConditionUtil {
         return list;
     }
 
+    /**
+     * 构建 _id 正则匹配条件
+     *
+     * @param pattern 正则表达式
+     * @return 条件
+     */
     public static Bson idFilterRegex(Pattern pattern) {
         return Filters.expr(
                 new Document("$regexMatch",
@@ -180,6 +186,12 @@ public class MongoConditionUtil {
         );
     }
 
+    /**
+     * 构建 _id 正则不匹配条件
+     *
+     * @param pattern 正则表达式
+     * @return 条件
+     */
     public static Bson idFilterRegexNot(Pattern pattern) {
         return Filters.expr(
                 new Document("$not",

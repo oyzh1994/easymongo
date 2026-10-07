@@ -29,6 +29,11 @@ import java.util.List;
  */
 public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValue> {
 
+    /**
+     * 构造buckets树节点
+     *
+     * @param treeView 树视图
+     */
     public MongoBucketsTreeItem(RichTreeView treeView) {
         super(treeView);
         super.setFilterable(true);
@@ -53,6 +58,9 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
         return items;
     }
 
+    /**
+     * 新增bucket
+     */
     private void addBucket() {
         String name = MessageBox.prompt(I18nHelper.pleaseInputBucketName());
         if (StringUtil.isBlank(name)) {
@@ -129,18 +137,38 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
         this.loadChild();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.parent().dbName();
     }
 
+    /**
+     * 获取mongo客户端
+     *
+     * @return mongo客户端
+     */
     public MongoClient client() {
         return this.parent().client();
     }
 
+    /**
+     * 获取mongo连接信息
+     *
+     * @return mongo连接信息
+     */
     public MongoConnect info() {
         return this.parent().info();
     }
 
+    /**
+     * 获取连接名称
+     *
+     * @return 连接名称
+     */
     public String infoName() {
         return this.parent().infoName();
     }
@@ -165,12 +193,25 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
     //    this.sortChild(this.isSortAsc());
     //}
 
+    /**
+     * 获取bucket数量
+     *
+     * @return bucket数量
+     */
     public long bucketsSize() {
        return this.parent().listBucketNames().size();
     }
 
+    /**
+     * bucket数量
+     */
     private Integer bucketsSize;
 
+    /**
+     * 获取bucket数量
+     *
+     * @return bucket数量
+     */
     public Integer getBucketsSize() {
         if (this.bucketsSize == null) {
             this.bucketsSize = Math.toIntExact(this.bucketsSize());

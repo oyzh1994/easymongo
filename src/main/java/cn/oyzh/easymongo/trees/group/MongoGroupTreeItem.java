@@ -50,6 +50,12 @@ public class MongoGroupTreeItem extends MongoTreeItem<MongoGroupTreeItemValue> i
      */
     private final MongoGroupStore groupStore = MongoGroupStore.INSTANCE;
 
+    /**
+     * 构造DB分组树节点
+     *
+     * @param group    分组对象
+     * @param treeView 树视图
+     */
     public MongoGroupTreeItem(MongoGroup group, MongoTreeView treeView) {
         super(treeView);
         this.value = group;
@@ -216,6 +222,11 @@ public class MongoGroupTreeItem extends MongoTreeItem<MongoGroupTreeItemValue> i
         }
     }
 
+    /**
+     * 获取分组对象
+     *
+     * @return 分组对象
+     */
     public MongoGroup value() {
         return value;
     }

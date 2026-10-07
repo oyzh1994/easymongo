@@ -16,8 +16,14 @@ import java.util.Arrays;
  */
 public class MongoNotEqCondition extends MongoCondition {
 
+    /**
+     * 不等于条件实例
+     */
     public final static MongoNotEqCondition INSTANCE = new MongoNotEqCondition();
 
+    /**
+     * 构造不等于条件
+     */
     public MongoNotEqCondition() {
         super(I18nHelper.notEq(), "!=");
     }

@@ -29,6 +29,11 @@ import java.util.List;
  */
 public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctionsTreeItemValue> {
 
+    /**
+     * 构造db树函数类型节点
+     *
+     * @param treeView 树视图
+     */
     public ShellMongoFunctionsTreeItem(RichTreeView treeView) {
         super(treeView);
         super.setFilterable(true);
@@ -53,6 +58,9 @@ public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctio
         return items;
     }
 
+    /**
+     * 新增函数
+     */
     private void add() {
         MongoFunction function = new MongoFunction();
         function.setDbName(this.dbName());
@@ -127,18 +135,38 @@ public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctio
         this.loadChild();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.parent().dbName();
     }
 
+    /**
+     * 获取db客户端
+     *
+     * @return db客户端
+     */
     public MongoClient client() {
         return this.parent().client();
     }
 
+    /**
+     * 获取连接信息
+     *
+     * @return 连接信息
+     */
     public MongoConnect info() {
         return this.parent().info();
     }
 
+    /**
+     * 获取连接名称
+     *
+     * @return 连接名称
+     */
     public String infoName() {
         return this.parent().infoName();
     }
@@ -158,12 +186,25 @@ public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctio
     //    this.refresh();
     //}
 
+    /**
+     * 获取函数数量
+     *
+     * @return 函数数量
+     */
     public long functionSize() {
        return this.client().functionSize(this.dbName());
     }
 
+    /**
+     * 函数数量
+     */
     private Integer functionSize;
 
+    /**
+     * 获取函数数量
+     *
+     * @return 函数数量
+     */
     public Integer getFunctionSize() {
         if (this.functionSize == null) {
             this.functionSize = Math.toIntExact(this.functionSize());
@@ -171,6 +212,11 @@ public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctio
         return this.functionSize;
     }
 
+    /**
+     * 添加函数
+     *
+     * @param function 函数对象
+     */
     public void addFunction(MongoFunction function) {
         this.addChild(new ShellMongoFunctionTreeItem(function, this.getTreeView()));
         this.sortChild(this.isSortAsc());

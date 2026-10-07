@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 查询结果标签页内容组件
+ *
  * @author oyzh
  * @since 2024/08/12
  */
@@ -118,7 +120,7 @@ public class MongoQuerySelectTabController extends RichTabController {
      * 执行初始化
      *
      * @param result 执行结果
-     * @param dbItem db树表节点
+     * @param dbItem 数据库树节点
      */
     public void init(MongoExecuteResult result, MongoDatabaseTreeItem dbItem) {
         this.result = result;
@@ -263,8 +265,7 @@ public class MongoQuerySelectTabController extends RichTabController {
     }
 
     /**
-     * 初始化记录
-     *
+     * 纠正记录
      */
     private void correctRecords() {
         List<MongoRecord> records = this.recordTable.getItems();
@@ -424,9 +425,9 @@ public class MongoQuerySelectTabController extends RichTabController {
     }
 
     /**
-     * 删除记录
+     * 批量删除记录
      *
-     * @param records 记录
+     * @param records 记录列表
      */
     private void deleteRecords(List<MongoRecord> records) {
         try {
@@ -454,7 +455,7 @@ public class MongoQuerySelectTabController extends RichTabController {
      * 删除记录
      *
      * @param record 记录
-     * @return 结果
+     * @return 是否删除成功
      */
     private boolean deleteRecord(MongoRecord record) {
         boolean success;

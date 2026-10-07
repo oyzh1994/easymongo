@@ -7,13 +7,16 @@ import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
 import javafx.scene.Cursor;
 
 /**
- * redis主页tab
+ * Mongo 主页标签页
  *
  * @author oyzh
  * @since 2023/6/24
  */
 public class MongoHomeTab extends RichTab {
 
+    /**
+     * 构造 Mongo 主页标签页
+     */
     public MongoHomeTab() {
         super();
         super.flush();

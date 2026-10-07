@@ -42,6 +42,9 @@ public class MongoTreeView extends RichTreeView implements FXEventListener {
         return (MongoTreeItemFilter) this.itemFilter;
     }
 
+    /**
+     * 构造 db 树视图
+     */
     public MongoTreeView() {
         this.dragContent = "db_tree_drag";
         this.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);

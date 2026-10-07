@@ -13,15 +13,10 @@ import cn.oyzh.easymongo.MongoConst;
 public class ShellFileUtil {
 
     /**
-     * 文件是否可查看
+     * 根据扩展名判断文件的可查看类型
      *
      * @param extName 扩展名
-     * @return 结果
-     * null 不可查看
-     * txt 文本类型
-     * img 图片类型
-     * video 视频类型
-     * audio 音频类型
+     * @return 可查看类型，txt 文本类型，img 图片类型，video 视频类型，audio 音频类型，unknown 未知类型
      */
     public static String fileViewable(String extName) {
         String type = null;

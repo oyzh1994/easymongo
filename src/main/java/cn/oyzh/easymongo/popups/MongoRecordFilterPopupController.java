@@ -13,7 +13,7 @@ import javafx.stage.WindowEvent;
 import java.util.List;
 
 /**
- * 数据过滤业务
+ * 数据过滤弹窗
  *
  * @author oyzh
  * @since 2024/06/26

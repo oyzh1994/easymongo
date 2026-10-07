@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * db函数内容组件
+ * 函数设计标签页内容组件
  *
  * @author oyzh
  * @since 2024/07/08
@@ -33,6 +33,11 @@ public class ShellMongoFunctionDesignTabController extends RichTabController {
      */
     private MongoFunction function;
 
+    /**
+     * 获取函数
+     *
+     * @return 函数
+     */
     public MongoFunction getFunction() {
         return function;
     }
@@ -83,8 +88,8 @@ public class ShellMongoFunctionDesignTabController extends RichTabController {
     /**
      * 执行初始化
      *
-     * @param function 查询对象
-     * @param dbItem   db库树节点
+     * @param function 函数对象
+     * @param dbItem   数据库树节点
      */
     public void init(MongoFunction function, MongoDatabaseTreeItem dbItem) {
         this.dbItem = dbItem;
@@ -266,18 +271,38 @@ public class ShellMongoFunctionDesignTabController extends RichTabController {
         this.preview.text(sql);
     }
 
+    /**
+     * 是否未保存
+     *
+     * @return 是否未保存
+     */
     public boolean isUnsaved() {
         return unsaved;
     }
 
+    /**
+     * 设置是否未保存
+     *
+     * @param unsaved 是否未保存
+     */
     public void setUnsaved(boolean unsaved) {
         this.unsaved = unsaved;
     }
 
+    /**
+     * 获取数据库树节点
+     *
+     * @return 数据库树节点
+     */
     public MongoDatabaseTreeItem getDbItem() {
         return dbItem;
     }
 
+    /**
+     * 设置数据库树节点
+     *
+     * @param dbItem 数据库树节点
+     */
     public void setDbItem(MongoDatabaseTreeItem dbItem) {
         this.dbItem = dbItem;
     }

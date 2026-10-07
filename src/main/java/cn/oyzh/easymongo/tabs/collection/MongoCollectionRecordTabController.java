@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * db表tab内容组件
+ * MongoDB collection 记录标签页内容组件，用于展示、分页及增删改集合中的文档记录
  *
  * @author oyzh
  * @since 2023/12/24
@@ -65,7 +65,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
     private FXVBox root;
 
     /**
-     * db树表节点
+     * collection 树节点
      */
     private ObjectProperty<MongoCollectionTreeItem> itemProperty;
 
@@ -127,7 +127,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
     /**
      * 执行初始化
      *
-     * @param item db树表节点
+     * @param item collection 树节点
      */
     public void init(MongoCollectionTreeItem item) {
         this.itemProperty = new SimpleObjectProperty<>(item);
@@ -152,6 +152,11 @@ public class MongoCollectionRecordTabController extends RichTabController {
         }
     }
 
+    /**
+     * 获取当前 collection 树节点
+     *
+     * @return 当前 collection 树节点
+     */
     public MongoCollectionTreeItem getItem() {
         return this.itemProperty.get();
     }
@@ -187,9 +192,9 @@ public class MongoCollectionRecordTabController extends RichTabController {
     }
 
     /**
-     * 获取已启用的表过滤条件
+     * 获取已启用的过滤条件
      *
-     * @return 已启用的表过滤条件
+     * @return 已启用的过滤条件
      */
     private List<MongoRecordFilter> enabledFilters() {
         if (CollectionUtil.isNotEmpty(this.filters)) {
@@ -285,8 +290,7 @@ public class MongoCollectionRecordTabController extends RichTabController {
     }
 
     /**
-     * 初始化记录
-     *
+     * 纠正记录
      */
     private void correctRecords() {
         List<MongoRecord> records = this.recordTable.getItems();
@@ -579,6 +583,8 @@ public class MongoCollectionRecordTabController extends RichTabController {
 
     /**
      * 跳页
+     *
+     * @param event 跳页事件
      */
     @FXML
     private void pageJump(PageEvent.PageJumpEvent event) {
@@ -699,10 +705,20 @@ public class MongoCollectionRecordTabController extends RichTabController {
         NodeUtil.nodeOnCtrlS(this.root, this::apply);
     }
 
+    /**
+     * 获取过滤条件列表
+     *
+     * @return 过滤条件列表
+     */
     public List<MongoRecordFilter> getFilters() {
         return filters;
     }
 
+    /**
+     * 设置过滤条件列表
+     *
+     * @param filters 过滤条件列表
+     */
     public void setFilters(List<MongoRecordFilter> filters) {
         this.filters = filters;
     }

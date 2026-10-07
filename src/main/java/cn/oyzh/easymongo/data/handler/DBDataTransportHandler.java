@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 数据库数据传输处理器基类
+ *
  * @author oyzh
  * @since 2024/09/06
  */
@@ -35,11 +37,13 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
 
     /**
      * 执行传输
+     *
+     * @throws Exception 异常
      */
     public abstract void doTransport() throws Exception;
 
     /**
-     * 插入集合
+     * 待批量插入的记录列表
      */
     protected List<MongoRecord> insertList;
 
@@ -89,34 +93,74 @@ public abstract class DBDataTransportHandler extends DBDataHandler {
      */
     protected abstract void doBatchInsert(List<MongoRecord> recordList);
 
+    /**
+     * 获取来源库
+     *
+     * @return 来源库
+     */
     public String getSourceDatabase() {
         return sourceDatabase;
     }
 
+    /**
+     * 设置来源库
+     *
+     * @param sourceDatabase 来源库
+     */
     public void setSourceDatabase(String sourceDatabase) {
         this.sourceDatabase = sourceDatabase;
     }
 
+    /**
+     * 获取目标库
+     *
+     * @return 目标库
+     */
     public String getTargetDatabase() {
         return targetDatabase;
     }
 
+    /**
+     * 设置目标库
+     *
+     * @param targetDatabase 目标库
+     */
     public void setTargetDatabase(String targetDatabase) {
         this.targetDatabase = targetDatabase;
     }
 
+    /**
+     * 获取查询限制
+     *
+     * @return 查询限制
+     */
     public int getSelectLimit() {
         return selectLimit;
     }
 
+    /**
+     * 设置查询限制
+     *
+     * @param selectLimit 查询限制
+     */
     public void setSelectLimit(int selectLimit) {
         this.selectLimit = selectLimit;
     }
 
+    /**
+     * 获取批量限制
+     *
+     * @return 批量限制
+     */
     public int getBatchLimit() {
         return batchLimit;
     }
 
+    /**
+     * 设置批量限制
+     *
+     * @param batchLimit 批量限制
+     */
     public void setBatchLimit(int batchLimit) {
         this.batchLimit = batchLimit;
     }

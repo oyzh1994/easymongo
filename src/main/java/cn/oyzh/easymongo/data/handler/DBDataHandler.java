@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 /**
+ * 数据库数据处理基类，提供中断控制、消息与进度回调等通用能力
+ *
  * @author oyzh
  * @since 2024/08/29
  */
@@ -129,27 +131,58 @@ public class DBDataHandler {
         }
     }
 
+    /**
+     * 获取中断标志位
+     *
+     * @return 中断标志位
+     */
     public AtomicBoolean getInterrupt() {
         return interrupt;
     }
 
+    /**
+     * 设置中断标志位
+     *
+     * @param interrupt 中断标志位
+     */
     public void setInterrupt(AtomicBoolean interrupt) {
         this.interrupt = interrupt;
     }
 
+    /**
+     * 获取消息处理器
+     *
+     * @return 消息处理器
+     */
     public Consumer<String> getMessageHandler() {
         return messageHandler;
     }
 
+    /**
+     * 设置消息处理器
+     *
+     * @param messageHandler 消息处理器
+     * @return 当前处理器
+     */
     public DBDataHandler setMessageHandler(Consumer<String> messageHandler) {
         this.messageHandler = messageHandler;
         return this;
     }
 
+    /**
+     * 获取进度处理器
+     *
+     * @return 进度处理器
+     */
     public Consumer<Integer> getProcessedHandler() {
         return processedHandler;
     }
 
+    /**
+     * 设置进度处理器
+     *
+     * @param processedHandler 进度处理器
+     */
     public void setProcessedHandler(Consumer<Integer> processedHandler) {
         this.processedHandler = processedHandler;
     }

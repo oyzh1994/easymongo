@@ -15,12 +15,24 @@ import java.util.regex.Pattern;
  */
 public class MongoContainsCondition extends MongoCondition {
 
+    /**
+     * 包含条件实例
+     */
     public final static MongoContainsCondition INSTANCE = new MongoContainsCondition();
 
+    /**
+     * 构造包含条件
+     */
     public MongoContainsCondition() {
         super(I18nHelper.contains(), "LIKE");
     }
 
+    /**
+     * 使用名称、值构造包含条件
+     *
+     * @param name  名称
+     * @param value 值
+     */
     public MongoContainsCondition(String name, String value) {
         super(name, value);
     }

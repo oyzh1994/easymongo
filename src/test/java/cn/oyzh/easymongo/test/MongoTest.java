@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * MongoDB 连接、集合查询与 GridFS 文件操作的功能测试
  *
  * @author oyzh
  * @since 2026-06-01

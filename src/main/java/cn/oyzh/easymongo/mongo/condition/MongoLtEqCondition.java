@@ -16,8 +16,14 @@ import java.util.Arrays;
  */
 public class MongoLtEqCondition extends MongoCondition {
 
+    /**
+     * 小于等于条件实例
+     */
     public final static MongoLtEqCondition INSTANCE = new MongoLtEqCondition();
 
+    /**
+     * 构造小于等于条件
+     */
     public MongoLtEqCondition() {
         super(I18nHelper.ltEq(), "<=");
     }

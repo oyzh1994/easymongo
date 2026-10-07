@@ -8,7 +8,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 
 /**
- * redis命令行tab内容组件
+ * Mongo 终端标签页内容组件
  *
  * @author oyzh
  * @since 2023/07/21
@@ -16,36 +16,50 @@ import javafx.fxml.FXML;
 public class MongoTerminalTabController extends RichTabController {
 
     /**
-     * redis命令行文本域
+     * 终端组件
      */
     @FXML
     private MongoTerminalPane terminal;
 
+    /**
+     * 数据库名称
+     */
     private String dbName;
 
     /**
      * 初始化
      *
-     * @param client redis客户端
+     * @param client 客户端
+     * @param dbName 数据库名称
      */
     public void init(MongoClient client, String dbName) {
         this.terminal.init(client,dbName);
         this.dbName = dbName;
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String getDbName() {
         return dbName;
     }
 
     /**
-     * redis信息
+     * 获取 Mongo 连接信息
      *
-     * @return 当前redis信息
+     * @return 当前 Mongo 连接信息
      */
     protected MongoConnect shellConnect() {
         return this.terminal.shellConnect();
     }
 
+    /**
+     * 获取客户端
+     *
+     * @return 客户端
+     */
     public MongoClient client() {
         return this.terminal.getClient();
     }

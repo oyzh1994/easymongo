@@ -20,6 +20,11 @@ public class MongoSetting extends AppSetting {
     @Column
     private Integer recordPageLimit;
 
+    /**
+     * 设置记录每页限制，无效值时默认100
+     *
+     * @param recordPageLimit 记录每页限制
+     */
     public void setRecordPageLimit(Integer recordPageLimit) {
         if (recordPageLimit == null || recordPageLimit <= 0) {
             this.recordPageLimit = 100;
@@ -28,6 +33,11 @@ public class MongoSetting extends AppSetting {
         }
     }
 
+    /**
+     * 获取记录每页限制
+     *
+     * @return 记录每页限制
+     */
     public int getRecordPageLimit() {
         if (this.recordPageLimit == null || this.recordPageLimit <= 0) {
             return 100;

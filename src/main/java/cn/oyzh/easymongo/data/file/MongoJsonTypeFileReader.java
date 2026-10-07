@@ -11,6 +11,8 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
+ * MongoDB 数据导入的 JSON 类型文件读取器
+ *
  * @author oyzh
  * @since 2024-09-03
  */
@@ -26,6 +28,13 @@ public class MongoJsonTypeFileReader extends MongoTypeFileReader {
      */
     private MongoDataImportConfig config;
 
+    /**
+     * 构造 JSON 类型文件读取器
+     *
+     * @param file   待读取的文件
+     * @param config 导入配置
+     * @throws FileNotFoundException 文件未找到异常
+     */
     public MongoJsonTypeFileReader(File file, MongoDataImportConfig config) throws FileNotFoundException {
         super(file);
         this.config = config;

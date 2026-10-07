@@ -12,8 +12,14 @@ import org.bson.conversions.Bson;
  */
 public class MongoNullCondition extends MongoCondition {
 
+    /**
+     * 是NULL条件实例
+     */
     public final static MongoNullCondition INSTANCE = new MongoNullCondition();
 
+    /**
+     * 构造是NULL条件
+     */
     public MongoNullCondition() {
         super(I18nHelper.isNull(), "IS NULL", false);
     }

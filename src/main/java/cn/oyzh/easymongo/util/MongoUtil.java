@@ -13,17 +13,26 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * db工具类
+ * MongoDB 工具类
  *
  * @author oyzh
  * @since 2023/12/27
  */
 public class MongoUtil {
 
+    /**
+     * 主键字段名
+     */
     public static final String ID = "_id";
 
+    /**
+     * 系统脚本集合名
+     */
     public static final String SYSTEM_JS = "system.js";
 
+    /**
+     * 日期格式化对象
+     */
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     /**
@@ -104,7 +113,7 @@ public class MongoUtil {
      * 是否原始类型
      *
      * @param val 值
-     * @return 类型
+     * @return 是否为原始类型
      */
     public static boolean isPrimaryType(Object val) {
         return StringUtil.equalsAnyIgnoreCase(getType(val), "int", "long", "double", "list", "object", "boolean");
@@ -113,7 +122,7 @@ public class MongoUtil {
     /**
      * 移除注释
      *
-     * @param sql sql
+     * @param sql 脚本内容
      * @return 结果
      */
     public static String removeComment(String sql) {

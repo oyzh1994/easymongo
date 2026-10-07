@@ -6,7 +6,7 @@ import cn.oyzh.store.jdbc.JdbcKeyValueStore;
 
 
 /**
- * db设置储存
+ * MongoDB设置存储
  *
  * @author oyzh
  * @since 2022/8/26
@@ -23,6 +23,11 @@ public class MongoSettingStore extends JdbcKeyValueStore<MongoSetting> {
      */
     public static final MongoSetting SETTING = INSTANCE.load();
 
+    /**
+     * 加载设置，加载失败时返回默认设置
+     *
+     * @return 设置
+     */
     public MongoSetting load() {
         MongoSetting setting = null;
         try {
@@ -37,6 +42,12 @@ public class MongoSettingStore extends JdbcKeyValueStore<MongoSetting> {
         return setting;
     }
 
+    /**
+     * 替换设置
+     *
+     * @param model 设置
+     * @return 结果
+     */
     public boolean replace(MongoSetting model) {
         if (model != null) {
             return this.update(model);

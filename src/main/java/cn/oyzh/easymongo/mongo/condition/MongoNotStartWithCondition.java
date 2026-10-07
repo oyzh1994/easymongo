@@ -15,8 +15,14 @@ import java.util.regex.Pattern;
  */
 public class MongoNotStartWithCondition extends MongoStartWithCondition {
 
+    /**
+     * 不是开始以条件实例
+     */
     public final static MongoNotStartWithCondition INSTANCE = new MongoNotStartWithCondition();
 
+    /**
+     * 构造不是开始以条件
+     */
     public MongoNotStartWithCondition() {
         super(I18nHelper.notStartWith(), "NOT LIKE");
     }

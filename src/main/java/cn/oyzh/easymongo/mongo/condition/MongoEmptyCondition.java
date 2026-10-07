@@ -5,15 +5,21 @@ import com.mongodb.client.model.Filters;
 import org.bson.conversions.Bson;
 
 /**
- * 包含条件
+ * 为空条件
  *
  * @author oyzh
  * @since 2024/6/27
  */
 public class MongoEmptyCondition extends MongoCondition {
 
+    /**
+     * 为空条件实例
+     */
     public final static MongoEmptyCondition INSTANCE = new MongoEmptyCondition();
 
+    /**
+     * 构造为空条件
+     */
     public MongoEmptyCondition() {
         super(I18nHelper.isEmpty(), "=''", false);
     }

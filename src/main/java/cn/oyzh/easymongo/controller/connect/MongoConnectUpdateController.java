@@ -131,7 +131,7 @@ public class MongoConnectUpdateController extends StageController {
     private PortTextField sshPort;
 
     /**
-     * ssh主机端口
+     * ssh超时时间
      */
     @FXML
     private NumberTextField sshTimeout;

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * db查询文本域
+ * 查询编辑器
  *
  * @author oyzh
  * @since 2024/02/18
@@ -145,6 +145,11 @@ public class MongoQueryEditor extends SqlEditor {
      */
     private Runnable runCallback;
 
+    /**
+     * 设置运行回调
+     *
+     * @param runCallback 运行回调
+     */
     public void setRunCallback(Runnable runCallback) {
         this.runCallback = runCallback;
     }

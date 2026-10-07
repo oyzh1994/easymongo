@@ -5,6 +5,8 @@ import cn.oyzh.common.util.RegexUtil;
 import com.alibaba.fastjson2.JSONArray;
 
 /**
+ * MongoDB 数据导入辅助工具，提供导入值的解析能力
+ *
  * @author oyzh
  * @since 2024/09/02
  */

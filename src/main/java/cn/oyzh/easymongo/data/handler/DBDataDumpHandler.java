@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * 数据库数据转储处理器基类
+ *
  * @author oyzh
  * @since 2024/08/22
  */
@@ -64,6 +66,11 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
      */
     protected int queryLimit = 500;
 
+    /**
+     * 构造数据转储处理器
+     *
+     * @param dbName 库名称
+     */
     public DBDataDumpHandler( String dbName) {
         this.dbName = dbName;
     }
@@ -102,6 +109,11 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
         this.fileWriter.close();
     }
 
+    /**
+     * 是否转储数据
+     *
+     * @return 是否转储数据
+     */
     public boolean isDumpRecord() {
         return this.dataType == 0;
     }
@@ -117,69 +129,153 @@ public abstract class DBDataDumpHandler extends DBDataHandler {
         return new ShellMongoDataDumpHandler(dbClient, dbName);
     }
 
+    /**
+     * 获取数据类型
+     *
+     * @return 数据类型
+     */
     public Byte getDataType() {
         return dataType;
     }
 
+    /**
+     * 设置数据类型
+     *
+     * @param dataType 数据类型
+     */
     public void setDataType(Byte dataType) {
         this.dataType = dataType;
     }
 
+    /**
+     * 获取库名称
+     *
+     * @return 库名称
+     */
     public String getDbName() {
         return dbName;
     }
 
+    /**
+     * 设置库名称
+     *
+     * @param dbName 库名称
+     */
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
 
+    /**
+     * 获取转储文件
+     *
+     * @return 转储文件
+     */
     public File getDumpFile() {
         return dumpFile;
     }
 
+    /**
+     * 设置转储文件
+     *
+     * @param dumpFile 转储文件
+     */
     public void setDumpFile(File dumpFile) {
         this.dumpFile = dumpFile;
     }
 
+    /**
+     * 获取文件写入器
+     *
+     * @return 文件写入器
+     */
     public FastFileWriter getFileWriter() {
         return fileWriter;
     }
 
+    /**
+     * 设置文件写入器
+     *
+     * @param fileWriter 文件写入器
+     */
     public void setFileWriter(FastFileWriter fileWriter) {
         this.fileWriter = fileWriter;
     }
 
+    /**
+     * 获取转储类型
+     *
+     * @return 转储类型
+     */
     public Byte getDumpType() {
         return dumpType;
     }
 
+    /**
+     * 设置转储类型
+     *
+     * @param dumpType 转储类型
+     * @return 当前对象
+     */
     public DBDataDumpHandler setDumpType(Byte dumpType) {
         this.dumpType = dumpType;
         return this;
     }
 
+    /**
+     * 获取表名称
+     *
+     * @return 表名称
+     */
     public String getTableName() {
         return tableName;
     }
 
+    /**
+     * 设置表名称
+     *
+     * @param tableName 表名称
+     * @return 当前对象
+     */
     public DBDataDumpHandler setTableName(String tableName) {
         this.tableName = tableName;
         return this;
     }
 
+    /**
+     * 获取连接信息
+     *
+     * @return 连接信息
+     */
     public MongoConnect getDbInfo() {
         return dbInfo;
     }
 
+    /**
+     * 设置连接信息
+     *
+     * @param dbInfo 连接信息
+     * @return 当前对象
+     */
     public DBDataDumpHandler setDbInfo(MongoConnect dbInfo) {
         this.dbInfo = dbInfo;
         return this;
     }
 
+    /**
+     * 获取查询限制
+     *
+     * @return 查询限制
+     */
     public int getQueryLimit() {
         return queryLimit;
     }
 
+    /**
+     * 设置查询限制
+     *
+     * @param queryLimit 查询限制
+     * @return 当前对象
+     */
     public DBDataDumpHandler setQueryLimit(int queryLimit) {
         this.queryLimit = queryLimit;
         return this;

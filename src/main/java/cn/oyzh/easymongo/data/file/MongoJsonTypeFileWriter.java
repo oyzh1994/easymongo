@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
+ * MongoDB 数据导出的 JSON 类型文件写入器
+ *
  * @author oyzh
  * @since 2024-09-04
  */
@@ -27,7 +29,7 @@ public class MongoJsonTypeFileWriter extends MongoTypeFileWriter {
     private MongoDataExportConfig config;
 
     /**
-     * 文件读取器
+     * 文件写入器
      */
     private LineFileWriter writer;
 
@@ -36,6 +38,14 @@ public class MongoJsonTypeFileWriter extends MongoTypeFileWriter {
      */
     private boolean firstWrite = true;
 
+    /**
+     * 构造 JSON 类型文件写入器
+     *
+     * @param filePath 导出文件路径
+     * @param config   导出配置
+     * @param columns  字段列表
+     * @throws FileNotFoundException 文件未找到异常
+     */
     public MongoJsonTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws FileNotFoundException {
         this.columns = columns;
         this.config = config;

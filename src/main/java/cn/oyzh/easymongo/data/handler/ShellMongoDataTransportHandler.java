@@ -13,6 +13,8 @@ import org.bson.BsonValue;
 import java.util.List;
 
 /**
+ * MongoDB 数据传输处理器
+ *
  * @author oyzh
  * @since 2024/09/06
  */
@@ -134,34 +136,74 @@ public class ShellMongoDataTransportHandler extends DBDataTransportHandler {
         }
     }
 
+    /**
+     * 设置函数列表
+     *
+     * @param functions 函数列表
+     */
     public void setFunctions(List<ShellMongoDataTransportFunction> functions) {
         this.functions = functions;
     }
 
+    /**
+     * 获取函数列表
+     *
+     * @return 函数列表
+     */
     public List<ShellMongoDataTransportFunction> getFunctions() {
         return functions;
     }
 
+    /**
+     * 获取来源客户端
+     *
+     * @return 来源客户端
+     */
     public MongoClient getSourceClient() {
         return sourceClient;
     }
 
+    /**
+     * 设置来源客户端
+     *
+     * @param sourceClient 来源客户端
+     */
     public void setSourceClient(MongoClient sourceClient) {
         this.sourceClient = sourceClient;
     }
 
+    /**
+     * 获取目标客户端
+     *
+     * @return 目标客户端
+     */
     public MongoClient getTargetClient() {
         return targetClient;
     }
 
+    /**
+     * 设置目标客户端
+     *
+     * @param targetClient 目标客户端
+     */
     public void setTargetClient(MongoClient targetClient) {
         this.targetClient = targetClient;
     }
 
+    /**
+     * 获取表列表
+     *
+     * @return 表列表
+     */
     public List<ShellMongoDataTransportCollection> getTables() {
         return tables;
     }
 
+    /**
+     * 设置表列表
+     *
+     * @param tables 表列表
+     */
     public void setTables(List<ShellMongoDataTransportCollection> tables) {
         this.tables = tables;
     }

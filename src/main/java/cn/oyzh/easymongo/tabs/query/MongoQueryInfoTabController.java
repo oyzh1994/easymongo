@@ -8,17 +8,24 @@ import cn.oyzh.i18n.I18nHelper;
 import javafx.fxml.FXML;
 
 /**
+ * 查询信息标签页内容组件
+ *
  * @author oyzh
  * @since 2024/08/12
  */
 public class MongoQueryInfoTabController extends RichTabController {
 
     /**
-     * 根节点
+     * 信息文本域
      */
     @FXML
     private FXTextArea infoArea;
 
+    /**
+     * 初始化查询结果信息
+     *
+     * @param results 查询结果集
+     */
     public void init(MongoQueryResults<?> results) {
         this.infoArea.clear();
         if (results.isSuccess()) {

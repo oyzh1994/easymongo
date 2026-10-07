@@ -387,6 +387,9 @@ public class ShellMongoDataExportController extends StageController {
         return I18nHelper.exportTitle();
     }
 
+    /**
+     * 显示第一步
+     */
     @FXML
     private void showStep1() {
         this.step1.display();
@@ -416,6 +419,9 @@ public class ShellMongoDataExportController extends StageController {
         }
     }
 
+    /**
+     * 显示第二步
+     */
     @FXML
     private void showStep2() {
         RadioButton button = this.fileType.selectedToggle();
@@ -431,6 +437,9 @@ public class ShellMongoDataExportController extends StageController {
         this.step2.display();
     }
 
+    /**
+     * 显示第三步
+     */
     @FXML
     private void showStep3() {
         if (!this.exportTableView.hasSelectedTable()) {
@@ -450,6 +459,9 @@ public class ShellMongoDataExportController extends StageController {
         this.step3.display();
     }
 
+    /**
+     * 显示第四步
+     */
     @FXML
     private void showStep4() {
         this.step3.disappear();
@@ -526,12 +538,18 @@ public class ShellMongoDataExportController extends StageController {
         this.step4.display();
     }
 
+    /**
+     * 显示第五步
+     */
     @FXML
     private void showStep5() {
         this.step4.disappear();
         this.step5.display();
     }
 
+    /**
+     * 全选表
+     */
     @FXML
     private void selectAllTable() {
         for (ShellMongoDataExportCollection item : this.exportTableView.getItems()) {
@@ -539,6 +557,9 @@ public class ShellMongoDataExportController extends StageController {
         }
     }
 
+    /**
+     * 取消全选表
+     */
     @FXML
     private void unselectAllTable() {
         for (ShellMongoDataExportCollection item : this.exportTableView.getItems()) {
@@ -546,6 +567,9 @@ public class ShellMongoDataExportController extends StageController {
         }
     }
 
+    /**
+     * 全选字段
+     */
     @FXML
     private void selectAllFiled() {
         for (FXCheckBox item : this.tableColumns.getItems()) {
@@ -553,6 +577,9 @@ public class ShellMongoDataExportController extends StageController {
         }
     }
 
+    /**
+     * 取消全选字段
+     */
     @FXML
     private void unselectAllField() {
         for (FXCheckBox item : this.tableColumns.getItems()) {

@@ -9,15 +9,21 @@ import org.bson.conversions.Bson;
 import java.util.Arrays;
 
 /**
- * 包含条件
+ * 不为空条件
  *
  * @author oyzh
  * @since 2024/6/27
  */
 public class MongoNotEmptyCondition extends MongoCondition {
 
+    /**
+     * 不为空条件实例
+     */
     public final static MongoNotEmptyCondition INSTANCE = new MongoNotEmptyCondition();
 
+    /**
+     * 构造不为空条件
+     */
     public MongoNotEmptyCondition() {
         super(I18nHelper.notIsEmpty(), "!=''", false);
     }

@@ -30,6 +30,9 @@ public class MongoQueryPromptPopup extends FXPopup {
      */
     protected Consumer<MongoQueryPromptItem> onItemSelected;
 
+    /**
+     * 构造查询提示框
+     */
     public MongoQueryPromptPopup() {
         this.setAutoFix(true);
         this.setAutoHide(true);
@@ -66,8 +69,8 @@ public class MongoQueryPromptPopup extends FXPopup {
     /**
      * 初始化提示词
      *
-     * @param token 提示词
-     * @return 结果
+     * @param token 词元
+     * @return 是否存在提示词
      */
     public synchronized boolean initPrompts(MongoQueryToken token) {
         // 提示词列表
@@ -79,7 +82,7 @@ public class MongoQueryPromptPopup extends FXPopup {
     }
 
     /**
-     * token
+     * 当前词元
      */
     private MongoQueryToken token;
 
@@ -222,7 +225,7 @@ public class MongoQueryPromptPopup extends FXPopup {
      * 是否常规按键事件
      *
      * @param event 按键事件
-     * @return 结果
+     * @return 是否为常规按键事件
      */
     private boolean isGeneralKeyEvent(KeyEvent event) {
         KeyCode code = event.getCode();
@@ -261,10 +264,20 @@ public class MongoQueryPromptPopup extends FXPopup {
         return false;
     }
 
+    /**
+     * 获取选中事件
+     *
+     * @return 选中事件
+     */
     public Consumer<MongoQueryPromptItem> getOnItemSelected() {
         return onItemSelected;
     }
 
+    /**
+     * 设置选中事件
+     *
+     * @param onItemSelected 选中事件
+     */
     public void setOnItemSelected(Consumer<MongoQueryPromptItem> onItemSelected) {
         this.onItemSelected = onItemSelected;
     }

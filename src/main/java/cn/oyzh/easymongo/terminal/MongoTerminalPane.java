@@ -25,7 +25,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.text.Font;
 
 /**
- * zk终端文本域
+ * Mongo 终端文本域
  *
  * @author oyzh
  * @since 2023/7/21
@@ -39,16 +39,21 @@ public class MongoTerminalPane extends TerminalPane {
     }
 
     /**
-     * zk客户端
+     * Mongo 客户端
      */
     private MongoClient client;
 
+    /**
+     * 获取客户端
+     *
+     * @return 客户端
+     */
     public MongoClient getClient() {
         return client;
     }
 
     /**
-     * zk连接
+     * 连接信息
      */
     private ShellMongoConnectInfo connectInfo;
 
@@ -78,6 +83,9 @@ public class MongoTerminalPane extends TerminalPane {
         this.prompt(str);
     }
 
+    /**
+     * 终端名称
+     */
     public static final String TERMINAL_NAME = "zookeeper";
 
     @Override
@@ -85,12 +93,16 @@ public class MongoTerminalPane extends TerminalPane {
         return TERMINAL_NAME;
     }
 
+    /**
+     * 数据库名称
+     */
     private String dbName;
 
     /**
      * 初始化
      *
      * @param client 客户端
+     * @param dbName 数据库名称
      */
     public void init(MongoClient client, String dbName) {
         this.client = client;
@@ -108,10 +120,20 @@ public class MongoTerminalPane extends TerminalPane {
         });
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String getDbName() {
         return dbName;
     }
 
+    /**
+     * 设置数据库名称
+     *
+     * @param dbName 数据库名称
+     */
     public void setDbName(String dbName) {
         this.dbName = dbName;
         this.client.shellEngine().db(dbName);
@@ -120,7 +142,7 @@ public class MongoTerminalPane extends TerminalPane {
     /**
      * 是否临时连接
      *
-     * @return 结果
+     * @return 是否临时连接
      */
     public boolean isTemporary() {
         return this.client.iid() == null;
@@ -136,7 +158,7 @@ public class MongoTerminalPane extends TerminalPane {
     /**
      * 是否已连接
      *
-     * @return 结果
+     * @return 是否已连接
      */
     public boolean isConnected() {
         return this.client != null && this.client.isConnected();
@@ -145,7 +167,7 @@ public class MongoTerminalPane extends TerminalPane {
     /**
      * 是否连接中
      *
-     * @return 结果
+     * @return 是否连接中
      */
     public boolean isConnecting() {
         return this.client != null && this.client.isConnecting();
@@ -154,7 +176,7 @@ public class MongoTerminalPane extends TerminalPane {
     /**
      * 是否已关闭
      *
-     * @return 结果
+     * @return 是否已关闭
      */
     public boolean isClosed() {
         return this.client != null && this.client.isClosed();
@@ -277,6 +299,11 @@ public class MongoTerminalPane extends TerminalPane {
         }
     }
 
+    /**
+     * 获取连接信息
+     *
+     * @return 连接信息
+     */
     public MongoConnect shellConnect() {
         return this.getClient().getShellConnect();
     }
@@ -311,6 +338,12 @@ public class MongoTerminalPane extends TerminalPane {
         super.destroy();
     }
 
+    /**
+     * 执行脚本
+     *
+     * @param input 输入内容
+     * @return 执行结果
+     */
     public TerminalExecuteResult eval(String input) {
         TerminalExecuteResult result = new TerminalExecuteResult();
         try {

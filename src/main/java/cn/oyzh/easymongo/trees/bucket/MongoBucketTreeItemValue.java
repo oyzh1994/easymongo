@@ -12,6 +12,11 @@ import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
  */
 public class MongoBucketTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造bucket树节点值
+     *
+     * @param item bucket树节点
+     */
     public MongoBucketTreeItemValue(MongoBucketTreeItem item) {
         super(item);
     }

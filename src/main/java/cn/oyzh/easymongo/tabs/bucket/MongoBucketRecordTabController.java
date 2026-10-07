@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * db表tab内容组件
+ * MongoDB bucket 记录标签页内容组件，用于展示、分页及管理 GridFS 存储桶中的文件记录
  *
  * @author oyzh
  * @since 2023/12/24
@@ -57,7 +57,7 @@ public class MongoBucketRecordTabController extends RichTabController {
     private FXVBox root;
 
     /**
-     * db树表节点
+     * bucket 树节点
      */
     private ObjectProperty<MongoBucketTreeItem> itemProperty;
 
@@ -102,7 +102,7 @@ public class MongoBucketRecordTabController extends RichTabController {
     /**
      * 执行初始化
      *
-     * @param item db树表节点
+     * @param item bucket 树节点
      */
     public void init(MongoBucketTreeItem item) {
         this.itemProperty = new SimpleObjectProperty<>(item);
@@ -119,6 +119,11 @@ public class MongoBucketRecordTabController extends RichTabController {
         this.reload();
     }
 
+    /**
+     * 获取当前 bucket 树节点
+     *
+     * @return 当前 bucket 树节点
+     */
     public MongoBucketTreeItem getItem() {
         return this.itemProperty.get();
     }
@@ -156,9 +161,9 @@ public class MongoBucketRecordTabController extends RichTabController {
     }
 
     /**
-     * 获取已启用的表过滤条件
+     * 获取已启用的过滤条件
      *
-     * @return 已启用的表过滤条件
+     * @return 已启用的过滤条件
      */
     private List<MongoRecordFilter> enabledFilters() {
         if (CollectionUtil.isNotEmpty(this.filters)) {
@@ -253,7 +258,6 @@ public class MongoBucketRecordTabController extends RichTabController {
 
     /**
      * 查看文档
-     *
      */
     @FXML
     public void viewDocument() {
@@ -345,6 +349,8 @@ public class MongoBucketRecordTabController extends RichTabController {
 
     /**
      * 跳页
+     *
+     * @param event 跳页事件
      */
     @FXML
     private void pageJump(PageEvent.PageJumpEvent event) {
@@ -488,10 +494,20 @@ public class MongoBucketRecordTabController extends RichTabController {
         });
     }
 
+    /**
+     * 获取过滤条件列表
+     *
+     * @return 过滤条件列表
+     */
     public List<MongoRecordFilter> getFilters() {
         return filters;
     }
 
+    /**
+     * 设置过滤条件列表
+     *
+     * @param filters 过滤条件列表
+     */
     public void setFilters(List<MongoRecordFilter> filters) {
         this.filters = filters;
     }

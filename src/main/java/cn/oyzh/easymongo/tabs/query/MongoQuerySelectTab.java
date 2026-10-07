@@ -7,7 +7,7 @@ import cn.oyzh.fx.gui.tabs.RichTab;
 import cn.oyzh.fx.plus.FXConst;
 
 /**
- * db查询tab
+ * 查询结果标签页
  *
  * @author oyzh
  * @since 2024/08/12
@@ -19,6 +19,13 @@ public class MongoQuerySelectTab extends RichTab {
         return FXConst.TAB_PATH + "query/mongoQuerySelectTab.fxml";
     }
 
+    /**
+     * 初始化查询结果
+     *
+     * @param title  标题
+     * @param result 执行结果
+     * @param dbItem 数据库树节点
+     */
     public void init(String title, MongoExecuteResult result, MongoDatabaseTreeItem dbItem) {
         this.setTitle(title);
         this.controller().init(result, dbItem);

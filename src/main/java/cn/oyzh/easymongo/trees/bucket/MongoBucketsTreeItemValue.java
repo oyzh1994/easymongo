@@ -13,6 +13,11 @@ import javafx.scene.paint.Color;
  */
 public class MongoBucketsTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造buckets树节点值
+     *
+     * @param item buckets树节点
+     */
     public MongoBucketsTreeItemValue(MongoBucketsTreeItem item) {
         super(item);
         super.setRichMode(true);

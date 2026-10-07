@@ -6,6 +6,8 @@ import javafx.scene.control.Skin;
 import org.bson.types.Code;
 
 /**
+ * Code类型文本编辑框
+ *
  * @author oyzh
  * @since 2024/7/21
  */
@@ -37,6 +39,12 @@ public class CodeTextFiled extends JsonTextFiled {
         this.setText(format(super.value()));
     }
 
+    /**
+     * 格式化Code值
+     *
+     * @param val 待格式化的值
+     * @return 格式化后的字符串
+     */
     public static String format(Object val) {
         if (val instanceof CharSequence sequence) {
             return sequence.toString();

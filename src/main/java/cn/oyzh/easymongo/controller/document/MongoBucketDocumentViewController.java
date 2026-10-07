@@ -43,7 +43,7 @@ import javafx.stage.WindowEvent;
 import java.io.File;
 
 /**
- * shell文件查看业务
+ * bucket文档查看业务
  *
  * @author oyzh
  * @since 2025/07/16
@@ -326,22 +326,47 @@ public class MongoBucketDocumentViewController extends StageController {
         }
     }
 
+    /**
+     * 是否为音频类型
+     *
+     * @return 结果
+     */
     private boolean isAudioType() {
         return "audio".equalsIgnoreCase(this.type);
     }
 
+    /**
+     * 是否为视频类型
+     *
+     * @return 结果
+     */
     private boolean isVideoType() {
         return "video".equalsIgnoreCase(this.type);
     }
 
+    /**
+     * 是否为图片类型
+     *
+     * @return 结果
+     */
     private boolean isImageType() {
         return "img".equalsIgnoreCase(this.type);
     }
 
+    /**
+     * 是否为文本类型
+     *
+     * @return 结果
+     */
     private boolean isTxtType() {
         return "txt".equalsIgnoreCase(this.type);
     }
 
+    /**
+     * 是否为未知类型
+     *
+     * @return 结果
+     */
     private boolean isUnknownType() {
         return "unknown".equalsIgnoreCase(this.type);
     }

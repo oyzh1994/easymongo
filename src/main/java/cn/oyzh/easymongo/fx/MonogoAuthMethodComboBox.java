@@ -4,12 +4,18 @@ import cn.oyzh.fx.plus.controls.combo.FXComboBox;
 import cn.oyzh.i18n.I18nHelper;
 
 /**
+ * MongoDB认证方式选择框
  *
  * @author oyzh
  * @since 2026-06-01
  */
 public class MonogoAuthMethodComboBox extends FXComboBox<String> {
 
+    /**
+     * 获取当前认证方式
+     *
+     * @return 认证方式，none、password或unknown
+     */
     public String getType() {
         if (this.getSelectedIndex() == 0) {
             return "none";

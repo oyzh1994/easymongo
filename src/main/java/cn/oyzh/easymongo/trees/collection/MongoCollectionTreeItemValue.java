@@ -12,6 +12,11 @@ import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
  */
 public class MongoCollectionTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造集合树节点值
+     *
+     * @param item 集合树节点
+     */
     public MongoCollectionTreeItemValue(MongoCollectionTreeItem item) {
         super(item);
     }

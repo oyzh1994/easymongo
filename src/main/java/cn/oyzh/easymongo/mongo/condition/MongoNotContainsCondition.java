@@ -15,8 +15,14 @@ import java.util.regex.Pattern;
  */
 public class MongoNotContainsCondition extends MongoContainsCondition {
 
+    /**
+     * 不包含条件实例
+     */
     public final static MongoNotContainsCondition INSTANCE = new MongoNotContainsCondition();
 
+    /**
+     * 构造不包含条件
+     */
     public MongoNotContainsCondition() {
         super(I18nHelper.notContains(), "NOT LIKE");
     }

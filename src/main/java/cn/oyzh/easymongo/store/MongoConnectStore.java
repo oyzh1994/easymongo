@@ -7,6 +7,8 @@ import cn.oyzh.store.jdbc.JdbcStandardStore;
 import java.util.List;
 
 /**
+ * MongoDB连接存储
+ *
  * @author oyzh
  * @since 2024/09/26
  */
@@ -25,7 +27,7 @@ public class MongoConnectStore extends JdbcStandardStore<MongoConnect> {
     /**
      * 加载列表
      *
-     * @return redis连接列表
+     * @return MongoDB连接列表
      */
     public List<MongoConnect> load() {
         return super.selectList();

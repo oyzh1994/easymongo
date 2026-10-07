@@ -15,12 +15,24 @@ import java.util.regex.Pattern;
  */
 public class MongoStartWithCondition extends MongoCondition {
 
+    /**
+     * 开始以条件实例
+     */
     public final static MongoStartWithCondition INSTANCE = new MongoStartWithCondition();
 
+    /**
+     * 构造开始以条件
+     */
     public MongoStartWithCondition() {
         super(I18nHelper.startWith(), "LIKE");
     }
 
+    /**
+     * 使用名称、值构造开始以条件
+     *
+     * @param name  名称
+     * @param value 值
+     */
     public MongoStartWithCondition(String name, String value) {
         super(name, value);
     }

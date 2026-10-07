@@ -7,7 +7,7 @@ import cn.oyzh.common.util.JarUtil;
 import java.io.File;
 
 /**
- * db常量对象
+ * MongoDB 常量类
  *
  * @author oyzh
  * @since 2023/06/16

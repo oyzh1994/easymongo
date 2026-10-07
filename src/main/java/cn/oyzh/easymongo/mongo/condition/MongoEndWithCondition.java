@@ -15,12 +15,24 @@ import java.util.regex.Pattern;
  */
 public class MongoEndWithCondition extends MongoCondition {
 
+    /**
+     * 结束以条件实例
+     */
     public final static MongoEndWithCondition INSTANCE = new MongoEndWithCondition();
 
+    /**
+     * 构造结束以条件
+     */
     public MongoEndWithCondition() {
         super(I18nHelper.endWith(), "LIKE");
     }
 
+    /**
+     * 使用名称、值构造结束以条件
+     *
+     * @param name  名称
+     * @param value 值
+     */
     public MongoEndWithCondition(String name, String value) {
         super(name, value);
     }

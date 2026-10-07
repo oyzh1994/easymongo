@@ -4,6 +4,7 @@ import org.openjdk.nashorn.api.scripting.AbstractJSObject;
 import org.openjdk.nashorn.internal.runtime.Undefined;
 
 /**
+ * 脚本环境中的 Long 构造函数，用于将参数转换为 64 位长整型
  *
  * @author oyzh
  * @since 2026-06-17

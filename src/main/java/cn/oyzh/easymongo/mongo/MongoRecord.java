@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * db记录
+ * 数据库记录
  *
  * @author oyzh
  * @since 2023/12/20
@@ -37,23 +37,50 @@ public class MongoRecord extends DBObjectStatus implements Destroyable, ObjectCo
      */
     private MongoColumns columns;
 
+    /**
+     * 使用字段列表构造数据库记录（非只读）
+     *
+     * @param columns 字段列表
+     */
     public MongoRecord(MongoColumns columns) {
         this(columns, false);
     }
 
+    /**
+     * 使用字段集合构造数据库记录（非只读）
+     *
+     * @param columns 字段集合
+     */
     public MongoRecord(List<MongoColumn> columns) {
         this(new MongoColumns(columns), false);
     }
 
+    /**
+     * 使用字段集合、是否只读构造数据库记录
+     *
+     * @param columns  字段集合
+     * @param readonly 是否只读
+     */
     public MongoRecord(List<MongoColumn> columns, boolean readonly) {
         this(new MongoColumns(columns), readonly);
     }
 
+    /**
+     * 使用字段列表、是否只读构造数据库记录
+     *
+     * @param columns  字段列表
+     * @param readonly 是否只读
+     */
     public MongoRecord(MongoColumns columns, boolean readonly) {
         this.columns = columns;
         this.readonly = readonly;
     }
 
+    /**
+     * 获取字段列表
+     *
+     * @return 字段列表
+     */
     public MongoColumns getColumns() {
         return columns;
     }
@@ -204,6 +231,8 @@ public class MongoRecord extends DBObjectStatus implements Destroyable, ObjectCo
 
     /**
      * 抛弃变更
+     *
+     * @throws Exception 异常
      */
     public void discard() throws Exception {
         for (MongoRecordProperty property : this.properties.values()) {
@@ -327,10 +356,21 @@ public class MongoRecord extends DBObjectStatus implements Destroyable, ObjectCo
     //    return recordData;
     //}
 
+    /**
+     * 指定字段是否已变更
+     *
+     * @param column 字段名称
+     * @return 是否已变更
+     */
     public boolean isColumnChanged(String column) {
         return false;
     }
 
+    /**
+     * 转换为 Map
+     *
+     * @return Map 数据
+     */
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         for (Map.Entry<String, MongoRecordProperty> value : this.properties.entrySet()) {
@@ -351,18 +391,39 @@ public class MongoRecord extends DBObjectStatus implements Destroyable, ObjectCo
         }
     }
 
+    /**
+     * 是否可编辑
+     *
+     * @return 是否可编辑
+     */
     public boolean isEditable() {
         return editable;
     }
 
+    /**
+     * 设置是否可编辑
+     *
+     * @param editable 是否可编辑
+     */
     public void setEditable(boolean editable) {
         this.editable = editable;
     }
 
+    /**
+     * 设置 _id 值
+     *
+     * @param _id _id 值
+     */
     public void set_id(BsonValue _id) {
         this.putValue(MongoUtil.ID, _id);
     }
 
+    /**
+     * 获取指定名称的字段
+     *
+     * @param columnName 字段名称
+     * @return 字段
+     */
     public MongoColumn column(String columnName) {
         if (this.columns == null) {
             return null;
@@ -370,10 +431,20 @@ public class MongoRecord extends DBObjectStatus implements Destroyable, ObjectCo
         return this.columns.column(columnName);
     }
 
+    /**
+     * 获取 _id 字段
+     *
+     * @return _id 字段
+     */
     public MongoColumn _idColumn() {
         return this.column(MongoUtil.ID);
     }
 
+    /**
+     * 获取 _id 值
+     *
+     * @return _id 值
+     */
     public Object _idValue() {
         MongoRecordProperty property = this.getProperty(MongoUtil.ID);
         if (property == null) {

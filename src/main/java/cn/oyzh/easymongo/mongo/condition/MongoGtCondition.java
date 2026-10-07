@@ -16,8 +16,14 @@ import java.util.Arrays;
  */
 public class MongoGtCondition extends MongoCondition {
 
+    /**
+     * 大于条件实例
+     */
     public final static MongoGtCondition INSTANCE = new MongoGtCondition();
 
+    /**
+     * 构造大于条件
+     */
     public MongoGtCondition() {
         super(I18nHelper.gt(), ">");
     }

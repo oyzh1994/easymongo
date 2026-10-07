@@ -49,6 +49,11 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
      */
     private final MongoGroupStore groupStore = MongoGroupStore.INSTANCE;
 
+    /**
+     * 构造DB树根节点
+     *
+     * @param treeView 树视图
+     */
     public MongoRootTreeItem(MongoTreeView treeView) {
         super(treeView);
         this.setValue(new MongoRootTreeItemValue());

@@ -13,6 +13,11 @@ import cn.oyzh.fx.gui.tree.view.RichTreeView;
  */
 public abstract class MongoTreeItem<V extends RichTreeItemValue> extends RichTreeItem<V> {
 
+    /**
+     * 构造树节点
+     *
+     * @param treeView 树视图
+     */
     public MongoTreeItem(RichTreeView treeView) {
         super(treeView);
     }

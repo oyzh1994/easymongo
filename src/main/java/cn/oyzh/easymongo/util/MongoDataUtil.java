@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * MongoDB 数据工具类
+ *
  * @author oyzh
  * @since 2024/08/26
  */
@@ -240,7 +242,7 @@ public class MongoDataUtil {
     /**
      * 转换为插入脚本
      *
-     * @param collectionName 记录
+     * @param collectionName 集合名称
      * @param doc            文档
      * @return 结果
      */
@@ -281,8 +283,8 @@ public class MongoDataUtil {
     /**
      * 转换为更新脚本
      *
-     * @param collectionName 记录
-     * @param id             id
+     * @param collectionName 集合名称
+     * @param id             主键值
      * @param doc            文档
      * @return 结果
      */
@@ -297,7 +299,7 @@ public class MongoDataUtil {
     /**
      * 转换为替换脚本
      *
-     * @param function 记录
+     * @param function 函数
      * @return 结果
      */
     public static String toReplaceScript(MongoFunction function) {

@@ -1,6 +1,8 @@
 package cn.oyzh.easymongo.query;
 
 /**
+ * 执行结果
+ *
  * @author oyzh
  * @since 2024/02/19
  */

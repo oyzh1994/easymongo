@@ -7,11 +7,16 @@ import cn.oyzh.event.EventFormatter;
 import cn.oyzh.i18n.I18nHelper;
 
 /**
+ * MongoDB 数据库新增事件
+ *
  * @author oyzh
  * @since 2024/01/30
  */
 public class MongoDatabaseAddedEvent extends Event<MongoDatabase> implements EventFormatter {
 
+    /**
+     * 连接树节点
+     */
     private MongoConnectTreeItem connectItem;
 
     @Override
@@ -19,10 +24,20 @@ public class MongoDatabaseAddedEvent extends Event<MongoDatabase> implements Eve
         return String.format("[%s:%s] added", I18nHelper.database(), this.data().getName());
     }
 
+    /**
+     * 获取连接树节点
+     *
+     * @return 连接树节点
+     */
     public MongoConnectTreeItem getConnectItem() {
         return connectItem;
     }
 
+    /**
+     * 设置连接树节点
+     *
+     * @param connectItem 连接树节点
+     */
     public void setConnectItem(MongoConnectTreeItem connectItem) {
         this.connectItem = connectItem;
     }

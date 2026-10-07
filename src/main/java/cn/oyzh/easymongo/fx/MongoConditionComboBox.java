@@ -6,6 +6,8 @@ import cn.oyzh.fx.plus.controls.combo.FXComboBox;
 import cn.oyzh.fx.plus.converter.SimpleStringConverter;
 
 /**
+ * MongoDB查询条件选择框
+ *
  * @author oyzh
  * @since 2024/06/26
  */

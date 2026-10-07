@@ -10,7 +10,7 @@ import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.Cursor;
 
 /**
- * db查询tab
+ * 查询主标签页
  *
  * @author oyzh
  * @since 2024/02/18
@@ -46,10 +46,20 @@ public class MongoQueryMainTab extends MongoTab {
         }
     }
 
+    /**
+     * 获取查询对象
+     *
+     * @return 查询对象
+     */
     public MongoQuery query() {
         return this.controller().getQuery();
     }
 
+    /**
+     * 获取查询标识
+     *
+     * @return 查询标识
+     */
     public String queryId() {
         return this.query().getUid();
     }
@@ -59,10 +69,20 @@ public class MongoQueryMainTab extends MongoTab {
         return this.controller().getDbItem();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.dbItem().dbName();
     }
 
+    /**
+     * 获取连接名称
+     *
+     * @return 连接名称
+     */
     public String connectName() {
         return this.dbItem().connectName();
     }
@@ -72,6 +92,7 @@ public class MongoQueryMainTab extends MongoTab {
      *
      * @param query 查询对象
      * @param item  db库树节点
+     * @return 是否初始化成功
      */
     public boolean init(MongoQuery query, MongoDatabaseTreeItem item) {
         this.controller().init(this, query, item);

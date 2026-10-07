@@ -12,9 +12,16 @@ import java.util.List;
  * @since 2024/2/20
  */
 public enum DBDialect {
+
+    /** MySQL 数据库 */
     MYSQL;
 
 
+    /**
+     * 获取全部数据库方言
+     *
+     * @return 数据库方言列表
+     */
     public static List<DBDialect> valueList() {
         List<DBDialect> list = new ArrayList<>();
         Collections.addAll(list, values());

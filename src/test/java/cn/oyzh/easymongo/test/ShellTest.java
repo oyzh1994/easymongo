@@ -16,6 +16,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * 模拟 MongoDB Shell 命令执行的测试
+ *
+ * @author oyzh
+ * @since 2026-06-06
+ */
 public class ShellTest {
 
     static void main() throws IOException {

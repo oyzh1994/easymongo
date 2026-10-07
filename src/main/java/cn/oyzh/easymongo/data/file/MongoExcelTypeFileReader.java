@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * MongoDB 数据导入的 Excel 类型文件读取器
+ *
  * @author oyzh
  * @since 2024-09-03
  */
@@ -42,6 +44,13 @@ public class MongoExcelTypeFileReader extends MongoTypeFileReader {
      */
     private Integer currentRowIndex;
 
+    /**
+     * 构造 Excel 类型文件读取器
+     *
+     * @param file   待读取的文件
+     * @param config 导入配置
+     * @throws Exception 异常
+     */
     public MongoExcelTypeFileReader(File file, MongoDataImportConfig config) throws Exception {
         super(file);
         this.config = config;

@@ -54,10 +54,16 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
     private boolean canceled;
 
     /**
-     * redis信息储存
+     * mongo连接信息储存
      */
     private final MongoConnectStore connectStore = MongoConnectStore.INSTANCE;
 
+    /**
+     * 构造连接节点
+     *
+     * @param value    连接信息
+     * @param treeView 树视图
+     */
     public MongoConnectTreeItem(MongoConnect value, MongoTreeView treeView) {
         super(treeView);
         this.value(value);
@@ -117,6 +123,11 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
         }
     }
 
+    /**
+     * 新增数据库
+     *
+     * @param databaseName 数据库名称
+     */
     public void addDatabase(String databaseName) {
         MongoDatabase database = this.client.database(databaseName);
         super.addChild(new MongoDatabaseTreeItem(database, this.getTreeView()));
@@ -257,7 +268,7 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
     /**
      * 设置值
      *
-     * @param value redis信息
+     * @param value 连接信息
      */
     public void value(MongoConnect value) {
         this.value = value;
@@ -265,6 +276,11 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
         this.setValue(new MongoConnectTreeItemValue(this));
     }
 
+    /**
+     * 获取连接信息
+     *
+     * @return 连接信息
+     */
     public MongoConnect value() {
         return value;
     }
@@ -325,26 +341,59 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
         }
     }
 
+    /**
+     * 数据库是否存在
+     *
+     * @param dbName 数据库名称
+     * @return 是否存在
+     */
     public boolean existDatabase(String dbName) {
         return this.client.existDatabase(dbName);
     }
 
+    /**
+     * 创建数据库
+     *
+     * @param dbName 数据库名称
+     */
     public void createDatabase(String dbName) {
         this.client.createDatabase(dbName);
     }
 
+    /**
+     * 修改数据库
+     *
+     * @param database 数据库
+     * @return 是否成功
+     */
     public boolean alterDatabase(MongoDatabase database) {
         return this.client.alterDatabase(database);
     }
 
+    /**
+     * 删除数据库
+     *
+     * @param dbName 数据库名称
+     * @return 是否成功
+     */
     public boolean dropDatabase(String dbName) {
         return this.client.dropDatabase(dbName);
     }
 
+    /**
+     * 获取连接类型
+     *
+     * @return 连接类型
+     */
     public String type() {
         return this.value.getType();
     }
 
+    /**
+     * 获取 db 客户端
+     *
+     * @return db 客户端
+     */
     public MongoClient getClient() {
         return client;
     }

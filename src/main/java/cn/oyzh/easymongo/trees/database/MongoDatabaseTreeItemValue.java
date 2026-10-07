@@ -13,6 +13,11 @@ import javafx.scene.paint.Color;
  */
 public class MongoDatabaseTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造database值
+     *
+     * @param item database树节点
+     */
     public MongoDatabaseTreeItemValue(MongoDatabaseTreeItem item) {
         super(item);
     }

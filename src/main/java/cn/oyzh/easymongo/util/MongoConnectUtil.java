@@ -7,7 +7,7 @@ import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.StageAdapter;
 
 /**
- * db连接工具类
+ * MongoDB 连接工具类
  *
  * @author oyzh
  * @since 2023/07/01

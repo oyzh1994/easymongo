@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Mongo 终端历史处理器
+ *
  * @author oyzh
  * @since 2023/8/28
  */

@@ -7,6 +7,8 @@ import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.i18n.I18nHelper;
 
 /**
+ * MongoDB 连接成功事件
+ *
  * @author oyzh
  * @since 2023/11/28
  */
@@ -17,6 +19,11 @@ public class MongoConnectionConnectedEvent extends Event<MongoClient> implements
         return String.format("[%s:%s] connected", I18nHelper.connect(), this.data().connectName());
     }
 
+    /**
+     * 获取 Shell 连接信息
+     *
+     * @return Shell 连接信息
+     */
     public MongoConnect shellConnect() {
         return this.data().getShellConnect();
     }

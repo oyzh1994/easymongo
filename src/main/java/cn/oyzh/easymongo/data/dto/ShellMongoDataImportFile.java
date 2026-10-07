@@ -12,19 +12,37 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.io.File;
 
 /**
+ * MongoDB 数据导入文件
+ *
  * @author oyzh
  * @since 2024/08/30
  */
 public class ShellMongoDataImportFile {
 
+    /**
+     * 数据库名称
+     */
     private String dbName;
 
+    /**
+     * 设置数据库名称
+     *
+     * @param dbName 数据库名称
+     */
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
 
+    /**
+     * 数据库客户端
+     */
     private MongoClient dbClient;
 
+    /**
+     * 设置数据库客户端
+     *
+     * @param dbClient 数据库客户端
+     */
     public void setDbClient(MongoClient dbClient) {
         this.dbClient = dbClient;
     }
@@ -40,6 +58,11 @@ public class ShellMongoDataImportFile {
      */
     private String targetTableName;
 
+    /**
+     * 获取文件属性
+     *
+     * @return 文件属性
+     */
     public ObjectProperty<File> fileProperty() {
         if (fileProperty == null) {
             this.fileProperty = new SimpleObjectProperty<>();
@@ -47,24 +70,49 @@ public class ShellMongoDataImportFile {
         return this.fileProperty;
     }
 
+    /**
+     * 获取文件
+     *
+     * @return 文件
+     */
     public File getFile() {
         return fileProperty == null ? null : fileProperty.get();
     }
 
+    /**
+     * 获取文件路径
+     *
+     * @return 文件路径
+     */
     public String getFilePath() {
         File file = getFile();
         return file == null ? null : file.getPath();
     }
 
+    /**
+     * 获取文件名称
+     *
+     * @return 文件名称
+     */
     public String getFileName() {
         File file = getFile();
         return file == null ? null : file.getName();
     }
 
+    /**
+     * 设置文件
+     *
+     * @param file 文件
+     */
     public void setFile(File file) {
         this.fileProperty().set(file);
     }
 
+    /**
+     * 获取文件路径控件
+     *
+     * @return 文件路径控件
+     */
     public ChooseFileTextField getFilePathControl() {
         ChooseFileTextField textField = new ChooseFileTextField();
         textField.setText(this.getFilePath());
@@ -74,6 +122,11 @@ public class ShellMongoDataImportFile {
         return textField;
     }
 
+    /**
+     * 获取目标表控件
+     *
+     * @return 目标表控件
+     */
     public ShellMongoCollectionComboBox getTargetTableControl() {
         ShellMongoCollectionComboBox comboBox = new ShellMongoCollectionComboBox();
         //String dbName = CacheHelper.get("mysql:dbName");
@@ -86,6 +139,11 @@ public class ShellMongoDataImportFile {
         return comboBox;
     }
 
+    /**
+     * 获取表名称（由文件名称去除扩展名得到）
+     *
+     * @return 表名称
+     */
     public String getTableName() {
         String fileName = this.getFileName();
         if (StringUtil.isBlank(fileName)) {
@@ -94,6 +152,11 @@ public class ShellMongoDataImportFile {
         return fileName.substring(0, fileName.lastIndexOf("."));
     }
 
+    /**
+     * 获取目标表名称
+     *
+     * @return 目标表名称
+     */
     public String getTargetTableName() {
         if (this.targetTableName == null) {
             return this.getTableName();
@@ -101,6 +164,11 @@ public class ShellMongoDataImportFile {
         return this.targetTableName;
     }
 
+    /**
+     * 设置目标表名称
+     *
+     * @param targetTableName 目标表名称
+     */
     public void setTargetTableName(String targetTableName) {
         this.targetTableName = targetTableName;
     }

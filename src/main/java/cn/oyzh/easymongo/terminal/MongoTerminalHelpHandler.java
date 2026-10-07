@@ -3,7 +3,7 @@ package cn.oyzh.easymongo.terminal;
 import cn.oyzh.fx.terminal.help.BaseTerminalHelpHandler;
 
 /**
- * zk终端提示器
+ * Mongo 终端帮助处理器
  *
  * @author oyzh
  * @since 2023/7/24

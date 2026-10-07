@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * db查询内容组件
+ * 查询主标签页内容组件
  *
  * @author oyzh
  * @since 2024/02/18
@@ -44,6 +44,11 @@ public class MongoQueryMainTabController extends RichTabController {
      */
     private boolean unsaved;
 
+    /**
+     * 获取查询对象
+     *
+     * @return 查询对象
+     */
     public MongoQuery getQuery() {
         return query;
     }
@@ -53,6 +58,11 @@ public class MongoQueryMainTabController extends RichTabController {
      */
     private MongoDatabaseTreeItem dbItem;
 
+    /**
+     * 获取数据库树节点
+     *
+     * @return 数据库树节点
+     */
     public MongoDatabaseTreeItem getDbItem() {
         return dbItem;
     }
@@ -89,8 +99,9 @@ public class MongoQueryMainTabController extends RichTabController {
     /**
      * 执行初始化
      *
+     * @param tab    查询主标签页
      * @param query  查询对象
-     * @param dbItem db库树节点
+     * @param dbItem 数据库树节点
      */
     public void init(MongoQueryMainTab tab, MongoQuery query, MongoDatabaseTreeItem dbItem) {
         this.tab = tab;
@@ -171,7 +182,7 @@ public class MongoQueryMainTabController extends RichTabController {
     /**
      * 执行运行
      *
-     * @param sql sql
+     * @param sql 脚本内容
      */
     private void doRun(String sql) {
         try {
@@ -367,6 +378,11 @@ public class MongoQueryMainTabController extends RichTabController {
         //        this.root.autosize();
     }
 
+    /**
+     * 是否未保存
+     *
+     * @return 是否未保存
+     */
     public boolean isUnsaved() {
         return unsaved;
     }

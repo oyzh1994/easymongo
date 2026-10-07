@@ -1,7 +1,7 @@
 package cn.oyzh.easymongo.terminal;
 
 /**
- * zk终端工具
+ * Mongo 终端工具
  *
  * @author oyzh
  * @since 2023/09/20

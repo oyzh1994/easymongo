@@ -7,17 +7,28 @@ import cn.oyzh.fx.plus.controls.combo.FXComboBox;
 import java.util.List;
 
 /**
- * db数据库选择框
+ * MongoDB数据库选择框
  *
  * @author oyzh
  * @since 2024/01/25
  */
 public class ShellMongoDatabaseComboBox extends FXComboBox<String> {
 
+    /**
+     * 初始化数据库列表
+     *
+     * @param client Mongo客户端
+     */
     public void init(MongoClient client) {
         this.init(client, null);
     }
 
+    /**
+     * 初始化数据库列表并选中指定数据库
+     *
+     * @param client Mongo客户端
+     * @param dbName 数据库名称
+     */
     public void init(MongoClient client, String dbName) {
         this.clearItems();
         List<String> databases = client.listDatabaseNames();

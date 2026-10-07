@@ -13,6 +13,11 @@ public enum MongoConnState {
      * 未初始化
      */
     NOT_INITIALIZED {
+        /**
+         * 是否已连接
+         *
+         * @return 是否已连接
+         */
         public boolean isConnected() {
             return false;
         }
@@ -21,6 +26,11 @@ public enum MongoConnState {
      * 已连接
      */
     CONNECTED {
+        /**
+         * 是否已连接
+         *
+         * @return 是否已连接
+         */
         public boolean isConnected() {
             return true;
         }
@@ -29,6 +39,11 @@ public enum MongoConnState {
      * 连接中
      */
     CONNECTING {
+        /**
+         * 是否已连接
+         *
+         * @return 是否已连接
+         */
         public boolean isConnected() {
             return false;
         }
@@ -37,6 +52,11 @@ public enum MongoConnState {
      * 已关闭
      */
     CLOSED {
+        /**
+         * 是否已连接
+         *
+         * @return 是否已连接
+         */
         public boolean isConnected() {
             return false;
         }
@@ -45,6 +65,11 @@ public enum MongoConnState {
      * 失败
      */
     FAILED {
+        /**
+         * 是否已连接
+         *
+         * @return 是否已连接
+         */
         public boolean isConnected() {
             return false;
         }
@@ -53,6 +78,11 @@ public enum MongoConnState {
      * 中断
      */
     INTERRUPTED {
+        /**
+         * 是否已连接
+         *
+         * @return 是否已连接
+         */
         public boolean isConnected() {
             return false;
         }
@@ -61,6 +91,11 @@ public enum MongoConnState {
      * 重连
      */
     RECONNECTED {
+        /**
+         * 是否已连接
+         *
+         * @return 是否已连接
+         */
         public boolean isConnected() {
             return true;
         }

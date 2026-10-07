@@ -17,12 +17,24 @@ import java.util.List;
  */
 public class MongoBetweenCondition extends MongoCondition {
 
+    /**
+     * 介于条件实例
+     */
     public final static MongoBetweenCondition INSTANCE = new MongoBetweenCondition();
 
+    /**
+     * 构造介于条件
+     */
     public MongoBetweenCondition() {
         super(I18nHelper.between(), "BETWEEN");
     }
 
+    /**
+     * 使用名称、值构造介于条件
+     *
+     * @param name  名称
+     * @param value 值
+     */
     public MongoBetweenCondition(String name, String value) {
         super(name, value);
     }

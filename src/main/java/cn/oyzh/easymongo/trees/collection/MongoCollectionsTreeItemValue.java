@@ -14,6 +14,11 @@ import javafx.scene.paint.Color;
  */
 public class MongoCollectionsTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造集合类型树节点值
+     *
+     * @param item 集合类型树节点
+     */
     public MongoCollectionsTreeItemValue(MongoCollectionsTreeItem item) {
         super(item);
         super.setRichMode(true);

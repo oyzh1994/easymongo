@@ -13,7 +13,7 @@ import javafx.scene.Cursor;
 import java.util.List;
 
 /**
- * db表tab
+ * 集合记录标签页
  *
  * @author oyzh
  * @since 2023/12/24
@@ -45,6 +45,7 @@ public class MongoCollectionRecordTab extends MongoTab {
      * 初始化
      *
      * @param item 树键
+     * @return 是否初始化成功
      */
     public boolean init(MongoCollectionTreeItem item) {
         this.controller().init(item);
@@ -64,18 +65,38 @@ public class MongoCollectionRecordTab extends MongoTab {
         this.controller().reload();
     }
 
+    /**
+     * 获取客户端
+     *
+     * @return 客户端
+     */
     public MongoClient client() {
         return this.item().client();
     }
 
+    /**
+     * 设置过滤条件
+     *
+     * @param filters 过滤条件列表
+     */
     public void setFilters(List<MongoRecordFilter> filters) {
         this.controller().setFilters(filters);
     }
 
+    /**
+     * 获取集合树节点
+     *
+     * @return 集合树节点
+     */
     public MongoCollectionTreeItem item(){
         return this.controller().getItem();
     }
-    
+
+    /**
+     * 获取集合名称
+     *
+     * @return 集合名称
+     */
     public String collectionName() {
         return this.item().collectionName();
     }
@@ -85,6 +106,11 @@ public class MongoCollectionRecordTab extends MongoTab {
         return this.item().dbItem();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.item().dbName();
     }

@@ -16,8 +16,14 @@ import java.util.Arrays;
  */
 public class MongoLtCondition extends MongoCondition {
 
+    /**
+     * 小于条件实例
+     */
     public final static MongoLtCondition INSTANCE = new MongoLtCondition();
 
+    /**
+     * 构造小于条件
+     */
     public MongoLtCondition() {
         super(I18nHelper.lt(), "<");
     }

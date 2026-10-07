@@ -9,11 +9,18 @@ import cn.oyzh.fx.plus.util.ListViewUtil;
 import java.util.List;
 
 /**
+ * 数据导出列列表视图，以复选框列表展示并选择需要导出的列
+ *
  * @author oyzh
  * @since 2024/08/27
  */
 public class ShellMongoDataExportColumnListView extends FXListView<FXCheckBox> {
 
+    /**
+     * 根据导出列初始化列表视图
+     *
+     * @param columns 导出列列表
+     */
     public void init(List<ShellMongoDataExportColumn> columns) {
         this.clearItems();
         if (CollectionUtil.isNotEmpty(columns)) {

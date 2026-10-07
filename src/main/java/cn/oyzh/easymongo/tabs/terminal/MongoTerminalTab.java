@@ -9,13 +9,19 @@ import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.Cursor;
 
 /**
- * redis终端tab
+ * Mongo 终端标签页
  *
  * @author oyzh
  * @since 2023/7/21
  */
 public class MongoTerminalTab extends RichTab {
 
+    /**
+     * 构造 Mongo 终端标签页
+     *
+     * @param client 客户端
+     * @param dbName 数据库名称
+     */
     public MongoTerminalTab(MongoClient client, String dbName) {
         this.init(client, dbName);
     }
@@ -49,7 +55,8 @@ public class MongoTerminalTab extends RichTab {
     /**
      * 初始化
      *
-     * @param client zk客户端
+     * @param client 客户端
+     * @param dbName 数据库名称
      */
     private void init(MongoClient client, String dbName) {
         try {
@@ -73,18 +80,28 @@ public class MongoTerminalTab extends RichTab {
     }
 
     /**
-     * redis信息
+     * 获取 Mongo 连接信息
      *
-     * @return 当前redis信息
+     * @return 当前 Mongo 连接信息
      */
     public MongoConnect redisConnect() {
         return this.controller().shellConnect();
     }
 
+    /**
+     * 获取客户端
+     *
+     * @return 客户端
+     */
     public MongoClient client() {
         return this.controller().client();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.controller().getDbName();
     }

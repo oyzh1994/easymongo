@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 数据库数据导出处理器基类
+ *
  * @author oyzh
  * @since 2024/08/27
  */
@@ -61,6 +63,12 @@ public abstract class DBDataExportHandler extends DBDataHandler {
      */
     private final MongoDataExportConfig config;
 
+    /**
+     * 构造数据导出处理器
+     *
+     * @param dbClient db 客户端
+     * @param dbName   库名称
+     */
     public DBDataExportHandler(MongoClient dbClient, String dbName) {
         this.dbClient = dbClient;
         this.dbName = dbName;
@@ -174,6 +182,14 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         this.message("Export Finished");
     }
 
+    /**
+     * 根据文件类型初始化文件写入器
+     *
+     * @param filePath 文件路径
+     * @param columns  字段列表
+     * @return 文件写入器
+     * @throws IOException IO 异常
+     */
     private MongoTypeFileWriter initWriter(String filePath, MongoColumns columns) throws IOException {
         if (this.isExcelType()) {
             return new MongoExcelTypeFileWriter(filePath, this.config, columns);
@@ -254,9 +270,10 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     }
 
     /**
-     * 写入头
+     * 写入文件头
      *
-     * @throws IOException 异常
+     * @param writer 文件写入器
+     * @throws Exception 异常
      */
     private void writeHeader(MongoTypeFileWriter writer) throws Exception {
         writer.writeHeader();
@@ -265,8 +282,9 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     /**
      * 写入记录
      *
+     * @param writer  文件写入器
      * @param records 记录列表
-     * @throws IOException 异常
+     * @throws Exception 异常
      */
     private void writeRecord(MongoTypeFileWriter writer, List<MongoRecord> records) throws Exception {
         List<Map<String, Object>> objects = new ArrayList<>();
@@ -277,9 +295,10 @@ public abstract class DBDataExportHandler extends DBDataHandler {
     }
 
     /**
-     * 写入尾
+     * 写入文件尾
      *
-     * @throws IOException 异常
+     * @param writer 文件写入器
+     * @throws Exception 异常
      */
     private void writeTail(MongoTypeFileWriter writer) throws Exception {
         writer.writeTrial();
@@ -298,70 +317,155 @@ public abstract class DBDataExportHandler extends DBDataHandler {
         }
     }
 
+    /**
+     * 设置记录分隔符
+     *
+     * @param recordSeparator 记录分隔符
+     */
     public void recordSeparator(String recordSeparator) {
         this.config.setRecordSeparator(recordSeparator);
     }
 
+    /**
+     * 设置文本标识符
+     *
+     * @param txtIdentifier 文本标识符
+     */
     public void txtIdentifier(String txtIdentifier) {
         this.config.setTxtIdentifier(txtIdentifier);
     }
 
+    /**
+     * 设置字段分隔符
+     *
+     * @param fieldSeparator 字段分隔符
+     */
     public void fieldSeparator(String fieldSeparator) {
         this.config.setFieldSeparator(fieldSeparator);
     }
 
+    /**
+     * 设置是否导出字段
+     *
+     * @param includeFields 是否导出字段
+     */
     public void includeFields(boolean includeFields) {
         this.config.setIncludeFields(includeFields);
     }
 
+    /**
+     * 设置字段是否作为属性
+     *
+     * @param fieldToAttr 字段是否作为属性
+     */
     public void fieldToAttr(boolean fieldToAttr) {
         this.config.setFieldToAttr(fieldToAttr);
     }
 
+    /**
+     * 设置是否早期版本格式
+     *
+     * @param earlyVersion 是否早期版本格式
+     */
     public void earlyVersion(boolean earlyVersion) {
         this.config.setEarlyVersion(earlyVersion);
     }
 
+    /**
+     * 获取库名称
+     *
+     * @return 库名称
+     */
     public String getDbName() {
         return dbName;
     }
 
+    /**
+     * 设置库名称
+     *
+     * @param dbName 库名称
+     */
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
 
+    /**
+     * 获取文件类型
+     *
+     * @return 文件类型
+     */
     public String getFileType() {
         return fileType;
     }
 
+    /**
+     * 设置文件类型
+     *
+     * @param fileType 文件类型
+     */
     public void setFileType(String fileType) {
         this.fileType = fileType;
     }
 
+    /**
+     * 获取 db 客户端
+     *
+     * @return db 客户端
+     */
     public MongoClient getDbClient() {
         return dbClient;
     }
 
+    /**
+     * 设置 db 客户端
+     *
+     * @param dbClient db 客户端
+     */
     public void setDbClient(MongoClient dbClient) {
         this.dbClient = dbClient;
     }
 
+    /**
+     * 获取查询限制
+     *
+     * @return 查询限制
+     */
     public int getQueryLimit() {
         return queryLimit;
     }
 
+    /**
+     * 设置查询限制
+     *
+     * @param queryLimit 查询限制
+     */
     public void setQueryLimit(int queryLimit) {
         this.queryLimit = queryLimit;
     }
 
+    /**
+     * 获取导出表列表
+     *
+     * @return 导出表列表
+     */
     public List<ShellMongoDataExportCollection> getTables() {
         return tables;
     }
 
+    /**
+     * 设置导出表列表
+     *
+     * @param tables 导出表列表
+     */
     public void setTables(List<ShellMongoDataExportCollection> tables) {
         this.tables = tables;
     }
 
+    /**
+     * 获取导出配置
+     *
+     * @return 导出配置
+     */
     public MongoDataExportConfig getConfig() {
         return config;
     }

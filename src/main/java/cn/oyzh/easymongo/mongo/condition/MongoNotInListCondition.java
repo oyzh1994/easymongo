@@ -17,8 +17,14 @@ import java.util.List;
  */
 public class MongoNotInListCondition extends MongoInListCondition {
 
+    /**
+     * 不在列表条件实例
+     */
     public final static MongoNotInListCondition INSTANCE = new MongoNotInListCondition();
 
+    /**
+     * 构造不在列表条件
+     */
     public MongoNotInListCondition() {
         super(I18nHelper.notInList(), "NOT IN");
     }

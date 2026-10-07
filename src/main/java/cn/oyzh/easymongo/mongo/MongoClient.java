@@ -63,7 +63,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * db客户端封装
+ * MongoDB 客户端封装
  *
  * @author oyzh
  * @since 2023/11/06
@@ -71,10 +71,15 @@ import java.util.concurrent.atomic.AtomicLong;
 public class MongoClient implements Closeable {
 
     /**
-     * db信息
+     * MongoDB 连接信息
      */
     protected MongoConnect shellConnect;
 
+    /**
+     * 使用连接信息构造客户端
+     *
+     * @param value 连接信息
+     */
     public MongoClient(MongoConnect value) {
         this.shellConnect = value;
         this.stateProperty().addListener((observable, oldValue, newValue) -> {
@@ -87,14 +92,29 @@ public class MongoClient implements Closeable {
         });
     }
 
+    /**
+     * 获取连接名称
+     *
+     * @return 连接名称
+     */
     public String connectName() {
         return this.shellConnect.getName();
     }
 
+    /**
+     * 是否已连接
+     *
+     * @return 是否已连接
+     */
     public boolean isConnected() {
         return this.state.get() != null && this.state.get().isConnected();
     }
 
+    /**
+     * 是否连接中
+     *
+     * @return 是否连接中
+     */
     public boolean isConnecting() {
         return this.state.get() == MongoConnState.CONNECTING;
     }
@@ -117,14 +137,19 @@ public class MongoClient implements Closeable {
      */
     private final SimpleObjectProperty<MongoConnState> state = new SimpleObjectProperty<>();
 
+    /**
+     * 获取连接状态属性
+     *
+     * @return 连接状态属性
+     */
     public ObjectProperty<MongoConnState> stateProperty() {
         return this.state;
     }
 
     /**
-     * 初始化连接
+     * 获取连接地址
      *
-     * @return 连接
+     * @return 连接地址
      */
     private String initHost() {
         // 连接地址
@@ -181,6 +206,9 @@ public class MongoClient implements Closeable {
         this.mongoClient = MongoClients.create(builder.build());
     }
 
+    /**
+     * 启动客户端并建立连接
+     */
     public void start() {
         if (this.isConnected() || this.isConnecting()) {
             return;
@@ -209,6 +237,12 @@ public class MongoClient implements Closeable {
         }
     }
 
+    /**
+     * 获取数据库
+     *
+     * @param dbName 数据库名称
+     * @return 数据库
+     */
     public MongoDatabase database(String dbName) {
         MongoDatabase database1 = new MongoDatabase();
         database1.setName(dbName);
@@ -272,15 +306,33 @@ public class MongoClient implements Closeable {
         return list;
     }
 
+    /**
+     * 获取集合
+     *
+     * @param dbName         数据库名称
+     * @param collectionName 集合名称
+     * @return 集合
+     */
     private com.mongodb.client.MongoCollection<Document> collection(String dbName, String collectionName) {
         return this.mongoClient.getDatabase(dbName).getCollection(collectionName);
     }
 
+    /**
+     * 创建数据库
+     *
+     * @param dbName 数据库名称
+     */
     public void createDatabase(String dbName) {
         com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
         database.createCollection("_empty_");
     }
 
+    /**
+     * 数据库是否存在
+     *
+     * @param dbName 数据库名称
+     * @return 是否存在
+     */
     public boolean existDatabase(String dbName) {
         try {
             com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
@@ -292,10 +344,22 @@ public class MongoClient implements Closeable {
         return false;
     }
 
+    /**
+     * 修改数据库
+     *
+     * @param database 数据库
+     * @return 是否成功
+     */
     public boolean alterDatabase(MongoDatabase database) {
         return false;
     }
 
+    /**
+     * 删除数据库
+     *
+     * @param dbName 数据库名称
+     * @return 是否成功
+     */
     public boolean dropDatabase(String dbName) {
         try {
             com.mongodb.client.MongoDatabase database = this.mongoClient.getDatabase(dbName);
@@ -788,6 +852,7 @@ public class MongoClient implements Closeable {
      * @param bucketName 桶名称
      * @param file       文件
      * @return 结果
+     * @throws Exception 异常
      */
     public ObjectId uploadBucketRecord(String dbName, String bucketName, File file) throws Exception {
         if (file == null) {
@@ -810,6 +875,7 @@ public class MongoClient implements Closeable {
      * @param id         文件id
      * @param filename   文件名
      * @param file       文件
+     * @throws Exception 异常
      */
     public void reuploadBucketRecord(String dbName, String bucketName, Object id, String filename, File file) throws Exception {
         if (file == null) {
@@ -834,6 +900,7 @@ public class MongoClient implements Closeable {
      * @param bucketName 桶名称
      * @param _id        数据id
      * @param file       文件
+     * @throws FileNotFoundException 异常
      */
     public void downloadBucketRecord(String dbName, String bucketName, Object _id, String file) throws FileNotFoundException {
         if (_id == null) {
@@ -903,13 +970,27 @@ public class MongoClient implements Closeable {
         return result.getMatchedCount();
     }
 
+    /**
+     * 查询集合字段列表
+     *
+     * @param param 参数
+     * @return 字段列表
+     */
     public List<? extends MongoColumn> selectColumns(MongoSelectRecordParam param) {
         List<MongoRecord> records = this.selectCollectionRecords(param);
         return MongoRecordUtil.columns(records);
     }
 
+    /**
+     * 版本号
+     */
     private String version;
 
+    /**
+     * 查询数据库版本
+     *
+     * @return 数据库版本
+     */
     public String selectVersion() {
         if (this.version == null) {
             Document buildInfo = this.mongoClient.getDatabase("admin")
@@ -919,6 +1000,11 @@ public class MongoClient implements Closeable {
         return this.version;
     }
 
+    /**
+     * 获取 MongoDB 连接信息
+     *
+     * @return MongoDB 连接信息
+     */
     public MongoConnect getShellConnect() {
         return this.shellConnect;
     }
@@ -995,7 +1081,7 @@ public class MongoClient implements Closeable {
     }
 
     /**
-     * 转换为mongo记录
+     * 转换为 Mongo 记录
      *
      * @param obj            对象
      * @param dbName         数据库名称
@@ -1043,7 +1129,7 @@ public class MongoClient implements Closeable {
     }
 
     /**
-     * 执行脚本
+     * 列举函数
      *
      * @param dbName 数据库名称
      * @return 结果
@@ -1065,6 +1151,14 @@ public class MongoClient implements Closeable {
         return functions;
     }
 
+    /**
+     * 创建函数
+     *
+     * @param dbName       数据库名称
+     * @param functionName 函数名称
+     * @param code         函数代码
+     * @return 结果
+     */
     public BsonValue createFunction(String dbName, String functionName, String code) {
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
         Document funcDoc = new Document()
@@ -1074,6 +1168,14 @@ public class MongoClient implements Closeable {
         return result.getInsertedId();
     }
 
+    /**
+     * 修改函数
+     *
+     * @param dbName       数据库名称
+     * @param functionName 函数名称
+     * @param code         函数代码
+     * @return 是否成功
+     */
     public boolean alertFunction(String dbName, String functionName, String code) {
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
         Bson filter = Filters.eq("_id", functionName);
@@ -1082,6 +1184,13 @@ public class MongoClient implements Closeable {
         return result.getMatchedCount() == 1;
     }
 
+    /**
+     * 查询函数
+     *
+     * @param dbName       数据库名称
+     * @param functionName 函数名称
+     * @return 函数
+     */
     public MongoFunction selectFunction(String dbName, String functionName) {
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
         Bson filter = Filters.eq("_id", functionName);
@@ -1098,6 +1207,13 @@ public class MongoClient implements Closeable {
         return null;
     }
 
+    /**
+     * 删除函数
+     *
+     * @param dbName       数据库名称
+     * @param functionName 函数名称
+     * @return 是否成功
+     */
     public boolean dropFunction(String dbName, String functionName) {
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
         Bson filter = Filters.eq("_id", functionName);
@@ -1105,6 +1221,14 @@ public class MongoClient implements Closeable {
         return document != null;
     }
 
+    /**
+     * 重命名函数
+     *
+     * @param dbName  数据库名称
+     * @param oldName 旧名称
+     * @param newName 新名称
+     * @return 是否成功
+     */
     public boolean renameFunction(String dbName, String oldName, String newName) {
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
         Bson filter = Filters.eq("_id", oldName);
@@ -1122,19 +1246,40 @@ public class MongoClient implements Closeable {
         return false;
     }
 
+    /**
+     * 获取函数数量
+     *
+     * @param dbName 数据库名称
+     * @return 函数数量
+     */
     public long functionSize(String dbName) {
         com.mongodb.client.MongoCollection<Document> collection = this.collection(dbName, MongoUtil.SYSTEM_JS);
         return collection.countDocuments();
     }
 
+    /**
+     * 添加状态监听器
+     *
+     * @param stateChangeListener 状态监听器
+     */
     public void addStateListener(ChangeListener<MongoConnState> stateChangeListener) {
         this.state.addListener(stateChangeListener);
     }
 
+    /**
+     * 是否已关闭
+     *
+     * @return 是否已关闭
+     */
     public boolean isClosed() {
         return !this.isConnected() && !this.isConnecting();
     }
 
+    /**
+     * 获取连接标识
+     *
+     * @return 连接标识
+     */
     public String iid() {
         return this.shellConnect.getId();
     }

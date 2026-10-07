@@ -30,6 +30,11 @@ import java.util.List;
  */
 public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTreeItemValue> {
 
+    /**
+     * 构造集合类型树节点
+     *
+     * @param treeView 树视图
+     */
     public MongoCollectionsTreeItem(RichTreeView treeView) {
         super(treeView);
         super.setFilterable(true);
@@ -72,6 +77,9 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
         MongoViewFactory.importData(this.client(), this.dbName());
     }
 
+    /**
+     * 新增集合
+     */
     private void addCollection() {
         String name = MessageBox.prompt(I18nHelper.pleaseInputCollectionName());
         if (StringUtil.isBlank(name)) {
@@ -151,18 +159,38 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
         this.loadChild();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.parent().dbName();
     }
 
+    /**
+     * 获取mongo客户端
+     *
+     * @return mongo客户端
+     */
     public MongoClient client() {
         return this.parent().client();
     }
 
+    /**
+     * 获取mongo连接信息
+     *
+     * @return mongo连接信息
+     */
     public MongoConnect info() {
         return this.parent().info();
     }
 
+    /**
+     * 获取连接名称
+     *
+     * @return 连接名称
+     */
     public String infoName() {
         return this.parent().infoName();
     }
@@ -187,12 +215,25 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
     //    this.sortChild(this.isSortAsc());
     //}
 
+    /**
+     * 获取集合数量
+     *
+     * @return 集合数量
+     */
     public long collectionsSize() {
         return this.parent().listCollectionNames().size();
     }
 
+    /**
+     * 集合数量
+     */
     private Integer collectionsSize;
 
+    /**
+     * 获取集合数量
+     *
+     * @return 集合数量
+     */
     public Integer getCollectionsSize() {
         if (this.collectionsSize == null) {
             this.collectionsSize = Math.toIntExact(this.collectionsSize());

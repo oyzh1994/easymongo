@@ -16,8 +16,14 @@ import java.util.Arrays;
  */
 public class MongoGtEqCondition extends MongoCondition {
 
+    /**
+     * 大于等于条件实例
+     */
     public final static MongoGtEqCondition INSTANCE = new MongoGtEqCondition();
 
+    /**
+     * 构造大于等于条件
+     */
     public MongoGtEqCondition() {
         super(I18nHelper.gtEq(), ">=");
     }

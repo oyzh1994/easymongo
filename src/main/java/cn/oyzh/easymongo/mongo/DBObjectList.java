@@ -10,17 +10,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 数据库对象状态列表，维护对象的新增、变更、删除、正常等状态
+ *
  * @author oyzh
  * @since 2024/07/13
  */
 public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S> {
 
+    /**
+     * 类型：正常
+     */
     public static final byte TYPE_NORMAL = 0;
 
+    /**
+     * 类型：已删除
+     */
     public static final byte TYPE_DELETED = 1;
 
+    /**
+     * 类型：已新增
+     */
     public static final byte TYPE_CREATED = 2;
 
+    /**
+     * 类型：已变更
+     */
     public static final byte TYPE_CHANGED = 3;
 
     // protected void valueList(List<S> list) {
@@ -30,6 +44,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
     //     }
     // }
 
+    /**
+     * 是否存在状态非空的对象
+     *
+     * @return 是否存在
+     */
     public boolean isChanged() {
         for (S s : this) {
             if (StringUtil.isNotBlank(s.getStatus())) {
@@ -39,6 +58,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return false;
     }
 
+    /**
+     * 获取已新增对象列表
+     *
+     * @return 已新增对象列表
+     */
     public List<S> createdList() {
         if (this.isEmpty()) {
             return Collections.emptyList();
@@ -46,6 +70,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return this.stream().filter(DBObjectList::isCreated).collect(Collectors.toList());
     }
 
+    /**
+     * 获取已变更对象列表
+     *
+     * @return 已变更对象列表
+     */
     public List<S> changedList() {
         if (this.isEmpty()) {
             return Collections.emptyList();
@@ -53,6 +82,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return this.stream().filter(DBObjectList::isChanged).collect(Collectors.toList());
     }
 
+    /**
+     * 获取已删除对象列表
+     *
+     * @return 已删除对象列表
+     */
     public List<S> deletedList() {
         if (this.isEmpty()) {
             return Collections.emptyList();
@@ -60,6 +94,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return this.stream().filter(DBObjectList::isDeleted).collect(Collectors.toList());
     }
 
+    /**
+     * 获取正常状态对象列表
+     *
+     * @return 正常状态对象列表
+     */
     public List<S> normalList() {
         if (this.isEmpty()) {
             return Collections.emptyList();
@@ -67,6 +106,12 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return this.stream().filter(DBObjectList::isNormal).collect(Collectors.toList());
     }
 
+    /**
+     * 按类型筛选对象列表
+     *
+     * @param types 类型集合
+     * @return 筛选结果
+     */
     public List<S> filterList(byte... types) {
         if (this.isEmpty()) {
             return Collections.emptyList();
@@ -101,14 +146,30 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return false;
     }
 
+    /**
+     * 移除对象
+     *
+     * @param s 对象
+     */
     public void remove(S s) {
         super.remove(s);
     }
 
+    /**
+     * 是否包含对象
+     *
+     * @param s 对象
+     * @return 是否包含
+     */
     public boolean contains(S s) {
         return super.contains(s);
     }
 
+    /**
+     * 是否存在已删除对象
+     *
+     * @return 是否存在
+     */
     public boolean hasDeleted() {
         if (this.isEmpty()) {
             return false;
@@ -121,6 +182,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return false;
     }
 
+    /**
+     * 是否存在已新增对象
+     *
+     * @return 是否存在
+     */
     public boolean hasCreated() {
         if (!this.isEmpty()) {
             for (S s : this) {
@@ -132,6 +198,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return false;
     }
 
+    /**
+     * 是否存在已变更对象
+     *
+     * @return 是否存在
+     */
     public boolean hasChanged() {
         if (!this.isEmpty()) {
             for (S s : this) {
@@ -143,6 +214,11 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return false;
     }
 
+    /**
+     * 是否存在正常状态对象
+     *
+     * @return 是否存在
+     */
     public boolean hasNormal() {
         if (!this.isEmpty()) {
             for (S s : this) {
@@ -154,18 +230,42 @@ public abstract class DBObjectList<S extends DBObjectStatus> extends ArrayList<S
         return false;
     }
 
+    /**
+     * 判断对象是否已删除
+     *
+     * @param status 对象状态
+     * @return 是否已删除
+     */
     public static boolean isDeleted(DBObjectStatus status) {
         return status != null && status.isDeleted();
     }
 
+    /**
+     * 判断对象是否已新增
+     *
+     * @param status 对象状态
+     * @return 是否已新增
+     */
     public static boolean isCreated(DBObjectStatus status) {
         return status != null && !status.isDeleted() && status.isCreated();
     }
 
+    /**
+     * 判断对象是否已变更
+     *
+     * @param status 对象状态
+     * @return 是否已变更
+     */
     public static boolean isChanged(DBObjectStatus status) {
         return status != null && !status.isCreated() && !status.isDeleted() && status.isChanged();
     }
 
+    /**
+     * 判断对象是否正常
+     *
+     * @param status 对象状态
+     * @return 是否正常
+     */
     public static boolean isNormal(DBObjectStatus status) {
         if (status == null) {
             return false;

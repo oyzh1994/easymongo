@@ -5,6 +5,7 @@ import org.openjdk.nashorn.api.scripting.AbstractJSObject;
 import org.openjdk.nashorn.internal.runtime.Undefined;
 
 /**
+ * 脚本环境中的 ObjectId 构造函数，用于按十六进制字符串创建 ObjectId，参数非法时生成新的 ObjectId
  *
  * @author oyzh
  * @since 2026-06-17

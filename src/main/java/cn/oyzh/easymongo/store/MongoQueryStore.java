@@ -10,7 +10,7 @@ import cn.oyzh.store.jdbc.param.SelectParam;
 import java.util.List;
 
 /**
- * zk查询存储
+ * MongoDB查询存储
  *
  * @author oyzh
  * @since 2025/01/20
@@ -23,11 +23,11 @@ public class MongoQueryStore extends JdbcStandardStore<MongoQuery> {
     public static final MongoQueryStore INSTANCE = new MongoQueryStore();
 
     /**
-     * 根据zk连接id加载列表
+     * 根据连接id加载查询列表
      *
-     * @param iid    zk连接id
-     * @param dbName db名称
-     * @return 收藏列表
+     * @param iid    连接id
+     * @param dbName 数据库名称
+     * @return 查询列表
      */
     public List<MongoQuery> list(String iid, String dbName) {
         QueryParam param1 = QueryParam.of("iid", iid);
@@ -55,9 +55,9 @@ public class MongoQueryStore extends JdbcStandardStore<MongoQuery> {
     }
 
     /**
-     * 根据zk连接id删除查询
+     * 根据连接id删除查询
      *
-     * @param iid zk连接id
+     * @param iid 连接id
      * @return 结果
      */
     public boolean deleteByIid(String iid) {

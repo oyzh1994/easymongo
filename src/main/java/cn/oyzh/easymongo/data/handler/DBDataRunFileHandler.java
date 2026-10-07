@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
+ * 数据库脚本文件执行处理器基类
+ *
  * @author oyzh
  * @since 2024/08/29
  */
@@ -53,8 +55,17 @@ public abstract class DBDataRunFileHandler extends DBDataHandler {
      */
     protected boolean continueWithErrors = true;
 
+    /**
+     * 脚本引擎
+     */
     protected MongoScriptEngine engine;
 
+    /**
+     * 构造脚本文件执行处理器
+     *
+     * @param dbClient db 客户端
+     * @param dbName   库名称
+     */
     public DBDataRunFileHandler(MongoClient dbClient, String dbName) {
         this.dbClient = dbClient;
         this.dbName = dbName;
@@ -75,11 +86,13 @@ public abstract class DBDataRunFileHandler extends DBDataHandler {
 
     /**
      * 运行文件
+     *
+     * @throws Exception 异常
      */
     public abstract void runFile() throws Exception;
 
     /**
-     * 插入集合
+     * 待批量执行的插入 sql 列表
      */
     protected List<String> insertList;
 
@@ -87,6 +100,7 @@ public abstract class DBDataRunFileHandler extends DBDataHandler {
      * 添加插入sql
      *
      * @param sql 插入sql
+     * @throws Exception 异常
      */
     protected void addInsertSql(String sql) throws Exception {
         if (StringUtil.isNotBlank(sql)) {
@@ -102,6 +116,8 @@ public abstract class DBDataRunFileHandler extends DBDataHandler {
 
     /**
      * 执行批量插入
+     *
+     * @throws Exception 异常
      */
     protected void doBatchInsert() throws Exception {
         if (CollectionUtil.isNotEmpty(this.insertList)) {
@@ -161,65 +177,136 @@ public abstract class DBDataRunFileHandler extends DBDataHandler {
      *
      * @param dbClient db客户端
      * @param dbName   数据库
-     * @return DBDataDumpHandler
+     * @return DBDataRunFileHandler
      */
     public static DBDataRunFileHandler newHandler(MongoClient dbClient, String dbName) {
         return new ShellMongoDataRunFileHandler(dbClient, dbName);
     }
 
+    /**
+     * 获取库名称
+     *
+     * @return 库名称
+     */
     public String getDbName() {
         return dbName;
     }
 
+    /**
+     * 设置库名称
+     *
+     * @param dbName 库名称
+     */
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
 
+    /**
+     * 获取 sql 文件
+     *
+     * @return sql 文件
+     */
     public File getSqlFile() {
         return sqlFile;
     }
 
+    /**
+     * 设置 sql 文件
+     *
+     * @param sqlFile sql 文件
+     */
     public void setSqlFile(File sqlFile) {
         this.sqlFile = sqlFile;
     }
 
+    /**
+     * 获取 db 客户端
+     *
+     * @return db 客户端
+     */
     public MongoClient getDbClient() {
         return dbClient;
     }
 
+    /**
+     * 设置 db 客户端
+     *
+     * @param dbClient db 客户端
+     */
     public void setDbClient(MongoClient dbClient) {
         this.dbClient = dbClient;
     }
 
+    /**
+     * 获取连接信息
+     *
+     * @return 连接信息
+     */
     public MongoConnect getDbInfo() {
         return dbInfo;
     }
 
+    /**
+     * 设置连接信息
+     *
+     * @param dbInfo 连接信息
+     * @return 当前对象
+     */
     public DBDataRunFileHandler setDbInfo(MongoConnect dbInfo) {
         this.dbInfo = dbInfo;
         return this;
     }
 
+    /**
+     * 获取插入限制
+     *
+     * @return 插入限制
+     */
     public int getInsertLimit() {
         return insertLimit;
     }
 
+    /**
+     * 设置插入限制
+     *
+     * @param insertLimit 插入限制
+     */
     public void setInsertLimit(int insertLimit) {
         this.insertLimit = insertLimit;
     }
 
+    /**
+     * 获取批量限制
+     *
+     * @return 批量限制
+     */
     public int getBatchLimit() {
         return batchLimit;
     }
 
+    /**
+     * 设置批量限制
+     *
+     * @param batchLimit 批量限制
+     */
     public void setBatchLimit(int batchLimit) {
         this.batchLimit = batchLimit;
     }
 
+    /**
+     * 是否在遇到错误时继续执行
+     *
+     * @return 是否在遇到错误时继续执行
+     */
     public boolean isContinueWithErrors() {
         return continueWithErrors;
     }
 
+    /**
+     * 设置是否在遇到错误时继续执行
+     *
+     * @param continueWithErrors 是否在遇到错误时继续执行
+     */
     public void setContinueWithErrors(boolean continueWithErrors) {
         this.continueWithErrors = continueWithErrors;
     }

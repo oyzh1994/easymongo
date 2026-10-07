@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * db切换面板
+ * Mongo 标签页面板
  *
  * @author oyzh
  * @since 2023/12/22
@@ -86,6 +86,13 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         }
     }
 
+    /**
+     * 获取集合记录标签页
+     *
+     * @param dbItem    数据库树节点
+     * @param tableName 集合名称
+     * @return 集合记录标签页
+     */
     private MongoCollectionRecordTab getMongoCollectionRecordTab(MongoDatabaseTreeItem dbItem, String tableName) {
         for (Tab tab : this.getTabs()) {
             if (tab instanceof MongoCollectionRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(tableName, tab1.collectionName())) {
@@ -113,6 +120,13 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         tab.init(event.data());
     }
 
+    /**
+     * 获取桶记录标签页
+     *
+     * @param dbItem     数据库树节点
+     * @param bucketName 桶名称
+     * @return 桶记录标签页
+     */
     private MongoBucketRecordTab getBucketRecordTab(MongoDatabaseTreeItem dbItem, String bucketName) {
         for (Tab tab : this.getTabs()) {
             if (tab instanceof MongoBucketRecordTab tab1 && tab1.dbItem() == dbItem && StringUtil.equals(bucketName, tab1.bucketName())) {
@@ -140,6 +154,12 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
         tab.init(event.data());
     }
 
+    /**
+     * 获取查询主标签页
+     *
+     * @param queryId 查询标识
+     * @return 查询主标签页
+     */
     private MongoQueryMainTab getMongoQueryMainTab(String queryId) {
         for (Tab tab : this.getTabs()) {
             if (tab instanceof MongoQueryMainTab tab1 && StringUtil.equals(tab1.queryId(), queryId)) {
@@ -190,8 +210,8 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     /**
      * 获取终端tab
      *
-     * @param client redis客户端
-     * @param dbName db索引
+     * @param client 客户端
+     * @param dbName 数据库名称
      * @return 终端tab
      */
     private MongoTerminalTab getTerminalTab(MongoClient client, String dbName) {
@@ -249,7 +269,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
      *
      * @param dbItem       db节点
      * @param functionName 函数名称
-     * @return 结果
+     * @return 函数设计标签页
      */
     private ShellMongoFunctionDesignTab getFunctionDesignTab(MongoDatabaseTreeItem dbItem, String functionName) {
         for (Tab tab : this.getTabs()) {
@@ -402,7 +422,7 @@ public class MongoTabPane extends RichTabPane implements FXEventListener {
     /**
      * 获取消息tab
      *
-     * @return 结果
+     * @return 消息标签页
      */
     private ShellMessageTab getMessageTab() {
         for (Tab tab : this.getTabs()) {

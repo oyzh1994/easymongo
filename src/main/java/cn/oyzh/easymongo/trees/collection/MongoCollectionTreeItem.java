@@ -38,6 +38,12 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
      */
     private final MongoCollection value;
 
+    /**
+     * 构造集合树节点
+     *
+     * @param table    集合对象
+     * @param treeView 树视图
+     */
     public MongoCollectionTreeItem(MongoCollection table, RichTreeView treeView) {
         super(treeView);
         this.value = table;
@@ -49,22 +55,37 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return (MongoCollectionsTreeItem) super.parent();
     }
 
+    /**
+     * 获取mongo客户端
+     *
+     * @return mongo客户端
+     */
     public MongoClient client() {
         return this.parent().client();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.parent().dbName();
     }
 
+    /**
+     * 获取集合名称
+     *
+     * @return 集合名称
+     */
     public String collectionName() {
         return this.value.getName();
     }
 
     /**
-     * 获取redis信息
+     * 获取mongo连接信息
      *
-     * @return redis信息
+     * @return mongo连接信息
      */
     public MongoConnect info() {
         return this.parent().info();
@@ -153,6 +174,11 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         }
     }
 
+    /**
+     * 获取database树节点
+     *
+     * @return database树节点
+     */
     public MongoDatabaseTreeItem dbItem() {
         if (this.parent() == null) {
             return null;
@@ -160,6 +186,11 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return this.parent().parent();
     }
 
+    /**
+     * 获取连接名称
+     *
+     * @return 连接名称
+     */
     public String infoName() {
         return parent().infoName();
     }
@@ -176,10 +207,24 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         this.loadChild();
     }
 
+    /**
+     * 获取集合值
+     *
+     * @return 集合值
+     */
     public MongoCollection value() {
         return value;
     }
 
+    /**
+     * 分页查询记录
+     *
+     * @param pageNo  页码
+     * @param limit   每页数量
+     * @param filters 过滤条件
+     * @param columns 字段集
+     * @return 分页记录
+     */
     public Paging<MongoRecord> recordPage(long pageNo, long limit, List<MongoRecordFilter> filters, MongoColumns columns) {
         MongoSelectRecordParam param = new MongoSelectRecordParam();
         param.setLimit(limit);
@@ -195,22 +240,53 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
         return paging;
     }
 
+    /**
+     * 新增记录
+     *
+     * @param record 记录
+     * @return 记录id
+     */
     public BsonValue insertRecord(MongoRecord record) {
         return this.dbItem().insertCollectionRecord(record);
     }
 
+    /**
+     * 删除记录
+     *
+     * @param record 记录
+     * @return 删除数量
+     */
     public long deleteRecord(MongoRecord record) {
         return this.dbItem().deleteCollectionRecord(record);
     }
 
+    /**
+     * 更新记录
+     *
+     * @param record 记录
+     * @return 更新数量
+     */
     public long updateRecord(MongoRecord record) {
         return this.dbItem().updateCollectionRecord(record);
     }
 
+    /**
+     * 执行脚本
+     *
+     * @param script 脚本
+     * @return 执行结果
+     * @throws Exception 异常
+     */
     public Object eval(String script) throws Exception {
         return this.dbItem().eval(script);
     }
 
+    /**
+     * 查询集合记录
+     *
+     * @param id 记录id
+     * @return 记录
+     */
     public MongoRecord selectCollectionRecord(Object id) {
         return this.dbItem().selectCollectionRecord(this.collectionName(), id);
     }

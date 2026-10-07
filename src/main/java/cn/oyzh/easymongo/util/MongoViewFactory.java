@@ -86,6 +86,7 @@ public class MongoViewFactory {
     /**
      * 添加数据库
      *
+     * @param treeItem 连接树节点
      * @return 页面
      */
     public static StageAdapter databaseAdd(MongoConnectTreeItem treeItem) {

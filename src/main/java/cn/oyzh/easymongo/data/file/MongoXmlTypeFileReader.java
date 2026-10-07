@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * MongoDB 数据导入的 XML 类型文件读取器
+ *
  * @author oyzh
  * @since 2024-09-03
  */
@@ -31,6 +33,13 @@ public class MongoXmlTypeFileReader extends MongoTypeFileReader {
      */
     private MongoDataImportConfig config;
 
+    /**
+     * 构造 XML 类型文件读取器
+     *
+     * @param file   待读取的文件
+     * @param config 导入配置
+     * @throws Exception 异常
+     */
     public MongoXmlTypeFileReader(File file, MongoDataImportConfig config) throws Exception {
         super(file);
         this.config = config;

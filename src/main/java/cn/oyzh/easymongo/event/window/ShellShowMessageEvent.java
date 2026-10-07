@@ -3,6 +3,8 @@ package cn.oyzh.easymongo.event.window;
 import cn.oyzh.event.Event;
 
 /**
+ * 显示消息页面事件
+ *
  * @author oyzh
  * @since 2025-02-20
  */

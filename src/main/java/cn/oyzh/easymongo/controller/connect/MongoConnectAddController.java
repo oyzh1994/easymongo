@@ -126,7 +126,7 @@ public class MongoConnectAddController extends StageController {
     private PortTextField sshPort;
 
     /**
-     * ssh主机端口
+     * ssh超时时间
      */
     @FXML
     private NumberTextField sshTimeout;
@@ -199,7 +199,7 @@ public class MongoConnectAddController extends StageController {
         if (StringUtil.isBlank(host) || StringUtil.isBlank(host.split(":")[0])) {
             MessageBox.warn(I18nHelper.contentCanNotEmpty());
         } else {
-            // 创建redis连接
+            // 创建mongodb连接
             MongoConnect mongoConnect = new MongoConnect();
             mongoConnect.setHost(host);
             mongoConnect.setConnectTimeOut(3);

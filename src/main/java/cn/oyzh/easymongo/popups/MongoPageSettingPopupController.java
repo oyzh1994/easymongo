@@ -11,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.stage.WindowEvent;
 
 /**
- * 页码设置弹窗
+ * 每页记录数设置弹窗
  *
  * @author oyzh
  * @since 2024/08/06

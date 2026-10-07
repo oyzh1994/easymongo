@@ -5,6 +5,8 @@ import cn.oyzh.fx.plus.controls.combo.FXComboBox;
 import cn.oyzh.fx.plus.converter.SimpleStringConverter;
 
 /**
+ * 数据导出集合下拉框，用于选择需要导出的集合
+ *
  * @author oyzh
  * @since 2024/8/27
  */

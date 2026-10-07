@@ -45,7 +45,7 @@ import cn.oyzh.fx.plus.changelog.ChangelogEvent;
 import javafx.scene.control.TreeItem;
 
 /**
- * redis事件工具
+ * MongoDB 事件工具类，负责各类 MongoDB 事件的发布
  *
  * @author oyzh
  * @since 2023/11/20
@@ -66,12 +66,23 @@ public class MongoEventUtil {
         EventUtil.post(new Layout2Event());
     }
 
+    /**
+     * 发送数据库关闭事件
+     *
+     * @param dbItem 数据库树节点
+     */
     public static void databaseClosed(MongoDatabaseTreeItem dbItem) {
         MongoDatabaseClosedEvent event = new MongoDatabaseClosedEvent();
         event.data(dbItem);
         EventUtil.post(event);
     }
 
+    /**
+     * 发送数据库新增事件
+     *
+     * @param connectItem 连接树节点
+     * @param database    数据库
+     */
     public static void databaseAdded(MongoConnectTreeItem connectItem, MongoDatabase database) {
         MongoDatabaseAddedEvent event = new MongoDatabaseAddedEvent();
         event.data(database);
@@ -79,6 +90,12 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送数据库更新事件
+     *
+     * @param connectItem 连接树节点
+     * @param database    数据库
+     */
     public static void databaseUpdated(MongoConnectTreeItem connectItem, MongoDatabase database) {
         MongoDatabaseUpdatedEvent event = new MongoDatabaseUpdatedEvent();
         event.data(database);
@@ -86,18 +103,34 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送数据库删除事件
+     *
+     * @param dbItem 数据库树节点
+     */
     public static void databaseDropped(MongoDatabaseTreeItem dbItem) {
         MongoDatabaseDroppedEvent event = new MongoDatabaseDroppedEvent();
         event.data(dbItem);
         EventUtil.post(event);
     }
 
+    /**
+     * 发送查询新增事件
+     *
+     * @param item 数据库树节点
+     */
     public static void queryAdd(MongoDatabaseTreeItem item) {
         MongoQueryAddEvent event = new MongoQueryAddEvent();
         event.data(item);
         EventUtil.post(event);
     }
 
+    /**
+     * 发送查询已新增事件
+     *
+     * @param query 查询
+     * @param item  数据库树节点
+     */
     public static void queryAdded(MongoQuery query, MongoDatabaseTreeItem item) {
         MongoQueryAddedEvent event = new MongoQueryAddedEvent();
         event.data(query);
@@ -105,12 +138,23 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送查询删除事件
+     *
+     * @param item 查询树节点
+     */
     public static void queryDeleted(MongoQueryTreeItem item) {
         MongoQueryDeletedEvent event = new MongoQueryDeletedEvent();
         event.data(item);
         EventUtil.post(event);
     }
 
+    /**
+     * 发送查询打开事件
+     *
+     * @param query 查询
+     * @param item  数据库树节点
+     */
     public static void queryOpen(MongoQuery query, MongoDatabaseTreeItem item) {
         MongoQueryOpenEvent event = new MongoQueryOpenEvent();
         event.data(query);
@@ -118,6 +162,14 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送查询重命名事件
+     *
+     * @param queryId      查询标识
+     * @param queryName    原查询名称
+     * @param newQueryName 新查询名称
+     * @param item         数据库树节点
+     */
     public static void queryRenamed(String queryId, String queryName, String newQueryName, MongoDatabaseTreeItem item) {
         MongoQueryRenamedEvent event = new MongoQueryRenamedEvent();
         event.data(queryId);
@@ -128,7 +180,7 @@ public class MongoEventUtil {
     }
 
     /**
-     * 连接已修改事件
+     * 发送连接已修改事件
      *
      * @param connect DB信息
      */
@@ -138,36 +190,66 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送新增连接事件
+     */
     public static void addConnect() {
         EventUtil.post(new MongoAddConnectEvent());
     }
 
+    /**
+     * 发送新增分组事件
+     */
     public static void addGroup() {
         EventUtil.post(new MongoAddGroupEvent());
     }
 
+    /**
+     * 发送更新日志事件
+     */
     public static void changelog() {
         EventUtil.post(new ChangelogEvent());
     }
 
+    /**
+     * 发送连接已新增事件
+     *
+     * @param connect 连接信息
+     */
     public static void connectAdded(MongoConnect connect) {
         MongoConnectAddedEvent event = new MongoConnectAddedEvent();
         event.data(connect);
         EventUtil.post(event);
     }
 
+    /**
+     * 发送连接已删除事件
+     *
+     * @param connect 连接信息
+     */
     public static void connectDeleted(MongoConnect connect) {
         MongoConnectDeletedEvent event = new MongoConnectDeletedEvent();
         event.data(connect);
         EventUtil.post(event);
     }
 
+    /**
+     * 发送树节点变更事件
+     *
+     * @param item 树节点
+     */
     public static void treeItemChanged(TreeItem<?> item) {
         MongoTreeItemChangedEvent event = new MongoTreeItemChangedEvent();
         event.data(item);
         EventUtil.post(event);
     }
 
+    /**
+     * 发送集合删除事件
+     *
+     * @param collectionItem 集合树节点
+     * @param dbItem         数据库树节点
+     */
     public static void collectionDropped(MongoCollectionTreeItem collectionItem, MongoDatabaseTreeItem dbItem) {
         MongoCollectionDroppedEvent event = new MongoCollectionDroppedEvent();
         event.data(collectionItem);
@@ -175,6 +257,12 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送集合打开事件
+     *
+     * @param collectionItem 集合树节点
+     * @param dbItem         数据库树节点
+     */
     public static void collectionOpen(MongoCollectionTreeItem collectionItem, MongoDatabaseTreeItem dbItem) {
         MongoCollectionOpenEvent event = new MongoCollectionOpenEvent();
         event.data(collectionItem);
@@ -182,6 +270,13 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送集合重命名事件
+     *
+     * @param collectionName    原集合名称
+     * @param newCollectionName 新集合名称
+     * @param dbItem            数据库树节点
+     */
     public static void collectionRenamed(String collectionName, String newCollectionName, MongoDatabaseTreeItem dbItem) {
         MongoCollectionRenamedEvent event = new MongoCollectionRenamedEvent();
         event.setDbItem(dbItem);
@@ -190,6 +285,12 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送桶删除事件
+     *
+     * @param collectionItem 桶树节点
+     * @param dbItem         数据库树节点
+     */
     public static void bucketDropped(MongoBucketTreeItem collectionItem, MongoDatabaseTreeItem dbItem) {
         MongoBucketDroppedEvent event = new MongoBucketDroppedEvent();
         event.data(collectionItem);
@@ -197,6 +298,12 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送桶打开事件
+     *
+     * @param collectionItem 桶树节点
+     * @param dbItem         数据库树节点
+     */
     public static void bucketOpen(MongoBucketTreeItem collectionItem, MongoDatabaseTreeItem dbItem) {
         MongoBucketOpenEvent event = new MongoBucketOpenEvent();
         event.data(collectionItem);
@@ -205,9 +312,10 @@ public class MongoEventUtil {
     }
 
     /**
-     * 终端打开事件
+     * 发送终端打开事件
      *
-     * @param client zk客户端
+     * @param client Mongo 客户端
+     * @param dbName 数据库名称
      */
     public static void terminalOpen(MongoClient client, String dbName) {
         MongoTerminalOpenEvent event = new MongoTerminalOpenEvent();
@@ -216,12 +324,23 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送函数删除事件
+     *
+     * @param treeItem 函数树节点
+     */
     public static void dropFunction(ShellMongoFunctionTreeItem treeItem) {
         ShellMongoFunctionDroppedEvent event = new ShellMongoFunctionDroppedEvent();
         event.data(treeItem);
         EventUtil.postSync(event);
     }
 
+    /**
+     * 发送函数设计的事件
+     *
+     * @param function 函数
+     * @param dbItem   数据库树节点
+     */
     public static void designFunction(MongoFunction function, MongoDatabaseTreeItem dbItem) {
         ShellMongoFunctionDesignEvent event = new ShellMongoFunctionDesignEvent();
         event.data(function);
@@ -229,6 +348,13 @@ public class MongoEventUtil {
         EventUtil.post(event);
     }
 
+    /**
+     * 发送函数重命名事件
+     *
+     * @param functionName    原函数名称
+     * @param newFunctionName 新函数名称
+     * @param dbItem          数据库树节点
+     */
     public static void functionRenamed(String functionName, String newFunctionName, MongoDatabaseTreeItem dbItem) {
         ShellMongoFunctionRenamedEvent event = new ShellMongoFunctionRenamedEvent();
         event.setDbItem(dbItem);
@@ -238,9 +364,9 @@ public class MongoEventUtil {
     }
 
     /**
-     * 连接关闭事件
+     * 发送连接关闭事件
      *
-     * @param client redis客户端
+     * @param client Mongo 客户端
      */
     public static void connectionClosed(MongoClient client) {
         MongoConnectionClosedEvent event = new MongoConnectionClosedEvent();
@@ -249,9 +375,9 @@ public class MongoEventUtil {
     }
 
     /**
-     * 连接成功事件
+     * 发送连接成功事件
      *
-     * @param client redis客户端
+     * @param client Mongo 客户端
      */
     public static void connectionConnected(MongoClient client) {
         MongoConnectionConnectedEvent event = new MongoConnectionConnectedEvent();

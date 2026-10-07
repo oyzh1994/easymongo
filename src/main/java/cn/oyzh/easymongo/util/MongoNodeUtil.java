@@ -15,13 +15,19 @@ import javafx.scene.control.TextField;
 import org.bson.types.Binary;
 
 /**
- * db节点工具类
+ * MongoDB 节点工具类
  *
  * @author oyzh
  * @since 2023/12/27
  */
 public class MongoNodeUtil {
 
+    /**
+     * 获取节点值
+     *
+     * @param node 节点
+     * @return 节点值
+     */
     public static Object getNodeVal(Node node) {
         Object val = null;
         if (node instanceof NumberTextField textField) {
@@ -44,6 +50,12 @@ public class MongoNodeUtil {
         return val;
     }
 
+    /**
+     * 设置节点值
+     *
+     * @param node 节点
+     * @param val  值
+     */
     public static void setNodeVal(Node node, Object val) {
         if (node == null || val == null) {
             return;
@@ -67,6 +79,12 @@ public class MongoNodeUtil {
         }
     }
 
+    /**
+     * 根据字段类型生成对应的编辑节点
+     *
+     * @param column 字段
+     * @return 节点
+     */
     public static Node generateNode(MongoColumn column) {
         Node node;
         if (column.supportInteger()) {

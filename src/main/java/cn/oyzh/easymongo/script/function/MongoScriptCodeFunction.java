@@ -7,6 +7,7 @@ import org.openjdk.nashorn.internal.runtime.Undefined;
 import java.util.Date;
 
 /**
+ * 脚本环境中的 Code 构造函数，用于将脚本内容封装为 BSON 代码类型
  *
  * @author oyzh
  * @since 2026-06-17

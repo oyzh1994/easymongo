@@ -28,6 +28,11 @@ import java.util.List;
  */
 public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValue> {
 
+    /**
+     * 构造db树查询类型节点
+     *
+     * @param treeView 树视图
+     */
     public MongoQueriesTreeItem(RichTreeView treeView) {
         super(treeView);
         super.setFilterable(true);
@@ -52,6 +57,9 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
         return items;
     }
 
+    /**
+     * 新增查询
+     */
     private void addQuery() {
         MongoEventUtil.queryAdd(this.parent());
     }
@@ -93,18 +101,38 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
         this.loadChild();
     }
 
+    /**
+     * 添加查询子节点
+     *
+     * @param query 查询对象
+     */
     public void addChild(MongoQuery query) {
         this.addChild(new MongoQueryTreeItem(query, this.getTreeView()));
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.parent().dbName();
     }
 
+    /**
+     * 获取db客户端
+     *
+     * @return db客户端
+     */
     public MongoClient client() {
         return this.parent().client();
     }
 
+    /**
+     * 获取连接信息
+     *
+     * @return 连接信息
+     */
     public MongoConnect info() {
         return this.parent().info();
     }
@@ -124,13 +152,26 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
     //    this.refresh();
     //}
 
+    /**
+     * 获取查询数量
+     *
+     * @return 查询数量
+     */
     public long querySize() {
         List<MongoQuery> dbQueries = MongoQueryStore.INSTANCE.list(this.info().getId(), this.dbName());
         return dbQueries == null ? 0 : dbQueries.size();
     }
 
+    /**
+     * 查询数量
+     */
     private Integer querySize;
 
+    /**
+     * 获取查询数量
+     *
+     * @return 查询数量
+     */
     public Integer getQuerySize() {
         if (this.querySize == null) {
             this.querySize = Math.toIntExact(this.querySize());
@@ -138,10 +179,20 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
         return this.querySize;
     }
 
+    /**
+     * 获取shell连接
+     *
+     * @return shell连接
+     */
     public MongoConnect shellConnect() {
         return this.parent().shellConnect();
     }
 
+    /**
+     * 添加查询
+     *
+     * @param query 查询对象
+     */
     public void addQuery(MongoQuery query) {
         this.addChild(new MongoQueryTreeItem(query, this.getTreeView()));
         this.sortChild(this.isSortAsc());

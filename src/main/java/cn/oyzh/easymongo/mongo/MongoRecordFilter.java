@@ -195,50 +195,110 @@ public class MongoRecordFilter {
         return this.condition.isRequireCondition();
     }
 
+    /**
+     * 获取值
+     *
+     * @return 值
+     */
     public Object getValue() {
         return value;
     }
 
+    /**
+     * 设置值
+     *
+     * @param value 值
+     */
     public void setValue(Object value) {
         this.value = value;
     }
 
+    /**
+     * 是否已启用
+     *
+     * @return 是否已启用
+     */
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * 设置是否启用
+     *
+     * @param enabled 是否启用
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    /**
+     * 获取连接符号
+     *
+     * @return 连接符号
+     */
     public String getJoinSymbol() {
         return joinSymbol;
     }
 
+    /**
+     * 设置连接符号
+     *
+     * @param joinSymbol 连接符号
+     */
     public void setJoinSymbol(String joinSymbol) {
         this.joinSymbol = joinSymbol;
     }
 
+    /**
+     * 获取条件
+     *
+     * @return 条件
+     */
     public MongoCondition getCondition() {
         return condition;
     }
 
+    /**
+     * 设置条件
+     *
+     * @param condition 条件
+     */
     public void setCondition(MongoCondition condition) {
         this.condition = condition;
     }
 
+    /**
+     * 获取字段
+     *
+     * @return 字段
+     */
     public MongoColumn getColumn() {
         return column;
     }
 
+    /**
+     * 设置字段
+     *
+     * @param column 字段
+     */
     public void setColumn(MongoColumn column) {
         this.column = column;
     }
 
+    /**
+     * 获取字段列表
+     *
+     * @return 字段列表
+     */
     public List<MongoColumn> getColumns() {
         return columns;
     }
 
+    /**
+     * 设置字段列表
+     *
+     * @param columns 字段列表
+     */
     public void setColumns(List<MongoColumn> columns) {
         this.columns = columns;
     }

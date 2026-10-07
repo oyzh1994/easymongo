@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * MongoDB 数据导出的 Excel 类型文件写入器
+ *
  * @author oyzh
  * @since 2024-09-04
  */
@@ -44,8 +46,19 @@ public class MongoExcelTypeFileWriter extends MongoTypeFileWriter {
      */
     private int xlsRowIndex = 1;
 
+    /**
+     * 导出文件路径
+     */
     private String filePath;
 
+    /**
+     * 构造 Excel 类型文件写入器
+     *
+     * @param filePath 导出文件路径
+     * @param config   导出配置
+     * @param columns  字段列表
+     * @throws IOException IO 异常
+     */
     public MongoExcelTypeFileWriter(String filePath, MongoDataExportConfig config, MongoColumns columns) throws IOException {
         this.columns = columns;
         this.config = config;
@@ -72,6 +85,13 @@ public class MongoExcelTypeFileWriter extends MongoTypeFileWriter {
         WorkbookHelper.write(this.workbook, this.filePath);
     }
 
+    /**
+     * 写入一个对象
+     *
+     * @param object 对象数据
+     * @param flush  是否立即写入文件
+     * @throws Exception 异常
+     */
     private void writeObject(Map<String, Object> object, boolean flush) throws Exception {
         // 处理数据
         Object[] values = new Object[this.columns.size()];

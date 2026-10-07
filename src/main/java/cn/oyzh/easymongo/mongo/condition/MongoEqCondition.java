@@ -10,13 +10,20 @@ import java.util.Arrays;
 
 /**
  * 等于条件
+ *
  * @author oyzh
  * @since 2024/6/27
  */
 public class MongoEqCondition extends MongoCondition {
 
+    /**
+     * 等于条件实例
+     */
     public final static MongoEqCondition INSTANCE = new MongoEqCondition();
 
+    /**
+     * 构造等于条件
+     */
     public MongoEqCondition() {
         super(I18nHelper.eq(), "=");
     }

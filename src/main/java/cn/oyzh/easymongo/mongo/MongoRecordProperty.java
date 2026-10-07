@@ -18,7 +18,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 
 /**
- * db表记录属性
+ * 数据库表记录属性
  *
  * @author oyzh
  * @since 2024/01/31
@@ -55,6 +55,14 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
      */
     private final boolean readonly;
 
+    /**
+     * 构造表记录属性
+     *
+     * @param record   表记录
+     * @param column   表字段
+     * @param value    字段值
+     * @param readonly 是否只读
+     */
     public MongoRecordProperty(MongoRecord record, MongoColumn column, Object value, boolean readonly) {
         this.column = column;
         this.record = record;
@@ -152,6 +160,11 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         this.setChanged(false);
     }
 
+    /**
+     * 获取是否变更属性
+     *
+     * @return 是否变更属性
+     */
     public SimpleBooleanProperty changedProperty() {
         if (this.changedProperty == null) {
             this.changedProperty = new SimpleBooleanProperty();
@@ -159,10 +172,20 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         return this.changedProperty;
     }
 
+    /**
+     * 是否已变更
+     *
+     * @return 是否已变更
+     */
     public boolean isChanged() {
         return this.changedProperty != null && this.changedProperty.get();
     }
 
+    /**
+     * 设置是否变更
+     *
+     * @param changed 是否变更
+     */
     public void setChanged(boolean changed) {
         this.changedProperty().set(changed);
         DBStatusListener listener = DBStatusListenerManager.getListener(this.column.getDbName() + ":" + this.column.getCollectionName());
@@ -176,6 +199,9 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         }
     }
 
+    /**
+     * 更新原始值
+     */
     public void updateOriginal() {
         try {
             if (!this.column.is_id() && this.node != null) {
@@ -187,14 +213,25 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         }
     }
 
+    /**
+     * 获取控件
+     *
+     * @return 控件
+     */
     public Node getControl() {
         return this.node;
     }
 
+    /**
+     * 复制节点值
+     */
     public void vCopy() {
         ClipboardUtil.copy(this.node);
     }
 
+    /**
+     * 粘贴节点值
+     */
     public void vPaste() {
         ClipboardUtil.paste(this.node);
     }
@@ -228,37 +265,73 @@ public class MongoRecordProperty extends SimpleObjectProperty<Object> implements
         ClipboardUtil.copy(sql);
     }
 
+    /**
+     * 设置值为空（null）
+     */
     public void vSetToNull() {
         this.setChanged(true);
         this.setToNullFlag = true;
         MongoNodeUtil.setToNullString(this.node);
     }
 
+    /**
+     * 设置值为空字符串
+     */
     public void vSetToEmptyString() {
         this.setChanged(true);
         MongoNodeUtil.setToEmptyString(this.node);
     }
 
+    /**
+     * 获取表字段
+     *
+     * @return 表字段
+     */
     public MongoColumn getColumn() {
         return column;
     }
 
+    /**
+     * 设置表字段
+     *
+     * @param column 表字段
+     */
     public void setColumn(MongoColumn column) {
         this.column = column;
     }
 
+    /**
+     * 获取原始值
+     *
+     * @return 原始值
+     */
     public Object getOriginal() {
         return original;
     }
 
+    /**
+     * 设置原始值
+     *
+     * @param original 原始值
+     */
     public void setOriginal(Object original) {
         this.original = original;
     }
 
+    /**
+     * 是否只读
+     *
+     * @return 是否只读
+     */
     public boolean isReadonly() {
         return readonly;
     }
 
+    /**
+     * 获取节点
+     *
+     * @return 节点
+     */
     public Node getNode() {
         return node;
     }

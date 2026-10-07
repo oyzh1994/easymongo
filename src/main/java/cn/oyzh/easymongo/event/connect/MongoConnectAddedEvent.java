@@ -6,6 +6,8 @@ import cn.oyzh.event.EventFormatter;
 import cn.oyzh.i18n.I18nHelper;
 
 /**
+ * MongoDB 连接已新增事件
+ *
  * @author oyzh
  * @since 2024/01/30
  */

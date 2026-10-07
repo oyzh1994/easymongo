@@ -53,6 +53,11 @@ public class EasyMongoApp extends FXApplication implements EventListener {
      */
     private static final Project PROJECT = Project.load();
 
+    /**
+     * 程序主方法，初始化运行环境并启动应用
+     *
+     * @param args 启动参数
+     */
     public static void main(String[] args) {
         try {
 //            // 开启fx的预览功能

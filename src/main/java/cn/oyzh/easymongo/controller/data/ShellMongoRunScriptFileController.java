@@ -34,7 +34,7 @@ import java.io.File;
 
 
 /**
- * db运行sql业务
+ * db运行脚本文件业务
  *
  * @author oyzh
  * @since 2024/08/29

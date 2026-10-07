@@ -332,6 +332,9 @@ public class ShellMongoDataImportController extends StageController {
         this.initFileTable();
     }
 
+    /**
+     * 初始化文件列表
+     */
     private void initFileTable() {
         for (ShellMongoDataImportFile index : this.importFileTableView.itemList()) {
             index.setDbName(this.dbName);
@@ -379,6 +382,9 @@ public class ShellMongoDataImportController extends StageController {
         return I18nHelper.importTitle();
     }
 
+    /**
+     * 显示第一步
+     */
     @FXML
     private void showStep1() {
         this.importFileTableView.clearItems();
@@ -386,6 +392,9 @@ public class ShellMongoDataImportController extends StageController {
         this.step1.display();
     }
 
+    /**
+     * 显示第二步
+     */
     @FXML
     private void showStep2() {
         RadioButton button = this.fileType.selectedToggle();
@@ -398,6 +407,9 @@ public class ShellMongoDataImportController extends StageController {
         this.step2.display();
     }
 
+    /**
+     * 显示第三步
+     */
     @FXML
     private void showStep3() {
         if (this.importFileTableView.isItemEmpty()) {
@@ -454,6 +466,9 @@ public class ShellMongoDataImportController extends StageController {
         this.step3.display();
     }
 
+    /**
+     * 显示第四步
+     */
     @FXML
     private void showStep4() {
         this.step3.disappear();
@@ -461,12 +476,18 @@ public class ShellMongoDataImportController extends StageController {
         this.step4.display();
     }
 
+    /**
+     * 显示第五步
+     */
     @FXML
     private void showStep5() {
         this.step4.disappear();
         this.step5.display();
     }
 
+    /**
+     * 添加文件
+     */
     @FXML
     private void addFile() {
         String fileType = this.fileType.selectedUserData();
@@ -479,6 +500,9 @@ public class ShellMongoDataImportController extends StageController {
         }
     }
 
+    /**
+     * 删除文件
+     */
     @FXML
     private void deleteFile() {
         this.importFileTableView.removeSelectedItem();

@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 数据库数据导入处理器基类
+ *
  * @author oyzh
  * @since 2024/08/27
  */
@@ -67,6 +69,12 @@ public abstract class DBDataImportHandler extends DBDataHandler {
      */
     private final MongoDataImportConfig config;
 
+    /**
+     * 构造数据导入处理器
+     *
+     * @param dbClient db 客户端
+     * @param dbName   库名称
+     */
     public DBDataImportHandler(MongoClient dbClient, String dbName) {
         this.dbClient = dbClient;
         this.dbName = dbName;
@@ -92,7 +100,7 @@ public abstract class DBDataImportHandler extends DBDataHandler {
     }
 
     /**
-     * 是否xls类型
+     * 是否 excel 类型
      *
      * @return 结果
      */
@@ -173,6 +181,13 @@ public abstract class DBDataImportHandler extends DBDataHandler {
         }
     }
 
+    /**
+     * 根据文件类型初始化文件读取器
+     *
+     * @param file 待读取的文件
+     * @return 文件读取器
+     * @throws Exception 异常
+     */
     private MongoTypeFileReader initReader(File file) throws Exception {
 //        if (this.isCsvType()) {
 //            return new MysqlCsvTypeFileReader(file, this.config);
@@ -192,6 +207,14 @@ public abstract class DBDataImportHandler extends DBDataHandler {
         return null;
     }
 
+    /**
+     * 读取记录列表
+     *
+     * @param reader 文件读取器
+     * @param count  读取数量
+     * @return 记录列表
+     * @throws Exception 异常
+     */
     private List<MongoRecord> readRecords(MongoTypeFileReader reader, int count) throws Exception {
         List<MongoRecord> records = new ArrayList<>();
         List<Map<String, Object>> list = reader.readObjects(count);
@@ -215,7 +238,7 @@ public abstract class DBDataImportHandler extends DBDataHandler {
     }
 
     /**
-     * 插入集合
+     * 待批量插入的记录列表
      */
     private List<MongoRecord> insertList;
 
@@ -334,66 +357,146 @@ public abstract class DBDataImportHandler extends DBDataHandler {
         this.config.setAttrToColumn(attrToColumn);
     }
 
+    /**
+     * 设置记录分隔符
+     *
+     * @param recordSeparator 记录分隔符
+     */
     public void recordSeparator(String recordSeparator) {
         this.config.setRecordSeparator(recordSeparator);
     }
 
+    /**
+     * 设置文本标识符
+     *
+     * @param txtIdentifier 文本标识符
+     */
     public void txtIdentifier(String txtIdentifier) {
         this.config.setTxtIdentifier(txtIdentifier);
     }
 
+    /**
+     * 设置字段分隔符
+     *
+     * @param fieldSeparator 字段分隔符
+     */
     public void fieldSeparator(String fieldSeparator) {
         this.config.setFieldSeparator(fieldSeparator);
     }
 
+    /**
+     * 获取库名称
+     *
+     * @return 库名称
+     */
     public String getDbName() {
         return dbName;
     }
 
+    /**
+     * 设置库名称
+     *
+     * @param dbName 库名称
+     */
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
 
+    /**
+     * 获取文件类型
+     *
+     * @return 文件类型
+     */
     public String getFileType() {
         return fileType;
     }
 
+    /**
+     * 设置文件类型
+     *
+     * @param fileType 文件类型
+     */
     public void setFileType(String fileType) {
         this.fileType = fileType;
     }
 
+    /**
+     * 获取 db 客户端
+     *
+     * @return db 客户端
+     */
     public MongoClient getDbClient() {
         return dbClient;
     }
 
+    /**
+     * 设置 db 客户端
+     *
+     * @param dbClient db 客户端
+     */
     public void setDbClient(MongoClient dbClient) {
         this.dbClient = dbClient;
     }
 
+    /**
+     * 获取读取限制
+     *
+     * @return 读取限制
+     */
     public int getReadLimit() {
         return readLimit;
     }
 
+    /**
+     * 设置读取限制
+     *
+     * @param readLimit 读取限制
+     */
     public void setReadLimit(int readLimit) {
         this.readLimit = readLimit;
     }
 
+    /**
+     * 获取批量处理限制
+     *
+     * @return 批量处理限制
+     */
     public int getBatchLimit() {
         return batchLimit;
     }
 
+    /**
+     * 设置批量处理限制
+     *
+     * @param batchLimit 批量处理限制
+     */
     public void setBatchLimit(int batchLimit) {
         this.batchLimit = batchLimit;
     }
 
+    /**
+     * 获取导入文件列表
+     *
+     * @return 导入文件列表
+     */
     public List<ShellMongoDataImportFile> getFiles() {
         return files;
     }
 
+    /**
+     * 设置导入文件列表
+     *
+     * @param files 导入文件列表
+     */
     public void setFiles(List<ShellMongoDataImportFile> files) {
         this.files = files;
     }
 
+    /**
+     * 获取导入配置
+     *
+     * @return 导入配置
+     */
     public MongoDataImportConfig getConfig() {
         return config;
     }

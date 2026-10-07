@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 查询提示列表视图
+ *
  * @author oyzh
  * @since 2024/02/21
  */
@@ -69,7 +71,7 @@ public class MongoQueryPromptListView extends FXListView<FXHBox> {
     /**
      * 是否有选中项
      *
-     * @return 结果
+     * @return 是否有选中项
      */
     public synchronized boolean hasPicked() {
         FXHBox box = this.getSelectedItem();
@@ -79,7 +81,7 @@ public class MongoQueryPromptListView extends FXListView<FXHBox> {
     /**
      * 获取选中项
      *
-     * @return 结果
+     * @return 选中项
      */
     public MongoQueryPromptItem getPickedItem() {
         FXHBox hBox = this.getSelectedItem();
@@ -125,7 +127,7 @@ public class MongoQueryPromptListView extends FXListView<FXHBox> {
     /**
      * 执行初始化
      *
-     * @param items 提示
+     * @param items 提示词列表
      */
     public void init(List<MongoQueryPromptItem> items) {
         // 应用背景色
@@ -220,10 +222,20 @@ public class MongoQueryPromptListView extends FXListView<FXHBox> {
         });
     }
 
+    /**
+     * 获取选中回调
+     *
+     * @return 选中回调
+     */
     public Runnable getOnItemPicked() {
         return onItemPicked;
     }
 
+    /**
+     * 设置选中回调
+     *
+     * @param onItemPicked 选中回调
+     */
     public void setOnItemPicked(Runnable onItemPicked) {
         this.onItemPicked = onItemPicked;
     }

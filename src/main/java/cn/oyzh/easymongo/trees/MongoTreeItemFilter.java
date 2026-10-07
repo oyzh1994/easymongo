@@ -36,10 +36,20 @@ public class MongoTreeItemFilter extends RichTreeItemFilter {
     }
 
 
+    /**
+     * 是否仅显示收藏
+     *
+     * @return 是否仅显示收藏
+     */
     public boolean isOnlyCollect() {
         return onlyCollect;
     }
 
+    /**
+     * 设置是否仅显示收藏
+     *
+     * @param onlyCollect 是否仅显示收藏
+     */
     public void setOnlyCollect(boolean onlyCollect) {
         this.onlyCollect = onlyCollect;
     }

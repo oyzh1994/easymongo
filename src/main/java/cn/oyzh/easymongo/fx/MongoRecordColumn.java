@@ -22,17 +22,33 @@ import java.util.List;
 
 
 /**
+ * MongoDB记录字段列
+ *
  * @author oyzh
  * @since 2024/7/17
  */
 public class MongoRecordColumn extends FXTableColumn<MongoRecord, Object> implements MenuItemAdapter, ContextMenuAdapter {
 
+    /**
+     * 字段
+     */
     private final MongoColumn column;
 
+    /**
+     * 构造记录字段列
+     *
+     * @param column 字段
+     */
     public MongoRecordColumn(MongoColumn column) {
         this(column, 1);
     }
 
+    /**
+     * 构造记录字段列
+     *
+     * @param column 字段
+     * @param mode   显示模式，0为纯文本，其他为图文
+     */
     public MongoRecordColumn(MongoColumn column, int mode) {
         this.column = column;
         this.setReorderable(true);
@@ -101,14 +117,29 @@ public class MongoRecordColumn extends FXTableColumn<MongoRecord, Object> implem
         ClipboardUtil.copy(this.getName());
     }
 
+    /**
+     * 获取字体
+     *
+     * @return 字体
+     */
     public Font getFont() {
         return FontManager.currentFont();
     }
 
+    /**
+     * 获取字段名称
+     *
+     * @return 字段名称
+     */
     public String getName() {
         return this.column.getName();
     }
 
+    /**
+     * 获取字段类型
+     *
+     * @return 字段类型
+     */
     public String getType() {
         return this.column.getType();
     }

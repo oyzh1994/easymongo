@@ -14,15 +14,25 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
- * db查询文本域
+ * 查询词元分析器
  *
  * @author oyzh
  * @since 2024/02/18
  */
 public class MongoQueryTokenAnalyzer {
 
+    /**
+     * 单例实例
+     */
     public static final MongoQueryTokenAnalyzer INSTANCE = new MongoQueryTokenAnalyzer();
 
+    /**
+     * 获取指定位置处的词元
+     *
+     * @param content      查询内容
+     * @param currentIndex 当前位置
+     * @return 词元
+     */
     public MongoQueryToken currentToken(String content, int currentIndex) {
         try {
             if (StringUtil.isEmpty(content)) {
@@ -80,9 +90,9 @@ public class MongoQueryTokenAnalyzer {
     /**
      * 初始化提示词
      *
-     * @param token   提示词
+     * @param token   词元
      * @param minCorr 最低相关度
-     * @return 结果
+     * @return 提示词列表
      */
     public List<MongoQueryPromptItem> initPrompts(MongoQueryToken token, float minCorr) {
         if (token == null || token.isEmpty()) {

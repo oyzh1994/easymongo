@@ -32,10 +32,21 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
      */
     private final MongoQuery value;
 
+    /**
+     * 获取查询对象
+     *
+     * @return 查询对象
+     */
     public MongoQuery value() {
         return value;
     }
 
+    /**
+     * 构造db树查询节点
+     *
+     * @param query    查询对象
+     * @param treeView 树视图
+     */
     public MongoQueryTreeItem(MongoQuery query, RichTreeView treeView) {
         super(treeView);
         super.setFilterable(true);
@@ -58,9 +69,9 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
     }
 
     /**
-     * 获取redis信息
+     * 获取mongo连接信息
      *
-     * @return redis信息
+     * @return mongo连接信息
      */
     public MongoConnect info() {
         return this.parent().info();
@@ -114,14 +125,29 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
         }
     }
 
+    /**
+     * 获取所属数据库节点
+     *
+     * @return 数据库节点
+     */
     public MongoDatabaseTreeItem dbItem() {
         return this.parent().parent();
     }
 
+    /**
+     * 获取数据库名称
+     *
+     * @return 数据库名称
+     */
     public String dbName() {
         return this.parent().dbName();
     }
 
+    /**
+     * 获取查询名称
+     *
+     * @return 查询名称
+     */
     public String queryName() {
         return this.value.getName();
     }
@@ -131,6 +157,11 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
         MongoEventUtil.queryOpen(this.value, this.dbItem());
     }
 
+    /**
+     * 获取shell连接
+     *
+     * @return shell连接
+     */
     public MongoConnect shellConnect() {
         return this.client().getShellConnect();
     }

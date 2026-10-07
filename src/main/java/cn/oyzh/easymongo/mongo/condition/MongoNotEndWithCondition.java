@@ -15,8 +15,14 @@ import java.util.regex.Pattern;
  */
 public class MongoNotEndWithCondition extends MongoEndWithCondition {
 
+    /**
+     * 不是结束以条件实例
+     */
     public final static MongoNotEndWithCondition INSTANCE = new MongoNotEndWithCondition();
 
+    /**
+     * 构造不是结束以条件
+     */
     public MongoNotEndWithCondition() {
         super(I18nHelper.notEndWith(), "NOT LIKE");
     }

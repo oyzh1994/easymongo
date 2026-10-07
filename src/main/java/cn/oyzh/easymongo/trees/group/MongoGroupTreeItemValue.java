@@ -6,13 +6,18 @@ import cn.oyzh.fx.plus.controls.svg.SVGGlyph;
 
 
 /**
- * db树 Group节点值
+ * db树分组节点值
  *
  * @author oyzh
  * @since 2023/12/21
  */
 public class MongoGroupTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造db树Group节点值
+     *
+     * @param item 分组节点
+     */
     public MongoGroupTreeItemValue(MongoGroupTreeItem item) {
         super(item);
     }

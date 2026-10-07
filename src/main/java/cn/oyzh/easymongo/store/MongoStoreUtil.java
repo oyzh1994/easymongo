@@ -9,6 +9,8 @@ import cn.oyzh.store.jdbc.JdbcDialect;
 import cn.oyzh.store.jdbc.JdbcManager;
 
 /**
+ * MongoDB存储工具
+ *
  * @author oyzh
  * @since 2024-09-23
  */

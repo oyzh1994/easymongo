@@ -43,11 +43,21 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * MongoDB 记录工具类
+ *
  * @author oyzh
  * @since 2024/7/17
  */
 public class MongoRecordUtil {
 
+    /**
+     * 根据字段类型生成记录属性对应的编辑节点
+     *
+     * @param property 记录属性
+     * @param object   值
+     * @param column   字段
+     * @return 节点
+     */
     public static Node getNode(MongoRecordProperty property, Object object, MongoColumn column) {
         Node node;
         if (column.supportInt32()) {
@@ -129,6 +139,13 @@ public class MongoRecordUtil {
         return node;
     }
 
+    /**
+     * 根据字段类型格式化值
+     *
+     * @param object 值
+     * @param column 字段
+     * @return 格式化后的字符串
+     */
     public static String formatValue(Object object, MongoColumn column) {
         String val;
         if (column.supportInteger()) {
@@ -151,6 +168,11 @@ public class MongoRecordUtil {
         return val;
     }
 
+    /**
+     * 获取空值占位提示文本
+     *
+     * @return 占位提示文本
+     */
     public static String nullPromptText() {
         return "(Null)";
     }

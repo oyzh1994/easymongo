@@ -7,13 +7,18 @@ import cn.oyzh.i18n.I18nHelper;
 import javafx.scene.paint.Color;
 
 /**
- * db树表类型值
+ * db树查询类型节点值
  *
  * @author oyzh
  * @since 2023/12/08
  */
 public class MongoQueriesTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造db树查询类型节点值
+     *
+     * @param item 查询类型节点
+     */
     public MongoQueriesTreeItemValue(MongoQueriesTreeItem item) {
         super(item);
         super.setRichMode(true);

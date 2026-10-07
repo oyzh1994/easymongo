@@ -14,6 +14,11 @@ import javafx.scene.paint.Color;
  */
 public class MongoConnectTreeItemValue extends RichTreeItemValue {
 
+    /**
+     * 构造连接节点值
+     *
+     * @param item 连接节点
+     */
     public MongoConnectTreeItemValue(MongoConnectTreeItem item) {
         super(item);
     }

@@ -8,11 +8,19 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * MongoDB 脚本文件执行处理器
+ *
  * @author oyzh
  * @since 2024/09/10
  */
 public class ShellMongoDataRunFileHandler extends DBDataRunFileHandler {
 
+    /**
+     * 构造脚本文件执行处理器
+     *
+     * @param dbClient db 客户端
+     * @param dbName   库名称
+     */
     public ShellMongoDataRunFileHandler(MongoClient dbClient, String dbName) {
         super(dbClient, dbName);
     }

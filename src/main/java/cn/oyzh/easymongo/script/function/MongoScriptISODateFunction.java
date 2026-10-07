@@ -7,6 +7,7 @@ import org.openjdk.nashorn.internal.runtime.Undefined;
 import java.util.Date;
 
 /**
+ * 脚本环境中的 ISODate 构造函数，用于将日期字符串解析为日期对象
  *
  * @author oyzh
  * @since 2026-06-17

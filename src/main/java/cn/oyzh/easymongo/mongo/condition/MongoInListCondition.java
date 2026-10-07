@@ -17,12 +17,24 @@ import java.util.List;
  */
 public class MongoInListCondition extends MongoCondition {
 
+    /**
+     * 在列表条件实例
+     */
     public final static MongoInListCondition INSTANCE = new MongoInListCondition();
 
+    /**
+     * 构造在列表条件
+     */
     public MongoInListCondition() {
         super(I18nHelper.inList(), "IN");
     }
 
+    /**
+     * 使用名称、值构造在列表条件
+     *
+     * @param name  名称
+     * @param value 值
+     */
     public MongoInListCondition(String name, String value) {
         super(name, value);
     }

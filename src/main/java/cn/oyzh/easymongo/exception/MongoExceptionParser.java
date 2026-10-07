@@ -3,7 +3,7 @@ package cn.oyzh.easymongo.exception;
 import java.util.function.Function;
 
 /**
- * redis异常信息解析
+ * MongoDB 异常信息解析
  *
  * @author oyzh
  * @since 2023/7/2

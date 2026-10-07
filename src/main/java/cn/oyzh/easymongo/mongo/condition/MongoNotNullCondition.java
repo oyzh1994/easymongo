@@ -16,8 +16,14 @@ import java.util.Arrays;
  */
 public class MongoNotNullCondition extends MongoCondition {
 
+    /**
+     * 不是NULL条件实例
+     */
     public final static MongoNotNullCondition INSTANCE = new MongoNotNullCondition();
 
+    /**
+     * 构造不是NULL条件
+     */
     public MongoNotNullCondition() {
         super(I18nHelper.notIsNull(), "IS NOT NULL", false);
     }

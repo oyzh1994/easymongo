@@ -56,6 +56,9 @@ public class MainController extends ParentStageController {
      */
     private final MongoSetting setting = MongoSettingStore.SETTING;
 
+    /**
+     * 配置持久化对象
+     */
     private final MongoSettingStore settingStore = MongoSettingStore.INSTANCE;
 
     @Override
