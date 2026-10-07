@@ -69,7 +69,7 @@ public class MongoUtil {
             return "binary";
         }
         if (val instanceof ObjectId) {
-            return "obejectid";
+            return "objectid";
         }
         if (val instanceof Document) {
             return "object";
@@ -103,7 +103,7 @@ public class MongoUtil {
                 return "object";
             }
             if (bsonValue.isObjectId()) {
-                return "obejectid";
+                return "objectid";
             }
         }
         return "object";

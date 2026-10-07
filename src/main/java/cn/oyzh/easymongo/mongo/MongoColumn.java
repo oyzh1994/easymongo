@@ -199,7 +199,7 @@ public class MongoColumn extends DBObjectStatus implements ObjectCopier<MongoCol
      * @return 结果
      */
     public boolean supportObjectId() {
-        return StringUtil.equalsIgnoreCase(this.getType(), "obejectid");
+        return StringUtil.equalsIgnoreCase(this.getType(), "objectid");
     }
 
     /**

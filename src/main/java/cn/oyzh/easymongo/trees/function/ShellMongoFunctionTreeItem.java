@@ -80,16 +80,16 @@ public class ShellMongoFunctionTreeItem extends MongoTreeItem<ShellMongoFunction
         items.add(MenuItemHelper.separator());
         FXMenuItem cloneFunction = MenuItemHelper.cloneFunction( this::cloneFunction);
         items.add(cloneFunction);
-        FXMenuItem info = MenuItemHelper.functionInfo( this::functionInfo);
-        items.add(info);
+//        FXMenuItem info = MenuItemHelper.functionInfo( this::functionInfo);
+//        items.add(info);
         return items;
     }
 
-    /**
-     * 查看函数信息
-     */
-    private void functionInfo() {
-    }
+//    /**
+//     * 查看函数信息
+//     */
+//    private void functionInfo() {
+//    }
 
     /**
      * 克隆函数

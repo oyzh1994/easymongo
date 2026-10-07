@@ -119,7 +119,7 @@ public class MongoDataUtil {
             return value;
         }
 
-        if ("obejectid".equalsIgnoreCase(type)) {
+        if ("objectid".equalsIgnoreCase(type)) {
             if (value == null) {
                 return "ObjectId()";
             }
