@@ -41,7 +41,7 @@ public class MongoConst {
      * @return 存储路径
      */
     public static String getStorePath() {
-        if (JarUtil.isInJar()) {
+        if (SystemUtil.isProd()) {
             return SystemUtil.userHome() + File.separator + ".easymongo" + File.separator;
         }
         return SystemUtil.userHome() + File.separator + ".easymongo_dev" + File.separator;
