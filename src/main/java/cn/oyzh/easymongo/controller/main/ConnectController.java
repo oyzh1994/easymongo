@@ -1,11 +1,11 @@
 package cn.oyzh.easymongo.controller.main;
 
-import cn.oyzh.fx.gui.svg.pane.SortSVGPane;
+import cn.oyzh.easymongo.event.MongoEventUtil;
+import cn.oyzh.easymongo.trees.MongoTreeView;
+import cn.oyzh.fx.gui.svg.label.SortSVGLabel;
 import cn.oyzh.fx.gui.text.field.ClearableTextField;
 import cn.oyzh.fx.plus.controller.SubStageController;
 import cn.oyzh.fx.plus.keyboard.KeyListener;
-import cn.oyzh.easymongo.event.MongoEventUtil;
-import cn.oyzh.easymongo.trees.MongoTreeView;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
@@ -30,7 +30,7 @@ public class ConnectController extends SubStageController {
      * 节点排序组件
      */
     @FXML
-    private SortSVGPane sortPane;
+    private SortSVGLabel sortPane;
 
     /**
      * 连接过滤

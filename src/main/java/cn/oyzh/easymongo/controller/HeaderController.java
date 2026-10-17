@@ -2,16 +2,16 @@ package cn.oyzh.easymongo.controller;
 
 import cn.oyzh.common.SysConst;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataTransportController;
+import cn.oyzh.easymongo.event.MongoEventUtil;
 import cn.oyzh.event.EventSubscribe;
 import cn.oyzh.fx.gui.event.Layout1Event;
 import cn.oyzh.fx.gui.event.Layout2Event;
-import cn.oyzh.fx.gui.svg.pane.LayoutSVGPane;
+import cn.oyzh.fx.gui.svg.label.LayoutSVGLabel;
 import cn.oyzh.fx.plus.controller.SubStageController;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
-import cn.oyzh.easymongo.event.MongoEventUtil;
 import javafx.fxml.FXML;
 import javafx.stage.WindowEvent;
 
@@ -27,7 +27,7 @@ public class HeaderController extends SubStageController {
      * 布局组件
      */
     @FXML
-    private LayoutSVGPane layoutPane;
+    private LayoutSVGLabel layoutPane;
 
     /**
      * 布局
