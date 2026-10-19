@@ -202,7 +202,7 @@ public class MongoConnectUpdateController extends StageController {
         // 检查连接地址
         String host = this.getHost();
         if (StringUtil.isBlank(host) || StringUtil.isBlank(host.split(":")[0])) {
-            MessageBox.warn(I18nHelper.contentCanNotEmpty());
+            MessageBox.warn(I18nHelper.contentCanNotEmpty(), this.getWindow());
         } else {
             MongoConnect mongoConnect = new MongoConnect();
             mongoConnect.setHost(host);
@@ -255,14 +255,14 @@ public class MongoConnectUpdateController extends StageController {
             // 保存数据
             if (this.connectStore.replace(this.mysqlConnect)) {
                 MongoEventUtil.connectUpdated(this.mysqlConnect);
-                MessageBox.okToast(I18nHelper.operationSuccess());
+               MessageBox.okToast(I18nHelper.operationSuccess(), this.getWindow());
                 this.closeWindow();
             } else {
-                MessageBox.warn(I18nHelper.operationFail());
+                MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 

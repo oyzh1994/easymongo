@@ -62,7 +62,7 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
      * 新增bucket
      */
     private void addBucket() {
-        String name = MessageBox.prompt(I18nHelper.pleaseInputBucketName());
+        String name = MessageBox.prompt(I18nHelper.pleaseInputBucketName(), this.getWindow());
         if (StringUtil.isBlank(name)) {
             return;
         }
@@ -120,7 +120,7 @@ public class MongoBucketsTreeItem extends MongoTreeItem<MongoBucketsTreeItemValu
                     })
                     .onError(ex -> {
                         this.setLoaded(false);
-                        MessageBox.exception(ex);
+                        MessageBox.exception(ex, this.getWindow());
                     })
                     .onSuccess(this::refresh)
                     .onFinish(() -> this.setLoading(false))

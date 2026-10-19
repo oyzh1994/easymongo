@@ -104,7 +104,7 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
     public void exportConnect() {
         List<MongoConnect> infos = this.connectStore.load();
         if (infos.isEmpty()) {
-            MessageBox.warn(I18nHelper.connectionIsEmpty());
+            MessageBox.warn(I18nHelper.connectionIsEmpty(), this.getWindow());
             return;
         }
     }
@@ -119,7 +119,7 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
             return;
         }
         if (files.size() != 1) {
-            MessageBox.warn(I18nHelper.onlySupportSingleFile());
+            MessageBox.warn(I18nHelper.onlySupportSingleFile(), this.getWindow());
             return;
         }
         File file = CollectionUtil.getFirst(files);
@@ -147,19 +147,19 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
             return;
         }
         if (!file.exists()) {
-            MessageBox.warn(I18nHelper.fileNotExists());
+            MessageBox.warn(I18nHelper.fileNotExists(), this.getWindow());
             return;
         }
         if (file.isDirectory()) {
-            MessageBox.warn(I18nHelper.notSupportFolder());
+            MessageBox.warn(I18nHelper.notSupportFolder(), this.getWindow());
             return;
         }
         if (!FileNameUtil.isType(file.getName(), "json")) {
-            MessageBox.warn(I18nHelper.invalidFormat());
+            MessageBox.warn(I18nHelper.invalidFormat(), this.getWindow());
             return;
         }
         if (file.length() == 0) {
-            MessageBox.warn(I18nHelper.contentCanNotEmpty());
+            MessageBox.warn(I18nHelper.contentCanNotEmpty(), this.getWindow());
             return;
         }
     }
@@ -175,7 +175,7 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
      * 添加分组
      */
     public void addGroup() {
-        String groupName = MessageBox.prompt(I18nHelper.contentTip1());
+        String groupName = MessageBox.prompt(I18nHelper.contentTip1(), this.getWindow());
 
         // 名称为null，则忽略
         if (groupName == null) {
@@ -184,20 +184,20 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
 
         // 不能为空
         if (StringUtil.isBlank(groupName)) {
-            MessageBox.warn(I18nHelper.nameCanNotEmpty());
+            MessageBox.warn(I18nHelper.nameCanNotEmpty(), this.getWindow());
             return;
         }
 
         MongoGroup group = new MongoGroup();
         group.setName(groupName);
         if (this.groupStore.exist(group)) {
-            MessageBox.warn(I18nHelper.contentAlreadyExists());
+            MessageBox.warn(I18nHelper.contentAlreadyExists(), this.getWindow());
             return;
         }
         if (this.groupStore.insert(group)) {
             this.addChild(new MongoGroupTreeItem(group, this.getTreeView()));
         } else {
-            MessageBox.warn(I18nHelper.operationFail());
+            MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
         }
     }
 

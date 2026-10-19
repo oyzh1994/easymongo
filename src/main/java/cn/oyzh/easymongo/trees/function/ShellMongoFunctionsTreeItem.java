@@ -120,7 +120,7 @@ public class ShellMongoFunctionsTreeItem extends MongoTreeItem<ShellMongoFunctio
                     .onFinish(() -> this.setLoading(false))
                     .onError(ex -> {
                         this.setLoaded(false);
-                        MessageBox.exception(ex);
+                        MessageBox.exception(ex, this.getWindow());
                     })
                     .build();
             // 执行业务

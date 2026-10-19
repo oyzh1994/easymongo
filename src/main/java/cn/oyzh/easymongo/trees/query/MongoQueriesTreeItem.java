@@ -87,7 +87,7 @@ public class MongoQueriesTreeItem extends MongoTreeItem<MongoQueriesTreeItemValu
                     .onSuccess(this::expend)
                     .onError(ex -> {
                         this.setLoaded(false);
-                        MessageBox.exception(ex);
+                        MessageBox.exception(ex, this.getWindow());
                     })
                     .build();
             this.startWaiting(task);

@@ -147,7 +147,7 @@ public class MongoBucketRecordTabController extends RichTabController {
             // 初始化数据
             this.initRecords(records);
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -243,7 +243,7 @@ public class MongoBucketRecordTabController extends RichTabController {
             }
             // 修改数据
             if (this.getItem().updateRecord(r) != 1) {
-                MessageBox.warn(I18nHelper.updateDocumentFail());
+                MessageBox.warn(I18nHelper.updateDocumentFail(), this.getWindow());
             } else {
                 record.putValue("filename", r.getValue("filename"));
                 record.putValue("metadata", r.getProperty("metadata").getOriginal());
@@ -252,7 +252,7 @@ public class MongoBucketRecordTabController extends RichTabController {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -291,7 +291,7 @@ public class MongoBucketRecordTabController extends RichTabController {
             // 设置过滤激活
             this.filter.setActive(CollectionUtil.isNotEmpty(this.enabledFilters()));
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -377,7 +377,7 @@ public class MongoBucketRecordTabController extends RichTabController {
      */
     @FXML
     private void deleteRecord() {
-        if (!MessageBox.confirm(I18nHelper.deleteDocument() + "?")) {
+        if (!MessageBox.confirm(I18nHelper.deleteDocument() + "?", this.getWindow())) {
             return;
         }
         List<MongoRecord> records = new ArrayList<>(this.recordTable.getSelectedItems());
@@ -403,10 +403,10 @@ public class MongoBucketRecordTabController extends RichTabController {
                 this.recordTable.removeItem(records);
                 this.initCount(this.pageData.count() - records.size());
             } else {// 操作失败
-                MessageBox.warnToast(I18nHelper.operationFail());
+                MessageBox.warnToast(I18nHelper.operationFail(), this.getWindow());
             }
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -428,7 +428,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         if (success) {
             this.recordTable.removeItem(record);
         } else {// 操作失败
-            MessageBox.warnToast(I18nHelper.operationFail());
+            MessageBox.warnToast(I18nHelper.operationFail(), this.getWindow());
         }
         return success;
     }
@@ -446,19 +446,19 @@ public class MongoBucketRecordTabController extends RichTabController {
             try {
                 ObjectId _id = this.getItem().uploadRecord(file);
                 if (_id == null) {
-                    MessageBox.warn(I18nHelper.uploadFileFailed());
+                    MessageBox.warn(I18nHelper.uploadFileFailed(), this.getWindow());
                     return;
                 }
                 MongoRecord record = this.getItem().selectRecord(_id);
                 if (record == null) {
-                    MessageBox.warn(I18nHelper.uploadFileFailed());
+                    MessageBox.warn(I18nHelper.uploadFileFailed(), this.getWindow());
                     return;
                 }
                 this.recordTable.addItem(record);
                 this.recordTable.selectLast();
                 this.initCount(this.recordTable.getItemSize());
             } catch (Exception ex) {
-                MessageBox.exception(ex);
+                MessageBox.exception(ex, this.getWindow());
             }
         });
     }
@@ -489,7 +489,7 @@ public class MongoBucketRecordTabController extends RichTabController {
                 Object _id = record._idValue();
                 this.getItem().downloadRecord(_id, file.getPath());
             } catch (Exception ex) {
-                MessageBox.exception(ex);
+                MessageBox.exception(ex, this.getWindow());
             }
         });
     }

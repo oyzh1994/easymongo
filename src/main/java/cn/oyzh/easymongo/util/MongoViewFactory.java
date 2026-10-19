@@ -40,7 +40,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
         return null;
     }
@@ -59,7 +59,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
         return null;
     }
@@ -78,7 +78,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
         return null;
     }
@@ -97,7 +97,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
         return null;
     }
@@ -133,7 +133,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
     }
 
@@ -151,7 +151,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
     }
 
@@ -173,7 +173,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
     }
 
@@ -191,7 +191,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
     }
 
@@ -211,7 +211,7 @@ public class MongoViewFactory {
             adapter.showAndWait();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, StageManager.getPrimaryStage());
         }
     }
 

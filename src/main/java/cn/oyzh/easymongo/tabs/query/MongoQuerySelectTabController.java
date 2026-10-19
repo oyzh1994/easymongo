@@ -168,7 +168,7 @@ public class MongoQuerySelectTabController extends RichTabController {
             // 初始化计数
             this.initCount(this.result.getCount());
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -297,7 +297,7 @@ public class MongoQuerySelectTabController extends RichTabController {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -333,7 +333,7 @@ public class MongoQuerySelectTabController extends RichTabController {
             // 纠正记录
             this.correctRecords();
         } else {// 操作失败
-            MessageBox.warn(I18nHelper.updateDocumentFail());
+            MessageBox.warn(I18nHelper.updateDocumentFail(), this.getWindow());
         }
     }
 
@@ -356,7 +356,7 @@ public class MongoQuerySelectTabController extends RichTabController {
                 }
                 this.apply.disable();
             } catch (Exception ex) {
-                MessageBox.exception(ex);
+                MessageBox.exception(ex, this.getWindow());
             }
         }
     }
@@ -380,7 +380,7 @@ public class MongoQuerySelectTabController extends RichTabController {
             // 初始化计数
             this.initCount(this.recordTable.getItemSize());
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -398,7 +398,7 @@ public class MongoQuerySelectTabController extends RichTabController {
     private void doReload() {
         try {
             // 检查是否有未保存的数据
-            if (this.apply.isEnable() && !MessageBox.confirm(I18nHelper.unsavedAndContinue())) {
+            if (this.apply.isEnable() && !MessageBox.confirm(I18nHelper.unsavedAndContinue(), this.getWindow())) {
                 return;
             }
             // 执行查询
@@ -408,7 +408,7 @@ public class MongoQuerySelectTabController extends RichTabController {
             // 禁用组件
             this.apply.disable();
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -417,7 +417,7 @@ public class MongoQuerySelectTabController extends RichTabController {
      */
     @FXML
     private void deleteRecord() {
-        if (!MessageBox.confirm(I18nHelper.deleteDocument() + "?")) {
+        if (!MessageBox.confirm(I18nHelper.deleteDocument() + "?", this.getWindow())) {
             return;
         }
         List<MongoRecord> records = new ArrayList<>(this.recordTable.getSelectedItems());
@@ -444,10 +444,10 @@ public class MongoQuerySelectTabController extends RichTabController {
                 // 初始化计数
                 this.initCount(this.recordTable.getItemSize());
             } else {// 操作失败
-                MessageBox.warnToast(I18nHelper.operationFail());
+                MessageBox.warnToast(I18nHelper.operationFail(), this.getWindow());
             }
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
@@ -469,7 +469,7 @@ public class MongoQuerySelectTabController extends RichTabController {
         if (success) {
             this.recordTable.removeItem(record);
         } else {// 操作失败
-            MessageBox.warnToast(I18nHelper.operationFail());
+            MessageBox.warnToast(I18nHelper.operationFail(), this.getWindow());
         }
         return success;
     }

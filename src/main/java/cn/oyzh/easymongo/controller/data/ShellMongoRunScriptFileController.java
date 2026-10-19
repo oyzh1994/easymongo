@@ -121,7 +121,7 @@ public class ShellMongoRunScriptFileController extends StageController {
     private boolean checkSqlFile() {
         File sqlFile = this.file.getFile();
         if (sqlFile == null) {
-            MessageBox.warn(I18nHelper.pleaseSelectFile());
+            MessageBox.warn(I18nHelper.pleaseSelectFile(), this.getWindow());
             return false;
         }
         return true;
@@ -139,7 +139,7 @@ public class ShellMongoRunScriptFileController extends StageController {
         // 检查数据库
         String database = this.database.getSelectedItem();
         if (StringUtil.isBlank(database)) {
-            MessageBox.warn(I18nHelper.pleaseSelectDatabase());
+            MessageBox.warn(I18nHelper.pleaseSelectDatabase(), this.getWindow());
             return;
         }
         // 重置参数
@@ -178,11 +178,11 @@ public class ShellMongoRunScriptFileController extends StageController {
             } catch (Exception e) {
                 if (e.getClass().isAssignableFrom(InterruptedException.class)) {
                     this.updateStatus(I18nHelper.operationCancel());
-                    MessageBox.okToast(I18nHelper.operationCancel());
+                    MessageBox.okToast(I18nHelper.operationCancel(), this.getWindow());
                 } else {
                     e.printStackTrace();
                     this.updateStatus(I18nHelper.operationFail());
-                    MessageBox.warn(I18nHelper.operationFail());
+                    MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
                 }
             } finally {
                 // 结束处理

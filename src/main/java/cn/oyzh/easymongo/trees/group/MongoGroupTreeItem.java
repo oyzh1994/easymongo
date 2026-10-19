@@ -88,7 +88,7 @@ public class MongoGroupTreeItem extends MongoTreeItem<MongoGroupTreeItemValue> i
 
     @Override
     public void rename() {
-        String groupName = MessageBox.prompt(I18nHelper.contentTip1(), this.value.getName());
+        String groupName = MessageBox.prompt(I18nHelper.contentTip1(), this.value.getName(), this.getWindow());
         // 名称为null或者跟当前名称相同，则忽略
         if (groupName == null || Objects.equals(groupName, this.value.getName())) {
             return;
@@ -102,28 +102,28 @@ public class MongoGroupTreeItem extends MongoTreeItem<MongoGroupTreeItemValue> i
         this.value.setName(groupName);
         if (this.groupStore.exist(this.value)) {
             this.value.setName(name);
-            MessageBox.warn(I18nHelper.contentAlreadyExists());
+            MessageBox.warn(I18nHelper.contentAlreadyExists(), this.getWindow());
             return;
         }
         // 修改名称
         if (this.groupStore.update(this.value)) {
             this.refresh();
         } else {
-            MessageBox.warn(I18nHelper.operationFail());
+            MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
         }
     }
 
     @Override
     public void delete() {
-        if (this.isChildEmpty() && !MessageBox.confirm(I18nHelper.deleteGroupTip1())) {
+        if (this.isChildEmpty() && !MessageBox.confirm(I18nHelper.deleteGroupTip1(), this.getWindow())) {
             return;
         }
-        if (!this.isChildEmpty() && !MessageBox.confirm(I18nHelper.deleteGroupTip2())) {
+        if (!this.isChildEmpty() && !MessageBox.confirm(I18nHelper.deleteGroupTip2(), this.getWindow())) {
             return;
         }
         // 删除失败
         if (!this.groupStore.delete(this.value)) {
-            MessageBox.warn(I18nHelper.operationFail());
+            MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
             return;
         }
         // 处理连接

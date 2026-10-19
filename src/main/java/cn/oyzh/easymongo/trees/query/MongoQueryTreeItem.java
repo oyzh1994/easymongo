@@ -91,26 +91,26 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
 
     @Override
     public void delete() {
-        if (MessageBox.confirm(I18nHelper.delete() + " " + this.queryName() + "?")) {
+        if (MessageBox.confirm(I18nHelper.delete() + " " + this.queryName() + "?", this.getWindow())) {
             if (MongoQueryStore.INSTANCE.delete(this.value)) {
                 this.remove();
                 MongoEventUtil.queryDeleted(this);
             } else {
-                MessageBox.warn(I18nHelper.operationFail());
+                MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
             }
         }
     }
 
     @Override
     public void rename() {
-        String name = MessageBox.prompt(I18nHelper.pleaseInputName(), this.queryName());
+        String name = MessageBox.prompt(I18nHelper.pleaseInputName(), this.queryName(), this.getWindow());
         // 名称为null或者跟当前名称相同，则忽略
         if (name == null || Objects.equals(name, this.queryName())) {
             return;
         }
         // 检查名称
         if (StringUtil.isBlank(name)) {
-            MessageBox.warn(I18nHelper.pleaseInputName());
+            MessageBox.warn(I18nHelper.pleaseInputName(), this.getWindow());
             return;
         }
         String oldName = this.value.getName();
@@ -121,7 +121,7 @@ public class MongoQueryTreeItem extends MongoTreeItem<MongoQueryTreeItemValue> {
             this.refresh();
         } else {
             this.value.setName(oldName);
-            MessageBox.warn(I18nHelper.operationFail());
+            MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
         }
     }
 

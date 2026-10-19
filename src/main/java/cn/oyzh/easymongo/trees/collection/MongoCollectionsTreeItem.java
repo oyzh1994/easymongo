@@ -81,7 +81,7 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
      * 新增集合
      */
     private void addCollection() {
-        String name = MessageBox.prompt(I18nHelper.pleaseInputCollectionName());
+        String name = MessageBox.prompt(I18nHelper.pleaseInputCollectionName(), this.getWindow());
         if (StringUtil.isBlank(name)) {
             return;
         }
@@ -142,7 +142,7 @@ public class MongoCollectionsTreeItem extends MongoTreeItem<MongoCollectionsTree
                     })
                     .onError(ex -> {
                         this.setLoaded(false);
-                        MessageBox.exception(ex);
+                        MessageBox.exception(ex, this.getWindow());
                     })
                     .onSuccess(this::refresh)
                     .onFinish(() -> this.setLoading(false))

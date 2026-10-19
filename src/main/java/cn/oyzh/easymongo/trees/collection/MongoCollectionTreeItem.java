@@ -128,7 +128,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
      * 清空集合
      */
     private void clearCollection() {
-        if (MessageBox.confirm(I18nHelper.clearCollection() + "[" + this.collectionName() + "]")) {
+        if (MessageBox.confirm(I18nHelper.clearCollection() + "[" + this.collectionName() + "]", this.getWindow())) {
             this.dbItem().clearCollection(this.collectionName());
             this.parent().reloadChild();
         }
@@ -137,29 +137,29 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
     @Override
     public void delete() {
         try {
-            if (MessageBox.confirm(I18nHelper.deleteCollection() + "[" + this.collectionName() + "]")) {
+            if (MessageBox.confirm(I18nHelper.deleteCollection() + "[" + this.collectionName() + "]", this.getWindow())) {
                 this.dbItem().dropCollection(this.collectionName());
                 MongoEventUtil.collectionDropped(this, this.dbItem());
                 this.remove();
             } else {
-                MessageBox.warn(I18nHelper.operationFail());
+                MessageBox.warn(I18nHelper.operationFail(), this.getWindow());
             }
         } catch (Exception ex) {
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
     @Override
     public void rename() {
         try {
-            String collectionName = MessageBox.prompt(I18nHelper.pleaseInputName(), this.value.getName());
+            String collectionName = MessageBox.prompt(I18nHelper.pleaseInputName(), this.value.getName(), this.getWindow());
             // 名称为null或者跟当前名称相同，则忽略
             if (collectionName == null || Objects.equals(collectionName, this.value.getName())) {
                 return;
             }
             // 检查名称
             if (StringUtil.isBlank(collectionName)) {
-                MessageBox.warn(I18nHelper.pleaseInputContent());
+                MessageBox.warn(I18nHelper.pleaseInputContent(), this.getWindow());
                 return;
             }
             String oldName = this.value.getName();
@@ -170,7 +170,7 @@ public class MongoCollectionTreeItem extends MongoTreeItem<MongoCollectionTreeIt
             MongoEventUtil.collectionRenamed(oldName, collectionName, this.dbItem());
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 

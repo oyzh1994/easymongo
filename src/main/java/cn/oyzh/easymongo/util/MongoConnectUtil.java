@@ -17,30 +17,30 @@ public class MongoConnectUtil {
     /**
      * 测试连接
      *
-     * @param view   页面
-     * @param dbInfo db信息
+     * @param adapter 页面
+     * @param dbInfo  db信息
      */
-    public static void testConnect(StageAdapter view, MongoConnect dbInfo) {
+    public static void testConnect(StageAdapter adapter, MongoConnect dbInfo) {
         ThreadUtil.start(() -> {
             try {
-                view.disable();
-                view.waitCursor();
-                view.appendTitle("==连接测试中...");
+                adapter.disable();
+                adapter.waitCursor();
+                adapter.appendTitle("==连接测试中...");
                 MongoClient client = new MongoClient(dbInfo);
                 client.start();
                 if (client.isConnected()) {
                     client.close();
-                    MessageBox.okToast("连接成功！");
+                    MessageBox.okToast("连接成功！", adapter);
                 } else {
-                    MessageBox.warn("连接失败，请检查地址是否有效！");
+                    MessageBox.warn("连接失败，请检查地址是否有效！", adapter);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                MessageBox.exception(ex);
+                MessageBox.exception(ex, adapter.stage());
             } finally {
-                view.enable();
-                view.defaultCursor();
-                view.restoreTitle();
+                adapter.enable();
+                adapter.defaultCursor();
+                adapter.restoreTitle();
             }
         });
     }

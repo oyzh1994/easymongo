@@ -170,7 +170,7 @@ public class MongoBucketDocumentViewController extends StageController {
                 this.restoreTitle();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                MessageBox.exception(ex);
+                MessageBox.exception(ex, this.getWindow());
             }
         });
     }
@@ -188,7 +188,7 @@ public class MongoBucketDocumentViewController extends StageController {
                 this.initView();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                MessageBox.exception(ex);
+                MessageBox.exception(ex, this.getWindow());
             }
         });
     }

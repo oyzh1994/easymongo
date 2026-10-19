@@ -67,7 +67,7 @@ public class MongoBucketDocumentUpdateController extends StageController {
             } else if (metadata.startsWith("{") && JSONUtil.isJson(metadata)) {
                 metadataDocument =MongoScriptUtil.toDocument(JSONUtil.parseObject(metadata));
             } else {
-                MessageBox.warn(I18nHelper.invalidMetadata());
+                MessageBox.warn(I18nHelper.invalidMetadata(), this.getWindow());
                 return;
             }
 //            String contentType = this.contentType.getTextTrim();
@@ -82,7 +82,7 @@ public class MongoBucketDocumentUpdateController extends StageController {
             this.closeWindow();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex);
+            MessageBox.exception(ex, this.getWindow());
         }
     }
 
