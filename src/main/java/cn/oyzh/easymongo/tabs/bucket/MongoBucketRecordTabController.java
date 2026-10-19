@@ -157,7 +157,7 @@ public class MongoBucketRecordTabController extends RichTabController {
      * @param pageNo 数据页码
      */
     private void initDataListByMask(long pageNo) {
-        StageManager.showMask(() -> this.initDataList(pageNo));
+        StageManager.showMask(this.getWindow(), () -> this.initDataList(pageNo));
     }
 
     /**
@@ -278,7 +278,7 @@ public class MongoBucketRecordTabController extends RichTabController {
      */
     @FXML
     public void reload() {
-        StageManager.showMask(this::doReload);
+        StageManager.showMask(this.getWindow(), this::doReload);
     }
 
     /**
@@ -381,7 +381,7 @@ public class MongoBucketRecordTabController extends RichTabController {
             return;
         }
         List<MongoRecord> records = new ArrayList<>(this.recordTable.getSelectedItems());
-        StageManager.showMask(() -> this.deleteRecords(records));
+        StageManager.showMask(this.getWindow(), () -> this.deleteRecords(records));
     }
 
     /**
@@ -442,7 +442,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         if (file == null) {
             return;
         }
-        StageManager.showMask(() -> {
+        StageManager.showMask(this.getWindow(), () -> {
             try {
                 ObjectId _id = this.getItem().uploadRecord(file);
                 if (_id == null) {
@@ -484,7 +484,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         if (file == null) {
             return;
         }
-        StageManager.showMask(() -> {
+        StageManager.showMask(this.getWindow(), () -> {
             try {
                 Object _id = record._idValue();
                 this.getItem().downloadRecord(_id, file.getPath());

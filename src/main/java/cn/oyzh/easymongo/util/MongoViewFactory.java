@@ -1,14 +1,14 @@
 package cn.oyzh.easymongo.util;
 
-import cn.oyzh.easymongo.controller.document.MongoBucketDocumentUpdateController;
-import cn.oyzh.easymongo.controller.document.MongoBucketDocumentViewController;
-import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentAddController;
-import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentUpdateController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataDumpController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataExportController;
 import cn.oyzh.easymongo.controller.data.ShellMongoDataImportController;
 import cn.oyzh.easymongo.controller.data.ShellMongoRunScriptFileController;
 import cn.oyzh.easymongo.controller.database.MongoDatabaseAddController;
+import cn.oyzh.easymongo.controller.document.MongoBucketDocumentUpdateController;
+import cn.oyzh.easymongo.controller.document.MongoBucketDocumentViewController;
+import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentAddController;
+import cn.oyzh.easymongo.controller.document.MongoCollectionDocumentUpdateController;
 import cn.oyzh.easymongo.data.dto.ShellMongoDataExportCollection;
 import cn.oyzh.easymongo.mongo.MongoClient;
 import cn.oyzh.easymongo.mongo.MongoColumns;
@@ -40,7 +40,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
         return null;
     }
@@ -59,7 +59,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
         return null;
     }
@@ -78,7 +78,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
         return null;
     }
@@ -97,7 +97,7 @@ public class MongoViewFactory {
             return adapter;
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
         return null;
     }
@@ -105,9 +105,9 @@ public class MongoViewFactory {
     /**
      * 导出数据
      *
-     * @param client    客户端
-     * @param collectionName    集合名称
-     * @param tableName 表名称
+     * @param client         客户端
+     * @param collectionName 集合名称
+     * @param tableName      表名称
      */
     public static void exportData(MongoClient client, String collectionName, String tableName) {
         exportData(client, collectionName, tableName, 0, null);
@@ -116,10 +116,10 @@ public class MongoViewFactory {
     /**
      * 导出数据
      *
-     * @param client      客户端
-     * @param dbName      数据库名称
+     * @param client           客户端
+     * @param dbName           数据库名称
      * @param collectionName   集合名称
-     * @param exportMode  导出模式
+     * @param exportMode       导出模式
      * @param exportCollection 导出集合
      */
     public static void exportData(MongoClient client, String dbName, String collectionName, int exportMode, ShellMongoDataExportCollection exportCollection) {
@@ -133,7 +133,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
     }
 
@@ -151,7 +151,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
     }
 
@@ -161,7 +161,7 @@ public class MongoViewFactory {
      * @param client    客户端
      * @param dbName    数据库名称
      * @param tableName 表名称
-     * @param dumpType 导出类型 1.库 2.表
+     * @param dumpType  导出类型 1.库 2.表
      */
     public static void dumpData(MongoClient client, String dbName, String tableName, int dumpType) {
         try {
@@ -173,7 +173,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
     }
 
@@ -191,7 +191,7 @@ public class MongoViewFactory {
             adapter.display();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
     }
 
@@ -204,14 +204,14 @@ public class MongoViewFactory {
      */
     public static void fileView(MongoRecord file, MongoClient client, String type) {
         try {
-            StageAdapter adapter = StageManager.parseStage(MongoBucketDocumentViewController.class);
+            StageAdapter adapter = StageManager.parseStage(MongoBucketDocumentViewController.class, StageManager.getFrontWindow());
             adapter.setProp("file", file);
             adapter.setProp("type", type);
             adapter.setProp("client", client);
             adapter.showAndWait();
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.exception(ex, StageManager.getPrimaryStage());
+            MessageBox.exception(ex, StageManager.getFrontWindow());
         }
     }
 

@@ -176,7 +176,7 @@ public class MongoQueryMainTabController extends RichTabController {
         } else {
             sql = this.queryArea.getTextTrim();
         }
-        StageManager.showMask(() -> this.doRun(sql));
+        StageManager.showMask(this.getWindow(), () -> this.doRun(sql));
     }
 
     /**

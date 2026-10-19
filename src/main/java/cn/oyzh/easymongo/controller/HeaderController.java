@@ -50,7 +50,7 @@ public class HeaderController extends SubStageController {
         if (wrapper != null) {
             wrapper.toFront();
         } else {
-            StageManager.showStage(ShellMongoDataTransportController.class);
+            StageManager.showStage(ShellMongoDataTransportController.class, StageManager.getFrontWindow());
         }
     }
 

@@ -147,7 +147,7 @@ public class EasyMongoApp extends FXApplication implements EventListener {
     protected void showMainView() {
         try {
             // 显示主页面
-            StageManager.showStage(MainController.class);
+            StageManager.showStage(MainController.class, StageManager.getFrontWindow());
         } catch (Exception ex) {
             ex.printStackTrace();
             JulLog.warn("showMainView error", ex);
