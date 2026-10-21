@@ -99,7 +99,7 @@ public class MongoTreeView extends RichTreeView implements FXEventListener {
      */
     @EventSubscribe
     private void addConnect(MongoAddConnectEvent event) {
-        StageManager.showStage(MongoConnectAddController.class, this.window());
+        StageManager.showStage(MongoConnectAddController.class, this.getWindow());
     }
 
     /**

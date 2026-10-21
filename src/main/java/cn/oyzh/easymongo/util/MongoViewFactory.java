@@ -91,7 +91,7 @@ public class MongoViewFactory {
      */
     public static StageAdapter databaseAdd(MongoConnectTreeItem treeItem) {
         try {
-            StageAdapter adapter = StageManager.parseStage(MongoDatabaseAddController.class, treeItem.window());
+            StageAdapter adapter = StageManager.parseStage(MongoDatabaseAddController.class, treeItem.getWindow());
             adapter.setProp("connectItem", treeItem);
             adapter.showAndWait();
             return adapter;

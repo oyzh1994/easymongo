@@ -142,7 +142,7 @@ public class MongoGroupTreeItem extends MongoTreeItem<MongoGroupTreeItemValue> i
      * 添加连接
      */
     private void addConnect() {
-        StageAdapter fxView = StageManager.parseStage(MongoConnectAddController.class, this.window());
+        StageAdapter fxView = StageManager.parseStage(MongoConnectAddController.class, this.getWindow());
         fxView.setProp("group", this.value);
         fxView.display();
     }

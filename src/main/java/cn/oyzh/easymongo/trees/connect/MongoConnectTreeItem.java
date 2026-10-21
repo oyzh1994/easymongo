@@ -212,7 +212,7 @@ public class MongoConnectTreeItem extends MongoTreeItem<MongoConnectTreeItemValu
             }
             this.closeConnect();
         }
-        StageAdapter fxView = StageManager.parseStage(MongoConnectUpdateController.class, this.window());
+        StageAdapter fxView = StageManager.parseStage(MongoConnectUpdateController.class, this.getWindow());
         fxView.setProp("info", this.value());
         fxView.display();
     }

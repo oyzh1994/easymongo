@@ -144,7 +144,7 @@ public class MongoDatabaseTreeItem extends MongoTreeItem<MongoDatabaseTreeItemVa
     //     * 编辑数据库
     //     */
     //    public void editDB() {
-    //        StageAdapter fxView = StageManager.parseStage(MongoDatabaseUpdateController.class, this.window());
+    //        StageAdapter fxView = StageManager.parseStage(MongoDatabaseUpdateController.class, this.getWindow());
     //        fxView.setProp("database", this.value);
     //        fxView.setProp("connectItem", this.parent());
     //        fxView.display();

@@ -168,7 +168,7 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
      * 添加连接
      */
     private void addConnect() {
-        StageManager.showStage(MongoConnectAddController.class, this.window());
+        StageManager.showStage(MongoConnectAddController.class, this.getWindow());
     }
 
     /**
