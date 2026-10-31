@@ -1,6 +1,6 @@
 package cn.oyzh.easymongo.util;
 
-import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
+import cn.oyzh.i18n.I18nResourceBundle;
 
 /**
  * MongoDB 国际化辅助类

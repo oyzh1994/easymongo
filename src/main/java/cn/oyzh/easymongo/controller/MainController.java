@@ -2,10 +2,11 @@ package cn.oyzh.easymongo.controller;
 
 import cn.oyzh.common.dto.Project;
 import cn.oyzh.common.log.JulLog;
+import cn.oyzh.easymongo.domain.MongoSetting;
+import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.fx.plus.FXConst;
 import cn.oyzh.fx.plus.controller.ParentStageController;
 import cn.oyzh.fx.plus.controller.StageController;
-import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
 import cn.oyzh.fx.plus.information.MessageBox;
 import cn.oyzh.fx.plus.tray.TrayManager;
 import cn.oyzh.fx.plus.window.FXStageStyle;
@@ -13,8 +14,7 @@ import cn.oyzh.fx.plus.window.StageAdapter;
 import cn.oyzh.fx.plus.window.StageAttribute;
 import cn.oyzh.fx.plus.window.StageManager;
 import cn.oyzh.i18n.I18nHelper;
-import cn.oyzh.easymongo.domain.MongoSetting;
-import cn.oyzh.easymongo.store.MongoSettingStore;
+import cn.oyzh.i18n.I18nResourceBundle;
 import javafx.fxml.FXML;
 import javafx.stage.WindowEvent;
 

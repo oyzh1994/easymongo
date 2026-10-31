@@ -13,7 +13,7 @@ import cn.oyzh.easymongo.store.MongoSettingStore;
 import cn.oyzh.easymongo.util.MongoI18nHelper;
 import cn.oyzh.easymongo.util.ShellMongoConnectUtil;
 import cn.oyzh.fx.plus.font.FontManager;
-import cn.oyzh.fx.plus.i18n.I18nResourceBundle;
+import cn.oyzh.i18n.I18nResourceBundle;
 import cn.oyzh.fx.plus.util.FXUtil;
 import cn.oyzh.fx.terminal.TerminalPane;
 import cn.oyzh.fx.terminal.command.TerminalCommand;
