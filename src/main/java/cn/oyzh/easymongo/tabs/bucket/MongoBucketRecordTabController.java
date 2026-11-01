@@ -438,7 +438,7 @@ public class MongoBucketRecordTabController extends RichTabController {
      */
     @FXML
     private void uploadRecord() {
-        File file = FileChooserHelper.choose(I18nHelper.pleaseSelectFile(), FXChooser.allExtensionFilter());
+        File file = FileChooserHelper.choose(I18nHelper.pleaseSelectFile(), FXChooser.allExtensionFilter(), this.getWindow());
         if (file == null) {
             return;
         }
@@ -480,7 +480,7 @@ public class MongoBucketRecordTabController extends RichTabController {
         } else {
             extensionFilter = FXChooser.allExtensionFilter();
         }
-        File file = FileChooserHelper.save(I18nHelper.pleaseSelectFile(), fileName, extensionFilter);
+        File file = FileChooserHelper.save(I18nHelper.pleaseSelectFile(), fileName, extensionFilter, this.getWindow());
         if (file == null) {
             return;
         }

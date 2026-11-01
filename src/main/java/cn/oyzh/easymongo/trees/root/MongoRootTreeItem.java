@@ -132,7 +132,7 @@ public class MongoRootTreeItem extends MongoTreeItem<MongoRootTreeItemValue> imp
      */
     public void importConnect() {
         FileExtensionFilter filter1 = FXChooser.jsonExtensionFilter();
-        File file = FileChooserHelper.choose(I18nHelper.chooseFile(), filter1);
+        File file = FileChooserHelper.choose(I18nHelper.chooseFile(), filter1, this.getWindow());
         // 解析文件
         this.parseConnect(file);
     }
